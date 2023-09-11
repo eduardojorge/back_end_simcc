@@ -290,13 +290,13 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
 
     
      if (type=='ARTICLE'):
-           sql= """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, pm.name as magazine,
+           sql= """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, periodical_magazine_name as magazine,
                r.name as researcher,r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link 
                FROM bibliographic_production b LEFT JOIN  researcher_frequency rf ON b.id = rf.bibliographic_production_id,
-                bibliographic_production_article ba, periodical_magazine pm,institution i, researcher r 
+                bibliographic_production_article ba,institution i, researcher r 
                 WHERE 
                 r.id = b.researcher_id
-                AND pm.id = ba.periodical_magazine_id
+               
                 AND   b.id = ba.bibliographic_production_id 
                  AND r.institution_id=i.id
                 AND year_>=%s  %s %s
@@ -308,10 +308,10 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
      if (type=='ABSTRACT'):
 
           sql="""
-                SELECT distinct b.id as id,title,year,type, doi,qualis, pm.name as magazine,r.name as researcher,
+                SELECT distinct b.id as id,title,year,type, doi,qualis, periodical_magazine_name as magazine,r.name as researcher,
                 r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link
                           FROM bibliographic_production b, researcher_abstract_frequency rf, 
-                          bibliographic_production_article ba, periodical_magazine pm, researcher r 
+                          bibliographic_production_article ba, researcher r 
                             WHERE  r.id = b.researcher_id
                                    AND rf.researcher_id=r.id 
                                    AND pm.id = ba.periodical_magazine_id 

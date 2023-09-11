@@ -211,17 +211,17 @@ def lista_production_article_area_expertise_db(great_area_expertise, area_specia
      
 
      reg = sgbdSQL.consultar_db("SELECT distinct bp.id as id ,bp.title as title,r.name as researcher,"
-                        "r.lattes_id as lattes_id,lattes_10_id,rp.great_area as area,bp.year as year,pm.name as magazine, doi,qualis,jcr,jcr_link"+
+                        "r.lattes_id as lattes_id,lattes_10_id,rp.great_area as area,bp.year as year,periodical_magazine_name as magazine, doi,qualis,jcr,jcr_link"+
                         " FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id,"
                        " researcher_production rp, "+
-	                   "bibliographic_production bp,bibliographic_production_article bar,"+
-	                  "periodical_magazine pm " +
+	                   "bibliographic_production bp,bibliographic_production_article bar"+
+	               
                         " WHERE  "+
 
-                         " pm.id = bar.periodical_magazine_id"+
+                        
                          #" AND asp.id= re. area_specialty_id"
     
-                         " AND   bp.id = bar.bibliographic_production_id"+
+                         " bp.id = bar.bibliographic_production_id"+
                          " AND bp.researcher_id = r.id "+                
                          " AND rp.researcher_id =r.id "+
                          #" AND gae.id = re.great_area_expertise_id "+
@@ -231,7 +231,7 @@ def lista_production_article_area_expertise_db(great_area_expertise, area_specia
                          "%s " % filtergraduate_program +
                          "  AND year_ >=%s" % year+
                           " Group by bp.id  ,bp.title ,r.name ,"+
-                         "r.lattes_id, lattes_10_id,great_area ,bp.year,pm.name , doi,qualis")
+                         "r.lattes_id, lattes_10_id,great_area ,bp.year,periodical_magazine_name , doi,qualis,jcr,jcr_link")
 
 
      df_bd = pd.DataFrame(reg, columns=['id','title','researcher','lattes_id','lattes_10_id','area','year','magazine','doi','qualis','jcr','jcr_link'])
