@@ -8,6 +8,7 @@ Passo II: Apache Hop
 config\projects\Jade-Extrator-Hop\metadata\dataset\
 
 Copiar os curriculos para pasta XML
+
 Copiar a planilha sucupira qualis para a pasta csv
 
 Passo III: Atualizar Fotos 
