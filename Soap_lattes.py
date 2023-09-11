@@ -20,7 +20,7 @@ def get_DataAtualização(id:str) -> datetime:
         return datetime.strptime(resultado, '%d/%m/%Y %H:%M:%S')
 
 def last_update(xml_filename):
-    tree = ET.parse(f'/home/eduardomfjorge/teste/curriculos/{xml_filename}')
+    tree = ET.parse(f'/home/eduardomfjorge/curriculos/{xml_filename}')
     root = tree.getroot()
     lista = [i for i in root.items()  if i[0]=='DATA-ATUALIZACAO' or i[0]=='HORA-ATUALIZACAO']
     return datetime.strptime(lista[0][1] + lista[1][1],'%d%m%Y%H%M%S')
@@ -44,19 +44,19 @@ def salvarCV(id, dir):
         
     print(id)
     resultado = client.service.getCurriculoCompactado(id)
-    arquivo = open(dir+id + '.zip','wb')
+    arquivo = open(dir+'/zip/'+id + '.zip','wb')
     arquivo.write(resultado)
     arquivo.close()
 
     print('teste 4')
-    with zipfile.ZipFile(dir+id + '.zip','r') as zip_ref:
+    with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
         zip_ref.extractall(dir)
     if os.path.exists(id + '.zip'):
         os.remove(id + '.zip')
 
 
 
-df = pd.read_excel(r'/home/eduardomfjorge/teste/csv/pesquisadoresCimatec_v1.xlsx')
+df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
 print(df)
 LATTES_ID=0
 
@@ -74,7 +74,7 @@ for i,infos in df.iterrows():
         lattes_id=str(infos[LATTES_ID])
 
 
-    salvarCV( lattes_id,'/home/eduardomfjorge/teste/curriculos')
+    salvarCV( lattes_id,'/home/eduardomfjorge/curriculos')
     x=x+1
 print("Fim "+str(x) )    
     #salvarCV('5674134492786099','/home/eduardomfjorge/teste/curriculos')
