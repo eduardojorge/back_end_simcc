@@ -1,0 +1,45 @@
+
+import Dao.sgbdSQL as sgbdSQL
+import unidecode
+import pandas as pd
+import Dao.util as util
+
+
+# Função que lista  as áreas de expertrize por Iniciais
+
+
+
+
+def lists_magazine_db(initials,issn):
+
+     filter=""
+     if initials!="":
+       filter = " LOWER(name) like '"+initials.lower()+"%' "
+     filteIssn="";
+     if issn!="":
+       filteIssn = " translate(issn,'-','')='"+issn+"'"
+      
+     if ((filter=="") and (filteIssn=="")):
+        sql="""
+            SELECT m.id as id, m.name as magazine, issn,jcr,jcr_link,qualis  
+            FROM  periodical_magazine  m ORDER BY name asc
+            """
+     else:   
+        sql = """SELECT m.id as id, m.name as magazine, issn,jcr,jcr_link,qualis
+                            
+            FROM  periodical_magazine  m
+                           where 
+                            %s %s
+                           
+                           ORDER BY name asc""" % (filter,filteIssn)
+     print(sql)
+
+     reg = sgbdSQL.consultar_db(sql)
+
+
+     df_bd = pd.DataFrame(reg, columns=['id','magazine','issn','jcr','jcr_link','qualis'])
+     print(df_bd)
+    
+     return df_bd
+
+
