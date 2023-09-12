@@ -16,8 +16,8 @@ import Dao.termFlowSQL as termFlowSQL
 
 import concurrent.futures
 
-researcher_teste1 ="r.name LIKE \'Eduardo M%\' OR r.name LIKE \'Gesil Sampaio%\' "
-researcher_teste2 ="r.name LIKE \'Hugo Saba%\' OR r.name LIKE \'Josemar Rodri%\'"
+researcher_teste1 ="r.name LIKE \'Manoel %\' OR r.name LIKE \'Gesil Sampaio%\' "
+#researcher_teste2 ="r.name LIKE \'Hugo Saba%\' OR r.name LIKE \'Josemar Rodri%\'"
 
 
 list_word = {}
@@ -30,7 +30,8 @@ def insert_researcher_frequency_db(teste,article,offset):
    time.sleep(3)
    filter=""
    if (teste==True):
-      filter =  " where "+ researcher_teste1 + " or " +researcher_teste2
+      filter =  " where "+ researcher_teste1 
+      #+ " or " +researcher_teste2
                   
    reg = sgbdSQL.consultar_db("SELECT   id from researcher r "+filter+" OFFSET "+str(offset) +" ROWS FETCH FIRST 100 ROW ONLY")
                     #'where id=\'35e6c140-7fbb-4298-b301-c5348725c467\''+
@@ -56,14 +57,17 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
           filter =""
           if article==True:
             filter =" AND type='ARTICLE' "
-          reg = sgbdSQL.consultar_db("SELECT  r.term as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id "+ 
-                                " FROM research_dictionary as r,bibliographic_production AS b"   
-                                " WHERE "+
-                                "(        translate(unaccent(LOWER(b.title)),\':;\',\'\') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE "
+          sql="""
+                        SELECT  r.term as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id 
+                                 FROM research_dictionary as r,bibliographic_production AS b   
+                                 WHERE 
+                                (        translate(unaccent(LOWER(b.title)),':;''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
-                                 +filter+
-                                 " AND r.term LIKE \'" +caracter+ "%\'"
-                                 " AND b.researcher_id=\'"+researcher_id+"\' AND r.type_='ARTICLE' ")
+                                %s
+                                 AND r.term LIKE '%s'
+                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' 
+              """  % ( filter,caracter+ "%",researcher_id)
+          reg = sgbdSQL.consultar_db(sql)
          
          
           #reg = SimccBD.consultar_db("SELECT  term FROM research_dictionary  ORDER BY frequency desc fetch FIRST 200 rows only")
@@ -86,16 +90,22 @@ def insert_researcher_abstract_frequency_caracter_bd(researcher_id):
       for caracter in string.ascii_lowercase: 
         #print(caracter)
         try:
-   
-          reg = sgbdSQL.consultar_db("SELECT  r.term,re.id "+ 
-                                " FROM research_dictionary as r,researcher re"   
-                                " WHERE "+
-                                "(        translate(unaccent(LOWER(re.abstract)),\':;\',\'\') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE "
+
+          sql="""
+
+              SELECT  r.term,re.id
+                                FROM research_dictionary as r,researcher re
+                                 WHERE 
+                                (        translate(unaccent(LOWER(re.abstract)),':;\''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
                               
-                                 " AND r.term LIKE \'" +caracter+ "%\'"
-                                 " AND re.id=\'"+researcher_id+"\'" +
-                                 " AND r.type_='ABSTRACT'")
+                                  AND r.term LIKE '%s'
+                                  AND re.id= '%s' 
+                                  AND r.type_='ABSTRACT'
+              """ % (caracter+ "%",researcher_id)
+         # print(sql)
+   
+          reg = sgbdSQL.consultar_db(sql)
          
          
           #reg = SimccBD.consultar_db("SELECT  term FROM research_dictionary  ORDER BY frequency desc fetch FIRST 200 rows only")
@@ -291,7 +301,8 @@ def create_researcher_dictionary_db(test,article):
 
   filter=""
   if (test==1):
-      filter =  " where "+ researcher_teste1+ "  OR "+researcher_teste2
+      filter =  " where "+ researcher_teste1
+      #+ "  OR "+researcher_teste2
         
  
   reg = sgbdSQL.consultar_db("SELECT   id from researcher r" + filter)
@@ -382,7 +393,8 @@ def create_researcher_dictionary_abstract_db(test):
   
   filter=""
   if (test==1):
-      filter =  " where "+ researcher_teste1+ "  OR "+researcher_teste2
+      filter =  " where "+ researcher_teste1
+      #+ "  OR "+researcher_teste2
         
  
   reg = sgbdSQL.consultar_db("SELECT   id from researcher r" + filter)
@@ -535,7 +547,8 @@ def create_researcher_production_db(teste):
 
      filter =""
      if (teste==1):
-        filter = " where "+ researcher_teste1 + " OR " +researcher_teste2
+        filter = " where "+ researcher_teste1 
+        #+ " OR " +researcher_teste2
                             
 
      reg = sgbdSQL.consultar_db("SELECT id from researcher r"+filter) 
@@ -670,7 +683,7 @@ def new_researcher_production_db(researcher_id):
 print("Passo II")
 
 
-create_researcher_production_db(0)
+create_researcher_production_db(0 )
 
 
 
@@ -688,8 +701,8 @@ create_researcher_dictionary_abstract_db(teste)
 
 #Levenshtein Distance
 
-sql = "DELETE FROM researcher_frequency "
-sgbdSQL.execScript_db(sql)            
+#sql = "DELETE FROM researcher_frequency "
+#sgbdSQL.execScript_db(sql)            
 #insert_researcher_frequency_bigrama_db(1)
 for i in range(4928):
   if (i%100)==0:

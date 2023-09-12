@@ -44,10 +44,10 @@ def consultar_db(sql):
 
 # Função para criar conexão no banco
 def conecta_db():
-  database_ ="cimatec_v7"
+  database_ ="cimatec_v6"
   #database_ ="simcc_profnit"
   #print(database_)
-  con = psycopg2.connect(host='localhost', 
+  con = psycopg2.connect(host='172.25.0.84', 
                          #database='simcc_v3',
                          database=database_,
                          user='postgres', 
