@@ -40,23 +40,29 @@ def salvarCV(id, dir):
             print('Currículo já está atualizado')
             return
     except:
-           print('Currículo não  atualizado')  
+           print(' Currículo não  atualizado')  
         
     print(id)
-    resultado = client.service.getCurriculoCompactado(id)
-    arquivo = open(dir+'/zip/'+id + '.zip','wb')
-    arquivo.write(resultado)
-    arquivo.close()
+    try:
+        resultado = client.service.getCurriculoCompactado(id)
+        arquivo = open(dir+'/zip/'+id + '.zip','wb')
+        arquivo.write(resultado)
+        arquivo.close()
+        print('teste 4')
+        with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
+         zip_ref.extractall(dir)
+         if os.path.exists(id + '.zip'):
+            os.remove(id + '.zip')
+    except:
+        #    print('----------Err:Currículo não  existe')  
+        
 
-    print('teste 4')
-    with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
-        zip_ref.extractall(dir)
-    if os.path.exists(id + '.zip'):
-        os.remove(id + '.zip')
+    
 
 
 
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
+#df = pd.read_excel(r'files/PesquisadoresProfnit.xlsx')
 print(df)
 LATTES_ID=0
 
@@ -76,5 +82,6 @@ for i,infos in df.iterrows():
 
     salvarCV( lattes_id,'/home/eduardomfjorge/curriculos')
     x=x+1
-print("Fim "+str(x) )    
+    print("------------Registro:"+str(x))
+print("------------Fim "+str(x) )    
     #salvarCV('5674134492786099','/home/eduardomfjorge/teste/curriculos')
