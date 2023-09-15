@@ -5,12 +5,22 @@ import os
 import zipfile
 import pandas as pd
 
+import os
+import logging
+from datetime import datetime
+
+
 
 
 client = Client( 'http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
 #client.transport.session.proxies = {'http': # Proxy da UNEB ,
 #                                    'https':  #Proxy da UNEB}
-                                    
+def log(texto):
+    
+    now = datetime.now()
+    mesg= now + " - "+ texto
+    logger.error(mesg)
+
 def get_DataAtualização(id:str) -> datetime:
     # Retorna a data de atualização do CV
     print("teste1")
@@ -38,9 +48,11 @@ def salvarCV(id, dir):
     try:
         if data <= last_update(id + '.xml'):
             print('Currículo já está atualizado')
+            log('Currículo já está atualizado id:'+ id)
             return
     except:
-           print('Currículo não  atualizado')  
+           print('Currículo não  atualizado id:'+id)  
+           log('Currículo não  atualizado id:'+id)
         
     print(id)
     resultado = client.service.getCurriculoCompactado(id)
@@ -55,6 +67,24 @@ def salvarCV(id, dir):
         os.remove(id + '.zip')
 
 
+
+Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+
+logging.basicConfig(filename = "logfile.log",
+                    filemode = "w",
+                    format = Log_Format, 
+                    level = logging.ERROR)
+
+logger = logging.getLogger()
+
+#Testing our Logger
+
+
+log("Inicio")
+dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos'
+for f in os.listdir(dir):
+    os.remove(os.path.join(dir, f))
+log("Arquivos XML removidos")
 
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
 print(df)
@@ -74,7 +104,9 @@ for i,infos in df.iterrows():
         lattes_id=str(infos[LATTES_ID])
 
 
-    salvarCV( lattes_id,'/home/eduardomfjorge/curriculos')
+    salvarCV( lattes_id,'/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos')
     x=x+1
 print("Fim "+str(x) )    
+log("Fim Total:"+str(x) )
+
     #salvarCV('5674134492786099','/home/eduardomfjorge/teste/curriculos')
