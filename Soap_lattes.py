@@ -51,20 +51,29 @@ def salvarCV(id, dir):
             log('Currículo já está atualizado id:'+ id)
             return
     except:
+<<<<<<< HEAD
            print('Currículo não  atualizado id:'+id)  
            log('Currículo não  atualizado id:'+id)
+=======
+           print(' Currículo não  atualizado')  
+>>>>>>> 46977c9ae8f21d33485a6078a96f513dd725352a
         
     print(id)
-    resultado = client.service.getCurriculoCompactado(id)
-    arquivo = open(dir+'/zip/'+id + '.zip','wb')
-    arquivo.write(resultado)
-    arquivo.close()
+    try:
+        resultado = client.service.getCurriculoCompactado(id)
+        arquivo = open(dir+'/zip/'+id + '.zip','wb')
+        arquivo.write(resultado)
+        arquivo.close()
+        print('teste 4')
+        with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
+         zip_ref.extractall(dir)
+         if os.path.exists(id + '.zip'):
+            os.remove(id + '.zip')
+    except:
+        #    print('----------Err:Currículo não  existe')  
+        
 
-    print('teste 4')
-    with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
-        zip_ref.extractall(dir)
-    if os.path.exists(id + '.zip'):
-        os.remove(id + '.zip')
+    
 
 
 
@@ -87,6 +96,7 @@ for f in os.listdir(dir):
 log("Arquivos XML removidos")
 
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
+#df = pd.read_excel(r'files/PesquisadoresProfnit.xlsx')
 print(df)
 LATTES_ID=0
 
@@ -106,7 +116,12 @@ for i,infos in df.iterrows():
 
     salvarCV( lattes_id,'/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos')
     x=x+1
+<<<<<<< HEAD
 print("Fim "+str(x) )    
 log("Fim Total:"+str(x) )
 
+=======
+    print("------------Registro:"+str(x))
+print("------------Fim "+str(x) )    
+>>>>>>> 46977c9ae8f21d33485a6078a96f513dd725352a
     #salvarCV('5674134492786099','/home/eduardomfjorge/teste/curriculos')
