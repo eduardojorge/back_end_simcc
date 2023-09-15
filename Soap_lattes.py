@@ -23,14 +23,14 @@ def log(texto):
 
 def get_DataAtualização(id:str) -> datetime:
     # Retorna a data de atualização do CV
-    print("teste1")
+   
     resultado = client.service.getDataAtualizacaoCV(id)
-    print("teste2")
+   
     if resultado != None:
         return datetime.strptime(resultado, '%d/%m/%Y %H:%M:%S')
 
 def last_update(xml_filename):
-    tree = ET.parse(f'/home/eduardomfjorge/curriculos/{xml_filename}')
+    tree = ET.parse(dir+xml_filename)
     root = tree.getroot()
     lista = [i for i in root.items()  if i[0]=='DATA-ATUALIZACAO' or i[0]=='HORA-ATUALIZACAO']
     return datetime.strptime(lista[0][1] + lista[1][1],'%d%m%Y%H%M%S')
