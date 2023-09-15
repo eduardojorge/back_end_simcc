@@ -87,8 +87,13 @@ logger = logging.getLogger()
 
 log("Inicio")
 dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos/'
+ 
 for f in os.listdir(dir):
-    os.remove(os.path.join(dir, f))
+    try:
+        os.remove(os.path.join(dir, f))
+    except:
+        log("Erro dir")
+
 log("Arquivos XML removidos")
 
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
