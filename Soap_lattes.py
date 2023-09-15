@@ -18,7 +18,7 @@ client = Client( 'http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
 def log(texto):
     
     now = datetime.now()
-    mesg= now + " - "+ texto
+    mesg= str(now) + " - "+ texto
     logger.error(mesg)
 
 def get_DataAtualização(id:str) -> datetime:
