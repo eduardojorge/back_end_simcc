@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request,Blueprint
 
 import json
-import nltk
+#import nltk
 import unidecode
 from flask_cors import CORS,cross_origin
 import os

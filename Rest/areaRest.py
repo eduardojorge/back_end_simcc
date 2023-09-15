@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request,Blueprint
 
 import json
-import nltk
+#import nltk
 import unidecode
 from flask_cors import CORS,cross_origin
 import os
@@ -85,7 +85,7 @@ def area_specialitInitials():
 def researcherArea_expertise():
     list_researcher_area_expertise  = []
     area = request.args.get('area')
-    stemmer = nltk.RSLPStemmer()
+    #stemmer = nltk.RSLPStemmer()
   
     #termNovo=unidecode.unidecode(name.replace(";","&"))
 

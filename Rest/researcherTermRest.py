@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request,Blueprint
 
 import json
-import nltk
+#import nltk
 import unidecode
 from flask_cors import CORS,cross_origin
 import os
@@ -85,7 +85,7 @@ def research():
        return jsonify(list_researcher), 200
     university=""
     university = str(request.args.get('university'))+""
-    stemmer = nltk.RSLPStemmer()
+    #stemmer = nltk.RSLPStemmer()
     print(terms)
     termNovo=unidecode.unidecode(terms.lower())
     print(terms)
@@ -544,7 +544,7 @@ def lists_word_researcher():
 def institutionFrequenci():
     list_institutionFrequenci  = []
     terms = request.args.get('terms')
-    stemmer = nltk.RSLPStemmer()
+    #stemmer = nltk.RSLPStemmer()
     print(terms)
     termNovo=terms.lower()
     print(terms)

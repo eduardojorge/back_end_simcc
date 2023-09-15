@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import json
-import nltk
+#import nltk
 import unidecode
 from flask_cors import CORS,cross_origin
 import os
@@ -143,7 +143,7 @@ def researcher_image():
 def researcherName():
     list_researcher  = []
     name = request.args.get('name')
-    stemmer = nltk.RSLPStemmer()
+    #stemmer = nltk.RSLPStemmer()
  
     #termNovo=unidecode.unidecode(name.replace(";","&"))
    
