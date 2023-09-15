@@ -86,7 +86,7 @@ logger = logging.getLogger()
 
 
 log("Inicio")
-dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos'
+dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos/'
 for f in os.listdir(dir):
     os.remove(os.path.join(dir, f))
 log("Arquivos XML removidos")
