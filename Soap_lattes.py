@@ -30,7 +30,7 @@ def get_DataAtualização(id:str) -> datetime:
         return datetime.strptime(resultado, '%d/%m/%Y %H:%M:%S')
 
 def last_update(xml_filename):
-    tree = ET.parse(dir+xml_filename)
+    tree = ET.parse(dir+'atual/'+xml_filename)
     root = tree.getroot()
     lista = [i for i in root.items()  if i[0]=='DATA-ATUALIZACAO' or i[0]=='HORA-ATUALIZACAO']
     return datetime.strptime(lista[0][1] + lista[1][1],'%d%m%Y%H%M%S')
@@ -63,6 +63,7 @@ def salvarCV(id, dir):
        
         with zipfile.ZipFile(dir+'/zip/'+id + '.zip','r') as zip_ref:
          zip_ref.extractall(dir)
+         zip_ref.extractall(dir+'/atual')
          if os.path.exists(id + '.zip'):
             os.remove(id + '.zip')
     except:
@@ -87,7 +88,7 @@ logger = logging.getLogger()
 
 log("Inicio")
 dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos/'
-''' 
+
 for f in os.listdir(dir):
     try:
         os.remove(os.path.join(dir, f))
@@ -95,7 +96,7 @@ for f in os.listdir(dir):
         log("Erro dir")
 
 log("Arquivos XML removidos")
-'''
+
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
 #df = pd.read_excel(r'files/PesquisadoresProfnit.xlsx')
 print(df)
