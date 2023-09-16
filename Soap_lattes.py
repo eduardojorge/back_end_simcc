@@ -15,11 +15,7 @@ from datetime import datetime
 client = Client( 'http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
 #client.transport.session.proxies = {'http': # Proxy da UNEB ,
 #                                    'https':  #Proxy da UNEB}
-def log(texto):
-    
-    now = datetime.now()
-    mesg= str(now) + " - "+ texto
-    logger.error(mesg)
+
 
 def get_DataAtualização(id:str) -> datetime:
     # Retorna a data de atualização do CV
@@ -47,12 +43,12 @@ def salvarCV(id, dir):
     print(data)
     try:
         if data <= last_update(id + '.xml'):
-            print('Currículo já está atualizado')
-            log('Currículo já está atualizado id:'+ id)
+            #print('Currículo já está atualizado')
+            logger.debug('Currículo já está atualizado id:'+ str(id))
             return
     except:
-           print('Currículo não  atualizado id:'+id)  
-           log('Currículo não  atualizado id:'+id)
+           #print('Currículo não  atualizado id:'+id)  
+           logger.debug('Currículo não  atualizado id:'+str(id))
         
     print(id)
     try:
@@ -68,7 +64,7 @@ def salvarCV(id, dir):
             os.remove(id + '.zip')
     except:
         #    print('----------Err:Currículo não  existe')  
-        log('----------Err:Currículo não  existe')
+        logger.error('----------Err:Currículo não  existe')
         
 
     
@@ -76,26 +72,27 @@ def salvarCV(id, dir):
 
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
-logging.basicConfig(filename = "logfile.log",
+logging.basicConfig(filename = "logfile_SOAP_Lattes.log",
                     filemode = "w",
                     format = Log_Format, 
-                    level = logging.ERROR)
+                    level = logging.DEBUG)
 
 logger = logging.getLogger()
 
 #Testing our Logger
 
 
-log("Inicio")
+logger.debug("Inicio")
+
 dir = '/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos/'
 
 for f in os.listdir(dir):
     try:
         os.remove(os.path.join(dir, f))
     except:
-        log("Erro dir")
+        logger.error("Dir")
 
-log("Arquivos XML removidos")
+logger.debug("Arquivos XML removidos")
 
 df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
 #df = pd.read_excel(r'files/PesquisadoresProfnit.xlsx')
@@ -119,7 +116,7 @@ for i,infos in df.iterrows():
     salvarCV( lattes_id,'/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos')
     x=x+1
 print("Fim "+str(x) )    
-log("Fim Total:"+str(x) )
+logger.debug("Fim Total:"+str(x) )
 
 print("------------Registro:"+str(x))
 print("------------Fim "+str(x) )    

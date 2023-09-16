@@ -11,7 +11,8 @@ import traceback
 import Dao.areaFlowSQL as areaFlowSQL
 import Dao.util as util
 import Dao.termFlowSQL as termFlowSQL
-
+import logging
+from datetime import datetime
 
 
 import concurrent.futures
@@ -25,6 +26,10 @@ lista_word_bigram ={}
 
 list_word_area = {}
 lista_word_area_bigram ={}
+
+
+    
+    
 
 def insert_researcher_frequency_db(teste,article,offset):
    time.sleep(3)
@@ -82,8 +87,11 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
                 values('%s','%s','%s');""" % (researcher_id,infos.bibliographic_production_id,infos.term)
 
            sgbdSQL.execScript_db(sql)
+           logger.debug(sql)
+           
         except Exception as e: 
           print (e)         
+          logger.erro(e)
           traceback.print_exc()  
        
 def insert_researcher_abstract_frequency_caracter_bd(researcher_id):     
@@ -120,6 +128,7 @@ def insert_researcher_abstract_frequency_caracter_bd(researcher_id):
                 values('%s','%s');""" % (researcher_id,infos.term)
 
            sgbdSQL.execScript_db(sql)
+           log(sql)
         except Exception as e: 
           print (e)         
           traceback.print_exc()  
@@ -292,12 +301,13 @@ def insert_area_dictionary_db(tokens):
             word_previous=word
 # Função para consultar o Banco SIMCC
 def create_researcher_dictionary_db(test,article):
+ 
 
-  sql = "DELETE FROM research_dictionary "
-  sgbdSQL.execScript_db(sql) 
+  #sql = "DELETE FROM research_dictionary "
+  #sgbdSQL.execScript_db(sql) 
 
-  sql = "DELETE FROM research_dictionary_bigram "
-  sgbdSQL.execScript_db(sql) 
+  #sql = "DELETE FROM research_dictionary_bigram "
+  #sgbdSQL.execScript_db(sql) 
 
   filter=""
   if (test==1):
@@ -330,8 +340,9 @@ def create_researcher_dictionary_db(test,article):
     sql = """
     INSERT into public.research_dictionary (term,frequency,type_) 
     values('%s','%s','%s');""" % (item.lower(),list_word[item].get("frequencia"),list_word[item].get("type"))
-
+    
     sgbdSQL.execScript_db(sql)
+    logger.debug(sql)
 
 
 
@@ -364,6 +375,7 @@ def create_researcher_dictionary_db(test,article):
     values('%s','%s','%s');""" % (item.lower(),list_word[item].get("frequencia"),list_word[item].get("type"))
 
     sgbdSQL.execScript_db(sql)
+    logger.debug(sql)
 
 
   i2 = 0
@@ -389,7 +401,7 @@ def create_researcher_dictionary_db(test,article):
 
 # Função para consultar o Banco SIMCC
 def create_researcher_dictionary_abstract_db(test):
-
+ 
   
   filter=""
   if (test==1):
@@ -435,6 +447,7 @@ def create_researcher_dictionary_abstract_db(test):
     values('%s','%s','%s');""" % (item.lower(),list_word[item].get("frequencia"),list_word[item].get("type"))
 
     sgbdSQL.execScript_db(sql)
+    logger.debug(sql)
     
 
 
@@ -447,7 +460,7 @@ def create_researcher_title_dictionary_db(researcher_id,article):
   if article==1:
      filter =" AND type='ARTICLE' "
   reg = sgbdSQL.consultar_db('SELECT  distinct title,b.type,year from bibliographic_production AS b'+
-  ' WHERE researcher_id=\''+ researcher_id +"\'"+filter+
+  ' WHERE is_new= true and researcher_id=\''+ researcher_id +"\'"+filter+
   # " AND char_length(unaccent(LOWER(r.term)))>3 AND to_tsvector('portuguese', unaccent(LOWER(r.term)))!='' and  unaccent(LOWER(r.term))!='sobre' "+
    # " AND (       translate(unaccent(LOWER(title)),':','') ::tsvector@@ '"+unidecode.unidecode("robotica | educacional | educacao")+"'::tsquery)=true"+
       #' AND "type" = \'ARTICLE\' '+
@@ -477,7 +490,7 @@ def create_researcher_abstract_dictionary_db(researcher_id):
 
  
   reg = sgbdSQL.consultar_db('SELECT  r.abstract as abstract from researcher as r'+
-  ' WHERE r.id=\''+ researcher_id +"\'")
+  ' WHERE update_abstract=true and r.id=\''+ researcher_id +"\'")
   
   df_bd = pd.DataFrame(reg, columns=['abstract'])
     #print(df_bd.head())
@@ -540,10 +553,11 @@ def insert_research_dictionary_db(tokens,type):
         
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(teste):
-
+     
  
      sql = "DELETE FROM researcher_production"
      sgbdSQL.execScript_db(sql)
+     logger.debug(sql)
 
      filter =""
      if (teste==1):
@@ -559,6 +573,7 @@ def create_researcher_production_db(teste):
     
      for i,infos in df_bd.iterrows():
          print(infos.id)
+         
          x=x+1
          print ("total=%d" % x)
          new_researcher_production_db(infos.id)
@@ -666,6 +681,7 @@ def new_researcher_production_db(researcher_id):
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
         values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');
         """ % (researcher_id,qtd_article,qtd_book_chapters, qtd_book,qtd_work_in_event,area,speciality,city,organ,qtd_patent,qtd_software,qtd_brand)
+    logger.debug(sql)
     print(sql)
     sgbdSQL.execScript_db(sql)
 
@@ -674,16 +690,64 @@ def new_researcher_production_db(researcher_id):
 
 
 
+
+
+Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+
+logging.basicConfig(filename = "logfile_Population.log",
+                    filemode = "w",
+                    format = Log_Format, 
+                    level = logging.DEBUG)
+
+logger = logging.getLogger()
+
        
+logger.debug("Inicio")
+
+sql = """
+
+UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
+FROM (SELECT jif2019,eissn,url_revista
+      FROM  "JCR_novo_link_v1" ) AS subquery
+WHERE translate(subquery.eissn,'-','')=p.issn
+"""
+sgbdSQL.execScript_db(sql)
+
+logger.debug(sql)
+
+sql = """
+
+UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
+FROM (SELECT jif2019,issn,url_revista
+      FROM  "JCR_novo_link_v1" ) AS subquery
+WHERE translate(subquery.issn,'-','')=p.issn
+"""
+sgbdSQL.execScript_db(sql)
+
+logger.debug(sql)
 
 
 #print(areaFlowSQL.lists_area_speciality_researcher_db('215a5c60-d882-4936-9445-da4742c14802'))
+sql = """
+      UPDATE bibliographic_production SET YEAR_=YEAR::INTEGER
+        """ 
+
+sgbdSQL.execScript_db(sql)
+logger.debug(sql)
+
+
+
+sql = """ UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' AND issn='2764622'"""
+
+sgbdSQL.execScript_db(sql)
+
+logger.debug(sql)
 
 
 print("Passo II")
 
 
-create_researcher_production_db(0 )
+#create_researcher_production_db(0 )
 
 
 
@@ -698,6 +762,7 @@ teste=False
 article=True
 create_researcher_dictionary_db(teste,article)
 create_researcher_dictionary_abstract_db(teste)
+
 
 #Levenshtein Distance
 
