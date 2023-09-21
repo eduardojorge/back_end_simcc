@@ -1,5 +1,8 @@
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
+import logging
+import json
+from datetime import datetime
 #import lattes10 as lattes10
 
 
@@ -173,9 +176,14 @@ def researcher_production_csv_db():
 
 def researcher_csv_db():
 
-   reg = sgbdSQL.consultar_db( " SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation"
+   sql=""" SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
-       " FROM  researcher r")
+
+        FROM  researcher r """
+
+   reg = sgbdSQL.consultar_db(sql)
+   
+   logger.debug(sql)
         
    
    df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','last_update','graduation'])
@@ -213,6 +221,8 @@ def researcher_production_novo_csv_db():
        
 
    reg = sgbdSQL.consultar_db(sql )
+
+   logger.debug(sql)
    
    df_bd = pd.DataFrame(reg, columns=['title','qualis','year','researcher_id','researcher','name_magazine','issn','jcr','jcr_link','type'])
 
@@ -226,7 +236,7 @@ def researcher_production_novo_csv_db():
 def article_distinct_novo_csv_db():
    
    sql="""
-         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
+         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
                              
                                    FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
 	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
@@ -239,10 +249,11 @@ def article_distinct_novo_csv_db():
                                    AND   b.id = bar.bibliographic_production_id
 
                         order by qualis desc
-    """
+   """
 
    reg = sgbdSQL.consultar_db(sql)   
-   df_bd = pd.DataFrame(reg, columns=[ 'title','qualis','jcr','year','graduate_program_id','year_pos'])
+   logger.debug(sql)
+   df_bd = pd.DataFrame(reg, columns=[ 'title','qualis','jcr','year','graduate_program_id','year_pos','name_magazine'])
    
    df_bd.to_csv(dir+'article_distinct_novo_csv_db.csv') 
 
@@ -266,6 +277,7 @@ def production_distinct_novo_csv_db():
     """
 
    reg = sgbdSQL.consultar_db(sql)   
+   logger.debug(sql)
    df_bd = pd.DataFrame(reg, columns=[ 'title','qualis','jcr','year','graduate_program_id','year_pos','type'])
    
    df_bd.to_csv(dir+'production_distinct_novo_csv_db.csv') 
@@ -310,9 +322,12 @@ def production_tecnical_year_novo_csv_db():
     df_bd.to_csv(dir+'production_tecnical_year_novo_csv_db.csv')
 
 def graduate_program_researcher_csv_db():
-
-   reg = sgbdSQL.consultar_db( " SELECT researcher_id,graduate_program_id,year,type_ "
-       " FROM graduate_program_researcher")
+   sql="""
+    SELECT researcher_id,graduate_program_id,year,type_ 
+        FROM graduate_program_researcher
+    """
+   reg = sgbdSQL.consultar_db(sql )
+   logger.debug(sql)
         
    
    df_bd = pd.DataFrame(reg, columns=[ 'researcher_id','graduate_program_id','year','type_'])
@@ -321,14 +336,49 @@ def graduate_program_researcher_csv_db():
 
 def graduate_program_csv_db():
 
-   reg = sgbdSQL.consultar_db( " SELECT graduate_program_id,code,name,area,modality,type,rating "
-       " FROM graduate_program gp")
+   sql="""
+      SELECT graduate_program_id,code,name,area,modality,type,rating 
+        FROM graduate_program gp
+    """
+
+   reg = sgbdSQL.consultar_db(sql )
+   logger.debug(sql)
+
         
    
    df_bd = pd.DataFrame(reg, columns=[ 'graduate_program_id','code','name','area','modality','type','rating'])
 
    df_bd.to_csv(dir+'cimatec_graduate_program.csv')
+  
 
+
+
+Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+
+logging.basicConfig(filename = "logfile_csv.log",
+                    filemode = "w",
+                    format = Log_Format, 
+                    level = logging.DEBUG)
+
+logger = logging.getLogger()
+
+       
+logger.debug("Inicio")
+list_data=[]
+hoje = str(datetime.now())
+print(hoje)
+
+data  = {
+        'data': hoje
+        
+       
+
+        }
+
+list_data.append(data)
+json_string = json.dumps(list_data)
+df = pd.read_json(json_string)
+df.to_csv(dir+'data.csv')
 
 print("Inicio: graduate_program_csv_db")
 graduate_program_csv_db()

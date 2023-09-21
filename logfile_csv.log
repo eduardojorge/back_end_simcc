@@ -1,0 +1,65 @@
+DEBUG 2023-09-21 07:32:57,664 - Inicio
+DEBUG 2023-09-21 07:32:57,798 - 
+      SELECT graduate_program_id,code,name,area,modality,type,rating 
+        FROM graduate_program gp
+    
+DEBUG 2023-09-21 07:32:57,937 - 
+    SELECT researcher_id,graduate_program_id,year,type_ 
+        FROM graduate_program_researcher
+    
+DEBUG 2023-09-21 07:32:58,509 - 
+        SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
+                             
+                                   FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
+			 									 ON b.id = bar.bibliographic_production_id , 
+	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
+                                   WHERE 
+                               
+                                    gpr.graduate_program_id = gp.graduate_program_id 
+                                   AND gpr.researcher_id = r.id 
+                                     AND r.id = b.researcher_id
+                                 
+                                   
+
+                        order by qualis desc
+    
+DEBUG 2023-09-21 07:32:58,927 - 
+         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
+                             
+                                   FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
+	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
+                                   WHERE 
+                               
+                                    gpr.graduate_program_id = gp.graduate_program_id 
+                                   AND gpr.researcher_id = r.id 
+                                     AND r.id = b.researcher_id
+                                 
+                                   AND   b.id = bar.bibliographic_production_id
+
+                        order by qualis desc
+   
+DEBUG 2023-09-21 07:32:59,255 - 
+            
+         	SELECT title,
+            
+            
+            qualis,year,r.id as researcher_id,
+            r.name as researcher,
+			bar.periodical_magazine_name as name_magazine,issn AS issn,jcr as jcr,jcr_link, b.type as type
+                           
+          FROM  
+            PUBLIC.bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
+			  ON b.id = bar.bibliographic_production_id , researcher r
+          WHERE 
+          
+         r.id =  b.researcher_id
+      
+         
+
+                    
+        
+         
+DEBUG 2023-09-21 07:32:59,683 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+        
+
+        FROM  researcher r 

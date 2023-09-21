@@ -5,6 +5,7 @@ import psycopg2
 import nltk
 from nltk.tokenize import RegexpTokenizer
 import unidecode
+import sys
 
 # Função para inserir dados no banco
 def execScript_db(sql):
@@ -44,10 +45,16 @@ def consultar_db(sql):
 
 # Função para criar conexão no banco
 def conecta_db():
-  database_ ="cimatec_v7"
+  #database_ ="cimatec_v7"
+  #database_ ="simcc_profnit_v1"
+  database_=sys.argv[1]
+  #host_='172.25.0.84'
+  #host_='127.0.0.1'
+  host_=sys.argv[2]
   #database_ ="simcc_profnit"
   #print(database_)
-  con = psycopg2.connect(host='172.25.0.84', 
+  
+  con = psycopg2.connect(host=host_, 
                          #database='simcc_v3',
                          database=database_,
                          user='postgres', 

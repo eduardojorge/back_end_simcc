@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
+import logging
 
 def getLattesId10(lattes_id: str) -> str:
     headers = {
@@ -37,14 +38,14 @@ def getLattesId10(lattes_id: str) -> str:
 
 
 
-def lattes_10_researcher_frequency_db():
+def lattes_10_researcher_frequency_db(logger):
  
                   
    reg = sgbdSQL.consultar_db("SELECT r.id as id, r.lattes_id as lattes from researcher r ")
                     #'where id=\'35e6c140-7fbb-4298-b301-c5348725c467\''+
                     #' OR id=\'c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf\' ')
    df_bd = pd.DataFrame(reg, columns=['id','lattes'])
-   print (df_bd)
+   #print (df_bd)
    for i,infos in df_bd.iterrows():
 
 
@@ -55,10 +56,11 @@ def lattes_10_researcher_frequency_db():
         UPDATE  researcher set lattes_10_id='%s' where id=\'%s\' """ % (lattes_10_id,infos.id)
         
         print(sql)
+        logger.debug(sql)
        
    
         sgbdSQL.execScript_db(sql)
 print("Passo I")
 
-lattes_10_researcher_frequency_db()
+
 #print(getLattesId10('8318844758415721'))

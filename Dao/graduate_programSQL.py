@@ -5,7 +5,7 @@ import pandas as pd
 import Dao.util as util
  # Função para listar a palavras do dicionário passando as iniciais 
 
-def graduate_program_csv_db(institution_id):
+def graduate_program_db(institution_id):
 
    reg = sgbdSQL.consultar_db( " SELECT graduate_program_id,code,name as program,area,modality,type,rating "
        " FROM graduate_program gp where institution_id=\'%s\'" % institution_id)
@@ -18,6 +18,20 @@ def graduate_program_csv_db(institution_id):
    return df_bd
 
 
+def graduate_program_profnit_db():
+   
+   sql="""
+       SELECT graduate_program_id,code,name as program,area,modality,type,rating,state,city, instituicao,url_image,region, sigla, latitude, longitude 
+       FROM graduate_program gp 
+      """
 
+   reg = sgbdSQL.consultar_db( sql)
+        
+   
+   df_bd = pd.DataFrame(reg, columns=[ 'graduate_program_id','code','program','area','modality','type','rating','state','city','instituicao','url_image','region', 'sigla', 'latitude', 'longitude'])
+
+   print(df_bd)
+
+   return df_bd
 
 

@@ -563,3 +563,471 @@ DEBUG 2023-09-15 21:18:21,293 -
 DEBUG 2023-09-15 21:18:21,984 - 
     INSERT into public.research_dictionary (term,frequency,type_) 
     values('cfd','1','ARTICLE');
+DEBUG 2023-09-15 21:20:14,594 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('doutor','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:15,276 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mestre','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:15,977 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('modelagem','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:16,666 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('computacional','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:17,370 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('tecnologia','3','ABSTRACT');
+DEBUG 2023-09-15 21:20:18,048 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('industrial','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:18,743 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('senai','4','ABSTRACT');
+DEBUG 2023-09-15 21:20:19,438 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('cimatec','3','ABSTRACT');
+DEBUG 2023-09-15 21:20:20,152 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2011','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:20,853 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2016','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:21,553 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('especialista','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:22,239 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('sistemas','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:22,924 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('distribuídos','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:23,606 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('universidade','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:24,290 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('federal','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:25,016 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('bahia','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:25,742 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ufba','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:26,443 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2006','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:27,165 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('graduado','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:27,902 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('processamento','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:28,725 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('dados','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:29,479 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('faculdade','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:30,252 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ruy','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:30,939 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('barbosa','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:31,711 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('frb','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:32,407 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2004','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:33,168 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('professor','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:34,211 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('programas','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:35,918 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('pós','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:36,607 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('graduação','3','ABSTRACT');
+DEBUG 2023-09-15 21:20:37,306 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('centro','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:38,294 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('universitário','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:39,001 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('atualmente','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:39,702 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('pesquisador','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:40,394 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('líder','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:41,079 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('instituto','3','ABSTRACT');
+DEBUG 2023-09-15 21:20:41,772 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('inovação','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:42,456 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('automação','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:43,139 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('produção','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:43,839 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ênfase','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:44,521 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('robôs','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:45,212 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('especiais','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:45,895 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('autônomos','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:46,601 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ppg','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:47,311 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('stricto','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:48,003 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('sensu','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:48,701 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('gestão','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:49,391 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('getec','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:50,114 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('além','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:50,815 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('disso','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:51,507 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('coordenador','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:52,197 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('grupo','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:52,895 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('trabalho','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:53,576 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('eixo','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:54,282 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('força','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:54,996 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('capacitação','2','ABSTRACT');
+DEBUG 2023-09-15 21:20:55,681 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('estratégia','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:56,381 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('brasileira','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:57,068 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('inteligência','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:57,772 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('artificial','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:58,468 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ebia','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:59,159 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('membro','1','ABSTRACT');
+DEBUG 2023-09-15 21:20:59,855 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('comitê','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:00,540 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('rede','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:01,334 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mcti','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:02,030 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('embrapii','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:02,725 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('possui','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:03,427 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('licenciatura','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:04,155 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('plena','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:04,878 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('matematica','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:05,574 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('estadual','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:06,582 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('paulista','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:07,277 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('júlio','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:07,968 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mesquita','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:08,648 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('filho','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:09,372 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('1999','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:10,078 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mestrado','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:10,773 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('engenharia','3','ABSTRACT');
+DEBUG 2023-09-15 21:21:11,461 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('aeronáutica','3','ABSTRACT');
+DEBUG 2023-09-15 21:21:12,244 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mecânica','4','ABSTRACT');
+DEBUG 2023-09-15 21:21:12,929 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('tecnológico','2','ABSTRACT');
+DEBUG 2023-09-15 21:21:13,625 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2003','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:14,344 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('doutorado','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:15,057 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('aeronâutica','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:15,743 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2009','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:16,428 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('professora','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:17,108 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('adjunto','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:17,793 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('pesquisadora','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:18,484 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('experiência','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:19,199 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('área','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:19,886 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('fluidos','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:20,574 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('atuando','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:22,270 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('principalmente','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:22,956 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('seguintes','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:23,657 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('temas','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:24,344 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('meios','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:25,042 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('porosos','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:25,734 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('simulação','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:26,433 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('numérica','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:27,117 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('energias','1','ABSTRACT');
+DEBUG 2023-09-15 21:21:27,799 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('renováveis','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:20,927 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('doutor','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:21,618 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('mestre','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:22,327 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('modelagem','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:23,014 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('computacional','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:23,705 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('tecnologia','3','ABSTRACT');
+DEBUG 2023-09-15 21:23:24,401 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('industrial','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:25,105 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('senai','4','ABSTRACT');
+DEBUG 2023-09-15 21:23:25,806 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('cimatec','3','ABSTRACT');
+DEBUG 2023-09-15 21:23:26,493 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2011','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:27,174 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2016','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:27,867 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('especialista','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:28,560 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('sistemas','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:29,270 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('distribuídos','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:29,954 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('universidade','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:30,645 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('federal','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:31,340 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('bahia','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:32,019 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ufba','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:32,702 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2006','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:33,390 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('graduado','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:34,078 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('processamento','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:34,809 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('dados','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:35,500 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('faculdade','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:36,185 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ruy','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:36,966 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('barbosa','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:37,675 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('frb','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:38,379 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('2004','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:39,092 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('professor','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:39,782 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('programas','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:40,491 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('pós','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:41,176 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('graduação','3','ABSTRACT');
+DEBUG 2023-09-15 21:23:41,866 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('centro','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:42,557 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('universitário','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:43,249 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('atualmente','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:43,952 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('pesquisador','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:44,650 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('líder','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:45,383 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('instituto','3','ABSTRACT');
+DEBUG 2023-09-15 21:23:46,082 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('inovação','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:46,782 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('automação','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:47,473 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('produção','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:48,174 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ênfase','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:48,868 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('robôs','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:49,579 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('especiais','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:50,267 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('autônomos','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:51,001 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('ppg','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:51,684 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('stricto','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:52,368 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('sensu','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:53,067 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('gestão','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:53,764 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('getec','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:54,521 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('além','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:55,203 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('disso','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:55,888 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('coordenador','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:56,588 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('grupo','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:57,310 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('trabalho','2','ABSTRACT');
+DEBUG 2023-09-15 21:23:57,998 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('eixo','1','ABSTRACT');
+DEBUG 2023-09-15 21:23:58,686 - 
+    INSERT into public.research_dictionary (term,frequency,type_) 
+    values('força','1','ABSTRACT');

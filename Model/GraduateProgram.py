@@ -8,6 +8,14 @@ class GraduateProgram(object):
      modality=""
      type=""
      rating=""
+     state=""
+     city=""
+     instituicao=""
+     url_image=""
+     region=""
+     sigla=""
+     latitude=""
+     longitude=""
 
      
      def __init__(self):
@@ -24,7 +32,15 @@ class GraduateProgram(object):
         'area':str(self.area),
         'modality':str(self.modality),
         'type':str(self.type),
-        'rating':str(self.rating)
+        'rating':str(self.rating),
+        "state":str(self.state),
+        "city":str(self.city),
+         "instituicao":str(self.instituicao),
+     "url_image":self.url_image,
+     "region":self.region,
+     "sigla":str(self.sigla),
+     "latitude":self.latitude,
+     "longitude":self.latitude
        
 
         }

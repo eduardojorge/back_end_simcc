@@ -11,7 +11,7 @@ from Model.Researcher import Researcher
 from Model.Bibliographic_Production_Researcher import Bibliographic_Production_Researcher
 from Rest.researcherTermRest import researcherTermRest
 from Rest.areaRest import areaRest
-from Rest.cimatecRest import cimatecRest
+from Rest.graduateProgramRest import cimatecRest
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
 

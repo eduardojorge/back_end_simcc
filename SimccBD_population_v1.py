@@ -13,6 +13,8 @@ import Dao.util as util
 import Dao.termFlowSQL as termFlowSQL
 import logging
 from datetime import datetime
+import lattes10
+#import Soap_lattes
 
 
 import concurrent.futures
@@ -65,7 +67,7 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
           sql="""
                         SELECT  r.term as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id 
                                  FROM research_dictionary as r,bibliographic_production AS b   
-                                 WHERE 
+                                 WHERE is_new=true and
                                 (        translate(unaccent(LOWER(b.title)),':;''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
                                 %s
@@ -91,7 +93,7 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
            
         except Exception as e: 
           print (e)         
-          logger.erro(e)
+          logger.error(e)
           traceback.print_exc()  
        
 def insert_researcher_abstract_frequency_caracter_bd(researcher_id):     
@@ -128,7 +130,7 @@ def insert_researcher_abstract_frequency_caracter_bd(researcher_id):
                 values('%s','%s');""" % (researcher_id,infos.term)
 
            sgbdSQL.execScript_db(sql)
-           log(sql)
+         
         except Exception as e: 
           print (e)         
           traceback.print_exc()  
@@ -704,6 +706,16 @@ logger = logging.getLogger()
        
 logger.debug("Inicio")
 
+lattes10.lattes_10_researcher_frequency_db(logger)
+
+sql="""
+
+UPDATE bibliographic_production_article ba SET qualis='A4' WHERE ba.issn='17412242'
+
+"""
+sgbdSQL.execScript_db(sql)
+logger.debug(sql)
+
 sql = """
 
 UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
@@ -737,7 +749,7 @@ logger.debug(sql)
 
 
 
-sql = """ UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' AND issn='2764622'"""
+sql = """ UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' OR issn='2764622'"""
 
 sgbdSQL.execScript_db(sql)
 
@@ -747,7 +759,7 @@ logger.debug(sql)
 print("Passo II")
 
 
-#create_researcher_production_db(0 )
+create_researcher_production_db(0 )
 
 
 
