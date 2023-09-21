@@ -13,7 +13,7 @@ from Model.Magazine import Magazine
 
 from Rest.researcherTermRest import researcherTermRest
 from Rest.areaRest import areaRest
-from Rest.cimatecRest import cimatecRest
+from Rest.graduateProgramRest import graduateProgramRest
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
 import Dao.generalSQL 
@@ -27,7 +27,7 @@ import Dao.generalSQL
 app = Flask(__name__)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(areaRest)
-app.register_blueprint(cimatecRest)
+app.register_blueprint(graduateProgramRest)
 app.config["CORS_HEADERS"] = "Content-Type"
 app.route('/')
 CORS(app, resources={r"/*":{"origins":"*"}})
