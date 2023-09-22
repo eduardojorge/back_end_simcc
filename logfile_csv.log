@@ -1,13 +1,13 @@
-DEBUG 2023-09-21 07:32:57,664 - Inicio
-DEBUG 2023-09-21 07:32:57,798 - 
+DEBUG 2023-09-21 12:50:09,680 - Inicio
+DEBUG 2023-09-21 12:50:09,794 - 
       SELECT graduate_program_id,code,name,area,modality,type,rating 
         FROM graduate_program gp
     
-DEBUG 2023-09-21 07:32:57,937 - 
+DEBUG 2023-09-21 12:50:09,891 - 
     SELECT researcher_id,graduate_program_id,year,type_ 
         FROM graduate_program_researcher
     
-DEBUG 2023-09-21 07:32:58,509 - 
+DEBUG 2023-09-21 12:50:10,305 - 
         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
                              
                                    FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
@@ -23,7 +23,7 @@ DEBUG 2023-09-21 07:32:58,509 -
 
                         order by qualis desc
     
-DEBUG 2023-09-21 07:32:58,927 - 
+DEBUG 2023-09-21 12:50:10,650 - 
          SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
                              
                                    FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
@@ -38,7 +38,7 @@ DEBUG 2023-09-21 07:32:58,927 -
 
                         order by qualis desc
    
-DEBUG 2023-09-21 07:32:59,255 - 
+DEBUG 2023-09-21 12:50:10,931 - 
             
          	SELECT title,
             
@@ -59,7 +59,7 @@ DEBUG 2023-09-21 07:32:59,255 -
                     
         
          
-DEBUG 2023-09-21 07:32:59,683 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+DEBUG 2023-09-21 12:50:11,334 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
 
         FROM  researcher r 

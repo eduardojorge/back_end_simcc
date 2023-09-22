@@ -27,18 +27,26 @@ def list_research_dictionary_db(initials,type):
      if initials=="":
         filter ="" 
         fetch="  fetch FIRST 50 rows only"
+     filterGraduate_program=""   
     
+     #LEFT JOIN graduate_program_researcher gpr ON  r.researcher_id =gpr.researcher_id    
+                                 
+     sql = """
+           SELECT  distinct unaccent(term) as term,count(frequency) as frequency ,type_  
+                                from research_dictionary r 
+                                
 
-     reg = sgbdSQL.consultar_db("SELECT  distinct unaccent(term) as term,count(frequency) as frequency ,type_  "
-                               " from research_dictionary r "
-                               #LEFT JOIN graduate_program_researcher gpr ON  r.researcher_id =gpr.researcher_id "
-
-                               " WHERE "
-                                "  type_='" + type + "'"+
-                                " %s" % filter +
-                                #" %s " % filtergraduate_program +
-                            
-                                " GROUP BY unaccent(term),type_  ORDER BY frequency desc %s" % fetch)
+                                 WHERE 
+                             
+                              
+                                  type_='%s'
+                                 %s 
+                                                             
+                                 GROUP BY unaccent(term),type_  ORDER BY frequency desc %s
+      """ % (type.upper(),filter,fetch)
+     print(sql)
+     reg = sgbdSQL.consultar_db(sql)
+ 
 
                          
      df_bd = pd.DataFrame(reg, columns=['term','frequency','type'])

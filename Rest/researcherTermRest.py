@@ -42,13 +42,14 @@ def originals_words():
     list_researcher  = []
     initials = request.args.get('initials')
     type = request.args.get('type')
+   # graduate_program_id =request.args.get('graduate_program_id')
     print(initials)
     ''''
      ''''''    
      filtergraduate_program=""
      if graduate_program_id!="":
        graduate_program_id = "AND gpr.graduate_program_id="+graduate_program_id
-    graduate_program_id =request.args.get('graduate_program_id')
+    
     if graduate_program_id is None:
         graduate_program_id =""
      '''   

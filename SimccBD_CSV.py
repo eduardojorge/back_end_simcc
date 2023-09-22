@@ -3,10 +3,12 @@ import pandas as pd
 import logging
 import json
 from datetime import datetime
+import sys
 #import lattes10 as lattes10
 
 
-dir="C:\\simccv3\\"
+#dir="C:\\simccv3\\"
+dir= host_=sys.argv[3]
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
     
