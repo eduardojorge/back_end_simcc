@@ -9,6 +9,7 @@ import sys
 
 #dir="C:\\simccv3\\"
 dir= host_=sys.argv[3]
+print(dir)
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
     
@@ -29,8 +30,9 @@ def researcher_production_tecnical_year_csv_db():
     df_bd = pd.DataFrame(reg, columns=['researcher_id','title','year','type'])
     
     print(df_bd)
+    logger.debug(sql)
 
-    df_bd.to_csv('C:/simccv3/production_tecnical_year.csv')
+    df_bd.to_csv(dir +'production_tecnical_year.csv')
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -402,6 +404,10 @@ print("Fim: article_distinct_novo_csv_db")
 print("Inicio: researcher_production_novo_csv_db")
 researcher_production_novo_csv_db()
 print("Fim: researcher_production_novo_csv_db")
+
+print("Inicio: researcher_production_tecnical_year_csv_db")
+researcher_production_tecnical_year_csv_db()
+print("Fim: researcher_production_tecnical_year_csv_db")
 
 print("Inicio: researcher_csv_db")
 researcher_csv_db()

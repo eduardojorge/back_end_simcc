@@ -1,0 +1,166 @@
+DEBUG 2023-09-23 19:57:37,319 - total=1
+DEBUG 2023-09-23 19:57:40,405 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('01036c84-533a-4747-9725-b9f0bb2075be','56','8','0','74','','','','','14','1','0');
+        
+DEBUG 2023-09-23 19:57:40,912 - total=2
+DEBUG 2023-09-23 19:57:43,928 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('02e48cb3-51aa-4d78-9229-6e9c0ed7c79c','146','9','2','207','','','','','0','3','0');
+        
+DEBUG 2023-09-23 19:57:44,406 - total=3
+DEBUG 2023-09-23 19:57:47,364 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('063679d8-a7c1-45b7-9f5b-6294a6bbaa50','48','3','1','32','','','','','1','0','0');
+        
+DEBUG 2023-09-23 19:57:47,825 - total=4
+DEBUG 2023-09-23 19:57:50,901 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('06ec627e-11a8-4ffe-9a11-a3e83044f5ee','1','0','0','0','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:57:51,433 - total=5
+DEBUG 2023-09-23 19:57:54,564 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('07caf0c5-7414-4436-a817-e2edb15cdddc','82','11','1','89','','','','','0','1','1');
+        
+DEBUG 2023-09-23 19:57:55,069 - total=6
+DEBUG 2023-09-23 19:57:58,204 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('084d9f37-10dc-433c-af9c-f8272f651960','6','0','4','22','','','','','0','7','0');
+        
+DEBUG 2023-09-23 19:57:58,687 - total=7
+DEBUG 2023-09-23 19:58:01,651 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('0b79ea1b-0a3d-4cc4-a1e2-117749322cda','0','0','0','0','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:02,131 - total=8
+DEBUG 2023-09-23 19:58:05,113 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('0c24e6f7-4259-402c-a473-9cefafcaa7eb','3','0','0','16','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:05,622 - total=9
+DEBUG 2023-09-23 19:58:08,728 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('126778b2-fad5-42b1-882b-05a9a1298137','73','10','7','36','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:09,197 - total=10
+DEBUG 2023-09-23 19:58:12,561 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('13fa2dbf-4ef1-49cd-85e8-19f1b9eb897a','56','4','0','52','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:13,102 - total=11
+DEBUG 2023-09-23 19:58:16,017 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1652efb5-7f82-4a42-9208-605694e6f0ce','40','19','3','69','','','','','0','8','0');
+        
+DEBUG 2023-09-23 19:58:16,538 - total=12
+DEBUG 2023-09-23 19:58:19,522 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('173fe9a4-5a1c-400e-9574-83f9e08be23c','78','19','3','178','','','','','0','1','0');
+        
+DEBUG 2023-09-23 19:58:20,019 - total=13
+DEBUG 2023-09-23 19:58:23,078 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('182fad3b-51ce-42a3-86f5-e6bbfb8861c2','31','0','0','80','','','','','7','0','0');
+        
+DEBUG 2023-09-23 19:58:23,582 - total=14
+DEBUG 2023-09-23 19:58:26,641 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1892ad9c-46cc-42d1-8bb8-0bdd99826975','0','0','0','1','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:27,140 - total=15
+DEBUG 2023-09-23 19:58:30,213 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('18ea51fe-c3d1-41d1-94f6-db98207f23f4','6','1','0','7','','','','','9','0','0');
+        
+DEBUG 2023-09-23 19:58:30,735 - total=16
+DEBUG 2023-09-23 19:58:33,662 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('192d382a-2b35-489e-8a4c-3fd2e24ad45b','12','5','6','64','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:34,136 - total=17
+DEBUG 2023-09-23 19:58:37,088 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('193fb260-cf35-4fff-86b9-156ff3811f41','106','7','3','225','','','','','23','0','5');
+        
+DEBUG 2023-09-23 19:58:37,562 - total=18
+DEBUG 2023-09-23 19:58:40,488 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1a888ffd-efea-4238-8aa9-8c26ad68ce0b','24','0','0','47','','','','','3','0','0');
+        
+DEBUG 2023-09-23 19:58:41,256 - total=19
+DEBUG 2023-09-23 19:58:44,371 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1a9ae83b-a477-46ed-abf0-0d0437850d8b','43','0','0','31','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:44,882 - total=20
+DEBUG 2023-09-23 19:58:47,960 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1b5bb57e-ef46-4c3b-82a4-2e75e54a41f5','33','15','3','84','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:58:48,438 - total=21
+DEBUG 2023-09-23 19:58:51,936 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1c2c3db8-4ead-426b-b1e8-6fa4598ac5fe','85','6','2','92','','','','','3','0','1');
+        
+DEBUG 2023-09-23 19:58:52,401 - total=22
+DEBUG 2023-09-23 19:58:55,372 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('1ccf8424-60e8-46f6-928f-ad4230094dba','9','1','0','72','','','','','1','0','0');
+        
+DEBUG 2023-09-23 19:58:55,892 - total=23
+DEBUG 2023-09-23 19:58:59,019 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('2064517f-a8ff-4d26-b384-07e9465151a4','46','9','0','57','','','','','1','2','0');
+        
+DEBUG 2023-09-23 19:58:59,529 - total=24
+DEBUG 2023-09-23 19:59:02,605 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('21395499-44ab-4e00-a382-3408f9c957a0','111','76','22','245','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:59:03,106 - total=25
+DEBUG 2023-09-23 19:59:06,154 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('22508054-4b2e-4b79-a56c-cdf80a783059','6','9','0','22','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:59:06,634 - total=26
+DEBUG 2023-09-23 19:59:09,565 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('248d3cd5-e118-4140-83c2-55450158eb00','0','3','0','1','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:59:10,029 - total=27
+DEBUG 2023-09-23 19:59:13,001 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('249f7d66-7df9-4bdf-96b3-8fb340e4eac1','93','98','22','100','','','','','0','27','0');
+        
+DEBUG 2023-09-23 19:59:13,478 - total=28
+DEBUG 2023-09-23 19:59:16,454 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('25f6b0cc-7d2d-4e1b-af2c-b1dfc04c1cde','0','1','0','0','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:59:16,987 - total=29
+DEBUG 2023-09-23 19:59:20,019 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('2d6cba8d-d3a6-4761-ad80-627837de3367','29','2','0','42','','','','','1','0','0');
+        
+DEBUG 2023-09-23 19:59:20,502 - total=30
+DEBUG 2023-09-23 19:59:23,602 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('2d803355-ae95-45e5-955a-027cfba6671e','141','10','0','199','OUTROS ; ENGENHARIAS ; CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Tecnologia De Processos E Produtos | Biotecnologia ; Produtos Naturais | Engenharia Química ','Salvador','Centro Integrado de Manufatura e Tecnologia','24','0','0');
+        
+DEBUG 2023-09-23 19:59:24,107 - total=31
+DEBUG 2023-09-23 19:59:27,776 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('3094b1b2-1524-4d0a-be91-368e13d81bda','206','47','79','272','','','','','0','0','0');
+        
+DEBUG 2023-09-23 19:59:28,280 - total=32
+DEBUG 2023-09-23 19:59:31,502 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('30a7c17d-e74a-468b-931a-db5d56efeb14','16','0','1','11','','','','','14','0','0');
+        
+DEBUG 2023-09-23 19:59:32,004 - total=33
+DEBUG 2023-09-23 19:59:35,239 - 
+        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
+        values('339a663e-794a-484b-8614-3e98f3fdb190','17','2','0','47','','','','','0','0','1');
+        
+DEBUG 2023-09-23 19:59:35,729 - total=34
