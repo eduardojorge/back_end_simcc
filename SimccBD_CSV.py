@@ -1,4 +1,5 @@
 import Dao.sgbdSQL as sgbdSQL
+import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
 import logging
 import json
@@ -355,6 +356,12 @@ def graduate_program_csv_db():
    df_bd.to_csv(dir+'cimatec_graduate_program.csv')
   
 
+def profnit_graduate_program_csv_db():
+
+   df_bd = graduate_programSQL.graduate_program_profnit_db()
+   logger.debug(profnit_graduate_program_csv_db)
+
+   df_bd.to_csv(dir+'profnit_graduate_program.csv')
 
 
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
@@ -408,6 +415,11 @@ print("Fim: researcher_production_novo_csv_db")
 print("Inicio: researcher_production_tecnical_year_csv_db")
 researcher_production_tecnical_year_csv_db()
 print("Fim: researcher_production_tecnical_year_csv_db")
+
+if sys.argv[1]=="simcc_profnit_v1":
+   profnit_graduate_program_csv_db()
+
+
 
 print("Inicio: researcher_csv_db")
 researcher_csv_db()

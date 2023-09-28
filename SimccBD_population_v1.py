@@ -64,10 +64,12 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
           filter =""
           if article==True:
             filter =" AND type='ARTICLE' "
+            # is_new=true and
           sql="""
                         SELECT  r.term as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id 
                                  FROM research_dictionary as r,bibliographic_production AS b   
-                                 WHERE is_new=true and
+                                 WHERE
+                                  
                                 (        translate(unaccent(LOWER(b.title)),':;''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
                                 %s
@@ -462,7 +464,9 @@ def create_researcher_title_dictionary_db(researcher_id,article):
   if article==1:
      filter =" AND type='ARTICLE' "
   reg = sgbdSQL.consultar_db('SELECT  distinct title,b.type,year from bibliographic_production AS b'+
-  ' WHERE is_new= true and researcher_id=\''+ researcher_id +"\'"+filter+
+  ' WHERE '+
+ # is_new= true and 
+  'researcher_id=\''+ researcher_id +"\'"+filter+
   # " AND char_length(unaccent(LOWER(r.term)))>3 AND to_tsvector('portuguese', unaccent(LOWER(r.term)))!='' and  unaccent(LOWER(r.term))!='sobre' "+
    # " AND (       translate(unaccent(LOWER(title)),':','') ::tsvector@@ '"+unidecode.unidecode("robotica | educacional | educacao")+"'::tsquery)=true"+
       #' AND "type" = \'ARTICLE\' '+
@@ -492,7 +496,9 @@ def create_researcher_abstract_dictionary_db(researcher_id):
 
  
   reg = sgbdSQL.consultar_db('SELECT  r.abstract as abstract from researcher as r'+
-  ' WHERE update_abstract=true and r.id=\''+ researcher_id +"\'")
+  ' WHERE ' +
+   # update_abstract=true and
+   'r.id=\''+ researcher_id +"\'")
   
   df_bd = pd.DataFrame(reg, columns=['abstract'])
     #print(df_bd.head())
@@ -619,7 +625,7 @@ logger.debug(sql)
 print("Passo II")
 
 
-create_researcher_production_db(0 )
+#create_researcher_production_db(0 )
 
 
 

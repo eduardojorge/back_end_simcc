@@ -1,13 +1,13 @@
-DEBUG 2023-09-23 17:21:36,646 - Inicio
-DEBUG 2023-09-23 17:21:37,092 - 
+DEBUG 2023-09-28 07:25:05,574 - Inicio
+DEBUG 2023-09-28 07:25:06,023 - 
       SELECT graduate_program_id,code,name,area,modality,type,rating 
         FROM graduate_program gp
     
-DEBUG 2023-09-23 17:21:37,801 - 
+DEBUG 2023-09-28 07:25:06,423 - 
     SELECT researcher_id,graduate_program_id,year,type_ 
         FROM graduate_program_researcher
     
-DEBUG 2023-09-23 17:21:38,803 - 
+DEBUG 2023-09-28 07:25:07,667 - 
         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
                              
                                    FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
@@ -23,7 +23,7 @@ DEBUG 2023-09-23 17:21:38,803 -
 
                         order by qualis desc
     
-DEBUG 2023-09-23 17:21:39,664 - 
+DEBUG 2023-09-28 07:25:08,498 - 
          SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
                              
                                    FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
@@ -38,7 +38,7 @@ DEBUG 2023-09-23 17:21:39,664 -
 
                         order by qualis desc
    
-DEBUG 2023-09-23 17:21:41,789 - 
+DEBUG 2023-09-28 07:25:09,617 - 
             
          	SELECT title,
             
@@ -59,7 +59,7 @@ DEBUG 2023-09-23 17:21:41,789 -
                     
         
          
-DEBUG 2023-09-23 17:21:42,539 - 
+DEBUG 2023-09-28 07:25:10,327 - 
           SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
           UNION
           SELECT researcher_id,title,YEAR,'SOFTWARE' from software
@@ -69,7 +69,7 @@ DEBUG 2023-09-23 17:21:42,539 -
           SELECT researcher_id,title,YEAR,'REPORT' from research_report
 
     
-DEBUG 2023-09-23 17:21:43,005 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+DEBUG 2023-09-28 07:25:10,767 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
 
         FROM  researcher r 

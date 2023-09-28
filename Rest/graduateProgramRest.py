@@ -25,6 +25,18 @@ from Model.Bibliographic_Production_Researcher import Bibliographic_Production_R
 #if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
 graduateProgramRest = Blueprint('graduateProgramRest', __name__)
 
+#print(list_originals_words_initials_term_db("rob")) 
+@graduateProgramRest.route('/graduate_program_production', methods=['GET'])
+@cross_origin(origin="*", headers=["Content-Type"])
+
+def graduate_program_production():
+  
+
+  graduate_program_id =request.args.get('graduate_program_id')
+
+  year =request.args.get('year')
+  
+  return jsonify(graduate_programSQL.production_general_db(graduate_program_id,year)),200
 
 
 

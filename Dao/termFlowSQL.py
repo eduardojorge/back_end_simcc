@@ -355,7 +355,7 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(researcher_id,year,g
      if graduate_program_id!="":
        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
 
-     reg = sgbdSQL.consultar_db(  " SELECT count(*)  as qtd,qualis,b.year as year"+
+     reg = sgbdSQL.consultar_db(  " SELECT count(*)  as qtd,bar.qualis"+
                                   " FROM  PUBLIC.bibliographic_production b  LEFT JOIN graduate_program_researcher gpr ON  b.researcher_id =gpr.researcher_id,bibliographic_production_article bar,"+
 	                               "periodical_magazine pm " + 
                                   "  WHERE "+
@@ -367,7 +367,7 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(researcher_id,year,g
                         "  AND year_ >=%s" % year+
                         filter+
                         " %s " % filtergraduate_program+
-                        "  group by b.year,qualis order by b.year,qualis desc")
+                        "  group by bar.qualis order by qualis asc")
                         
                         
      
@@ -376,7 +376,7 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(researcher_id,year,g
                         
                         
                      
-     df_bd = pd.DataFrame(reg, columns=['qtd','qualis','year'])
+     df_bd = pd.DataFrame(reg, columns=['qtd','qualis'])
     
      return df_bd
 
