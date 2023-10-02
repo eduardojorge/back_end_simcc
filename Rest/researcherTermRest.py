@@ -16,6 +16,7 @@ from Model.Book_Researcher import Book_Researcher
 from Model.Book_Chapter_Researcher import Book_Chapter_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.Researcher_Report import Researcher_Report
+import  Dao.resarcher_baremaSQL as  resarcher_baremaSQL
 import Dao.areaFlowSQL
 
 
@@ -34,7 +35,27 @@ researcherTermRest = Blueprint('researcherTermRest', __name__)
 
 
 
+
+
 ######### Fluxo Termo
+
+@researcherTermRest.route('/resarcher_barema', methods=['GET'])
+@cross_origin(origin="*", headers=["Content-Type"])
+def resarcher_barema():
+   
+    list_lattes_id = request.args.get('lattes_id')
+    year = request.args.get('year')
+    year_guidance = request.args.get('year_guidance')
+ 
+
+    
+  
+    
+    
+    return jsonify(resarcher_baremaSQL.researcher_production_db(list_lattes_id,year,year_guidance)
+), 200
+
+
 
 @researcherTermRest.route('/originals_words', methods=['GET'])
 @cross_origin(origin="*", headers=["Content-Type"])

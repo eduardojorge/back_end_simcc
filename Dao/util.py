@@ -1,5 +1,5 @@
  
-
+import unidecode
 
 
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
@@ -34,3 +34,9 @@ def filterSQLLike(text,split,booleanOperator,attribute):
       filter = filter[0:x-3]
       filter = " AND ("+filter+")" 
  return filter
+
+def unidecodelower(text1,text2):
+    if unidecode.unidecode(text1.lower())==unidecode.unidecode(text2.lower()):
+       return True
+    else:
+       return False
