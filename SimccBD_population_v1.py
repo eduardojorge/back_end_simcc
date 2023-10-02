@@ -12,12 +12,16 @@ import Dao.areaFlowSQL as areaFlowSQL
 import Dao.util as util
 import Dao.termFlowSQL as termFlowSQL
 import logging
-from datetime import datetime
+from datetime import datetime,timedelta
 import lattes10
 #import Soap_lattes
 
 
 import concurrent.futures
+
+
+dataP = datetime.today() - timedelta(days=5)
+
 
 researcher_teste1 ="r.name LIKE \'Manoel %\' OR r.name LIKE \'Gesil Sampaio%\' "
 #researcher_teste2 ="r.name LIKE \'Hugo Saba%\' OR r.name LIKE \'Josemar Rodri%\'"
@@ -37,7 +41,7 @@ def insert_researcher_frequency_db(teste,article,offset):
    time.sleep(3)
    filter=""
    if (teste==True):
-      filter =  " where "+ researcher_teste1 
+      filter =  " where created_at>= '%s'" % dataP
       #+ " or " +researcher_teste2
                   
    reg = sgbdSQL.consultar_db("SELECT   id from researcher r "+filter+" OFFSET "+str(offset) +" ROWS FETCH FIRST 100 ROW ONLY")
@@ -74,8 +78,8 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
                                 
                                 %s
                                  AND r.term LIKE '%s'
-                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' 
-              """  % ( filter,caracter+ "%",researcher_id)
+                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' AND created_at>= '%s'
+              """  % ( filter,caracter+ "%",researcher_id,dataP)
           reg = sgbdSQL.consultar_db(sql)
          
          
@@ -113,8 +117,8 @@ def insert_researcher_abstract_frequency_caracter_bd(researcher_id):
                               
                                   AND r.term LIKE '%s'
                                   AND re.id= '%s' 
-                                  AND r.type_='ABSTRACT'
-              """ % (caracter+ "%",researcher_id)
+                                  AND r.type_='ABSTRACT' AND re.created_at>= '%s'
+              """ % (caracter+ "%",researcher_id,dataP)
          # print(sql)
    
           reg = sgbdSQL.consultar_db(sql)
@@ -315,11 +319,13 @@ def create_researcher_dictionary_db(test,article):
 
   filter=""
   if (test==1):
-      filter =  " where "+ researcher_teste1
+      filter =  " where created_at>= '%s'" % dataP
       #+ "  OR "+researcher_teste2
         
- 
-  reg = sgbdSQL.consultar_db("SELECT   id from researcher r" + filter)
+  sql="SELECT   id from researcher r" + filter 
+  reg = sgbdSQL.consultar_db(sql)
+
+  logger.debug(sql)
                  
   df_bd = pd.DataFrame(reg, columns=['id'])
   m=[];
@@ -409,12 +415,12 @@ def create_researcher_dictionary_abstract_db(test):
   
   filter=""
   if (test==1):
-      filter =  " where "+ researcher_teste1
+      filter =  " where created_at>= '%s'" % dataP
       #+ "  OR "+researcher_teste2
         
- 
-  reg = sgbdSQL.consultar_db("SELECT   id from researcher r" + filter)
-                 
+  sql="SELECT   id from researcher r" + filter
+  reg = sgbdSQL.consultar_db(sql)
+  logger.debug(sql)               
   df_bd = pd.DataFrame(reg, columns=['id'])
   m=[];
 
@@ -462,7 +468,7 @@ def create_researcher_title_dictionary_db(researcher_id,article):
 
   filter =""
   if article==1:
-     filter =" AND type='ARTICLE' "
+     filter =" AND  type='ARTICLE' AND created_at>= '%s'" % dataP
   reg = sgbdSQL.consultar_db('SELECT  distinct title,b.type,year from bibliographic_production AS b'+
   ' WHERE '+
  # is_new= true and 
@@ -571,8 +577,12 @@ logger = logging.getLogger()
 
        
 logger.debug("Inicio")
+try:
 
-lattes10.lattes_10_researcher_frequency_db(logger)
+  lattes10.lattes_10_researcher_frequency_db(logger)
+except Exception as e: 
+          print (e)         
+          traceback.print_exc()   
 
 sql="""
 
@@ -636,7 +646,7 @@ print("Passo II")
 
 
 #create_area_ditionary_db()
-teste=False
+teste=True
 article=True
 create_researcher_dictionary_db(teste,article)
 create_researcher_dictionary_abstract_db(teste)

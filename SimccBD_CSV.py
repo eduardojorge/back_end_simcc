@@ -9,6 +9,7 @@ import sys
 
 
 #dir="C:\\simccv3\\"
+#python3 SimccBD_CSV.py   "cimatec_v7"  "172.25.0.84" "C:\simccv3\" 
 dir= host_=sys.argv[3]
 print(dir)
 # Função processar e inserir a produção de cada pesquisador
