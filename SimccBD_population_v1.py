@@ -41,10 +41,10 @@ def insert_researcher_frequency_db(teste,article,offset):
    time.sleep(3)
    filter=""
    if (teste==True):
-      filter =  " where created_at>= '%s'" % dataP
+      filter =  " and  b.created_at>= '%s'" % dataP
       #+ " or " +researcher_teste2
                   
-   reg = sgbdSQL.consultar_db("SELECT   id from researcher r "+filter+" OFFSET "+str(offset) +" ROWS FETCH FIRST 100 ROW ONLY")
+   reg = sgbdSQL.consultar_db("SELECT   r.id from researcher r, bibliographic_production b where r.id =b.researcher_id "+filter+" OFFSET "+str(offset) +" ROWS FETCH FIRST 100 ROW ONLY")
                     #'where id=\'35e6c140-7fbb-4298-b301-c5348725c467\''+
                     #' OR id=\'c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf\' ')
    df_bd = pd.DataFrame(reg, columns=['id'])
@@ -78,7 +78,7 @@ def insert_researcher_frequency_caracter_bd(researcher_id,article):
                                 
                                 %s
                                  AND r.term LIKE '%s'
-                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' AND created_at>= '%s'
+                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' AND b.created_at>= '%s'
               """  % ( filter,caracter+ "%",researcher_id,dataP)
           reg = sgbdSQL.consultar_db(sql)
          
@@ -319,10 +319,10 @@ def create_researcher_dictionary_db(test,article):
 
   filter=""
   if (test==1):
-      filter =  " where created_at>= '%s'" % dataP
+      filter =  "  and b.created_at>= '%s'" % dataP
       #+ "  OR "+researcher_teste2
         
-  sql="SELECT   id from researcher r" + filter 
+  sql="SELECT   r.id from researcher r,bibliographic_production b where r.id=researcher_id " + filter 
   reg = sgbdSQL.consultar_db(sql)
 
   logger.debug(sql)

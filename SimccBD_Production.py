@@ -6,6 +6,8 @@ import Dao.areaFlowSQL as areaFlowSQL
 import Dao.util as util
 import Dao.termFlowSQL as termFlowSQL
 import logging
+from datetime import datetime,timedelta
+
 
 
 
@@ -46,6 +48,8 @@ def researcher_patent_db(researcher_id):
 
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(teste):
+    
+    
      
  
      sql = "DELETE FROM researcher_production"
