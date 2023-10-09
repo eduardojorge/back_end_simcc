@@ -84,7 +84,7 @@ logger = logging.getLogger()
 
 logger.debug("Inicio")
 
-dir = '/home/eduardomfjorge/hop/config/projects/curriculos/'
+dir = '/home/eduardomfjorge/curriculos/'
 
 for f in os.listdir(dir):
     try:
