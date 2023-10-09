@@ -8,7 +8,16 @@ class Resarcher_Production(object):
         software=""
         brand=""
         book=""
-        article=""
+        article_A1=""
+        article_A2=""
+        article_A3=""
+        article_A4=""
+        article_B1=""
+        article_B2=""
+        article_B3=""
+        article_B4=""
+        article_C=""
+        article_SQ=""
         book_chapter=""
         work_in_event=""
         researcher=""
@@ -46,7 +55,21 @@ class Resarcher_Production(object):
          'software': self.software,
          'brand':self.brand,
          'book':self.book,
-         'article':self.article,
+         'article_A1':self.article_A1,
+         'article_A2':self.article_A2,
+         'article_A3':self.article_A3,
+         'article_A4':self.article_A4,
+         'article_B1':self.article_B1,
+         'article_B2':self.article_B2,
+         'article_B3':self.article_B3,
+         'article_B4':self.article_B4,
+         'article_C':self.article_C,
+          'article_SQ':self.article_SQ,
+
+        
+
+
+         
          'book_chapter':self.book_chapter,
          'work_in_event':self.work_in_event,
          'researcher':self.researcher,

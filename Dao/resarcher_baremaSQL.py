@@ -7,7 +7,33 @@ import Model.Resarcher_Production as Resarcher_Production
  # Função para listar a palavras do dicionário passando as iniciais 
 
 
+def article_qualis(resarcher_Production,infos):
 
+    print(infos.tipo[7:10])
+
+    
+    if(infos.tipo[7:10]=='A1'):
+        resarcher_Production.article_A1=infos.qtd
+    if(infos.tipo[7:10]=='A2'):
+        resarcher_Production.article_A2=infos.qtd
+    if(infos.tipo[7:10]=='A3'):
+        resarcher_Production.article_A3=infos.qtd    
+    if(infos.tipo[7:10]=='A4'):
+        resarcher_Production.article_A4=infos.qtd
+    if(infos.tipo[7:10]=='B1'):
+        resarcher_Production.article_B1=infos.qtd
+    if(infos.tipo[7:10]=='B2'):
+        resarcher_Production.article_B2=infos.qtd
+    if(infos.tipo[7:10]=='B3'):
+        resarcher_Production.article_B3=infos.qtd
+    if(infos.tipo[7:10]=='B4'):
+        resarcher_Production.article_B4=infos.qtd
+    if(infos.tipo[7:10]=='SQ'):
+        resarcher_Production.article_SQ=infos.qtd
+    if(infos.tipo[7:9]=='C'):
+        resarcher_Production.article_C=infos.qtd
+
+    return resarcher_Production
 
 def lists_guidance_researcher_db(year,resarcher_Production):
       
@@ -91,7 +117,7 @@ def lists_guidance_researcher_db(year,resarcher_Production):
            resarcher_Production.guidance_e_a= infos.qtd    
        
 
-      print(df_bd)
+      #print(df_bd)
 
       return resarcher_Production
 
@@ -115,13 +141,13 @@ def production_general_db(lattes_id,year,year_guidance):
                  group by  type,r.name,r.lattes_10_id,r.graduation,r.id   
                   UNION                 
   
-            SELECT COUNT(ba.id) as qtd,'ARTICLE' as TYPE , r.name,r.lattes_10_id,r.graduation,r.id
+            SELECT COUNT(ba.id) as qtd,'ARTICLE' || ba.qualis as TYPE , r.name,r.lattes_10_id,r.graduation,r.id
             FROM   PUBLIC.bibliographic_production b , bibliographic_production_article ba, researcher r
 			 WHERE  b.id =ba.bibliographic_production_id AND TYPE='ARTICLE' AND b.researcher_id =r.id
 			 and r.lattes_id='%s' and  b.year_ >=%s
           
                 
-                 group BY  TYPE, r.name,r.lattes_10_id,r.graduation, r.id 
+                 group BY  'ARTICLE' || ba.qualis, r.name,r.lattes_10_id,r.graduation, r.id 
                           
         UNION
         SELECT COUNT(b.id) as qtd, 'BOOK' AS  type ,r.name,r.lattes_10_id,r.graduation,r.id
@@ -152,9 +178,10 @@ def production_general_db(lattes_id,year,year_guidance):
         
 
     """ % (lattes_id,year,lattes_id,year,lattes_id,year,lattes_id,year,lattes_id,year,lattes_id,year)
-    print(sql)
+    #print(sql)
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=['qtd','tipo','name_','lattes_10_id','graduation','researcher_id'])
+   
 
     list_Resarcher_Production=[]
     resarcher_Production = Resarcher_Production.Resarcher_Production()
@@ -173,6 +200,7 @@ def production_general_db(lattes_id,year,year_guidance):
         resarcher_Production.id = str(infos.researcher_id)
         
         resarcher_Production.graduation = infos.graduation
+        
 
         if infos.tipo=="BOOK":
           
@@ -181,8 +209,10 @@ def production_general_db(lattes_id,year,year_guidance):
         if infos.tipo=="WORK_IN_EVENT":
             resarcher_Production.work_in_event= infos.qtd   
 
-        if infos.tipo=="ARTICLE":
-            resarcher_Production.article = infos.qtd   
+        if infos.tipo[0:7]=="ARTICLE":
+            print(infos.tipo[7:10])
+            resarcher_Production = article_qualis(resarcher_Production,infos)
+            #resarcher_Production.article = infos.qtd   
 
         if infos.tipo=="BOOK_CHAPTER":
            resarcher_Production.book_chapter = infos.qtd   
