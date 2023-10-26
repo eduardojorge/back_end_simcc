@@ -38,6 +38,9 @@ class Resarcher_Production(object):
 
         lattes_10_id=""
         graduation=""
+        event_organization=""
+        participation_event=""
+
        
 
         def __init__(self):
@@ -91,7 +94,9 @@ class Resarcher_Production(object):
           'guidance_e_a':self.guidance_e_a,
           'guidance_e_c':self.guidance_e_c,
 
-          'lattes_10_id':self.lattes_10_id
+          'lattes_10_id':self.lattes_10_id,
+          'event_organization':self.event_organization,
+          'participation_event':self.participation_event
 
      
         

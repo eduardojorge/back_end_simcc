@@ -42,17 +42,19 @@ researcherTermRest = Blueprint('researcherTermRest', __name__)
 @researcherTermRest.route('/resarcher_barema', methods=['GET'])
 @cross_origin(origin="*", headers=["Content-Type"])
 def resarcher_barema():
+
+    list_name= request.args.get('name')
    
     list_lattes_id = request.args.get('lattes_id')
     year = request.args.get('year')
-    year_guidance = request.args.get('year_guidance')
+    
  
 
     
   
     
     
-    return jsonify(resarcher_baremaSQL.researcher_production_db(list_lattes_id,year,year_guidance)
+    return jsonify(resarcher_baremaSQL.researcher_production_db(list_name,list_lattes_id,year)
 ), 200
 
 
@@ -117,7 +119,8 @@ def research():
     #print("yyyyy "+graduate_program_id  )
     if graduate_program_id is None:
         graduate_program_id =""
-
+    if graduate_program_id=="0":
+        graduate_program_id =""
 
     #terms = unidecode(terms.lower())
     #print(termNovo)
@@ -257,6 +260,8 @@ def book_production_researcher():
         b.id =  str(infos.id)
         b.title = str(infos.title)
         b.year =  str(infos.year)
+        b.isbn = str(infos.isbn)
+        b.publishing_company = str(infos.publishing_company)
      
        
 
@@ -289,6 +294,8 @@ def book_chapter_production_researcher():
         b.id =  str(infos.id)
         b.title = str(infos.title)
         b.year =  str(infos.year)
+        b.isbn = str(infos.isbn)
+        b.publishing_company = str(infos.publishing_company)
      
        
 

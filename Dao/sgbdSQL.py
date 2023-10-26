@@ -7,6 +7,13 @@ from nltk.tokenize import RegexpTokenizer
 import unidecode
 import sys
 
+import project as project_
+
+
+
+
+
+
 # Função para inserir dados no banco
 def execScript_db(sql):
     con = conecta_db()
@@ -47,10 +54,31 @@ def consultar_db(sql):
 def conecta_db():
   #database_ ="cimatec_v7"
   #database_ ="simcc_profnit_v1"
-  database_=sys.argv[1]
+ 
+     
+  if (project_.getProject())=="1":
+     database_=  "cimatec_v7" 
+     host_="172.25.0.84" 
+  if (project_.getProject())=="2":
+     database_=  "simcc_profnit_v1" 
+     host_="127.0.0.1" 
+  if (project_.getProject())=="3":
+     database_=  "simcc_ifba" 
+     host_="127.0.0.1" 
+  if (project_.getProject())=="4":
+     database_=  "simcc_v3" 
+     host_="127.0.0.1"    
+     
+    
+
+   
+
+
+      
+  #database_=sys.argv[1]
   #host_='172.25.0.84'
   #host_='127.0.0.1'
-  host_=sys.argv[2]
+  #host_=sys.argv[2]
   #database_ ="simcc_profnit"
   #print(database_)
   
@@ -60,3 +88,5 @@ def conecta_db():
                          user='postgres', 
                          password='root')
   return con
+
+

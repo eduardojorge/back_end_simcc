@@ -5,12 +5,16 @@ import logging
 import json
 from datetime import datetime
 import sys
+
+import project as project_
 #import lattes10 as lattes10
 
 
 #dir="C:\\simccv3\\"
 #python3 SimccBD_CSV.py   "cimatec_v7"  "172.25.0.84" "C:\simccv3\" 
-dir= host_=sys.argv[3]
+
+dir= host_=sys.argv[2]
+project_.project_=sys.argv[1]
 print(dir)
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
@@ -263,6 +267,30 @@ def article_distinct_novo_csv_db():
    
    df_bd.to_csv(dir+'article_distinct_novo_csv_db.csv') 
 
+
+
+      
+
+def production_coauthors_csv_db():
+   
+   sql="""
+           SELECT COUNT(*),a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
+		FROM bibliographic_production a LEFT JOIN bibliographic_production_article ba ON  a.id = ba.bibliographic_production_id, bibliographic_production b, 
+		 graduate_program_researcher gp
+      WHERE  (a.doi = b.doi OR a.title = b.title)    AND a.researcher_id = gp.researcher_id AND b.researcher_id = gp.researcher_id 
+  
+      GROUP BY a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
+      HAVING COUNT(*)>1
+    """
+
+   reg = sgbdSQL.consultar_db(sql)   
+   logger.debug(sql)
+   df_bd = pd.DataFrame(reg, columns=['qtd','doi','title','qualis','year','graduate_program_id','year_pos','type'])
+   
+   df_bd.to_csv(dir+'production_coauthors_csv_db.csv') 
+
+
+
 def production_distinct_novo_csv_db():
    
    sql="""
@@ -417,7 +445,7 @@ print("Inicio: researcher_production_tecnical_year_csv_db")
 researcher_production_tecnical_year_csv_db()
 print("Fim: researcher_production_tecnical_year_csv_db")
 
-if sys.argv[1]=="simcc_profnit_v1":
+if project_.project_=="2":
    profnit_graduate_program_csv_db()
 
 
@@ -426,7 +454,9 @@ print("Inicio: researcher_csv_db")
 researcher_csv_db()
 print("Fim: researcher_csv_db")
 
-
+print("Inicio: production_coauthors_csv_db")
+production_coauthors_csv_db()
+print("Fim: production_coauthors_csv_db")
 
 """
 researcher_production_year_csv_db()

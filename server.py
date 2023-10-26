@@ -20,6 +20,9 @@ import Dao.generalSQL
 
 
 #from  Rest.researcherTermRest import researcherTermRest
+import project as project_
+import sys
+#project_.project_=sys.argv[1]
 
 
 
@@ -31,9 +34,13 @@ app.register_blueprint(graduateProgramRest)
 app.config["CORS_HEADERS"] = "Content-Type"
 app.route('/')
 CORS(app, resources={r"/*":{"origins":"*"}})
+
 #app = Flask(__name__)
 
 #if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
+
+
+
 
 
 #lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')

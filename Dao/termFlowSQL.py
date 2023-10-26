@@ -79,28 +79,30 @@ def lists_patent_production_researcher_db(researcher_id,year):
 
 def lists_book_production_researcher_db(researcher_id,year):
       sql = """SELECT b.id as id, b.title as title, 
-            b.year as year
+            b.year as year,bb.isbn,bb.publishing_company
                         
-            FROM   bibliographic_production b
+            FROM   bibliographic_production b,bibliographic_production_book bb
                            where 
+                           bb.bibliographic_production_id = b.id AND
                            researcher_id='%s'
                            AND b.year_>=%s
                            AND b.type='%s'
                            ORDER BY year_ desc""" % (researcher_id,year,"BOOK")
-                          #print(sql)
+      print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
 
 
-      df_bd = pd.DataFrame(reg, columns=['id','title','year'])
+      df_bd = pd.DataFrame(reg, columns=['id','title','year','isbn','publishing_company'])
 
       return df_bd
 def lists_book_chapter_production_researcher_db(researcher_id,year):
       sql = """SELECT b.id as id, b.title as title, 
-            b.year as year
+            b.year as year,bc.isbn,bc.publishing_company
                         
-            FROM   bibliographic_production b
+            FROM   bibliographic_production b, bibliographic_production_book_chapter bc
                            where 
+                           bc.bibliographic_production_id = b.id AND
                            researcher_id='%s'
                            AND b.year_>=%s
                            AND b.type='%s'
@@ -110,7 +112,7 @@ def lists_book_chapter_production_researcher_db(researcher_id,year):
       reg = sgbdSQL.consultar_db(sql)
 
 
-      df_bd = pd.DataFrame(reg, columns=['id','title','year'])
+      df_bd = pd.DataFrame(reg, columns=['id','title','year','isbn','publishing_company'])
 
       return df_bd
       

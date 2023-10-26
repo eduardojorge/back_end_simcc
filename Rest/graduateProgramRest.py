@@ -7,10 +7,13 @@ from flask_cors import CORS,cross_origin
 import os
 
 import Dao.graduate_programSQL as graduate_programSQL
-
+import Dao.sgbdSQL as sgbdSQL
 
 from Model.GraduateProgram  import GraduateProgram 
 from Model.Bibliographic_Production_Researcher import Bibliographic_Production_Researcher
+
+
+import project as project_
 
 
 ##from server import app
@@ -23,6 +26,8 @@ from Model.Bibliographic_Production_Researcher import Bibliographic_Production_R
 #app = Flask(__name__)
 
 #if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
+
+
 graduateProgramRest = Blueprint('graduateProgramRest', __name__)
 
 #print(list_originals_words_initials_term_db("rob")) 
@@ -80,6 +85,14 @@ def graduate_program():
 def graduate_program_profnit():
 
     list_gradute_program =[]
+
+    id =request.args.get('id')
+
+    project_.project_=id
+   
+   
+
+
     #institution_id =request.args.get('institution_id')
     #print("yyyyy "+graduate_program_id  )
     #if institution_id is None:
