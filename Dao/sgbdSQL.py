@@ -77,7 +77,7 @@ def conecta_db():
   if (project_.getProject())=="6":
      #tupi
      database_=  "simcc_" 
-     host_="200.128.66.226"     
+     host_="127.0.0.1"     
      
     
 
