@@ -22,7 +22,7 @@ import Dao.generalSQL
 #from  Rest.researcherTermRest import researcherTermRest
 import project as project_
 import sys
-#project_.project_=sys.argv[1]
+project_.project_=sys.argv[1]
 
 
 

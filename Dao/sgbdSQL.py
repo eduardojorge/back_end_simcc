@@ -54,11 +54,14 @@ def consultar_db(sql):
 def conecta_db():
   #database_ ="cimatec_v7"
   #database_ ="simcc_profnit_v1"
+  password_='root'
  
      
   if (project_.getProject())=="1":
      database_=  "cimatec_v7" 
      host_="172.25.0.84" 
+     password_='wn6H4!16NBcb}4%hy6"h'
+
   if (project_.getProject())=="2":
      database_=  "simcc_profnit_v1" 
      host_="127.0.0.1" 
@@ -66,8 +69,15 @@ def conecta_db():
      database_=  "simcc_ifba" 
      host_="127.0.0.1" 
   if (project_.getProject())=="4":
-     database_=  "simcc_v3" 
+     database_=  "simcc_v4" 
      host_="127.0.0.1"    
+  if (project_.getProject())=="5":
+     database_=  "proforte" 
+     host_="127.0.0.1"     
+  if (project_.getProject())=="6":
+     #tupi
+     database_=  "simcc_" 
+     host_="200.128.66.226"     
      
     
 
@@ -86,7 +96,7 @@ def conecta_db():
                          #database='simcc_v3',
                          database=database_,
                          user='postgres', 
-                         password='root')
+                         password=password_)
   return con
 
 

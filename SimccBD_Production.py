@@ -8,7 +8,10 @@ import Dao.termFlowSQL as termFlowSQL
 import logging
 from datetime import datetime,timedelta
 
+import project as project_
 
+import sys
+project_.project_=sys.argv[1]
 
 
 # Função processar e inserir a produção de cada pesquisador

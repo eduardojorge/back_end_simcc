@@ -19,10 +19,11 @@ import lattes10
 
 import concurrent.futures
 
+import project as project_
+dataP = datetime.today() - timedelta(days=100000)
 
-dataP = datetime.today() - timedelta(days=5)
-
-
+import sys
+project_.project_=sys.argv[1]
 researcher_teste1 ="r.name LIKE \'Manoel %\' OR r.name LIKE \'Gesil Sampaio%\' "
 #researcher_teste2 ="r.name LIKE \'Hugo Saba%\' OR r.name LIKE \'Josemar Rodri%\'"
 
@@ -61,79 +62,56 @@ def insert_researcher_frequency_db(teste,article,offset):
       
       #a = list(string.ascii_lowercase)
      
-def insert_researcher_frequency_caracter_bd(researcher_id,article):     
-      for caracter in string.ascii_lowercase: 
-        #print(caracter)
-        try:
-          filter =""
-          if article==True:
-            filter =" AND type='ARTICLE' "
-            # is_new=true and
-          sql="""
-                        SELECT  r.term as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id 
+def insert_researcher_frequency_caracter_bd(researcher_id,article): 
+
+
+  try:    
+           
+
+           
+        sql = """
+           
+	         INSERT into public.researcher_frequency (term,researcher_id,bibliographic_production_id) 
+	  
+	  
+	           SELECT   unaccent(r.term) as term,b.researcher_id as researcher_id ,b.id as bibliographic_production_id 
                                  FROM research_dictionary as r,bibliographic_production AS b   
                                  WHERE
                                   
                                 (        translate(unaccent(LOWER(b.title)),':;''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
-                                %s
-                                 AND r.term LIKE '%s'
-                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' AND b.created_at>= '%s'
-              """  % ( filter,caracter+ "%",researcher_id,dataP)
-          reg = sgbdSQL.consultar_db(sql)
-         
-         
-          #reg = SimccBD.consultar_db("SELECT  term FROM research_dictionary  ORDER BY frequency desc fetch FIRST 200 rows only")
-             #"WHERE term LIKE 'rob%' OR term LIKE 'edu%' ")
-                        
-          df_bd = pd.DataFrame(reg, columns=['term','researcher_id','bibliographic_production_id'])
-          list=[]
-          for i,infos in df_bd.iterrows():
-          
-           term = infos.term
-           sql = """INSERT into public.researcher_frequency (researcher_id,bibliographic_production_id,term) 
-                values('%s','%s','%s');""" % (researcher_id,infos.bibliographic_production_id,infos.term)
+                              AND type='ARTICLE'
+                                
+                                 AND b.researcher_id='%s' AND r.type_='ARTICLE' 
+        """ % (researcher_id)                                
 
-           sgbdSQL.execScript_db(sql)
-           logger.debug(sql)
+        sgbdSQL.execScript_db(sql)
+        logger.debug(sql)
            
-        except Exception as e: 
+  except Exception as e: 
           print (e)         
           logger.error(e)
           traceback.print_exc()  
        
 def insert_researcher_abstract_frequency_caracter_bd(researcher_id):     
-      for caracter in string.ascii_lowercase: 
+     
         #print(caracter)
         try:
-
-          sql="""
-
-              SELECT  r.term,re.id
+           
+           sql= """
+             INSERT into public.researcher_abstract_frequency (researcher_id,term) 
+                 
+                  SELECT  re.id, unaccent(r.term)
                                 FROM research_dictionary as r,researcher re
                                  WHERE 
                                 (        translate(unaccent(LOWER(re.abstract)),':;\''','') ::tsvector@@ unaccent(LOWER(r.term))::tsquery)=TRUE 
                                 
                               
-                                  AND r.term LIKE '%s'
+                             
                                   AND re.id= '%s' 
-                                  AND r.type_='ABSTRACT' AND re.created_at>= '%s'
-              """ % (caracter+ "%",researcher_id,dataP)
-         # print(sql)
-   
-          reg = sgbdSQL.consultar_db(sql)
+                                  AND r.type_='ABSTRACT' 
          
-         
-          #reg = SimccBD.consultar_db("SELECT  term FROM research_dictionary  ORDER BY frequency desc fetch FIRST 200 rows only")
-             #"WHERE term LIKE 'rob%' OR term LIKE 'edu%' ")
-                        
-          df_bd = pd.DataFrame(reg, columns=['term','researcher_id'])
-          list=[]
-          for i,infos in df_bd.iterrows():
-          
-           term = infos.term
-           sql = """INSERT into public.researcher_abstract_frequency (researcher_id,term) 
-                values('%s','%s');""" % (researcher_id,infos.term)
+         """ % (researcher_id)
 
            sgbdSQL.execScript_db(sql)
          
@@ -648,8 +626,8 @@ print("Passo II")
 #create_area_ditionary_db()
 teste=True
 article=True
-create_researcher_dictionary_db(teste,article)
-create_researcher_dictionary_abstract_db(teste)
+#create_researcher_dictionary_db(teste,article)
+#create_researcher_dictionary_abstract_db(teste)
 
 
 #Levenshtein Distance

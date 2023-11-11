@@ -145,31 +145,32 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
 
     filter=""
     if name=="":
-       filter= "r.lattes_id='%s'" % (lattes_id) 
+       filter= "r.lattes_id='%s' and " % (lattes_id) 
     else:   
-       filter= "r.name='%s'"  % (name) 
+       if name!="todos":
+          filter= "r.name='%s' and "  % (name) 
 
 
- 
+    year_work_event=1900
     sql= """
           
         
          SELECT COUNT(p.id) as qtd, 'PATENT' as type,r.name,r.lattes_10_id,r.graduation,r.id
           FROM patent p,researcher r
-          WHERE  p.researcher_id = r.id AND %s and p.development_year::INT  >=%s
+          WHERE  p.researcher_id = r.id AND %s p.development_year::INT  >=%s
                 group by  type,r.name,r.lattes_10_id,r.graduation,r.id
                 UNION                
                 
         SELECT COUNT(s.id) as qtd,'SOFTWARE' as type, r.name,r.lattes_10_id,r.graduation,r.id
           from software s,researcher r
-          WHERE  s.researcher_id = r.id and %s and  s.year >=%s
+          WHERE  s.researcher_id = r.id and %s   s.year >=%s
                  group by  type,r.name,r.lattes_10_id,r.graduation,r.id   
                   UNION                 
   
             SELECT COUNT(ba.id) as qtd,'ARTICLE' || ba.qualis as TYPE , r.name,r.lattes_10_id,r.graduation,r.id
             FROM   PUBLIC.bibliographic_production b , bibliographic_production_article ba, researcher r
 			 WHERE  b.id =ba.bibliographic_production_id AND TYPE='ARTICLE' AND b.researcher_id =r.id
-			 and %s and  b.year_ >=%s
+			 and %s  b.year_ >=%s
           
                 
                  group BY  'ARTICLE' || ba.qualis, r.name,r.lattes_10_id,r.graduation, r.id 
@@ -178,7 +179,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
         SELECT COUNT(b.id) as qtd, 'BOOK' AS  type ,r.name,r.lattes_10_id,r.graduation,r.id
           FROM   PUBLIC.bibliographic_production b , researcher r
 			 where  b.researcher_id =r.id AND TYPE IN ('BOOK')
-			 and %s and  b.year_ >=%s
+			 and %s  b.year_ >=%s
 			        group BY type, r.name,r.lattes_10_id,r.graduation,r.id     
                       
         UNION          
@@ -187,7 +188,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
         SELECT COUNT(b.id) as qtd,'BOOK_CHAPTER' as  type ,r.name,r.lattes_10_id,r.graduation,r.id
           FROM   PUBLIC.bibliographic_production b , researcher r
 			 where  b.researcher_id =r.id AND TYPE IN ('BOOK_CHAPTER') 
-			 and %s and  b.year_ >=%s
+			 and %s   b.year_ >=%s
           
                 
                  group BY type, r.name,r.lattes_10_id,r.graduation,r.id   
@@ -195,7 +196,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
         SELECT COUNT(b.id) as qtd,'WORK_IN_EVENT' as type ,r.name,r.lattes_10_id,r.graduation,r.id
           FROM   PUBLIC.bibliographic_production b , researcher r
 			 where  b.researcher_id =r.id AND TYPE IN ( 'WORK_IN_EVENT') 
-			 and %s and  b.year_ >=%s
+			 and %s  b.year_ >=%s
           
                 
                  group BY type, r.name,r.lattes_10_id,r.graduation,r.id  
@@ -203,7 +204,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
             SELECT COUNT(b.id) as qtd,'EVENT_ORGANIZATION' as type ,r.name,r.lattes_10_id,r.graduation,r.id
           FROM   event_organization b , researcher r
 			 where  b.researcher_id =r.id 
-			 and %s and  b.year >=%s
+			 and %s   b.year >=%s
           
                 
                  group BY type, r.name,r.lattes_10_id,r.graduation,r.id      
@@ -211,7 +212,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
                    SELECT COUNT(b.id) as qtd,'PARTICIPATION_EVENTS' as type ,r.name,r.lattes_10_id,r.graduation,r.id
           FROM   participation_events b , researcher r
 			 where  b.researcher_id =r.id 
-			 and %s and  b.year >=%s
+			 and %s   b.year >=%s
           
                 
                  group BY type, r.name,r.lattes_10_id,r.graduation,r.id     
@@ -219,8 +220,8 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
                 
         
 
-    """ % (filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_37,filter,year_37)
-    #print(sql)
+    """ % (filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_work_event,filter,year_37,filter,year_37)
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=['qtd','tipo','name_','lattes_10_id','graduation','researcher_id'])
    
@@ -247,6 +248,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
         if infos.tipo=="BOOK":
           
            resarcher_Production.book= infos.qtd
+           
 
         if infos.tipo=="WORK_IN_EVENT":
             resarcher_Production.work_in_event= infos.qtd   
@@ -320,18 +322,37 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
       return list_resarcher  
 
     else:
-      t=[]
-      t= list_name.split(";")  
+      
 
-      list_resarcher=[]
+
+      if list_name!="todos":
+        t=[]
+        t= list_name.split(";")  
+
+        list_resarcher=[]
      
-      i=0;
-      for word in t:
+        i=0;
+        for word in t:
           
-          list_resarcher.append(production_general_db(word,"",year_5,year_25_31,year_37))
-          i=i+1
+            list_resarcher.append(production_general_db(word,"",year_5,year_25_31,year_37))
+            i=i+1
      
-      return list_resarcher
+        return list_resarcher
+      else:
+           sql="select name from researcher "
+           reg = sgbdSQL.consultar_db(sql)
+           list_resarcher=[]
+           x=0
+           df_bd = pd.DataFrame(reg, columns=['name_'])
+           for i,infos in df_bd.iterrows():
+                list_resarcher.append(production_general_db(infos.name_,"",year_5,year_25_31,year_37))
+                #i=i+1
+                x=x+1
+                print(str(x))
+     
+           return list_resarcher
+
+          
 
 
     

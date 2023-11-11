@@ -49,7 +49,7 @@ def production_general_db(graduate_program_id,year):
    
    filter=""
 
-   if (graduate_program_id!=""):
+   if (graduate_program_id!="0"):
        filter="and graduate_program_id="+graduate_program_id
        
     
