@@ -84,7 +84,8 @@ logger = logging.getLogger()
 
 logger.debug("Inicio")
 
-dir = '/home/eduardomfjorge/curriculos/'
+#dir = '/home/eduardomfjorge/curriculos/'
+dir='/home/pendulum/curriculos/'
 
 for f in os.listdir(dir):
     try:
