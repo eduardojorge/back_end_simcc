@@ -69,7 +69,7 @@ def conecta_db():
      database_=  "simcc_ifba" 
      host_="127.0.0.1" 
   if (project_.getProject())=="4":
-     database_=  "simcc_v4" 
+     database_=  "simcc_" 
      host_="127.0.0.1"    
   if (project_.getProject())=="5":
      database_=  "proforte" 
