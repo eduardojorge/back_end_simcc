@@ -16,6 +16,7 @@ from Model.Book_Researcher import Book_Researcher
 from Model.Book_Chapter_Researcher import Book_Chapter_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.Researcher_Report import Researcher_Report
+from Model.Year_Barema import Year_Barema
 import  Dao.resarcher_baremaSQL as  resarcher_baremaSQL
 import Dao.areaFlowSQL
 
@@ -46,7 +47,25 @@ def resarcher_barema():
     list_name= request.args.get('name')
    
     list_lattes_id = request.args.get('lattes_id')
-    year = request.args.get('year')
+    year = Year_Barema()
+    
+    year.article=request.args.get('yarticle')
+    year.work_event=request.args.get('ywork_event')
+ 
+    year.book=request.args.get('ybook')
+    year.chapter_book=request.args.get('ychapter_book')
+ 
+
+    year.patent=request.args.get('ypatent')
+    year.software=request.args.get('ysoftware')
+    year.brand=request.args.get('ybrand')
+    year.resource_progress=request.args.get('yresource_progress')
+    year.resource_completed=request.args.get('yresource_completed')
+    year.participation_events=request.args.get('yparticipation_events')
+      
+
+
+
     
  
 
