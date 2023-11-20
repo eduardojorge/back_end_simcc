@@ -220,7 +220,8 @@ def production_general_db(name,lattes_id,year):
         
 
     """ % (filter,year.brand,filter,year.patent,filter,year.software,filter,year.article,
-           filter,year.book,filter,year.chaper_book,filter,year.work_event,filter,year.participation_events,filter,year.participation_events)
+           filter,year.book,filter,year.chapter_book,filter,year.work_event,
+           filter,year.participation_events,filter,year.participation_events)
     print(sql)
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=['qtd','tipo','name_','lattes_10_id','graduation','researcher_id'])
