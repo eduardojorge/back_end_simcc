@@ -146,6 +146,12 @@ def production_general_db(name,lattes_id,year):
 
     year_work_event=1900
     sql= """
+
+         SELECT COUNT(p.id) as qtd, 'BRAND' as type,r.name,r.lattes_10_id,r.graduation,r.id
+          FROM brand p,researcher r
+          WHERE  p.researcher_id = r.id AND %s p.year  >=%s
+                group by  type,r.name,r.lattes_10_id,r.graduation,r.id
+             UNION    
           
         
          SELECT COUNT(p.id) as qtd, 'PATENT' as type,r.name,r.lattes_10_id,r.graduation,r.id
@@ -213,7 +219,7 @@ def production_general_db(name,lattes_id,year):
                 
         
 
-    """ % (filter,year.patent,filter,year.sofware,filter,year.article,
+    """ % (filter,year.brand,filter,year.patent,filter,year.software,filter,year.article,
            filter,year.book,filter,year.chaper_book,filter,year.work_event,filter,year.participation_events,filter,year.participation_events)
     print(sql)
     reg = sgbdSQL.consultar_db(sql)
@@ -238,6 +244,7 @@ def production_general_db(name,lattes_id,year):
         
         resarcher_Production.graduation = infos.graduation
         
+       
 
         if infos.tipo=="BOOK":
           
