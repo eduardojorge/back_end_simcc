@@ -275,11 +275,9 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
    
    
               
-    if year!="":
-      t=[]
-      t= year.split(";")  
+  
 
-      i=0;
+    
     
      
 
