@@ -87,7 +87,7 @@ year.work_event="2018"
 year.book="1900" 
 
 year.chapter_book="1900"
-year.book="1900"
+
 year.patent="1900"
 year.software="1900"
 year.brand="1900"
