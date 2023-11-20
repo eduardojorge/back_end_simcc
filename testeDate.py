@@ -82,7 +82,7 @@ def dataLattes(dias):
 
 
 year = Year_Barema()
-year.artigo="2018"
+year.article="2018"
 year.work_event="2018"
 year.book="1900" 
 
