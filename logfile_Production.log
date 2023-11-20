@@ -1,900 +1,175 @@
-DEBUG 2023-11-03 02:28:18,938 - total=1
-DEBUG 2023-11-03 02:28:24,785 - 
+DEBUG 2023-11-19 17:08:30,907 - total=1
+DEBUG 2023-11-19 17:08:31,751 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4b78324d-46ca-465c-8bb1-9b21e6a08fdd','49','3','0','51','CIENCIAS_EXATAS_E_DA_TERRA ','','None','None','4','4','0');
+        values('41dce847-4096-41c8-acc6-967e966faa64','20','2','1','35','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Lipidologia | Medicina ; Cardiologia | Medicina ','Salvador','Departamento de Educação de Senhor do Bonfim Campus VII','0','1','0');
         
-DEBUG 2023-11-03 02:28:25,504 - total=2
-DEBUG 2023-11-03 02:28:30,597 - 
+DEBUG 2023-11-19 17:08:31,877 - total=2
+DEBUG 2023-11-19 17:08:32,763 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1a9ae83b-a477-46ed-abf0-0d0437850d8b','43','0','0','31','CIENCIAS_SOCIAIS_APLICADAS ','Estatística Sócio-Econômica | Economia ; Contabilidade Financeira - Foco Na Geração De Informações Para Usuários Externos | Administração ','None','None','0','0','0');
+        values('30f1fad3-e08a-459c-81d5-9fcbea87b5d2','0','1','2','7','CIENCIAS_HUMANAS ','','Salvador','Departamento de Exatas e da Terra','0','0','0');
         
-DEBUG 2023-11-03 02:28:31,322 - total=3
-DEBUG 2023-11-03 02:28:36,816 - 
+DEBUG 2023-11-19 17:08:32,891 - total=3
+DEBUG 2023-11-19 17:08:33,742 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1c2c3db8-4ead-426b-b1e8-6fa4598ac5fe','85','6','2','92','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Recursos Ergogênicos E Treinamento | Medicina ; Performance Humana | Educação Física ; Metabolismo E Bioenergética | Bioquímica ; Fisiologia Do Esforço | Fisiologia ; Exercício Resistido | Educação Física ; Cinesiologia | Fisiologia ','Cuiabá','Pró-Reitoria de Ensino e Graduação','3','0','1');
+        values('c072746d-42d7-4f26-9c1b-ed25fcaac4ad','18','20','15','11','','','Euclides da Cunha','Departamento de Ciências Humanas e Tecnologia','0','0','0');
         
-DEBUG 2023-11-03 02:28:37,533 - total=4
-DEBUG 2023-11-03 02:28:43,054 - 
+DEBUG 2023-11-19 17:08:33,887 - total=4
+DEBUG 2023-11-19 17:08:34,706 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c689e964-4e49-48b8-b5a0-41afb4f233c9','9','2','0','35','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Teleinformática | Ciência Da Computação ; Sistemas De Telecomunicações | Engenharia Elétrica ; Redes De Computadores | Ciência Da Computação ; Hardware | Ciência Da Computação ','Fortaleza','Gerência de Telemática','0','4','0');
+        values('0414afa4-53e1-4138-bb64-af45460df06b','34','5','1','80','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_BIOLOGICAS ','Sistemas De Informação | Ciência Da Computação ; Princípios Variacionais E Métodos Numéricos | Engenharia Mecânica ; Inteligência Artificial | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ; Bioinformática | Genética ','Salvador','Departamento de Ciências Exatas e da Terra','2','10','0');
         
-DEBUG 2023-11-03 02:28:43,778 - total=5
-DEBUG 2023-11-03 02:28:48,277 - 
+DEBUG 2023-11-19 17:08:34,925 - total=5
+DEBUG 2023-11-19 17:08:36,704 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('8aecc69a-5d05-401c-88fb-a77dbf98696e','2','0','0','0','ENGENHARIAS ','Teoria Eletromagnetica, Microondas, Propagação De Ondas, Antenas | Engenharia Elétrica ; Automação Eletrônica De Processos Elétricos E Industriais | Engenharia Elétrica ','Rio de Janeiro','Instituto de Imunobiologicos','0','0','0');
+        values('910dc764-a77c-412f-9cda-0537d5d158a3','17','12','4','40','','','Guanambi','Departamento de Educação','0','0','0');
         
-DEBUG 2023-11-03 02:28:48,995 - total=6
-DEBUG 2023-11-03 02:28:53,856 - 
+DEBUG 2023-11-19 17:08:36,815 - total=6
+DEBUG 2023-11-19 17:08:37,627 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1b5bb57e-ef46-4c3b-82a4-2e75e54a41f5','33','15','3','84','CIENCIAS_BIOLOGICAS ','','Manaus','Instituto de Ciências Biológicas','0','0','0');
+        values('3b44edf6-2fd7-434a-b94f-ebacdc3c722d','27','19','3','45','','','Salvador','None','0','0','0');
         
-DEBUG 2023-11-03 02:28:54,606 - total=7
-DEBUG 2023-11-03 02:28:59,424 - 
+DEBUG 2023-11-19 17:08:37,745 - total=7
+DEBUG 2023-11-19 17:08:38,538 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ebeeecb1-b156-4745-b55d-f176a229653e','54','10','4','139','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_BIOLOGICAS ','Biodiesel | Química ; Biocombustíveis | Biotecnologia ; Análise De Traços E Química Ambiental | Química ','Salvador','Centro Integrado de Manufatura e Tecnologia','2','3','0');
+        values('8fae239b-ffc8-44ab-b9d8-503a465da33b','14','3','1','36','CIENCIAS_BIOLOGICAS ; CIENCIAS_AGRARIAS ','','Juazeiro','Departamento de Tecnologia e Ciências Sociais','1','0','0');
         
-DEBUG 2023-11-03 02:29:00,172 - total=8
-DEBUG 2023-11-03 02:29:04,681 - 
+DEBUG 2023-11-19 17:08:38,647 - total=8
+DEBUG 2023-11-19 17:08:39,427 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('b4f666f3-d4cd-40f3-b189-e3ff60341a3a','17','10','9','17','CIENCIAS_HUMANAS ','Análise Regional | Geografia ','Salvador','Instituto de Geociências','0','0','0');
+        values('8ca1400e-400c-490e-94e3-a8de235ebf2e','14','3','0','1','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Anatomia Humana | Morfologia ','Salvador','None','0','0','0');
         
-DEBUG 2023-11-03 02:29:06,726 - total=9
-DEBUG 2023-11-03 02:29:11,864 - 
+DEBUG 2023-11-19 17:08:39,534 - total=9
+DEBUG 2023-11-19 17:08:40,292 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('54b425dd-88b2-4afc-b0d2-e72a6c847c62','25','2','1','36','CIENCIAS_AGRARIAS ','Química, Física, Fisico-Química E Bioquímica Dos Alim. E Das Mat-Primas Alimentares | Ciência E Tecnologia De Alimentos ; Microbiologia De Alimentos | Ciência E Tecnologia De Alimentos ; Instalações Industriais De Produção De Alimentos | Ciência E Tecnologia De Alimentos ; Avaliação E Controle De Qualidade De Alimentos | Ciência E Tecnologia De Alimentos ; Analise Sensorial | Ciência E Tecnologia De Alimentos ','Petrolina','IF Sertão-PE Campus Petrolina','4','0','0');
+        values('41b40c40-24a0-4255-93b4-f305d121bdd1','18','10','5','71','CIENCIAS_HUMANAS ','','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:29:12,588 - total=10
-DEBUG 2023-11-03 02:29:17,740 - 
+DEBUG 2023-11-19 17:08:40,401 - total=10
+DEBUG 2023-11-19 17:08:41,183 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a09243c8-27be-4b18-a1db-c5e4bc2748c3','34','10','7','15','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Regressão E Correlação | Probabilidade E Estatística ; Metrologia, Técnicas Gerais De Laboratório, Sistema De Instrumentação | Física ; Linguagem Formais E Autômatos | Ciência Da Computação ; Análise Numérica | Matemática ; Administração De Sistemas Educacionais | Educação ; Administração Da Produção | Administração ','Salvador','MCTI','0','43','0');
+        values('6c0f8fdb-cf93-40ee-84f6-42729682476a','7','4','0','16','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','','Salvador','Departamento de Ciências Exatas e da Terra','0','0','0');
         
-DEBUG 2023-11-03 02:29:18,476 - total=11
-DEBUG 2023-11-03 02:29:23,313 - 
+DEBUG 2023-11-19 17:08:41,305 - total=11
+DEBUG 2023-11-19 17:08:42,077 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a306a688-e5d0-4778-bb58-5a832e4c7440','200','7','2','73','CIENCIAS_DA_SAUDE ','Doenças Infecciosas E Parasitárias | Medicina ','Salvador','Centro Integrado de Manufatura e Tecnologia','0','0','0');
+        values('c5621e0d-6d0e-4bdd-bed2-fe241fe8b12b','16','34','8','97','CIENCIAS_HUMANAS ','Política Educacional | Educação ; Avaliação De Sistemas, Instituições, Planos E Programas Educacionais | Educação ; Administração De Unidades Educativas | Educação ; Administração De Sistemas Educacionais | Educação ','Barreiras','None','0','0','0');
         
-DEBUG 2023-11-03 02:29:24,430 - total=12
-DEBUG 2023-11-03 02:29:29,239 - 
+DEBUG 2023-11-19 17:08:42,185 - total=12
+DEBUG 2023-11-19 17:08:42,969 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c14bdddc-40e4-4d2b-a217-a2de6f620d44','11','5','0','41','CIENCIAS_SOCIAIS_APLICADAS ','','Tangará da Serra','None','0','0','0');
+        values('587f8209-4c3b-4512-9273-f9e4ca0d4aef','8','0','1','19','LINGUISTICA_LETRAS_E_ARTES ','Análise Do Discurso | Lingüística ','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:29:29,994 - total=13
-DEBUG 2023-11-03 02:29:34,862 - 
+DEBUG 2023-11-19 17:08:43,077 - total=13
+DEBUG 2023-11-19 17:08:43,847 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('dc944d40-c458-4bf8-b500-ce55aa15ecfd','78','25','4','30','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Manaus','ESCOLA SUPERIOR DE TECNOLOGIA - EST','0','3','0');
+        values('6e30600b-7269-4114-bea2-70d638cb21e8','2','2','2','11','CIENCIAS_HUMANAS ','História Do Brasil Império | História ','Salvador','Departamento de Ciências Humanas ? DCH I - Campus I','0','0','0');
         
-DEBUG 2023-11-03 02:29:35,576 - total=14
-DEBUG 2023-11-03 02:29:40,517 - 
+DEBUG 2023-11-19 17:08:43,958 - total=14
+DEBUG 2023-11-19 17:08:44,763 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('90acc05b-7d32-4886-88ff-87ec3bf2b46f','85','41','18','426','CIENCIAS_HUMANAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Engenharia De Software | Ciência Da Computação ','Cuiabá','Instituto de Computação','0','5','0');
+        values('5aaab29a-4c38-4695-b86f-2b845c3bfe84','28','14','6','32','LINGUISTICA_LETRAS_E_ARTES ','','Salvador','Departamento de Ciências Humanas ? DCH I - Campus I','0','0','0');
         
-DEBUG 2023-11-03 02:29:41,240 - total=15
-DEBUG 2023-11-03 02:29:45,760 - 
+DEBUG 2023-11-19 17:08:44,890 - total=15
+DEBUG 2023-11-19 17:08:45,730 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('370fd82e-9301-4a5a-976c-56cf816e94c3','25','9','18','42','OUTROS ; ENGENHARIAS ','Energia Solar Fotovoltáica | Engenharia De Energia ; Energia Renováveis | Engenharia Elétrica ; Eficiência Energética | Engenharia Elétrica ','Macapá','Departamento de Engenharia Elétrica','3','3','0');
+        values('59a62475-8e31-431b-bc3e-bbb5904c842b','30','10','2','93','CIENCIAS_AGRARIAS ; CIENCIAS_BIOLOGICAS ','Tecnologia De Produtos De Origem Vegetal | Ciência E Tecnologia De Alimentos ; Qualidade Pós-Colheita De Frutos E Hortaliças | Ciência E Tecnologia De Alimentos ; Engenharia De Processamento De Produtos Agrícolas | Ciência E Tecnologia De Alimentos ; Avaliação E Controle De Alimentos Vegetais | Ciência E Tecnologia De Alimentos ','Barreiras','Departamento Ciencias Humanas - Campus IX','3','0','0');
         
-DEBUG 2023-11-03 02:29:46,491 - total=16
-DEBUG 2023-11-03 02:29:51,024 - 
+DEBUG 2023-11-19 17:08:45,846 - total=16
+DEBUG 2023-11-19 17:08:46,627 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('41ef2f89-7ec9-43a5-a8d0-1f695b5d0e2c','29','13','7','104','','','None','None','0','1','0');
+        values('2d9437fe-5a63-4ca7-8c17-11889f80dd5a','38','92','78','54','LINGUISTICA_LETRAS_E_ARTES ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_BIOLOGICAS ','Ecologia Humana | Ecologia ','Paulo Afonso','Faculdade de Educação do Estado da Bahia','0','0','0');
         
-DEBUG 2023-11-03 02:29:51,747 - total=17
-DEBUG 2023-11-03 02:29:58,272 - 
+DEBUG 2023-11-19 17:08:46,740 - total=17
+DEBUG 2023-11-19 17:08:48,084 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d905b8e5-fdfb-4ac4-b721-27383de19a28','71','4','4','115','CIENCIAS_AGRARIAS ','Tecnologia De Produtos De Origem Vegetal | Ciência E Tecnologia De Alimentos ','Maringá','Centro de Tecnologia','2','0','0');
+        values('cedaa56f-64a9-4a40-9985-d35a61890417','29','55','14','59','','','Salvador','Departamento de Ciências Humanas','0','7','0');
         
-DEBUG 2023-11-03 02:29:59,308 - total=18
-DEBUG 2023-11-03 02:30:03,867 - 
+DEBUG 2023-11-19 17:08:48,195 - total=18
+DEBUG 2023-11-19 17:08:48,954 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('173fe9a4-5a1c-400e-9574-83f9e08be23c','80','19','3','180','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','Localização Industrial | Engenharia De Produção ; Avaliação De Projetos | Engenharia De Produção ; Análise De Custos | Engenharia De Produção ; Administração Financeira | Administração ','São João del Rei','Divisão de Assuntos Departamentais','0','2','0');
+        values('bd29a1bc-d707-486d-bae1-d157d6c6c7ff','18','27','12','94','CIENCIAS_HUMANAS ','Ensino De Geografia | Geografia ','Caetite','Departamento de Educação e Ciencias Humanas','0','0','0');
         
-DEBUG 2023-11-03 02:30:04,610 - total=19
-DEBUG 2023-11-03 02:30:09,483 - 
+DEBUG 2023-11-19 17:08:49,058 - total=19
+DEBUG 2023-11-19 17:08:49,841 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('193fb260-cf35-4fff-86b9-156ff3811f41','106','7','3','230','CIENCIAS_AGRARIAS ','','None','None','23','0','5');
+        values('a96f6ac7-3e2f-4705-ac9d-ee8065279986','2','0','0','9','CIENCIAS_EXATAS_E_DA_TERRA ','','Paulo Afonso','Departamento de Ciências Humanas-Campus VIII','0','0','0');
         
-DEBUG 2023-11-03 02:30:10,216 - total=20
-DEBUG 2023-11-03 02:30:14,786 - 
+DEBUG 2023-11-19 17:08:49,950 - total=20
+DEBUG 2023-11-19 17:08:50,736 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cc04c3fb-78cf-4f4f-a0af-1a4232008e37','70','7','4','149','ENGENHARIAS ','Energia | Engenharia Mecânica ','Salvador','Senai','9','6','0');
+        values('5c796b99-62e1-4069-9570-d44ec5544218','16','4','2','35','CIENCIAS_DA_SAUDE ','Enfermagem Em Saúde Do Idoso | Enfermagem ','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:30:15,536 - total=21
-DEBUG 2023-11-03 02:30:20,039 - 
+DEBUG 2023-11-19 17:08:50,887 - total=21
+DEBUG 2023-11-19 17:08:51,695 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cd2d9e4b-7426-42b8-b08e-7bda3583192d','2','0','0','1','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Desenvolvimento De Recursos Humanos | Administração ; Avaliação De Sistemas, Instituições, Planos E Programas Educacionais | Educação ','Rio de Janeiro','Coordenação Geral de Gestão de Pessoas','0','0','0');
+        values('77d83a0c-02ee-4c00-9412-8d60254abd56','21','3','5','41','CIENCIAS_EXATAS_E_DA_TERRA ','Engenharia De Software | Ciência Da Computação ','Salvador','Mestrado em Sistemas e Computação','0','14','0');
         
-DEBUG 2023-11-03 02:30:20,841 - total=22
-DEBUG 2023-11-03 02:30:25,341 - 
+DEBUG 2023-11-19 17:08:51,803 - total=22
+DEBUG 2023-11-19 17:08:52,563 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('30a7c17d-e74a-468b-931a-db5d56efeb14','17','0','2','14','','','Sao Luis','Centro de Ciências Biológicas e da Saúde, Departam de Ciências Fisiológicas','17','0','0');
+        values('77ce1c1c-bf45-4c90-bd40-3aafbb298c16','58','77','20','41','CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_HUMANAS ','Tecnologia Educacional | Educação ; Sistemas De Informação | Ciência Da Computação ; Métodos E Técnicas De Ensino | Educação ; História Regional Do Brasil | História ; Educação À Distância | Ciência Da Computação ','Salvador','Faculdade de Educação do Estado da Bahia','0','129','0');
         
-DEBUG 2023-11-03 02:30:26,061 - total=23
-DEBUG 2023-11-03 02:30:31,279 - 
+DEBUG 2023-11-19 17:08:52,672 - total=23
+DEBUG 2023-11-19 17:08:53,470 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('126778b2-fad5-42b1-882b-05a9a1298137','73','10','7','36','CIENCIAS_HUMANAS ','Geografia Urbana | Geografia ','None','None','0','0','0');
+        values('ba412158-f436-4247-9a97-36080118dd41','17','8','3','35','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Gestão Empresarial | Administração ; Controladoria | Administração ','Camaçari','DCHT Departamento de Ciências Humanas e Tecnologias','0','0','0');
         
-DEBUG 2023-11-03 02:30:32,042 - total=24
-DEBUG 2023-11-03 02:30:37,290 - 
+DEBUG 2023-11-19 17:08:53,601 - total=24
+DEBUG 2023-11-19 17:08:54,362 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('da418259-29e2-4b86-8bb0-1d7b572d9486','19','3','1','20','CIENCIAS_SOCIAIS_APLICADAS ','','Maringá','Departamento de Administração','0','0','0');
+        values('2cc9bd40-9c27-4b1b-90c1-2882c280c3e8','0','0','4','2','CIENCIAS_HUMANAS ','História Regional Do Brasil | História ; Estudos Étnicos E Africanos | Antropologia ','Santo Antonio de Jesus','Departamento de Ciencias Humanas','0','0','0');
         
-DEBUG 2023-11-03 02:30:38,070 - total=25
-DEBUG 2023-11-03 02:30:43,247 - 
+DEBUG 2023-11-19 17:08:54,473 - total=25
+DEBUG 2023-11-19 17:08:55,249 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('6e77ec2c-5036-4f27-8b13-4218b71dbb0c','3','0','0','1','CIENCIAS_SOCIAIS_APLICADAS ','','Rio de Janeiro','DIRAD - Diretoria Administrativa','0','0','0');
+        values('13d9b752-f63d-48f1-aab4-cfcd296149aa','70','11','2','86','','','None','None','0','1','0');
         
-DEBUG 2023-11-03 02:30:44,020 - total=26
-DEBUG 2023-11-03 02:30:49,866 - 
+DEBUG 2023-11-19 17:08:55,357 - total=26
+DEBUG 2023-11-19 17:08:56,148 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('18ea51fe-c3d1-41d1-94f6-db98207f23f4','6','1','0','7','OUTROS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','','Guarapuava','Procuradoria Jurídica','9','0','0');
+        values('f82f7942-710a-4a7b-9489-5e9acca009a0','25','2','0','34','CIENCIAS_DA_SAUDE ','','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:30:50,638 - total=27
-DEBUG 2023-11-03 02:30:56,203 - 
+DEBUG 2023-11-19 17:08:56,258 - total=27
+DEBUG 2023-11-19 17:08:57,021 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c7f0d7d3-6e6e-4b67-9148-8d3083670c1b','219','20','10','502','ENGENHARIAS ','Termodinâmica Aplicada | Engenharia Química ; Síntese De Processos Bioquímicos | Engenharia Química ; Simulação De Processos | Engenharia Química ; Processos Químicos E Bioquímicos | Engenharia Química ; Extração Usando Fluido Supercrítico | Engenharia Química ; Engenharia De Processos | Engenharia Química ','Salvador','MCTI','5','5','0');
+        values('1cc64704-f450-4a2a-bc15-2b50f2a1660b','6','1','1','14','','','Guanambi','Departamento de Educação Campus XII','0','0','0');
         
-DEBUG 2023-11-03 02:30:57,362 - total=28
-DEBUG 2023-11-03 02:31:03,325 - 
+DEBUG 2023-11-19 17:08:57,128 - total=28
+DEBUG 2023-11-19 17:08:57,887 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('64478ab4-fa55-4284-8e88-8d6152984794','31','1','0','61','CIENCIAS_HUMANAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Teleinformática | Ciência Da Computação ; Administração De Unidades Educativas | Educação ; Administração De Sistemas Educacionais | Educação ','Ouro Branco','CAP','1','0','0');
+        values('512781d2-0c09-42e9-88af-aea0e62fe9f2','7','8','0','17','CIENCIAS_DA_SAUDE ','','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:31:04,095 - total=29
-DEBUG 2023-11-03 02:31:09,603 - 
+DEBUG 2023-11-19 17:08:57,994 - total=29
+DEBUG 2023-11-19 17:08:58,749 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9cbd8783-0907-4828-91cb-3e24a16011a6','17','1','4','45','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Usabilidade | Ciência Da Computação ; Sistemas De Informação | Ciência Da Computação ; Metodologias Ágeis | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ','Recife','Centro de Artes e Comunicação','0','4','0');
+        values('754b8597-61dc-4a19-bbc3-55f45f8fa1b2','17','17','11','42','CIENCIAS_HUMANAS ','','Salvador','Faculdade de Educação DEDC I','0','0','0');
         
-DEBUG 2023-11-03 02:31:10,370 - total=30
-DEBUG 2023-11-03 02:31:15,799 - 
+DEBUG 2023-11-19 17:08:58,856 - total=30
+DEBUG 2023-11-19 17:08:59,661 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('b0e12033-63b5-47fe-9bea-18a7a242bfcf','38','26','7','48','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Instrumentação Específica De Uso Geral Em Física | Física ; Geração Da Energia Elétrica | Engenharia Elétrica ','Porto Velho','Grupo de Pesquisa Energia Renovavel Sustentável','0','0','0');
+        values('febb24bf-f33f-4cba-8bab-a42e85cf6cf8','14','8','1','46','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Teoria E Ética Do Jornalismo | Comunicação ; Jornalismo Especializado (comunitário, Rural, Empresarial, Científico) | Comunicação ','Juazeiro','Departamento de Ciências Humanas, Campus III','0','1','0');
         
-DEBUG 2023-11-03 02:31:17,215 - total=31
-DEBUG 2023-11-03 02:31:23,339 - 
+DEBUG 2023-11-19 17:08:59,770 - total=31
+DEBUG 2023-11-19 17:09:01,132 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('248d3cd5-e118-4140-83c2-55450158eb00','0','3','0','1','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','','Maceió','Curso de Comunicação Social - COS','0','0','0');
+        values('4bd8b85b-59a3-4349-ba49-0a67c513dfd5','7','1','1','19','CIENCIAS_DA_SAUDE ','','Salvador','Faculdade de Farmácia','0','0','0');
         
-DEBUG 2023-11-03 02:31:24,087 - total=32
-DEBUG 2023-11-03 02:31:30,248 - 
+DEBUG 2023-11-19 17:09:01,236 - total=32
+DEBUG 2023-11-19 17:09:01,985 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('7cfab0dd-64d8-49fc-890f-aecd7ec35bd3','0','0','0','0','','','Rio de Janeiro','Presidência da Fiocruz','0','0','0');
+        values('fb143599-e70c-47ed-ac82-3f17d399c7b3','32','1','0','10','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','','Jacobina','Departamento de Ciências Humanas (DCH) - Campus IV -Jacobina','0','2','0');
         
-DEBUG 2023-11-03 02:31:32,334 - total=33
-DEBUG 2023-11-03 02:31:37,942 - 
+DEBUG 2023-11-19 17:09:02,092 - total=33
+DEBUG 2023-11-19 17:09:02,841 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('01036c84-533a-4747-9725-b9f0bb2075be','57','8','0','74','','','Guarapuava','Universidade Estaual do Centro Oeste','14','1','0');
+        values('b77a220f-06c5-4a01-adf6-08076ae7d83a','18','11','9','30','','','Jacobina','Departamento de Ciências Humanas - Campus IV','0','0','0');
         
-DEBUG 2023-11-03 02:31:38,726 - total=34
-DEBUG 2023-11-03 02:31:45,529 - 
+DEBUG 2023-11-19 17:09:02,947 - total=34
+DEBUG 2023-11-19 17:09:03,699 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('f3373355-9fc5-4869-a97a-32920dc0570e','12','0','0','66','','','Barreiras','Centro de Ciências Biológicas e da Saúde','0','0','0');
+        values('b26cd0e6-143d-4322-973d-67fb51592d79','32','2','1','17','CIENCIAS_DA_SAUDE ','','None','None','0','0','0');
         
-DEBUG 2023-11-03 02:31:46,306 - total=35
-DEBUG 2023-11-03 02:31:51,971 - 
+DEBUG 2023-11-19 17:09:03,806 - total=35
+DEBUG 2023-11-19 17:09:05,050 - 
         INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('79cbcc16-3cb7-4bce-9dc2-418a0320c528','28','0','0','54','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','','Barreiras','None','1','0','0');
-        
-DEBUG 2023-11-03 02:31:52,731 - total=36
-DEBUG 2023-11-03 02:31:57,968 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cc504365-c399-4a85-b336-1bf03a97ae28','71','27','1','106','CIENCIAS_BIOLOGICAS ','Biotecnologia Aplicada | Genética ; Biologia Molecular | Genética ','Divinópolis','Curso de Bioquímica','55','2','0');
-        
-DEBUG 2023-11-03 02:31:58,740 - total=37
-DEBUG 2023-11-03 02:32:04,232 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('52448b91-6819-43af-bec0-19f8b7172498','31','1','0','10','CIENCIAS_EXATAS_E_DA_TERRA ','Transp. Eletrônicos E Prop. Elétricas De Superfícies; Interfaces E Películas | Física ; Modelos Analíticos E De Simulação | Ciência Da Computação ; Geofísica Aplicada | Geociências ','Salvador','Instituto de Física','0','0','0');
-        
-DEBUG 2023-11-03 02:32:05,003 - total=38
-DEBUG 2023-11-03 02:32:09,985 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3abc160d-8934-456a-a171-bbc8d200898a','12','7','1','33','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas De Informação | Ciência Da Computação ; Gestão Do Conhecimento | Administração ; Gestão Da Tecnologia E Inovação | Administração ; Gerenciamento De Projetos | Administração ','Manaus','Faculdade de Estudos Sociais','0','5','0');
-        
-DEBUG 2023-11-03 02:32:10,781 - total=39
-DEBUG 2023-11-03 02:32:15,742 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('dc500371-2bfd-423c-b00d-737958f3fb23','12','0','0','20','','','Ilhéus','None','0','0','0');
-        
-DEBUG 2023-11-03 02:32:16,558 - total=40
-DEBUG 2023-11-03 02:32:21,813 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('78a759f1-fa7f-47c5-b6b4-8d8f6f98abdc','16','0','0','18','CIENCIAS_SOCIAIS_APLICADAS ','','Rio de Janeiro','Instituto Oswaldo Cruz','0','0','0');
-        
-DEBUG 2023-11-03 02:32:22,929 - total=41
-DEBUG 2023-11-03 02:32:27,878 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('21395499-44ab-4e00-a382-3408f9c957a0','112','76','22','245','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','','Salvador','Programa de pós-graduação','0','0','0');
-        
-DEBUG 2023-11-03 02:32:28,650 - total=42
-DEBUG 2023-11-03 02:32:33,580 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a9410017-50a1-44b6-9498-abc57e71949d','4','3','1','1','','','Rio de Janeiro','Faculdade Nacional de Direito','0','0','0');
-        
-DEBUG 2023-11-03 02:32:34,366 - total=43
-DEBUG 2023-11-03 02:32:39,301 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('51952bbf-11cb-4855-9322-971e78d2dc43','33','17','14','60','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Mercadologia | Administração ; Gestão De Unidades De Informação | Ciência Da Informação ','Manaus','Faculdade de Informação e Comunicação','0','0','0');
-        
-DEBUG 2023-11-03 02:32:40,068 - total=44
-DEBUG 2023-11-03 02:32:46,007 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c08d163f-9623-44b0-b45e-40ae77a3cb58','36','5','0','38','CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_AGRARIAS ','Físico-Química De Superfícies E Interfaces Sólidas | Química ','Barreiras','Centro das Ciências Exatas e das Tecnologias','4','0','0');
-        
-DEBUG 2023-11-03 02:32:47,066 - total=45
-DEBUG 2023-11-03 02:32:52,150 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('599f9d40-4fe9-4b23-bb98-8d74ec3c7b94','17','0','0','11','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Marabá','Instituto de Geociências e Engenharias','1','1','0');
-        
-DEBUG 2023-11-03 02:32:52,985 - total=46
-DEBUG 2023-11-03 02:32:58,267 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('83735216-3325-4242-8817-4bb1ae37921d','43','9','1','112','CIENCIAS_HUMANAS ','Tecnologia Educacional | Educação ; Técnicas De Processamento Estatístico, Matemático E Computacional Em Psicologia | Psicologia ; Relações Interpessoais | Psicologia ; Educação Especial | Educação ','Salvador','Centro Universitário SENAI CIMATEC','0','2','2');
-        
-DEBUG 2023-11-03 02:32:59,039 - total=47
-DEBUG 2023-11-03 02:33:03,932 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('5544249b-8a13-49be-9169-5d42159e6a12','21','3','0','37','CIENCIAS_BIOLOGICAS ','','Porto Velho','None','0','0','0');
-        
-DEBUG 2023-11-03 02:33:04,697 - total=48
-DEBUG 2023-11-03 02:33:09,616 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('838463ca-4a95-43dd-8f5d-fcfbf8f03465','1','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_DA_SAUDE ','Contabilidade E Finanças Públicas | Administração ','Rio de Janeiro','Presidência da Fiocruz','0','0','0');
-        
-DEBUG 2023-11-03 02:33:10,411 - total=49
-DEBUG 2023-11-03 02:33:15,652 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3adca52d-5b69-49c3-9273-3fe1b0ff1fbd','0','0','0','0','ENGENHARIAS ; CIENCIAS_HUMANAS ','Planejamento Institucional | Psicologia ; Máquinas De Fluxo | Engenharia Aeroespacial ; Garantia De Controle De Qualidade | Engenharia De Produção ; Combustão E Escoamento Com Reações Químicas | Engenharia Aeroespacial ','Rio de Janeiro','Instituto Oswaldo Cruz','0','0','0');
-        
-DEBUG 2023-11-03 02:33:16,437 - total=50
-DEBUG 2023-11-03 02:33:21,456 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('13fa2dbf-4ef1-49cd-85e8-19f1b9eb897a','56','4','0','52','OUTROS ; ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','Mercadologia | Administração ; Estudo De Mercado | Engenharia De Produção ','Jaguaruana','None','0','0','0');
-        
-DEBUG 2023-11-03 02:33:22,808 - total=51
-DEBUG 2023-11-03 02:33:27,689 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('5659d9d2-1f9d-4777-9422-1582ff874d51','77','7','2','151','ENGENHARIAS ','Biomateriais E Materiais Biocompatíveis | Engenharia Biomédica ','Salvador','Centro Integrado de Manufatura e Tecnologia','5','0','0');
-        
-DEBUG 2023-11-03 02:33:28,451 - total=52
-DEBUG 2023-11-03 02:33:33,659 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('5b03ba9d-6ac5-4783-bbc9-a814736820d0','30','4','2','24','CIENCIAS_SOCIAIS_APLICADAS ','Direito Do Trabalho | Direito ; Direito Da Cidade | Direito ','Rio de Janeiro','None','0','0','0');
-        
-DEBUG 2023-11-03 02:33:34,434 - total=53
-DEBUG 2023-11-03 02:33:40,102 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d9a626f4-b121-4b77-8738-95a63400b0e1','63','27','8','33','CIENCIAS_SOCIAIS_APLICADAS ','','Salvador','Departamento de Ciências Exatas e da Terra','2','39','1');
-        
-DEBUG 2023-11-03 02:33:40,870 - total=54
-DEBUG 2023-11-03 02:33:45,825 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('660ea35a-892c-47f9-95f1-6852a7702ab8','7','2','1','24','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Gestão De Tecnologia Da Informação E Comunicação | Ciência Da Computação ; Empreendedorismo | Ciência Da Computação ; Administração Universitária | Administração ','Florianópolis','Instituto de Pesquisas e Estudos em Administração Universitária','0','9','0');
-        
-DEBUG 2023-11-03 02:33:46,612 - total=55
-DEBUG 2023-11-03 02:33:51,505 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('bb3f205d-1bbe-4dcc-a0cf-5e09939ec3da','17','7','14','57','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','João Pessoa','Centro de Ciências Sociais Aplicadas - Campus I','0','1','0');
-        
-DEBUG 2023-11-03 02:33:52,259 - total=56
-DEBUG 2023-11-03 02:33:58,742 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3b178329-2363-4360-b6ca-ca43a5104427','23','5','0','23','CIENCIAS_SOCIAIS_APLICADAS ','','Maringá','Centro de Tecnologia','0','0','0');
-        
-DEBUG 2023-11-03 02:33:59,528 - total=57
-DEBUG 2023-11-03 02:34:05,492 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('abc566a0-9612-41de-bcbf-5d344f938f96','0','0','0','0','','','None','None','0','0','0');
-        
-DEBUG 2023-11-03 02:34:06,243 - total=58
-DEBUG 2023-11-03 02:34:11,714 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9b2e1afb-e2f6-4901-8e7d-4f7677c8de8a','114','9','1','84','CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_BIOLOGICAS ','Modelagem Molecular Clássica | Biofísica ; Física Estatística E Termodinâmica | Física ; Física Clássica E Física Quântica; Mecânica E Campos | Física ; Estrutura Eletrônica De Átomos E Moléculas; Teoria | Física ','Salvador','Centro Integrado de Manufatura e Tecnologia','0','11','0');
-        
-DEBUG 2023-11-03 02:34:12,847 - total=59
-DEBUG 2023-11-03 02:34:18,019 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1652efb5-7f82-4a42-9208-605694e6f0ce','40','19','3','69','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas Computacionais De Suporte À Eficiência Energética | Ciência Da Computação ; Gestão Do Conhecimento | Ciência Da Computação ','Santarém','Instituto de Engenharia e Geociências','0','8','0');
-        
-DEBUG 2023-11-03 02:34:18,787 - total=60
-DEBUG 2023-11-03 02:34:24,317 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9cb26795-5abb-4b82-8d4b-7199693b0303','66','14','3','105','CIENCIAS_BIOLOGICAS ','','Belém','Coordenação de Recursos Pesqueiros e Agronegócio','0','3','0');
-        
-DEBUG 2023-11-03 02:34:25,363 - total=61
-DEBUG 2023-11-03 02:34:30,526 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9702a8e4-9fe4-4691-812e-89fbdbe8683e','1','0','0','1','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_DA_SAUDE ','Política E Planejamento Governamentais | Administração ','Rio de Janeiro','Escola Politécnica de Saúde Joaquim Venâncio','0','0','0');
-        
-DEBUG 2023-11-03 02:34:31,339 - total=62
-DEBUG 2023-11-03 02:34:36,515 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c4f95790-7356-44aa-a6ba-d8ca65266e75','10','12','7','14','CIENCIAS_SOCIAIS_APLICADAS ','Economia Dos Programas De Bem-Estar Social | Economia ','Sinop','Coordenação de Campi','0','0','0');
-        
-DEBUG 2023-11-03 02:34:37,286 - total=63
-DEBUG 2023-11-03 02:34:42,451 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('858eb143-d3f8-4703-a011-ad434bd78f7a','144','40','11','225','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Superfícies E Interfaces; Películas E Filamentos | Física ; Prop. Óticas E Espectrosc. Da Mat. Condens; Outras Inter. Da Mat. Com Rad. E Part. | Física ; Planejamento Em Ciência E Tecnologia | Administração ; Métodos Óticos De Análise | Química ; Inf. Sobre Átomos E Moléculas Obtidos Experimentalmente; Instrumentação E Técnicas | Física ; Espectroscopia | Química ','Salvador','Instituto de Química','54','3','2');
-        
-DEBUG 2023-11-03 02:34:43,215 - total=64
-DEBUG 2023-11-03 02:34:48,435 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('f68d9b31-adb1-4cb5-bb3f-27c0c486484a','37','1','0','22','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Síntese Orgânica | Química ; Produtos Naturais | Engenharia Química ','Salvador','Senai Cimatec','0','0','0');
-        
-DEBUG 2023-11-03 02:34:49,205 - total=65
-DEBUG 2023-11-03 02:34:54,789 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('182fad3b-51ce-42a3-86f5-e6bbfb8861c2','31','2','0','81','ENGENHARIAS ','Prototipagem Rápida | Engenharia Mecânica ; Matrizes E Ferramentas | Engenharia Mecânica ; Fundamentos Gerais De Projetos Das Máquinas | Engenharia Mecânica ; Ferramental Rápido | Engenharia Mecânica ; Fabricação Rápida | Engenharia Mecânica ','Salvador','Centro Integrado de Manufatura e Tecnologia','7','0','0');
-        
-DEBUG 2023-11-03 02:34:55,586 - total=66
-DEBUG 2023-11-03 02:35:01,076 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a78f7f08-ed34-41de-8d33-18a752c285fc','8','4','0','41','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','','Nova Mutum','Campus de Nova Mutum','0','0','0');
-        
-DEBUG 2023-11-03 02:35:01,875 - total=67
-DEBUG 2023-11-03 02:35:06,796 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d9aaa764-b6dd-4daf-8241-1d8c3434978f','9','7','2','24','','','São Luís','Centro de Ciencias Exatas e Naturais','5','4','1');
-        
-DEBUG 2023-11-03 02:35:07,595 - total=68
-DEBUG 2023-11-03 02:35:12,505 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3489ae2d-c415-40fb-b939-ef03ec0bc863','1','0','0','2','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_BIOLOGICAS ','Planejamento Em Ciência E Tecnologia | Administração ; Gerência Do Projeto E Do Produto | Engenharia De Produção ','Rio de Janeiro','Presidência da Fiocruz','0','0','0');
-        
-DEBUG 2023-11-03 02:35:13,278 - total=69
-DEBUG 2023-11-03 02:35:19,177 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('06ec627e-11a8-4ffe-9a11-a3e83044f5ee','2','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_DA_SAUDE ','Direito Do Trabalho | Direito ; Direito Administrativo | Direito ; Administração De Recursos Humanos | Administração ','Rio de Janeiro','Instituto de Tecnologia em Fármacos','0','0','0');
-        
-DEBUG 2023-11-03 02:35:19,931 - total=70
-DEBUG 2023-11-03 02:35:24,801 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('5100d41e-243c-4f24-85a2-78a6ee1c176f','25','1','0','34','CIENCIAS_BIOLOGICAS ','Neurofisiologia | Fisiologia ','Bragança','Instituto Federal de Educação, Ciência e Tecnologia do PA - Campus Bragança','2','4','0');
-        
-DEBUG 2023-11-03 02:35:25,570 - total=71
-DEBUG 2023-11-03 02:35:32,113 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('192d382a-2b35-489e-8a4c-3fd2e24ad45b','12','5','6','64','CIENCIAS_DA_SAUDE ; CIENCIAS_AGRARIAS ','','Catalão','Pro Reitoria Pro Tempore de Pesquisa, Pós Graduação e Inovação','0','0','0');
-        
-DEBUG 2023-11-03 02:35:32,888 - total=72
-DEBUG 2023-11-03 02:35:40,108 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3d9a6910-0a4d-48a9-8219-b47174bd3d83','0','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Administração De Recursos Humanos | Administração ','Rio de Janeiro','Instituto de Ciência e Tecnologia em Biomodelos','0','0','0');
-        
-DEBUG 2023-11-03 02:35:40,871 - total=73
-DEBUG 2023-11-03 02:35:46,697 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c0133c65-6557-49b8-81c5-f35a360d435a','4','1','3','16','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','','None','None','1','0','0');
-        
-DEBUG 2023-11-03 02:35:47,778 - total=74
-DEBUG 2023-11-03 02:35:53,009 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('485ed94f-938c-49c2-b6d7-b6b02f9d3d09','21','10','7','22','CIENCIAS_SOCIAIS_APLICADAS ','Organização Industrial E  Estudos Industriais | Economia ; Mudança Tecnológica | Economia ; Economia Regional | Economia ; Arranjos Produtivos Locais | Economia ','Porto Alegre','Campus Porto Alegre','0','1','5');
-        
-DEBUG 2023-11-03 02:35:54,074 - total=75
-DEBUG 2023-11-03 02:35:59,010 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c53c3c17-459b-441f-9b2d-aa701e31e287','13','9','1','21','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Software Básico | Ciência Da Computação ; Microprocessadores E Microcontroladores | Engenharia Elétrica ; Gerenciamento De Redes | Ciência Da Computação ; Automação Eletrônica De Processos Elétricos E Industriais | Engenharia Elétrica ; Arquitetura De Sistemas De Computação | Ciência Da Computação ','Fortaleza','None','8','3','0');
-        
-DEBUG 2023-11-03 02:35:59,768 - total=76
-DEBUG 2023-11-03 02:36:04,846 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c195648c-3de6-488b-9127-59ae4a07b862','35','12','0','176','ENGENHARIAS ; CIENCIAS_DA_SAUDE ','Sistemas Eletrônicos De Medida E De Controle | Engenharia Elétrica ; Robotização | Engenharia Mecânica ; Planejamento, Projeto E Controle De Sistemas De Produção | Engenharia De Produção ; Instrumentação Eletromecânica | Engenharia Elétrica ; Controle De Sistemas Mecânicos | Engenharia Mecânica ','Salvador','Centro Integrado de Manufatura e Tecnologia','13','5','0');
-        
-DEBUG 2023-11-03 02:36:05,629 - total=77
-DEBUG 2023-11-03 02:36:10,837 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cff8eaec-05eb-4f62-b97d-0089d11cf4ae','43','1','0','82','CIENCIAS_EXATAS_E_DA_TERRA ','Prop. Óticas E Espectrosc. Da Mat. Condens; Outras Inter. Da Mat. Com Rad. E Part. | Física ; Ótica | Física ; Metrologia, Técnicas Gerais De Laboratório, Sistema De Instrumentação | Física ','Salvador','Centro Integrado de Manufatura e Tecnologia','23','1','0');
-        
-DEBUG 2023-11-03 02:36:11,618 - total=78
-DEBUG 2023-11-03 02:36:16,935 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('44076ac2-8df5-465f-a2fe-856fc609a460','15','1','0','21','','','','','1','1','0');
-        
-DEBUG 2023-11-03 02:36:17,690 - total=79
-DEBUG 2023-11-03 02:36:22,629 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('50acddba-06e5-46d8-b331-03b2b61a2c6d','29','1','1','61','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Transdutores Para Aplicações Biomédicas | Engenharia Biomédica ; Ótica | Física ; Materiais E Componentes Eletroóticos E Magnetoóticos, Materiais Fotoelétricos | Engenharia Elétrica ; Instrumentação Eletrônica | Engenharia Elétrica ; Automação Eletrônica De Processos Elétricos E Industriais | Engenharia Elétrica ','João Pessoa','IFPB - Campus João Pessoa','3','1','0');
-        
-DEBUG 2023-11-03 02:36:23,387 - total=80
-DEBUG 2023-11-03 02:36:28,893 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a9afffa8-076f-4e07-b7e9-56094703170a','5','4','0','15','CIENCIAS_EXATAS_E_DA_TERRA ','Engenharia De Software | Ciência Da Computação ; Banco De Dados | Ciência Da Computação ','Santarém','None','0','1','0');
-        
-DEBUG 2023-11-03 02:36:29,912 - total=81
-DEBUG 2023-11-03 02:36:34,728 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4f55da08-4ba8-43de-a1d2-91d132957ca8','17','2','1','10','CIENCIAS_SOCIAIS_APLICADAS ','Organização Industrial E  Estudos Industriais | Economia ; Mudança Tecnológica | Economia ','Salvador','Faculdade de Economia','0','0','0');
-        
-DEBUG 2023-11-03 02:36:35,485 - total=82
-DEBUG 2023-11-03 02:36:40,405 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a5842abd-1185-4af1-89a8-2fd4e39872a7','43','13','0','59','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','Planejamento, Projeto E Controle De Sistemas De Produção | Engenharia De Produção ; Metodologia De Projeto Do Produto | Engenharia De Produção ; Gerência Do Projeto E Do Produto | Engenharia De Produção ; Desenvolvimento De Produto | Engenharia De Produção ','None','None','0','2','0');
-        
-DEBUG 2023-11-03 02:36:41,168 - total=83
-DEBUG 2023-11-03 02:36:47,376 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('aa1c8eda-707b-4d76-82ae-277e1506a59a','0','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_DA_SAUDE ','Mudança Tecnológica | Economia ; Análise Institucional | Psicologia ','Rio de Janeiro','Instituto de Tecnologia em Fármacos - Jacarepaguá','0','0','0');
-        
-DEBUG 2023-11-03 02:36:48,142 - total=84
-DEBUG 2023-11-03 02:36:53,375 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('084d9f37-10dc-433c-af9c-f8272f651960','6','0','4','22','CIENCIAS_SOCIAIS_APLICADAS ','','Colatina','None','0','7','0');
-        
-DEBUG 2023-11-03 02:36:54,132 - total=85
-DEBUG 2023-11-03 02:37:00,382 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('2064517f-a8ff-4d26-b384-07e9465151a4','46','9','0','57','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Salvador','Centro Integrado de Manufatura e Tecnologia','1','2','0');
-        
-DEBUG 2023-11-03 02:37:01,148 - total=86
-DEBUG 2023-11-03 02:37:07,563 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('249f7d66-7df9-4bdf-96b3-8fb340e4eac1','93','98','22','100','CIENCIAS_HUMANAS ','Tecnologias Intelectuais E Cognição | Educação ; Jogos Eletrônicos | Educação ; Adolescentes | Educação ','Salvador','Instituto de Humanidades, Artes e Ciências - IHAC','0','27','0');
-        
-DEBUG 2023-11-03 02:37:08,337 - total=87
-DEBUG 2023-11-03 02:37:13,233 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('99b9752e-31d2-49a3-9b2f-a11562b2924f','6','1','0','20','CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas Distribuídos | Ciência Da Computação ; Redes De Computadores | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ','Campina Grande','IFPB Campus Campina Grande','0','6','0');
-        
-DEBUG 2023-11-03 02:37:14,004 - total=88
-DEBUG 2023-11-03 02:37:19,291 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3094b1b2-1524-4d0a-be91-368e13d81bda','206','47','79','272','ENGENHARIAS ','','Florianópolis','Departamento de Engenharia do Conhecimento','0','0','0');
-        
-DEBUG 2023-11-03 02:37:20,337 - total=89
-DEBUG 2023-11-03 02:37:25,541 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d07cf4bf-8192-48ce-a645-1ec8b5af2b7d','18','17','0','35','CIENCIAS_SOCIAIS_APLICADAS ','','Frutal','None','0','0','0');
-        
-DEBUG 2023-11-03 02:37:26,316 - total=90
-DEBUG 2023-11-03 02:37:31,554 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('74e456df-7737-48a8-be5e-1da17382f729','79','12','1','55','CIENCIAS_AGRARIAS ','','Guarapuava','None','5','0','1');
-        
-DEBUG 2023-11-03 02:37:32,373 - total=91
-DEBUG 2023-11-03 02:37:38,512 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ce800128-285f-4119-b954-ea670fe62a9a','98','31','12','156','CIENCIAS_EXATAS_E_DA_TERRA ','','Salvador','Centro Integrado de Manufatura e Tecnologia','1','21','0');
-        
-DEBUG 2023-11-03 02:37:39,490 - total=92
-DEBUG 2023-11-03 02:37:45,259 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('40da8c68-6288-480a-bf33-aa36161e54ba','5','1','1','4','CIENCIAS_DA_SAUDE ','','Rio de Janeiro','DIPLAN - DIRETORIA DE PLANEJAMENTO ESTRATÉGICO','0','3','0');
-        
-DEBUG 2023-11-03 02:37:46,035 - total=93
-DEBUG 2023-11-03 02:37:50,905 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('57c7edb2-39e6-4826-8081-038a963b5b3e','20','6','1','27','CIENCIAS_BIOLOGICAS ; CIENCIAS_AGRARIAS ','Microbiologia Agrícola | Agronomia ','Palmas','Engenharia de Alimentos','0','0','0');
-        
-DEBUG 2023-11-03 02:37:51,676 - total=94
-DEBUG 2023-11-03 02:37:57,788 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c9aad719-8f8d-41d1-ab6b-a951163bcaea','21','2','1','44','OUTROS ; CIENCIAS_SOCIAIS_APLICADAS ','','Sao Bento do Sul','PRPPG','0','0','0');
-        
-DEBUG 2023-11-03 02:37:58,553 - total=95
-DEBUG 2023-11-03 02:38:03,725 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('64635a76-c343-45b7-b15e-e324f46fafc8','21','6','3','17','CIENCIAS_SOCIAIS_APLICADAS ','','Tangara da Serra','Instituto de Administração Ciências Contábeis e Econômicas','0','0','0');
-        
-DEBUG 2023-11-03 02:38:04,517 - total=96
-DEBUG 2023-11-03 02:38:09,399 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('69fd91f6-0d4a-4e4a-81b1-8db053171e87','19','3','0','83','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Química De Interfaces | Química ; Qualidade De Água | Engenharia Sanitária ; Físico Química Inorgânica | Química ; Controle Da Poluição | Engenharia Sanitária ; Biocombustíveis | Engenharia Química ','Sume','Centro de Desevolvimento Sustentável do Semi-Árido','3','0','0');
-        
-DEBUG 2023-11-03 02:38:10,172 - total=97
-DEBUG 2023-11-03 02:38:15,730 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cea78c3f-452f-4bfc-ba1e-64b8c55da4f5','0','0','0','0','CIENCIAS_DA_SAUDE ','','Rio de Janeiro','far-manguinhos','0','0','0');
-        
-DEBUG 2023-11-03 02:38:16,828 - total=98
-DEBUG 2023-11-03 02:38:22,059 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ac2e6e8a-3740-4494-ac29-3a405be8e990','2','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_DA_SAUDE ','Planejamento Em Ciência E Tecnologia | Administração ; Organizações Públicas | Administração ; Gestão Em Ciência E Tecnologia Em Saúde | Saúde Coletiva ; Gestão Do Conhecimento Organizacional | Administração ','Salvador','None','0','0','0');
-        
-DEBUG 2023-11-03 02:38:22,809 - total=99
-DEBUG 2023-11-03 02:38:28,590 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('df556148-646d-4903-a7f0-6b85df3da3ce','28','1','0','21','OUTROS ; ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Quimiometria | Química ; Espectroscopia | Química ','None','None','1','0','0');
-        
-DEBUG 2023-11-03 02:38:29,377 - total=100
-DEBUG 2023-11-03 02:38:34,500 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('fc55993c-7203-4736-a9b7-4746e1ad7535','0','0','2','0','CIENCIAS_SOCIAIS_APLICADAS ','Planejamento Em Ciência E Tecnologia | Administração ','Rio de Janeiro','Presidência da Fiocruz','0','1','0');
-        
-DEBUG 2023-11-03 02:38:35,271 - total=101
-DEBUG 2023-11-03 02:38:40,494 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c8a17189-51c9-472b-a431-6edbf7b94b22','28','4','5','79','CIENCIAS_EXATAS_E_DA_TERRA ','Tratamento De Efluentes | Química ; Reaproveitamento De Resíduos | Química ; Quimica Ambiental | Química ','Salvador','FACULDADE DE TECNOLOGIA SENAI CIMATEC','8','0','0');
-        
-DEBUG 2023-11-03 02:38:41,251 - total=102
-DEBUG 2023-11-03 02:38:46,200 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('b158f64b-c4ec-42b5-9723-e709b4d36789','16','11','1','30','ENGENHARIAS ; CIENCIAS_AGRARIAS ','Sistemas De Informações Geográficas | Engenharia Sanitária ; Hidrologia | Engenharia Civil ; Hidráulica | Engenharia Civil ','Colatina','Unidade Colatina','0','0','0');
-        
-DEBUG 2023-11-03 02:38:46,978 - total=103
-DEBUG 2023-11-03 02:38:52,537 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a0954dac-a5be-42ad-804d-30186ef9ecc1','24','10','1','74','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas De Telecomunicações | Engenharia Elétrica ; Modelos Analíticos E De Simulação | Ciência Da Computação ','Recife','Centro de Ciências Sociais Aplicadas','0','1','0');
-        
-DEBUG 2023-11-03 02:38:53,300 - total=104
-DEBUG 2023-11-03 02:38:58,102 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c5ebdd4e-dd3e-4b09-a93e-41be950defbe','22','3','0','56','OUTROS ; ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','','Salvador','Departamento de Ciências Sociais Aplicadas','0','0','0');
-        
-DEBUG 2023-11-03 02:38:58,846 - total=105
-DEBUG 2023-11-03 02:39:03,713 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('626e6b50-1028-49c9-be06-f88737c58ee1','14','5','2','14','OUTROS ; CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_BIOLOGICAS ','Serviços Ambientais | Ciências Ambientais ; Direito Ambiental E Politicas Públicas | Direito ; Bioprospecção | Biotecnologia ','Santarém','Instituto de Ciências e Tecnologia das Águas - ICTA','0','0','0');
-        
-DEBUG 2023-11-03 02:39:04,489 - total=106
-DEBUG 2023-11-03 02:39:10,496 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4d5d3dd4-4add-482f-a10d-8db6150429c3','107','21','2','165','CIENCIAS_BIOLOGICAS ','Microbiologia Industrial E De Fermentação | Microbiologia ','Ilhéus','Departamento de Ciências Biológicas','2','1','1');
-        
-DEBUG 2023-11-03 02:39:11,252 - total=107
-DEBUG 2023-11-03 02:39:16,390 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('41650b94-6ba1-4a50-a469-ee8669373a34','19','24','5','18','CIENCIAS_SOCIAIS_APLICADAS ','Relações Do Comércio; Política Comercial; Integração Econômica | Economia ; Propriedade Intelectual E Inovação | Economia ; Organização Industrial E  Estudos Industriais | Economia ','FLORIANOPOLIS','Seção de Difusão Regional/SEDIR','0','0','0');
-        
-DEBUG 2023-11-03 02:39:17,482 - total=108
-DEBUG 2023-11-03 02:39:23,092 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('33a9d8e1-769d-4ad8-bc10-6693e28a3dd7','9','3','2','35','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas De Informação | Ciência Da Computação ; Linguagens De Programação | Ciência Da Computação ; Educação À Distância | Ciência Da Computação ','Viamão','IFRS - Campus Viamão','0','3','0');
-        
-DEBUG 2023-11-03 02:39:23,844 - total=109
-DEBUG 2023-11-03 02:39:28,729 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ded2bafa-9a13-4e35-8c85-c0aff6619c03','12','0','0','10','CIENCIAS_BIOLOGICAS ','','Rio de Janeiro','Presidência da Fiocruz','0','0','0');
-        
-DEBUG 2023-11-03 02:39:29,496 - total=110
-DEBUG 2023-11-03 02:39:35,710 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('90779822-365f-4952-b29d-3dea03e35a99','1','1','1','2','CIENCIAS_SOCIAIS_APLICADAS ','Modelagem Organizacional | Administração ; Gestão Hospitalar | Administração ; Gestão De Pessoas | Administração ; Gestão Da Qualidade | Administração ; Administração Da Produção | Administração ','Rio de Janeiro','Escola Nacional de Saúde Pública','0','0','0');
-        
-DEBUG 2023-11-03 02:39:36,476 - total=111
-DEBUG 2023-11-03 02:39:41,676 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('25f6b0cc-7d2d-4e1b-af2c-b1dfc04c1cde','0','1','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Educação De Adultos | Educação ','Rio de Janeiro','None','0','0','0');
-        
-DEBUG 2023-11-03 02:39:42,428 - total=112
-DEBUG 2023-11-03 02:39:47,300 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ee3cdb3d-b4cb-4ddf-af70-d3b5a99b9b4f','63','9','1','200','','','Medianeira','None','9','0','0');
-        
-DEBUG 2023-11-03 02:39:48,055 - total=113
-DEBUG 2023-11-03 02:39:53,236 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('07caf0c5-7414-4436-a817-e2edb15cdddc','88','11','1','93','OUTROS ; ENGENHARIAS ','','Salvador','ICS-Instituto de Ciências da Saúde','1','1','1');
-        
-DEBUG 2023-11-03 02:39:54,026 - total=114
-DEBUG 2023-11-03 02:39:59,182 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('0e325677-9357-46a1-9c7b-8fe0a4e4bedc','42','19','9','42','CIENCIAS_EXATAS_E_DA_TERRA ','Software Básico | Ciência Da Computação ; Sistemas De Informação | Ciência Da Computação ; Linguagens De Programação | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ; Banco De Dados | Ciência Da Computação ; Arquitetura De Sistemas De Computação | Ciência Da Computação ','Salvador','Departamento de Ciências Exatas e da Terra','18','31','1');
-        
-DEBUG 2023-11-03 02:39:59,952 - total=115
-DEBUG 2023-11-03 02:40:04,783 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ecf4b84e-e216-4b7e-b9ab-b2b53b6de75d','35','7','4','21','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_DA_SAUDE ','Organização Industrial E  Estudos Industriais | Economia ; Computabilidade E Modelos De Computação | Ciência Da Computação ','Salvador','Centro Universitário SENAI CIMATEC','0','21','0');
-        
-DEBUG 2023-11-03 02:40:05,548 - total=116
-DEBUG 2023-11-03 02:40:10,829 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a18789b3-6133-431d-88d7-7f1e863d2deb','24','1','3','54','ENGENHARIAS ','','Feira de Santana','CETENS','1','0','0');
-        
-DEBUG 2023-11-03 02:40:11,587 - total=117
-DEBUG 2023-11-03 02:40:16,595 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('678ee8e7-c468-4f9e-9e90-9681f9fd579c','2','1','2','4','CIENCIAS_HUMANAS ','','Belem','Diretoria de Ensino Profissional de Nivel Médio','0','1','0');
-        
-DEBUG 2023-11-03 02:40:17,384 - total=118
-DEBUG 2023-11-03 02:40:22,396 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('37a6c3df-e96f-416f-b2f8-4b35361b61ed','18','4','1','20','CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Análise De Traços E Química Ambiental | Química ','Porto Velho','INSTITUTO FEDERAL DE EDUCAÇÃO, CIÊNCIA E TECNOLOGIA DE RONDÔNIA','0','0','0');
-        
-DEBUG 2023-11-03 02:40:23,156 - total=119
-DEBUG 2023-11-03 02:40:28,167 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('8c164a19-35d3-4f70-83ec-fb3b99278248','68','8','0','152','CIENCIAS_AGRARIAS ','Nutrição De Plantas | Agronomia ; Manejo E Tratos Culturais | Agronomia ; Fisiologia De Plantas Cultivadas | Agronomia ; Cultivo Consorciado De Hortaliças | Agronomia ','None','None','1','0','0');
-        
-DEBUG 2023-11-03 02:40:28,944 - total=120
-DEBUG 2023-11-03 02:40:34,877 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9aeb38ea-44bb-4d0e-9459-a8eb5d12e72d','28','5','6','16','CIENCIAS_EXATAS_E_DA_TERRA ','Física Estatística E Termodinâmica | Física ','None','None','0','20','0');
-        
-DEBUG 2023-11-03 02:40:35,638 - total=121
-DEBUG 2023-11-03 02:40:41,373 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('62e73505-af5a-45d1-b9ba-fd6bf4206e0e','70','7','2','120','CIENCIAS_SOCIAIS_APLICADAS ','Administração Da Informação | Administração ','São Paulo','None','0','1','1');
-        
-DEBUG 2023-11-03 02:40:42,223 - total=122
-DEBUG 2023-11-03 02:40:47,860 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9d37e596-66be-4a8c-b336-9647e9eb7d64','28','25','5','58','CIENCIAS_AGRARIAS ','Manejo De Animais | Zootecnia ; Instalações Para Produção Animal | Zootecnia ; Criação De Animais | Zootecnia ','Santa Teresa','Instituto Federal do Espírito Santo - Campus Santa Teresa','0','0','0');
-        
-DEBUG 2023-11-03 02:40:48,636 - total=123
-DEBUG 2023-11-03 02:40:53,555 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('5d3ffa0e-ddba-49c4-a676-9de72b2311d4','6','1','0','8','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Processos De Disseminação Da Informação | Ciência Da Informação ; Processos De Aprendizagem, Memória E Motivação | Psicologia ; Administração De Recursos Humanos | Administração ; Administração De Pessoal | Administração ','Rio de Janeiro','Coordenação-Geral de Gestão de Pessoas','0','0','0');
-        
-DEBUG 2023-11-03 02:40:54,336 - total=124
-DEBUG 2023-11-03 02:40:59,214 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('6989b05a-9e63-4a29-9d8e-a0b8bfc3aaef','21','1','0','57','CIENCIAS_SOCIAIS_APLICADAS ','Economia Do Consumidor | Economia ','Cuiabá','Campus Bela Vista','0','0','0');
-        
-DEBUG 2023-11-03 02:40:59,971 - total=125
-DEBUG 2023-11-03 02:41:05,164 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('02e48cb3-51aa-4d78-9229-6e9c0ed7c79c','148','9','2','209','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Micrometeorologia | Geociências ','Salvador','Centro Integrado de Manufatura e Tecnologia','0','4','0');
-        
-DEBUG 2023-11-03 02:41:05,934 - total=126
-DEBUG 2023-11-03 02:41:10,983 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('063679d8-a7c1-45b7-9f5b-6294a6bbaa50','48','3','1','32','ENGENHARIAS ','Tratamentos Térmicos, Mecânicos E Químicos | Engenharia De Materiais E Metalúrgica ; Soldagem | Engenharia De Materiais E Metalúrgica ; Recobrimentos | Engenharia De Materiais E Metalúrgica ; Propriedades Mecânicas Dos Metais E Ligas | Engenharia De Materiais E Metalúrgica ; Conformação Mecânica | Engenharia De Materiais E Metalúrgica ','Salvador','Centro Integrado de Manufatura e Tecnologia','1','0','0');
-        
-DEBUG 2023-11-03 02:41:11,741 - total=127
-DEBUG 2023-11-03 02:41:18,024 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('e0b0e130-fc59-4d88-b1d2-486638d8b60b','0','0','0','7','','','Salvador','Centro de Pesquisas Gonçalo Moniz - BA','0','0','0');
-        
-DEBUG 2023-11-03 02:41:18,819 - total=128
-DEBUG 2023-11-03 02:41:24,041 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ca9fe351-4ce3-4f2d-b312-08659f37cab2','19','21','0','45','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Manaus','Faculdade de Tecnologia - DEC','0','2','0');
-        
-DEBUG 2023-11-03 02:41:24,804 - total=129
-DEBUG 2023-11-03 02:41:30,428 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('bd0edba9-5cf7-4a92-a921-5c38ecf4ed8b','26','9','0','52','','','Tangará da Serra','Departamento de Administração','0','0','0');
-        
-DEBUG 2023-11-03 02:41:31,191 - total=130
-DEBUG 2023-11-03 02:41:36,738 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('fb69eba6-dd80-4c0f-a844-7544d2c91a0f','0','0','0','0','CIENCIAS_DA_SAUDE ','','Rio de Janeiro','Instituto de Tecnologia em Fármacos - Jacarepaguá','0','0','0');
-        
-DEBUG 2023-11-03 02:41:37,801 - total=131
-DEBUG 2023-11-03 02:41:42,725 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('cb5f5432-72e3-4372-a02f-82e31a586c52','16','3','0','129','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','Materiais Conjugados Não-Metálicos | Engenharia De Materiais E Metalúrgica ; Extração E Transformação De Materiais | Engenharia De Materiais E Metalúrgica ; Cerâmicos | Engenharia De Materiais E Metalúrgica ','Marabá','Instituto de Geociências e Engenharias','0','0','0');
-        
-DEBUG 2023-11-03 02:41:43,521 - total=132
-DEBUG 2023-11-03 02:41:50,238 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('54dc7a49-7613-42dc-9fbb-15099cad8d11','18','1','0','79','CIENCIAS_EXATAS_E_DA_TERRA ','Métodos Óticos De Análise | Química ; Instrumentação Analítica | Química ; Análise De Traços E Química Ambiental | Química ','Petrolina','Colegiado de Engenharia Agronômica','0','5','0');
-        
-DEBUG 2023-11-03 02:41:51,036 - total=133
-DEBUG 2023-11-03 02:41:56,036 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1a888ffd-efea-4238-8aa9-8c26ad68ce0b','24','0','0','48','CIENCIAS_EXATAS_E_DA_TERRA ','Eletroquímica | Química ; Corrosão | Química ','Ouro Branco','Campus Alto Paraopeba','3','0','0');
-        
-DEBUG 2023-11-03 02:41:56,816 - total=134
-DEBUG 2023-11-03 02:42:01,988 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('de05bc3d-4a23-45c9-b05b-5076375984a4','73','1','4','99','ENGENHARIAS ; CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','','Recife','Centro de Tecnologia','1','1','0');
-        
-DEBUG 2023-11-03 02:42:02,831 - total=135
-DEBUG 2023-11-03 02:42:08,241 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c50f8fc7-420a-4591-82f2-9bd5c561188e','20','5','7','56','CIENCIAS_SOCIAIS_APLICADAS ','Empreendedorismo E Inovação | Administração ; Empreendedorismo De Interesse Social | Administração ','Sao Joao Del Rei','Departamento de Ciências Administrativas e Contábeis - DECAC','0','0','0');
-        
-DEBUG 2023-11-03 02:42:09,015 - total=136
-DEBUG 2023-11-03 02:42:13,885 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9242b02d-628c-43a4-9e50-6c9324d13ae8','22','2','1','30','CIENCIAS_DA_SAUDE ','Farmacoeconomia | Farmácia ','Brasília','UNB - Campus Ceilândia','0','0','0');
-        
-DEBUG 2023-11-03 02:42:14,656 - total=137
-DEBUG 2023-11-03 02:42:20,741 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('33eb906b-a7ed-4917-904c-4812050f561d','152','5','1','35','CIENCIAS_EXATAS_E_DA_TERRA ','','Rio de Janeiro','Centro de Tecnologia e Ciências','0','2','0');
-        
-DEBUG 2023-11-03 02:42:21,524 - total=138
-DEBUG 2023-11-03 02:42:26,974 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('8014ecb3-8a14-4d69-ad3c-f0475c016f60','34','7','6','139','CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas De Informação | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ','Salvador','Conselho de Ensino, Pesquisa e Extensão','0','33','0');
-        
-DEBUG 2023-11-03 02:42:27,754 - total=139
-DEBUG 2023-11-03 02:42:33,344 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('2d803355-ae95-45e5-955a-027cfba6671e','142','10','0','202','OUTROS ; ENGENHARIAS ; CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Tecnologia De Processos E Produtos | Biotecnologia ; Produtos Naturais | Engenharia Química ','Salvador','Centro Integrado de Manufatura e Tecnologia','28','0','0');
-        
-DEBUG 2023-11-03 02:42:34,114 - total=140
-DEBUG 2023-11-03 02:42:39,066 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1ccf8424-60e8-46f6-928f-ad4230094dba','9','1','0','72','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','','Barreiras','Centro das Ciências Biológicas e da Saúde','1','0','0');
-        
-DEBUG 2023-11-03 02:42:39,838 - total=141
-DEBUG 2023-11-03 02:42:44,999 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('649bc7b6-ba91-4071-97c5-cc5606a85614','86','22','2','220','CIENCIAS_AGRARIAS ','Microbiologia E Bioquímica Do Solo | Agronomia ','Marabá','Instituto de Estudo do Desenvolvimento Agrário e Regional','0','1','0');
-        
-DEBUG 2023-11-03 02:42:45,762 - total=142
-DEBUG 2023-11-03 02:42:50,616 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('7a3d1239-d05b-484d-a2de-e99ca7749d59','2','4','0','12','CIENCIAS_SOCIAIS_APLICADAS ','Educação Corporativa | Administração ; Administração Mercadológica | Administração ','Rio de Janeiro','Casa Oswaldo Cruz','0','0','0');
-        
-DEBUG 2023-11-03 02:42:51,382 - total=143
-DEBUG 2023-11-03 02:42:56,572 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d1b2b53a-f15a-4c60-87da-54397d06a3bb','17','6','0','16','CIENCIAS_EXATAS_E_DA_TERRA ','Sistemas De Informação | Ciência Da Computação ; Engenharia De Software | Ciência Da Computação ; Banco De Dados | Ciência Da Computação ','Palmas','Campus Universitário de Palmas','0','23','0');
-        
-DEBUG 2023-11-03 02:42:57,349 - total=144
-DEBUG 2023-11-03 02:43:02,863 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('7d1118d5-f671-4d55-89d4-9e671521878f','5','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_DA_SAUDE ','Política E Planejamento Governamentais | Administração ; Organizações Públicas | Administração ','Brasília','Coordenação de Gestão e Integração Estratégica','0','0','0');
-        
-DEBUG 2023-11-03 02:43:03,628 - total=145
-DEBUG 2023-11-03 02:43:09,000 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4ba0b220-4551-4dc9-97c4-46801d9a9cd8','1','0','0','9','CIENCIAS_SOCIAIS_APLICADAS ','','None','None','6','0','0');
-        
-DEBUG 2023-11-03 02:43:09,885 - total=146
-DEBUG 2023-11-03 02:43:16,115 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('b579e1e1-7aca-47ad-839f-726e78306be3','282','0','5','24','CIENCIAS_EXATAS_E_DA_TERRA ','Separação | Química ; Quimiometria | Química ; Química De Alimentos | Química ; Métodos Óticos De Análise | Química ','Salvador','Instituto de Química','1','0','0');
-        
-DEBUG 2023-11-03 02:43:17,172 - total=147
-DEBUG 2023-11-03 02:43:22,133 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('75e9365e-d655-4a73-9bd0-5ad4ed969244','16','3','0','62','CIENCIAS_SOCIAIS_APLICADAS ','','Ilhéus','Reitoria','0','0','0');
-        
-DEBUG 2023-11-03 02:43:22,906 - total=148
-DEBUG 2023-11-03 02:43:28,417 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('d2cf6752-4cbc-4bb3-b868-f13fae68cfc7','7','3','1','50','','','','','5','1','0');
-        
-DEBUG 2023-11-03 02:43:29,192 - total=149
-DEBUG 2023-11-03 02:43:34,118 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c0ed0196-5aa9-4af9-912c-47c94974166f','13','11','0','34','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Análise De Traços E Química Ambiental | Química ','Frutal','UEMG/Frutal','1','0','0');
-        
-DEBUG 2023-11-03 02:43:34,883 - total=150
-DEBUG 2023-11-03 02:43:39,801 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('703dfb9f-6d9c-4f14-8d96-a0407eff0bb9','26','5','0','16','CIENCIAS_EXATAS_E_DA_TERRA ','','Porto Velho','Instituto Federal de Rondônia - IFRO - Campus Porto Velho Calama','4','0','0');
-        
-DEBUG 2023-11-03 02:43:40,559 - total=151
-DEBUG 2023-11-03 02:43:45,749 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4b5a5332-53fa-436d-a51a-fa77e88271c9','12','6','0','29','CIENCIAS_HUMANAS ','','Amargosa','Centro de Formação de Professores','0','0','0');
-        
-DEBUG 2023-11-03 02:43:46,529 - total=152
-DEBUG 2023-11-03 02:43:52,997 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('1892ad9c-46cc-42d1-8bb8-0bdd99826975','0','0','0','1','','','Rio de Janeiro','Instituto de Tecnologia em Fármacos - Jacarepaguá','0','0','0');
-        
-DEBUG 2023-11-03 02:43:53,768 - total=153
-DEBUG 2023-11-03 02:43:58,732 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('22508054-4b2e-4b79-a56c-cdf80a783059','6','9','0','22','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ','Educação A Distância | Educação ','Fortaleza','Diretoria de Educação a Distância','0','0','0');
-        
-DEBUG 2023-11-03 02:43:59,491 - total=154
-DEBUG 2023-11-03 02:44:04,400 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('339a663e-794a-484b-8614-3e98f3fdb190','17','2','0','47','CIENCIAS_EXATAS_E_DA_TERRA ','Química Bio-Inorgânica | Química ; Foto-Química Inorgânica | Química ; Catálise | Química ','Brasília','Campus Gama','0','0','1');
-        
-DEBUG 2023-11-03 02:44:05,161 - total=155
-DEBUG 2023-11-03 02:44:11,332 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('c0f610c5-c24c-45ae-a418-aba41fd77a55','0','6','2','192','ENGENHARIAS ','Tratamento De Resíduos | Engenharia Química ','Toledo','Centro de Engenharias e Ciências Exatas','47','1','0');
-        
-DEBUG 2023-11-03 02:44:12,105 - total=156
-DEBUG 2023-11-03 02:44:16,918 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('fd532696-5ba8-4063-80a8-c7f230e35192','59','27','7','43','CIENCIAS_SOCIAIS_APLICADAS ','Sistema Local Inovação | Economia ; Dinâmica De Sistemas | Economia ','Salvador','Centro Universitário SENAI CIMATEC','0','8','0');
-        
-DEBUG 2023-11-03 02:44:17,669 - total=157
-DEBUG 2023-11-03 02:44:22,510 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('42394c01-797a-48a2-b561-f6a61acc2f4c','62','0','0','62','CIENCIAS_EXATAS_E_DA_TERRA ','Separação | Química ; Análise De Traços E Química Ambiental | Química ','Salvador','Instituto de Química','0','0','0');
-        
-DEBUG 2023-11-03 02:44:23,281 - total=158
-DEBUG 2023-11-03 02:44:28,156 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3fec55ea-32a1-4e34-b142-a99b9c0662da','148','1','1','223','CIENCIAS_EXATAS_E_DA_TERRA ','Tratamento De Amostras | Química ; Separação | Química ; Métodos Óticos De Análise | Química ; Análise De Traços E Química Ambiental | Química ','Salvador','Instituto de Química','0','0','0');
-        
-DEBUG 2023-11-03 02:44:28,957 - total=159
-DEBUG 2023-11-03 02:44:34,140 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('999a50b0-5372-44ce-876b-caf2d9e4fa0e','42','12','2','106','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_BIOLOGICAS ; CIENCIAS_AGRARIAS ','','Sete Lagoas','Campus de Sete Lagoas','0','0','0');
-        
-DEBUG 2023-11-03 02:44:34,898 - total=160
-DEBUG 2023-11-03 02:44:39,732 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('9a53a06e-aff2-4e5e-a631-27769b763f60','0','0','0','0','ENGENHARIAS ; CIENCIAS_SOCIAIS_APLICADAS ','Planejamento Em Ciência E Tecnologia | Administração ; Avaliação De Projetos | Engenharia De Produção ','Rio de Janeiro','Presidência da Fiocruz','0','0','0');
-        
-DEBUG 2023-11-03 02:44:40,815 - total=161
-DEBUG 2023-11-03 02:44:45,593 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('2d6cba8d-d3a6-4761-ad80-627837de3367','29','2','0','42','ENGENHARIAS ','','None','None','1','0','0');
-        
-DEBUG 2023-11-03 02:44:46,352 - total=162
-DEBUG 2023-11-03 02:44:51,344 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('4fe960ac-de4a-4915-8a0b-1fd523d9b731','1','0','0','4','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Rio de Janeiro','Coordenação-Geral de Gestão de Tecnologia da Informação','0','0','0');
-        
-DEBUG 2023-11-03 02:44:52,099 - total=163
-DEBUG 2023-11-03 02:44:56,942 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('0b79ea1b-0a3d-4cc4-a1e2-117749322cda','0','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ','','Rio de Janeiro','Instituto de Tecnologia em Fármacos','0','0','0');
-        
-DEBUG 2023-11-03 02:44:57,711 - total=164
-DEBUG 2023-11-03 02:45:02,510 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3ebbdbe5-278b-409a-be77-56940fd19063','12','3','0','19','CIENCIAS_SOCIAIS_APLICADAS ','','None','None','0','0','0');
-        
-DEBUG 2023-11-03 02:45:03,287 - total=165
-DEBUG 2023-11-03 02:45:08,082 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('a307ff10-dc4c-4a7c-bfb6-48b6db1ff09a','77','3','0','86','CIENCIAS_EXATAS_E_DA_TERRA ','Separação | Química ; Métodos Óticos De Análise | Química ; Instrumentação Analítica | Química ; Análise De Traços E Química Ambiental | Química ','Salvador','Instituto de Química','2','0','0');
-        
-DEBUG 2023-11-03 02:45:08,833 - total=166
-DEBUG 2023-11-03 02:45:13,688 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('814f021f-0a03-4cf3-b9b1-6e1fb8b6f373','39','13','3','71','CIENCIAS_SOCIAIS_APLICADAS ','','Salvador','IFBA - CAMPUS SALVADOR','0','2','0');
-        
-DEBUG 2023-11-03 02:45:14,454 - total=167
-DEBUG 2023-11-03 02:45:19,382 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ff6dd4ae-1ae0-42f2-b267-7f0a39f81be1','20','5','3','28','CIENCIAS_SOCIAIS_APLICADAS ','Contabilidade De Custos | Administração ','Cuiabá','FACC - Faculdade de Administração e Ciências Contábeis','0','1','0');
-        
-DEBUG 2023-11-03 02:45:20,147 - total=168
-DEBUG 2023-11-03 02:45:25,019 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('ba06bed8-17f2-4889-b71e-70906f2cbbd6','5','3','3','21','CIENCIAS_EXATAS_E_DA_TERRA ','Robótica Inteligente | Ciência Da Computação ; Inteligência Artificial | Ciência Da Computação ','Palmas','Curso de Bacharelado em Ciência da Computação','0','6','0');
-        
-DEBUG 2023-11-03 02:45:25,777 - total=169
-DEBUG 2023-11-03 02:45:31,618 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('8a81f2cd-9083-4e4c-8727-4d9fe610a366','36','5','0','51','CIENCIAS_SOCIAIS_APLICADAS ','','Salvador','None','0','0','0');
-        
-DEBUG 2023-11-03 02:45:33,378 - total=170
-DEBUG 2023-11-03 02:45:38,276 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('44ea5b76-11f8-44a1-b1a6-eaaaab79355c','20','10','22','13','CIENCIAS_SOCIAIS_APLICADAS ','','Salvador','Colegiado do Curso de Bacharel em Administração','0','0','0');
-        
-DEBUG 2023-11-03 02:45:39,069 - total=171
-DEBUG 2023-11-03 02:45:44,051 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('41fa89f9-1081-4462-9b08-920c1b12bd17','295','6','1','212','CIENCIAS_DA_SAUDE ; CIENCIAS_BIOLOGICAS ','Toxinologia | Farmacologia ; Novas Drogas Terapêuticas | Biotecnologia ','Porto Velho','Fundação Oswaldo Cruz - Unidade de Rondônia - RO','2','2','0');
-        
-DEBUG 2023-11-03 02:45:44,803 - total=172
-DEBUG 2023-11-03 02:45:49,673 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('83540b49-d994-4f85-bcc5-4514a5bf5e38','3','2','0','6','CIENCIAS_SOCIAIS_APLICADAS ; CIENCIAS_HUMANAS ; CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_DA_SAUDE ','Tecnologia Educacional | Educação ; Processos De Disseminação Da Informação | Ciência Da Informação ; Informação E Informática Em Saúde | Saúde Coletiva ; Educação De Adultos | Educação ; Análise De Sistemas | Ciência Da Computação ','Rio de Janeiro','Diretoria de Recursos Humanos','0','0','0');
-        
-DEBUG 2023-11-03 02:45:50,416 - total=173
-DEBUG 2023-11-03 02:45:55,278 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('388a24bd-39b3-4e78-af2d-98dabbde5163','2','0','0','25','CIENCIAS_AGRARIAS ','Química, Física, Fisico-Química E Bioquímica Dos Alim. E Das Mat-Primas Alimentares | Ciência E Tecnologia De Alimentos ; Padrões, Legislação E Fiscalização De Alimentos | Ciência E Tecnologia De Alimentos ; Operações Unitárias | Ciência E Tecnologia De Alimentos ; Avaliação E Controle De Qualidade De Alimentos | Ciência E Tecnologia De Alimentos ','Belo Horizonte','Centro de Pesquisas René Rachou','0','0','0');
-        
-DEBUG 2023-11-03 02:45:56,036 - total=174
-DEBUG 2023-11-03 02:46:00,981 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('51933ce1-987f-469f-bb96-808d5e023e42','0','0','0','0','CIENCIAS_SOCIAIS_APLICADAS ','Direito Civil | Direito ; Direito Administrativo | Direito ','Rio de Janeiro','Instituto de Tecnologia em Fármacos','0','0','0');
-        
-DEBUG 2023-11-03 02:46:01,753 - total=175
-DEBUG 2023-11-03 02:46:06,614 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('f69915b3-0a09-4298-8728-6661626132a8','37','20','2','67','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','','Salvador','FACULDADE DE TECNOLOGIA SENAI CIMATEC','6','14','0');
-        
-DEBUG 2023-11-03 02:46:07,360 - total=176
-DEBUG 2023-11-03 02:46:12,407 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('0c24e6f7-4259-402c-a473-9cefafcaa7eb','3','0','0','16','','','Rio de Janeiro','Instituto de Tecnologia em Imunobiológicos','0','0','0');
-        
-DEBUG 2023-11-03 02:46:13,174 - total=177
-DEBUG 2023-11-03 02:46:18,371 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('887515e0-73dd-4656-9d6f-3e71c23d8a52','272','7','8','125','CIENCIAS_EXATAS_E_DA_TERRA ','Química Da Atmosfera | Geociências ','Salvador','FACULDADE DE TECNOLOGIA SENAI CIMATEC','6','0','0');
-        
-DEBUG 2023-11-03 02:46:19,329 - total=178
-DEBUG 2023-11-03 02:46:24,284 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3487dd6c-3d43-4985-ad7a-594365850075','17','0','1','32','ENGENHARIAS ; CIENCIAS_EXATAS_E_DA_TERRA ','Alimentos | Engenharia Química ','Sousa','IFPB - Campus Sousa','2','2','0');
-        
-DEBUG 2023-11-03 02:46:25,050 - total=179
-DEBUG 2023-11-03 02:46:30,197 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('3eb8aa1f-abd9-4d11-9b0a-ff7ea3b0c50b','24','6','0','145','ENGENHARIAS ','Polímeros, Aplicações | Engenharia De Materiais E Metalúrgica ','Camaçari','Instituto de Ciência, Tecnologia e Inovação','3','0','0');
-        
-DEBUG 2023-11-03 02:46:30,952 - total=180
-DEBUG 2023-11-03 02:46:36,140 - 
-        INSERT into public.researcher_production (researcher_id ,articles,book_chapters,book,work_in_event,great_area,area_specialty,city,organ,patent,software,brand) 
-        values('89e23302-61ea-4f84-bc0b-d2909d8ffee8','53','2','1','124','CIENCIAS_EXATAS_E_DA_TERRA ; CIENCIAS_AGRARIAS ','Tecnologia Das Bebidas | Ciência E Tecnologia De Alimentos ; Separação | Química ; Análise De Traços E Química Ambiental | Química ','Santo André','Centro de Ciências Naturais e Humanas','4','0','0');
+        values('8e957577-3974-437c-96a2-27771a256ab8','21','0','0','57','CIENCIAS_AGRARIAS ','Irrigação E Drenagem | Engenharia Agrícola ','Juazeiro','Departamento de Tecnologia e Ciências Sociais','0','0','0');
         

@@ -374,12 +374,12 @@ logger = logging.getLogger()
 
        
 logger.debug("Inicio")
-#try:
+try:
 
-  #lattes10.lattes_10_researcher_frequency_db(logger)
-#except Exception as e: 
- #         print (e)         
- #         traceback.print_exc()   
+  lattes10.lattes_10_researcher_frequency_db(logger)
+except Exception as e: 
+          print (e)         
+          traceback.print_exc()   
 
 sql="""
 
@@ -445,6 +445,7 @@ print("Passo II")
 #create_area_ditionary_db()
 teste=True
 article=True
+"""
 create_researcher_dictionary_db(teste,article)
 
 
@@ -468,7 +469,7 @@ for i in range(4928):
 
       #insert_researcher_frequency_db(1)
 
-
+"""
 
 
 #lista = {}

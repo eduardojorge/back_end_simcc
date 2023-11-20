@@ -88,7 +88,8 @@ def graduate_program_profnit():
 
     id =request.args.get('id')
 
-    project_.project_=id
+    #
+    # project_.project_=id
    
    
 

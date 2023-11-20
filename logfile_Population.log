@@ -1,280 +1,269 @@
-DEBUG 2023-11-18 13:59:08,687 - Inicio
-DEBUG 2023-11-18 13:59:08,820 - 
+DEBUG 2023-11-19 17:19:16,938 - Inicio
+DEBUG 2023-11-19 17:19:17,057 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:17,331 - http://lattes.cnpq.br:80 "GET /0266844129389646 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:17,332 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:17,541 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=0266844129389646 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:17,606 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4784643P0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:17,614 - 
+        UPDATE  researcher set lattes_10_id='K4784643P0' where id='41dce847-4096-41c8-acc6-967e966faa64' 
+DEBUG 2023-11-19 17:19:17,732 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:17,847 - http://lattes.cnpq.br:80 "GET /0699272930614987 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:17,848 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:17,982 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=0699272930614987 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:18,063 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4774663T0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:18,071 - 
+        UPDATE  researcher set lattes_10_id='K4774663T0' where id='30f1fad3-e08a-459c-81d5-9fcbea87b5d2' 
+DEBUG 2023-11-19 17:19:18,184 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:18,308 - http://lattes.cnpq.br:80 "GET /1209808259228932 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:18,309 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:18,425 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1209808259228932 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:18,504 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4259709P8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:18,511 - 
+        UPDATE  researcher set lattes_10_id='K4259709P8' where id='c072746d-42d7-4f26-9c1b-ed25fcaac4ad' 
+DEBUG 2023-11-19 17:19:18,626 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:18,741 - http://lattes.cnpq.br:80 "GET /1377022547816780 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:18,742 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:18,864 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1377022547816780 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:18,929 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4765005U0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:18,940 - 
+        UPDATE  researcher set lattes_10_id='K4765005U0' where id='0414afa4-53e1-4138-bb64-af45460df06b' 
+DEBUG 2023-11-19 17:19:19,053 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:19,173 - http://lattes.cnpq.br:80 "GET /3020780194610500 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:19,174 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:19,290 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=3020780194610500 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:19,354 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4267589D9 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:19,362 - 
+        UPDATE  researcher set lattes_10_id='K4267589D9' where id='910dc764-a77c-412f-9cda-0537d5d158a3' 
+DEBUG 2023-11-19 17:19:19,476 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:19,600 - http://lattes.cnpq.br:80 "GET /3099747635787702 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:19,602 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:19,736 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=3099747635787702 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:19,821 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4279140D8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:19,828 - 
+        UPDATE  researcher set lattes_10_id='K4279140D8' where id='3b44edf6-2fd7-434a-b94f-ebacdc3c722d' 
+DEBUG 2023-11-19 17:19:19,941 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:20,063 - http://lattes.cnpq.br:80 "GET /4723636105334324 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:20,064 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:20,188 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=4723636105334324 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:20,267 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4105550T5 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:20,274 - 
+        UPDATE  researcher set lattes_10_id='K4105550T5' where id='8fae239b-ffc8-44ab-b9d8-503a465da33b' 
+DEBUG 2023-11-19 17:19:20,384 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:20,522 - http://lattes.cnpq.br:80 "GET /5045960149447792 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:20,523 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:20,654 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5045960149447792 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:20,905 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4284868A3 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:20,913 - 
+        UPDATE  researcher set lattes_10_id='K4284868A3' where id='8ca1400e-400c-490e-94e3-a8de235ebf2e' 
+DEBUG 2023-11-19 17:19:21,026 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:21,147 - http://lattes.cnpq.br:80 "GET /5477289691865843 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:21,148 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:21,275 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5477289691865843 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:21,343 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4237039T8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:21,351 - 
+        UPDATE  researcher set lattes_10_id='K4237039T8' where id='41b40c40-24a0-4255-93b4-f305d121bdd1' 
+DEBUG 2023-11-19 17:19:21,464 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:21,612 - http://lattes.cnpq.br:80 "GET /5823568857777899 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:21,613 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:21,737 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5823568857777899 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:21,805 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4784829A0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:21,833 - 
+        UPDATE  researcher set lattes_10_id='K4784829A0' where id='6c0f8fdb-cf93-40ee-84f6-42729682476a' 
+DEBUG 2023-11-19 17:19:21,946 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:22,092 - http://lattes.cnpq.br:80 "GET /7308959142072698 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:22,093 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:22,212 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=7308959142072698 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:22,279 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4746945J5 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:22,286 - 
+        UPDATE  researcher set lattes_10_id='K4746945J5' where id='c5621e0d-6d0e-4bdd-bed2-fe241fe8b12b' 
+DEBUG 2023-11-19 17:19:22,400 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:22,563 - http://lattes.cnpq.br:80 "GET /0020007740310998 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:22,564 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:22,934 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=0020007740310998 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:23,020 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4736606H6 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:23,027 - 
+        UPDATE  researcher set lattes_10_id='K4736606H6' where id='587f8209-4c3b-4512-9273-f9e4ca0d4aef' 
+DEBUG 2023-11-19 17:19:23,146 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:23,275 - http://lattes.cnpq.br:80 "GET /1565238867146404 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:23,276 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:23,424 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1565238867146404 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:23,499 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4708444T3 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:23,511 - 
+        UPDATE  researcher set lattes_10_id='K4708444T3' where id='6e30600b-7269-4114-bea2-70d638cb21e8' 
+DEBUG 2023-11-19 17:19:23,626 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:23,768 - http://lattes.cnpq.br:80 "GET /1592267430900741 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:23,769 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:23,880 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1592267430900741 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:23,939 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4746418P8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:23,945 - 
+        UPDATE  researcher set lattes_10_id='K4746418P8' where id='5aaab29a-4c38-4695-b86f-2b845c3bfe84' 
+DEBUG 2023-11-19 17:19:24,063 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:24,219 - http://lattes.cnpq.br:80 "GET /4558390230976450 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:24,220 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:24,345 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=4558390230976450 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:24,413 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4795287Z5 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:24,422 - 
+        UPDATE  researcher set lattes_10_id='K4795287Z5' where id='59a62475-8e31-431b-bc3e-bbb5904c842b' 
+DEBUG 2023-11-19 17:19:24,538 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:24,679 - http://lattes.cnpq.br:80 "GET /5856711452186247 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:24,680 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:24,842 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5856711452186247 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:24,920 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4778721J0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:24,927 - 
+        UPDATE  researcher set lattes_10_id='K4778721J0' where id='2d9437fe-5a63-4ca7-8c17-11889f80dd5a' 
+DEBUG 2023-11-19 17:19:25,045 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:25,198 - http://lattes.cnpq.br:80 "GET /7536235341113556 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:25,199 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:25,354 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=7536235341113556 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:25,420 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4794424D4 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:25,428 - 
+        UPDATE  researcher set lattes_10_id='K4794424D4' where id='cedaa56f-64a9-4a40-9985-d35a61890417' 
+DEBUG 2023-11-19 17:19:25,557 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:25,697 - http://lattes.cnpq.br:80 "GET /7716686318910908 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:25,698 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:25,828 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=7716686318910908 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:25,908 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4220263D7 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:25,914 - 
+        UPDATE  researcher set lattes_10_id='K4220263D7' where id='bd29a1bc-d707-486d-bae1-d157d6c6c7ff' 
+DEBUG 2023-11-19 17:19:26,032 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:26,171 - http://lattes.cnpq.br:80 "GET /7886130744713667 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:26,172 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:26,313 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=7886130744713667 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:26,385 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4262700H6 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:26,393 - 
+        UPDATE  researcher set lattes_10_id='K4262700H6' where id='a96f6ac7-3e2f-4705-ac9d-ee8065279986' 
+DEBUG 2023-11-19 17:19:26,507 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:26,665 - http://lattes.cnpq.br:80 "GET /7904835498250257 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:26,666 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:26,786 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=7904835498250257 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:26,849 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4208096Z6 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:26,856 - 
+        UPDATE  researcher set lattes_10_id='K4208096Z6' where id='5c796b99-62e1-4069-9570-d44ec5544218' 
+DEBUG 2023-11-19 17:19:26,979 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:27,123 - http://lattes.cnpq.br:80 "GET /0657883154152274 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:27,124 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:27,246 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=0657883154152274 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:27,332 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4798297E6 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:27,339 - 
+        UPDATE  researcher set lattes_10_id='K4798297E6' where id='77d83a0c-02ee-4c00-9412-8d60254abd56' 
+DEBUG 2023-11-19 17:19:27,453 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:27,609 - http://lattes.cnpq.br:80 "GET /1169116651630370 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:27,610 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:27,758 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1169116651630370 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:27,823 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4760509U8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:27,829 - 
+        UPDATE  researcher set lattes_10_id='K4760509U8' where id='77ce1c1c-bf45-4c90-bd40-3aafbb298c16' 
+DEBUG 2023-11-19 17:19:27,979 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:28,112 - http://lattes.cnpq.br:80 "GET /9308862450295724 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:28,113 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:28,234 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=9308862450295724 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:28,304 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4737760Y8 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:28,311 - 
+        UPDATE  researcher set lattes_10_id='K4737760Y8' where id='ba412158-f436-4247-9a97-36080118dd41' 
+DEBUG 2023-11-19 17:19:28,425 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:28,574 - http://lattes.cnpq.br:80 "GET /1261049356975668 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:28,575 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:28,693 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=1261049356975668 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:28,758 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4775734Z2 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:28,766 - 
+        UPDATE  researcher set lattes_10_id='K4775734Z2' where id='2cc9bd40-9c27-4b1b-90c1-2882c280c3e8' 
+DEBUG 2023-11-19 17:19:28,884 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:29,019 - http://lattes.cnpq.br:80 "GET /2047154900663263 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:29,020 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:29,129 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=2047154900663263 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:29,219 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4550093T0 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:29,226 - 
+        UPDATE  researcher set lattes_10_id='K4550093T0' where id='13d9b752-f63d-48f1-aab4-cfcd296149aa' 
+DEBUG 2023-11-19 17:19:29,352 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:29,504 - http://lattes.cnpq.br:80 "GET /2592909300138980 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:29,505 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:29,641 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=2592909300138980 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:29,709 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4207889H7 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:29,716 - 
+        UPDATE  researcher set lattes_10_id='K4207889H7' where id='f82f7942-710a-4a7b-9489-5e9acca009a0' 
+DEBUG 2023-11-19 17:19:29,936 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:30,084 - http://lattes.cnpq.br:80 "GET /3033771902812860 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:30,086 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:30,210 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=3033771902812860 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:30,304 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4402128H4 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:30,311 - 
+        UPDATE  researcher set lattes_10_id='K4402128H4' where id='1cc64704-f450-4a2a-bc15-2b50f2a1660b' 
+DEBUG 2023-11-19 17:19:30,444 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:30,590 - http://lattes.cnpq.br:80 "GET /4669485635557634 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:30,592 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:30,717 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=4669485635557634 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:30,784 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4349145A2 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:30,793 - 
+        UPDATE  researcher set lattes_10_id='K4349145A2' where id='512781d2-0c09-42e9-88af-aea0e62fe9f2' 
+DEBUG 2023-11-19 17:19:30,909 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:31,058 - http://lattes.cnpq.br:80 "GET /4801862422650145 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:31,059 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:31,187 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=4801862422650145 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:31,255 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4794332U9 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:31,262 - 
+        UPDATE  researcher set lattes_10_id='K4794332U9' where id='754b8597-61dc-4a19-bbc3-55f45f8fa1b2' 
+DEBUG 2023-11-19 17:19:31,377 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:31,523 - http://lattes.cnpq.br:80 "GET /5237012475215329 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:31,524 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:31,646 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5237012475215329 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:31,712 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4768654E4 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:31,719 - 
+        UPDATE  researcher set lattes_10_id='K4768654E4' where id='febb24bf-f33f-4cba-8bab-a42e85cf6cf8' 
+DEBUG 2023-11-19 17:19:31,835 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:31,987 - http://lattes.cnpq.br:80 "GET /5354457634051138 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:31,989 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:32,106 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5354457634051138 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:32,178 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4779954H5 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:32,187 - 
+        UPDATE  researcher set lattes_10_id='K4779954H5' where id='4bd8b85b-59a3-4349-ba49-0a67c513dfd5' 
+DEBUG 2023-11-19 17:19:32,313 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:32,446 - http://lattes.cnpq.br:80 "GET /5629885946582094 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:32,447 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:32,602 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5629885946582094 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:32,670 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4485918D2 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:32,678 - 
+        UPDATE  researcher set lattes_10_id='K4485918D2' where id='fb143599-e70c-47ed-ac82-3f17d399c7b3' 
+DEBUG 2023-11-19 17:19:32,803 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:32,937 - http://lattes.cnpq.br:80 "GET /6043241728305153 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:32,938 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:33,048 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=6043241728305153 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:33,105 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4267498Z7 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:33,112 - 
+        UPDATE  researcher set lattes_10_id='K4267498Z7' where id='b77a220f-06c5-4a01-adf6-08076ae7d83a' 
+DEBUG 2023-11-19 17:19:33,234 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:33,379 - http://lattes.cnpq.br:80 "GET /8392100254660761 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:33,380 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:33,515 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=8392100254660761 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:33,583 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4790121H4 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:33,591 - 
+        UPDATE  researcher set lattes_10_id='K4790121H4' where id='b26cd0e6-143d-4322-973d-67fb51592d79' 
+DEBUG 2023-11-19 17:19:33,709 - Starting new HTTP connection (1): lattes.cnpq.br:80
+DEBUG 2023-11-19 17:19:33,846 - http://lattes.cnpq.br:80 "GET /5000352799444295 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:33,847 - Starting new HTTP connection (1): buscatextual.cnpq.br:80
+DEBUG 2023-11-19 17:19:33,978 - http://buscatextual.cnpq.br:80 "GET /buscatextual/cv?id=5000352799444295 HTTP/1.1" 302 0
+DEBUG 2023-11-19 17:19:34,053 - http://buscatextual.cnpq.br:80 "GET /buscatextual/visualizacv.do?metodo=apresentar&id=K4745369E2 HTTP/1.1" 200 None
+DEBUG 2023-11-19 17:19:34,060 - 
+        UPDATE  researcher set lattes_10_id='K4745369E2' where id='8e957577-3974-437c-96a2-27771a256ab8' 
+DEBUG 2023-11-19 17:19:34,300 - 
 
 UPDATE bibliographic_production_article ba SET qualis='A4' WHERE ba.issn='17412242'
 
 
-DEBUG 2023-11-18 13:59:09,072 - 
+DEBUG 2023-11-19 17:19:34,417 - 
 
 UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,eissn,url_revista
       FROM  "JCR_novo_link_v1" ) AS subquery
 WHERE translate(subquery.eissn,'-','')=p.issn
 
-DEBUG 2023-11-18 13:59:09,301 - 
+DEBUG 2023-11-19 17:19:34,537 - 
 
 UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,issn,url_revista
       FROM  "JCR_novo_link_v1" ) AS subquery
 WHERE translate(subquery.issn,'-','')=p.issn
 
-DEBUG 2023-11-18 13:59:09,823 - 
+DEBUG 2023-11-19 17:19:34,821 - 
       UPDATE bibliographic_production SET YEAR_=YEAR::INTEGER
         
-DEBUG 2023-11-18 13:59:09,958 -  UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' OR issn='2764622'
-DEBUG 2023-11-18 13:59:10,246 - SELECT distinct  r.id from researcher r,bibliographic_production b where r.id=researcher_id   and b.created_at>= '1750-02-02 13:59:08.687677'
-DEBUG 2023-11-18 13:59:10,247 - Total Pesquisador Article: 0
-DEBUG 2023-11-18 13:59:10,531 - Entrei nos artigos pesquisador 9d6eb8e6-cd3f-4805-82b2-f01823102140
-DEBUG 2023-11-18 13:59:40,015 - Entrei nos artigos pesquisador d779a9ee-ed15-4f58-92d6-249d417a6015
-DEBUG 2023-11-18 13:59:50,751 - Entrei nos artigos pesquisador fedbc20e-0b48-4f84-88d1-f1243c8506ad
-DEBUG 2023-11-18 13:59:59,540 - Entrei nos artigos pesquisador 01699273-6192-46dd-b937-c9b4f5b9c2b4
-DEBUG 2023-11-18 14:01:23,498 - Entrei nos artigos pesquisador e18da1fd-13e8-4d8c-81d4-00aa4fe8ebe7
-DEBUG 2023-11-18 14:01:49,485 - Entrei nos artigos pesquisador e1834c24-8bab-4a34-ae22-4f14503e5260
-DEBUG 2023-11-18 14:01:54,839 - Entrei nos artigos pesquisador 5ee7a420-0451-4cba-92ee-ff6457e7730d
-DEBUG 2023-11-18 14:02:31,491 - Entrei nos artigos pesquisador bbae86c5-f323-4948-9ab2-eb1516351ef0
-DEBUG 2023-11-18 14:03:06,707 - Entrei nos artigos pesquisador 82fc3a93-0fe9-411f-a772-179273d0f692
-DEBUG 2023-11-18 14:04:02,717 - Entrei nos artigos pesquisador bb313672-3d78-4a8a-b54b-489efe077d2a
-DEBUG 2023-11-18 14:04:53,367 - Entrei nos artigos pesquisador f04f1175-1023-4c3f-b3fe-57093d3d583e
-DEBUG 2023-11-18 14:05:00,551 - Entrei nos artigos pesquisador 2cda1c01-46dc-4d6d-b582-0c43543bb8c7
-DEBUG 2023-11-18 14:05:18,597 - Entrei nos artigos pesquisador 88883698-63c9-413f-8830-738fd8c95b33
-DEBUG 2023-11-18 14:05:50,152 - Entrei nos artigos pesquisador 2ad6b71c-9cfa-47ea-933f-18c9255062bf
-DEBUG 2023-11-18 14:06:14,272 - Entrei nos artigos pesquisador 8eb8492c-56df-4a51-9233-6a160632bdd8
-DEBUG 2023-11-18 14:06:25,319 - Entrei nos artigos pesquisador c96bff9c-1412-4896-ae96-0ef1aee10d02
-DEBUG 2023-11-18 14:07:06,645 - Entrei nos artigos pesquisador ced7b3c6-0341-4afb-9ffe-0bebefcc6338
-DEBUG 2023-11-18 14:07:07,196 - Entrei nos artigos pesquisador 44f65c59-4f2b-4511-aa78-a45808fc8717
-DEBUG 2023-11-18 14:08:49,190 - Entrei nos artigos pesquisador 1573232b-a86b-4622-861d-3e67beea3cf8
-DEBUG 2023-11-18 14:09:47,319 - Entrei nos artigos pesquisador 36fbafb3-7c16-4d84-8d11-f99f141c46e8
-DEBUG 2023-11-18 14:09:51,759 - Entrei nos artigos pesquisador 087e3385-7096-4ec9-991c-0d317d59cf3b
-DEBUG 2023-11-18 14:10:41,314 - Entrei nos artigos pesquisador 1037207c-cb37-46e9-be13-240548bd7ea2
-DEBUG 2023-11-18 14:11:13,645 - Entrei nos artigos pesquisador 7db741cc-5a02-42a3-b2ac-c24c9a91f9b6
-DEBUG 2023-11-18 14:11:55,081 - Entrei nos artigos pesquisador f57bfe40-24cc-4dd8-aa86-f90909d0d89a
-DEBUG 2023-11-18 14:13:06,586 - Entrei nos artigos pesquisador 3f280784-1a4d-4f97-bd14-a792f15041dd
-DEBUG 2023-11-18 14:14:15,543 - Entrei nos artigos pesquisador f470df49-dc24-454d-94d5-11182f629fbb
-DEBUG 2023-11-18 14:14:33,176 - Entrei nos artigos pesquisador f930dc9d-5600-4885-a348-a318e9527b19
-DEBUG 2023-11-18 14:15:10,949 - Entrei nos artigos pesquisador 34d01c45-96fa-4234-8a2a-6ee8edbc62f0
-DEBUG 2023-11-18 14:15:15,224 - Entrei nos artigos pesquisador ad267735-9407-494e-b55e-18d5d8cd5081
-DEBUG 2023-11-18 14:15:20,311 - Entrei nos artigos pesquisador 23f8c991-78a0-48f7-8887-39e070ac43aa
-DEBUG 2023-11-18 14:16:59,193 - Entrei nos artigos pesquisador 16c33796-b7fb-45d1-80c1-e6cf726e7c60
-DEBUG 2023-11-18 14:17:04,830 - Entrei nos artigos pesquisador 57ab6504-ba9e-42d9-a2ce-d9447afdb6d1
-DEBUG 2023-11-18 14:17:27,918 - Entrei nos artigos pesquisador 3b8b2c3c-cd23-4ee6-a559-9e3caa32791e
-DEBUG 2023-11-18 14:17:44,772 - Entrei nos artigos pesquisador 8756550e-84f4-47f4-b229-84ff106ccbd4
-DEBUG 2023-11-18 14:18:04,813 - Entrei nos artigos pesquisador e2ca301d-08ba-40a3-88d2-29bf39d09777
-DEBUG 2023-11-18 14:18:09,006 - Entrei nos artigos pesquisador 8cf237f5-65d8-46a3-93f2-facf54031bd4
-DEBUG 2023-11-18 14:19:21,741 - Entrei nos artigos pesquisador fa6455c4-d910-4bdf-bd09-d1485f5eb01c
-DEBUG 2023-11-18 14:20:09,558 - Entrei nos artigos pesquisador 7bcaa537-fead-4018-a149-23b90f264116
-DEBUG 2023-11-18 14:20:59,974 - Entrei nos artigos pesquisador f9ba1132-2953-4887-b3c1-6dff9e2ccc1d
-DEBUG 2023-11-18 14:21:08,813 - Entrei nos artigos pesquisador 295d70b6-8893-44f3-b980-41f035a32f87
-DEBUG 2023-11-18 14:21:55,458 - Entrei nos artigos pesquisador 60f495f0-a8ae-40af-83cf-8be2a68a15a5
-DEBUG 2023-11-18 14:23:23,843 - Entrei nos artigos pesquisador 93ac85fe-f240-44b4-b900-fde7d2786b28
-DEBUG 2023-11-18 14:23:34,093 - Entrei nos artigos pesquisador 35578f00-9405-45b8-8aeb-e2289dd68cb2
-DEBUG 2023-11-18 14:23:58,067 - Entrei nos artigos pesquisador 112387b1-4f27-4c85-aa29-cf3b293ba605
-DEBUG 2023-11-18 14:24:30,876 - Entrei nos artigos pesquisador 871ac885-c383-453e-be75-191249f6f1a7
-DEBUG 2023-11-18 14:24:45,597 - Entrei nos artigos pesquisador c649bb60-4a38-4c10-822d-7bf03539a7a0
-DEBUG 2023-11-18 14:24:58,100 - Entrei nos artigos pesquisador cdfaedd3-3e2a-48ce-aba1-d821208176a6
-DEBUG 2023-11-18 14:25:09,840 - Entrei nos artigos pesquisador 6d7897bc-cb87-4ead-a529-e264796e9f5d
-DEBUG 2023-11-18 14:25:34,738 - Entrei nos artigos pesquisador 756c49f5-e868-4929-ac18-93b776f6d307
-DEBUG 2023-11-18 14:25:58,688 - Entrei nos artigos pesquisador 1e06eac6-3b54-4379-872d-10f6ee12c428
-DEBUG 2023-11-18 14:26:11,573 - Entrei nos artigos pesquisador a2eb9f38-8981-4590-ae31-3e23ddb83564
-DEBUG 2023-11-18 14:26:25,362 - Entrei nos artigos pesquisador 294ae13a-a46e-4d8a-b618-0c064e17cf3f
-DEBUG 2023-11-18 14:26:44,704 - Entrei nos artigos pesquisador b94b0044-19b3-464a-97e6-d570819d3358
-DEBUG 2023-11-18 14:27:19,447 - Entrei nos artigos pesquisador c8750890-9737-45c1-a437-266cbf1c34da
-DEBUG 2023-11-18 14:28:08,292 - Entrei nos artigos pesquisador 52f5e9f3-e3d8-4ed6-aa71-26039a65cdfb
-DEBUG 2023-11-18 14:28:30,854 - Entrei nos artigos pesquisador 0f4560b6-f8bf-4961-99ce-a3890e8f62ed
-DEBUG 2023-11-18 14:28:52,084 - Entrei nos artigos pesquisador 555a17c1-e66a-45a1-8b59-ccc55521d1f2
-DEBUG 2023-11-18 14:29:25,039 - Entrei nos artigos pesquisador be692f1c-21c7-4a9a-bb5c-5f650adba4ef
-DEBUG 2023-11-18 14:31:02,630 - Entrei nos artigos pesquisador 99401132-1d9e-41a8-b4fd-5faf823c4422
-DEBUG 2023-11-18 14:31:08,042 - Entrei nos artigos pesquisador 4bfbc5ac-783e-4536-bdac-ef0885701350
-DEBUG 2023-11-18 14:31:38,202 - Entrei nos artigos pesquisador e2520a68-8a5a-4742-be78-017e4778de37
-DEBUG 2023-11-18 14:31:53,518 - Entrei nos artigos pesquisador 87e1901c-3de7-4351-a843-f4a990b94a65
-DEBUG 2023-11-18 14:32:17,125 - Entrei nos artigos pesquisador 8413b1cd-bee8-4e94-8a22-a4c7eafb7415
-DEBUG 2023-11-18 14:32:34,595 - Total Pesquisador abstract: 0
-DEBUG 2023-11-18 14:47:47,774 - Total Pesquisador Patent: 0
-DEBUG 2023-11-18 14:47:47,897 - Entrei nas patentes  9d6eb8e6-cd3f-4805-82b2-f01823102140
-DEBUG 2023-11-18 14:47:48,233 - Entrei nas patentes  d779a9ee-ed15-4f58-92d6-249d417a6015
-DEBUG 2023-11-18 14:47:48,364 - Entrei nas patentes  fedbc20e-0b48-4f84-88d1-f1243c8506ad
-DEBUG 2023-11-18 14:47:48,480 - Entrei nas patentes  01699273-6192-46dd-b937-c9b4f5b9c2b4
-DEBUG 2023-11-18 14:47:48,599 - Entrei nas patentes  e18da1fd-13e8-4d8c-81d4-00aa4fe8ebe7
-DEBUG 2023-11-18 14:47:48,714 - Entrei nas patentes  e1834c24-8bab-4a34-ae22-4f14503e5260
-DEBUG 2023-11-18 14:47:48,826 - Entrei nas patentes  5ee7a420-0451-4cba-92ee-ff6457e7730d
-DEBUG 2023-11-18 14:47:48,942 - Entrei nas patentes  bbae86c5-f323-4948-9ab2-eb1516351ef0
-DEBUG 2023-11-18 14:47:52,180 - Entrei nas patentes  82fc3a93-0fe9-411f-a772-179273d0f692
-DEBUG 2023-11-18 14:47:52,296 - Entrei nas patentes  bb313672-3d78-4a8a-b54b-489efe077d2a
-DEBUG 2023-11-18 14:47:52,413 - Entrei nas patentes  f04f1175-1023-4c3f-b3fe-57093d3d583e
-DEBUG 2023-11-18 14:47:52,533 - Entrei nas patentes  2cda1c01-46dc-4d6d-b582-0c43543bb8c7
-DEBUG 2023-11-18 14:47:52,646 - Entrei nas patentes  88883698-63c9-413f-8830-738fd8c95b33
-DEBUG 2023-11-18 14:47:52,759 - Entrei nas patentes  2ad6b71c-9cfa-47ea-933f-18c9255062bf
-DEBUG 2023-11-18 14:47:52,880 - Entrei nas patentes  8eb8492c-56df-4a51-9233-6a160632bdd8
-DEBUG 2023-11-18 14:47:52,995 - Entrei nas patentes  c96bff9c-1412-4896-ae96-0ef1aee10d02
-DEBUG 2023-11-18 14:47:53,105 - Entrei nas patentes  ced7b3c6-0341-4afb-9ffe-0bebefcc6338
-DEBUG 2023-11-18 14:47:53,216 - Entrei nas patentes  44f65c59-4f2b-4511-aa78-a45808fc8717
-DEBUG 2023-11-18 14:47:53,331 - Entrei nas patentes  1573232b-a86b-4622-861d-3e67beea3cf8
-DEBUG 2023-11-18 14:47:53,442 - Entrei nas patentes  36fbafb3-7c16-4d84-8d11-f99f141c46e8
-DEBUG 2023-11-18 14:47:53,550 - Entrei nas patentes  087e3385-7096-4ec9-991c-0d317d59cf3b
-DEBUG 2023-11-18 14:47:53,665 - Entrei nas patentes  1037207c-cb37-46e9-be13-240548bd7ea2
-DEBUG 2023-11-18 14:47:59,596 - Entrei nas patentes  7db741cc-5a02-42a3-b2ac-c24c9a91f9b6
-DEBUG 2023-11-18 14:47:59,708 - Entrei nas patentes  f57bfe40-24cc-4dd8-aa86-f90909d0d89a
-DEBUG 2023-11-18 14:47:59,825 - Entrei nas patentes  3f280784-1a4d-4f97-bd14-a792f15041dd
-DEBUG 2023-11-18 14:48:02,246 - Entrei nas patentes  f470df49-dc24-454d-94d5-11182f629fbb
-DEBUG 2023-11-18 14:48:02,362 - Entrei nas patentes  f930dc9d-5600-4885-a348-a318e9527b19
-DEBUG 2023-11-18 14:48:02,480 - Entrei nas patentes  34d01c45-96fa-4234-8a2a-6ee8edbc62f0
-DEBUG 2023-11-18 14:48:02,596 - Entrei nas patentes  ad267735-9407-494e-b55e-18d5d8cd5081
-DEBUG 2023-11-18 14:48:02,715 - Entrei nas patentes  23f8c991-78a0-48f7-8887-39e070ac43aa
-DEBUG 2023-11-18 14:48:02,836 - Entrei nas patentes  16c33796-b7fb-45d1-80c1-e6cf726e7c60
-DEBUG 2023-11-18 14:48:02,957 - Entrei nas patentes  57ab6504-ba9e-42d9-a2ce-d9447afdb6d1
-DEBUG 2023-11-18 14:48:03,079 - Entrei nas patentes  3b8b2c3c-cd23-4ee6-a559-9e3caa32791e
-DEBUG 2023-11-18 14:48:03,190 - Entrei nas patentes  8756550e-84f4-47f4-b229-84ff106ccbd4
-DEBUG 2023-11-18 14:48:03,303 - Entrei nas patentes  e2ca301d-08ba-40a3-88d2-29bf39d09777
-DEBUG 2023-11-18 14:48:03,418 - Entrei nas patentes  8cf237f5-65d8-46a3-93f2-facf54031bd4
-DEBUG 2023-11-18 14:48:03,528 - Entrei nas patentes  fa6455c4-d910-4bdf-bd09-d1485f5eb01c
-DEBUG 2023-11-18 14:48:03,643 - Entrei nas patentes  7bcaa537-fead-4018-a149-23b90f264116
-DEBUG 2023-11-18 14:48:03,761 - Entrei nas patentes  f9ba1132-2953-4887-b3c1-6dff9e2ccc1d
-DEBUG 2023-11-18 14:48:03,880 - Entrei nas patentes  295d70b6-8893-44f3-b980-41f035a32f87
-DEBUG 2023-11-18 14:48:03,999 - Entrei nas patentes  60f495f0-a8ae-40af-83cf-8be2a68a15a5
-DEBUG 2023-11-18 14:48:04,111 - Entrei nas patentes  93ac85fe-f240-44b4-b900-fde7d2786b28
-DEBUG 2023-11-18 14:48:04,331 - Entrei nas patentes  35578f00-9405-45b8-8aeb-e2289dd68cb2
-DEBUG 2023-11-18 14:48:04,440 - Entrei nas patentes  112387b1-4f27-4c85-aa29-cf3b293ba605
-DEBUG 2023-11-18 14:48:04,552 - Entrei nas patentes  871ac885-c383-453e-be75-191249f6f1a7
-DEBUG 2023-11-18 14:48:04,669 - Entrei nas patentes  c649bb60-4a38-4c10-822d-7bf03539a7a0
-DEBUG 2023-11-18 14:48:04,798 - Entrei nas patentes  cdfaedd3-3e2a-48ce-aba1-d821208176a6
-DEBUG 2023-11-18 14:48:04,917 - Entrei nas patentes  6d7897bc-cb87-4ead-a529-e264796e9f5d
-DEBUG 2023-11-18 14:48:05,040 - Entrei nas patentes  756c49f5-e868-4929-ac18-93b776f6d307
-DEBUG 2023-11-18 14:48:05,160 - Entrei nas patentes  1e06eac6-3b54-4379-872d-10f6ee12c428
-DEBUG 2023-11-18 14:48:05,271 - Entrei nas patentes  a2eb9f38-8981-4590-ae31-3e23ddb83564
-DEBUG 2023-11-18 14:48:05,380 - Entrei nas patentes  294ae13a-a46e-4d8a-b618-0c064e17cf3f
-DEBUG 2023-11-18 14:48:05,495 - Entrei nas patentes  b94b0044-19b3-464a-97e6-d570819d3358
-DEBUG 2023-11-18 14:48:08,192 - Entrei nas patentes  c8750890-9737-45c1-a437-266cbf1c34da
-DEBUG 2023-11-18 14:48:08,313 - Entrei nas patentes  52f5e9f3-e3d8-4ed6-aa71-26039a65cdfb
-DEBUG 2023-11-18 14:48:08,431 - Entrei nas patentes  0f4560b6-f8bf-4961-99ce-a3890e8f62ed
-DEBUG 2023-11-18 14:48:08,540 - Entrei nas patentes  555a17c1-e66a-45a1-8b59-ccc55521d1f2
-DEBUG 2023-11-18 14:48:08,647 - Entrei nas patentes  be692f1c-21c7-4a9a-bb5c-5f650adba4ef
-DEBUG 2023-11-18 14:48:08,803 - Entrei nas patentes  99401132-1d9e-41a8-b4fd-5faf823c4422
-DEBUG 2023-11-18 14:48:09,354 - Entrei nas patentes  4bfbc5ac-783e-4536-bdac-ef0885701350
-DEBUG 2023-11-18 14:48:09,465 - Entrei nas patentes  e2520a68-8a5a-4742-be78-017e4778de37
-DEBUG 2023-11-18 14:48:09,587 - Entrei nas patentes  87e1901c-3de7-4351-a843-f4a990b94a65
-DEBUG 2023-11-18 14:48:09,697 - Entrei nas patentes  8413b1cd-bee8-4e94-8a22-a4c7eafb7415
-DEBUG 2023-11-18 14:48:35,160 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:41,098 - Inserindo insert_researcher_frequency_db  9d6eb8e6-cd3f-4805-82b2-f01823102140
-DEBUG 2023-11-18 14:48:41,099 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:42,555 - Inserindo insert_researcher_frequency_db  d779a9ee-ed15-4f58-92d6-249d417a6015
-DEBUG 2023-11-18 14:48:42,556 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:43,755 - Inserindo insert_researcher_frequency_db  fedbc20e-0b48-4f84-88d1-f1243c8506ad
-DEBUG 2023-11-18 14:48:43,756 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:50,123 - Inserindo insert_researcher_frequency_db  01699273-6192-46dd-b937-c9b4f5b9c2b4
-DEBUG 2023-11-18 14:48:50,124 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:52,827 - Inserindo insert_researcher_frequency_db  e18da1fd-13e8-4d8c-81d4-00aa4fe8ebe7
-DEBUG 2023-11-18 14:48:52,827 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:53,674 - Inserindo insert_researcher_frequency_db  e1834c24-8bab-4a34-ae22-4f14503e5260
-DEBUG 2023-11-18 14:48:53,675 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:48:57,352 - Inserindo insert_researcher_frequency_db  5ee7a420-0451-4cba-92ee-ff6457e7730d
-DEBUG 2023-11-18 14:48:57,353 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:00,765 - Inserindo insert_researcher_frequency_db  bbae86c5-f323-4948-9ab2-eb1516351ef0
-DEBUG 2023-11-18 14:49:00,765 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:05,392 - Inserindo insert_researcher_frequency_db  82fc3a93-0fe9-411f-a772-179273d0f692
-DEBUG 2023-11-18 14:49:05,393 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:10,426 - Inserindo insert_researcher_frequency_db  bb313672-3d78-4a8a-b54b-489efe077d2a
-DEBUG 2023-11-18 14:49:10,427 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:11,484 - Inserindo insert_researcher_frequency_db  f04f1175-1023-4c3f-b3fe-57093d3d583e
-DEBUG 2023-11-18 14:49:11,485 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:13,585 - Inserindo insert_researcher_frequency_db  2cda1c01-46dc-4d6d-b582-0c43543bb8c7
-DEBUG 2023-11-18 14:49:13,586 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:16,705 - Inserindo insert_researcher_frequency_db  88883698-63c9-413f-8830-738fd8c95b33
-DEBUG 2023-11-18 14:49:16,705 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:19,246 - Inserindo insert_researcher_frequency_db  2ad6b71c-9cfa-47ea-933f-18c9255062bf
-DEBUG 2023-11-18 14:49:19,247 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:20,830 - Inserindo insert_researcher_frequency_db  8eb8492c-56df-4a51-9233-6a160632bdd8
-DEBUG 2023-11-18 14:49:20,831 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:24,558 - Inserindo insert_researcher_frequency_db  c96bff9c-1412-4896-ae96-0ef1aee10d02
-DEBUG 2023-11-18 14:49:24,558 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:25,430 - Inserindo insert_researcher_frequency_db  ced7b3c6-0341-4afb-9ffe-0bebefcc6338
-DEBUG 2023-11-18 14:49:25,431 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:34,338 - Inserindo insert_researcher_frequency_db  44f65c59-4f2b-4511-aa78-a45808fc8717
-DEBUG 2023-11-18 14:49:34,339 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:39,482 - Inserindo insert_researcher_frequency_db  1573232b-a86b-4622-861d-3e67beea3cf8
-DEBUG 2023-11-18 14:49:39,483 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:40,340 - Inserindo insert_researcher_frequency_db  36fbafb3-7c16-4d84-8d11-f99f141c46e8
-DEBUG 2023-11-18 14:49:40,341 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:44,934 - Inserindo insert_researcher_frequency_db  087e3385-7096-4ec9-991c-0d317d59cf3b
-DEBUG 2023-11-18 14:49:44,935 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:48,157 - Inserindo insert_researcher_frequency_db  1037207c-cb37-46e9-be13-240548bd7ea2
-DEBUG 2023-11-18 14:49:48,158 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:52,004 - Inserindo insert_researcher_frequency_db  7db741cc-5a02-42a3-b2ac-c24c9a91f9b6
-DEBUG 2023-11-18 14:49:52,004 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:49:58,053 - Inserindo insert_researcher_frequency_db  f57bfe40-24cc-4dd8-aa86-f90909d0d89a
-DEBUG 2023-11-18 14:49:58,054 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:04,084 - Inserindo insert_researcher_frequency_db  3f280784-1a4d-4f97-bd14-a792f15041dd
-DEBUG 2023-11-18 14:50:04,084 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:05,914 - Inserindo insert_researcher_frequency_db  f470df49-dc24-454d-94d5-11182f629fbb
-DEBUG 2023-11-18 14:50:05,915 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:09,575 - Inserindo insert_researcher_frequency_db  f930dc9d-5600-4885-a348-a318e9527b19
-DEBUG 2023-11-18 14:50:09,575 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:10,433 - Inserindo insert_researcher_frequency_db  34d01c45-96fa-4234-8a2a-6ee8edbc62f0
-DEBUG 2023-11-18 14:50:10,434 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:11,316 - Inserindo insert_researcher_frequency_db  ad267735-9407-494e-b55e-18d5d8cd5081
-DEBUG 2023-11-18 14:50:11,316 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:19,763 - Inserindo insert_researcher_frequency_db  23f8c991-78a0-48f7-8887-39e070ac43aa
-DEBUG 2023-11-18 14:50:19,764 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:21,025 - Inserindo insert_researcher_frequency_db  16c33796-b7fb-45d1-80c1-e6cf726e7c60
-DEBUG 2023-11-18 14:50:21,025 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:23,670 - Inserindo insert_researcher_frequency_db  57ab6504-ba9e-42d9-a2ce-d9447afdb6d1
-DEBUG 2023-11-18 14:50:23,671 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:25,841 - Inserindo insert_researcher_frequency_db  3b8b2c3c-cd23-4ee6-a559-9e3caa32791e
-DEBUG 2023-11-18 14:50:25,842 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:28,247 - Inserindo insert_researcher_frequency_db  8756550e-84f4-47f4-b229-84ff106ccbd4
-DEBUG 2023-11-18 14:50:28,248 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:29,337 - Inserindo insert_researcher_frequency_db  e2ca301d-08ba-40a3-88d2-29bf39d09777
-DEBUG 2023-11-18 14:50:29,337 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:35,125 - Inserindo insert_researcher_frequency_db  8cf237f5-65d8-46a3-93f2-facf54031bd4
-DEBUG 2023-11-18 14:50:35,125 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:39,659 - Inserindo insert_researcher_frequency_db  fa6455c4-d910-4bdf-bd09-d1485f5eb01c
-DEBUG 2023-11-18 14:50:39,659 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:43,877 - Inserindo insert_researcher_frequency_db  7bcaa537-fead-4018-a149-23b90f264116
-DEBUG 2023-11-18 14:50:43,879 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:45,062 - Inserindo insert_researcher_frequency_db  f9ba1132-2953-4887-b3c1-6dff9e2ccc1d
-DEBUG 2023-11-18 14:50:45,062 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:49,375 - Inserindo insert_researcher_frequency_db  295d70b6-8893-44f3-b980-41f035a32f87
-DEBUG 2023-11-18 14:50:49,376 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:56,663 - Inserindo insert_researcher_frequency_db  60f495f0-a8ae-40af-83cf-8be2a68a15a5
-DEBUG 2023-11-18 14:50:56,663 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:50:58,731 - Inserindo insert_researcher_frequency_db  93ac85fe-f240-44b4-b900-fde7d2786b28
-DEBUG 2023-11-18 14:50:58,732 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:01,876 - Inserindo insert_researcher_frequency_db  35578f00-9405-45b8-8aeb-e2289dd68cb2
-DEBUG 2023-11-18 14:51:01,877 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:05,052 - Inserindo insert_researcher_frequency_db  112387b1-4f27-4c85-aa29-cf3b293ba605
-DEBUG 2023-11-18 14:51:05,053 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:06,568 - Inserindo insert_researcher_frequency_db  871ac885-c383-453e-be75-191249f6f1a7
-DEBUG 2023-11-18 14:51:06,569 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:08,215 - Inserindo insert_researcher_frequency_db  c649bb60-4a38-4c10-822d-7bf03539a7a0
-DEBUG 2023-11-18 14:51:08,216 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:09,850 - Inserindo insert_researcher_frequency_db  cdfaedd3-3e2a-48ce-aba1-d821208176a6
-DEBUG 2023-11-18 14:51:09,850 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:12,607 - Inserindo insert_researcher_frequency_db  6d7897bc-cb87-4ead-a529-e264796e9f5d
-DEBUG 2023-11-18 14:51:12,608 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:15,066 - Inserindo insert_researcher_frequency_db  756c49f5-e868-4929-ac18-93b776f6d307
-DEBUG 2023-11-18 14:51:15,067 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:16,675 - Inserindo insert_researcher_frequency_db  1e06eac6-3b54-4379-872d-10f6ee12c428
-DEBUG 2023-11-18 14:51:16,675 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:18,653 - Inserindo insert_researcher_frequency_db  a2eb9f38-8981-4590-ae31-3e23ddb83564
-DEBUG 2023-11-18 14:51:18,653 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:21,084 - Inserindo insert_researcher_frequency_db  294ae13a-a46e-4d8a-b618-0c064e17cf3f
-DEBUG 2023-11-18 14:51:21,085 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:24,387 - Inserindo insert_researcher_frequency_db  b94b0044-19b3-464a-97e6-d570819d3358
-DEBUG 2023-11-18 14:51:24,388 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:28,814 - Inserindo insert_researcher_frequency_db  c8750890-9737-45c1-a437-266cbf1c34da
-DEBUG 2023-11-18 14:51:28,814 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:30,928 - Inserindo insert_researcher_frequency_db  52f5e9f3-e3d8-4ed6-aa71-26039a65cdfb
-DEBUG 2023-11-18 14:51:30,929 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:33,170 - Inserindo insert_researcher_frequency_db  0f4560b6-f8bf-4961-99ce-a3890e8f62ed
-DEBUG 2023-11-18 14:51:33,170 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:36,377 - Inserindo insert_researcher_frequency_db  555a17c1-e66a-45a1-8b59-ccc55521d1f2
-DEBUG 2023-11-18 14:51:36,377 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:44,023 - Inserindo insert_researcher_frequency_db  be692f1c-21c7-4a9a-bb5c-5f650adba4ef
-DEBUG 2023-11-18 14:51:44,024 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:44,927 - Inserindo insert_researcher_frequency_db  99401132-1d9e-41a8-b4fd-5faf823c4422
-DEBUG 2023-11-18 14:51:44,927 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:48,155 - Inserindo insert_researcher_frequency_db  4bfbc5ac-783e-4536-bdac-ef0885701350
-DEBUG 2023-11-18 14:51:48,156 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:49,783 - Inserindo insert_researcher_frequency_db  e2520a68-8a5a-4742-be78-017e4778de37
-DEBUG 2023-11-18 14:51:49,784 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:52,496 - Inserindo insert_researcher_frequency_db  87e1901c-3de7-4351-a843-f4a990b94a65
-DEBUG 2023-11-18 14:51:52,496 - DELETE FROM researcher_abstract_frequency 
-DEBUG 2023-11-18 14:51:54,527 - Inserindo insert_researcher_frequency_db  8413b1cd-bee8-4e94-8a22-a4c7eafb7415
+DEBUG 2023-11-19 17:19:34,937 -  UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' OR issn='2764622'

@@ -79,7 +79,10 @@ def conecta_db():
      database_=  "simcc_" 
      host_="127.0.0.1"     
      
-    
+  if (project_.getProject())=="7":
+     #tupi
+     database_=  "inovacao" 
+     host_="127.0.0.1"       
 
    
 
