@@ -3,27 +3,24 @@ class Year_Barema(object):
         article=""
         chapter_book=""
         book=""
-        title=""
-        year=""
+        work_event=""
+        magazine=""
+        patent=""
+        software=""
+        brand=""
+        resource_progress=""
+        resource_completed=""
+        participation_events=""
+
+
+       
        
 
         def __init__(self):
           self.id=""
           
      
-        def getJson(self):
-         
-         Software_Researcher  =  {
-             
-         'id': self.id,   
-         'title': self.title,
-         'year': self.year
-     
-        
-         
-
-         }
-         return  Software_Researcher
+       
           
 
 

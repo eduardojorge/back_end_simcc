@@ -12,7 +12,9 @@ import sys
 
 import project as project_
 import sys
-project_.project_="5"
+from Model.Year_Barema import Year_Barema
+
+project_.project_="7"
 
 def researcher_csv_db():
 
@@ -68,17 +70,34 @@ def dataLattes(dias):
            
 
 
-hoje = datetime.today() - timedelta(days=5)
-print(hoje.date())
+#hoje = datetime.today() - timedelta(days=5)
+#print(hoje.date())
 
-dataLattes(180)
+#dataLattes(180)
 
 #testeDiciopnario()
 #researcher_csv_db()
 
 #"1966167015825708;8933624812566216"
 
-#print(resarcher_baremaSQL.researcher_production_db("todos","","year_5=2020;year_37=2019"))
+
+year = Year_Barema()
+year.artigo="2018"
+year.work_event="2018"
+year.book="1900" 
+
+year.chapter_book="1900"
+year.book="1900"
+year.patent="1900"
+year.software="1900"
+year.brand="1900"
+year.resource_progress="1900"
+year.resource_completed="1900"
+year.participation_events="1900"
+
+
+
+print(resarcher_baremaSQL.researcher_production_db("todos","",year))
 
 
 

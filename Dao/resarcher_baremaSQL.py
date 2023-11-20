@@ -3,6 +3,7 @@ import Dao.sgbdSQL as sgbdSQL
 import unidecode
 import pandas as pd
 import Dao.util as util
+import Model.Year_Barema as Year_Barema
 import Model.Resarcher_Production as Resarcher_Production
  # Função para listar a palavras do dicionário passando as iniciais 
 
@@ -35,7 +36,7 @@ def article_qualis(resarcher_Production,infos):
 
     return resarcher_Production
 
-def lists_guidance_researcher_db(year_25_30,resarcher_Production):
+def lists_guidance_researcher_db(year,resarcher_Production):
       
       sql = """
 
@@ -53,7 +54,7 @@ def lists_guidance_researcher_db(year_25_30,resarcher_Production):
             GROUP BY      status,nature   
 
 
-      """ % (resarcher_Production.id,year_25_30)
+      """ % (resarcher_Production.id,year.resource_completed)
                           #print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
@@ -122,15 +123,7 @@ def lists_guidance_researcher_db(year_25_30,resarcher_Production):
       return resarcher_Production
 
 #Função processar e inserir a produção de cada pesquisador
-def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
-
-
-    if (year_5==""):
-        year_5=1900
-    if (year_25_31==""):
-        year_25_31=1900    
-    if (year_37==""):
-        year_37=1900    
+def production_general_db(name,lattes_id,year):
     
 
 
@@ -220,7 +213,8 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
                 
         
 
-    """ % (filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_5,filter,year_work_event,filter,year_37,filter,year_37)
+    """ % (filter,year.patent,filter,year.sofware,filter,year.article,
+           filter,year.book,filter,year.chaper_book,filter,year.work_event,filter,year.participation_events,filter,year.participation_events)
     print(sql)
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=['qtd','tipo','name_','lattes_10_id','graduation','researcher_id'])
@@ -272,7 +266,7 @@ def production_general_db(name,lattes_id,year_5,year_25_31,year_37):
             resarcher_Production.participation_event = infos.qtd   
 
 
-    lists_guidance_researcher_db(year_25_31,resarcher_Production)
+    lists_guidance_researcher_db(year,resarcher_Production)
     return resarcher_Production.getJson()
 
 
@@ -286,27 +280,11 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
       t= year.split(";")  
 
       i=0;
-      year_5=""
-      year_25_31=""
-      year_37=""
-      for word in t:
-          
-          w=[]
-          w = word.split("=")
-          if (w[0]=="year_5"):
-              year_5=w[1]
-          if (w[0]=="year_25_31"):
-              year_25_31=w[1]
-          if (w[0]=="year_37"):
-              year_37=w[1]    
-          
-          i=i+1
+    
      
 
 
-    print(year_37)  
-    print(year_5)    
-    print(year_25_31)   
+      
     if list_resarcher_lattes_id!="":
       t=[]
       t= list_resarcher_lattes_id.split(";")  
@@ -316,7 +294,7 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
       i=0;
       for word in t:
           
-          list_resarcher.append(production_general_db("",word,year_5,year_25_31,year_37))
+          list_resarcher.append(production_general_db("",word,year))
           i=i+1
      
       return list_resarcher  
@@ -334,7 +312,7 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
         i=0;
         for word in t:
           
-            list_resarcher.append(production_general_db(word,"",year_5,year_25_31,year_37))
+            list_resarcher.append(production_general_db(word,"",year))
             i=i+1
      
         return list_resarcher
@@ -345,7 +323,7 @@ def researcher_production_db(list_name,list_resarcher_lattes_id,year):
            x=0
            df_bd = pd.DataFrame(reg, columns=['name_'])
            for i,infos in df_bd.iterrows():
-                list_resarcher.append(production_general_db(infos.name_,"",year_5,year_25_31,year_37))
+                list_resarcher.append(production_general_db(infos.name_,"",year))
                 #i=i+1
                 x=x+1
                 print(str(x))
