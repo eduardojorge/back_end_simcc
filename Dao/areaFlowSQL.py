@@ -336,5 +336,62 @@ def lista_researcher_area_speciality_db(text,institution,graduate_program_id):
      print (df_bd)
      return df_bd
 
+def lista_researcher_patent_db(text,institution,graduate_program_id):
+    
+   
+     #reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
+      #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
+     print(text)
+     text = text.replace("&"," ")
+     text = unidecode.unidecode(text.lower())
+
+     filter = util.filterSQLLike(text,";","or","rpf.term")
+     #filter= util.filterSQL(text,";","or","gae.name")
+     
+
+     filterinstitution= util.filterSQL(institution,";","or","i.name")
+     print("XXXXXXXXXXXXXXXXXXXXX" +text)
+     print(filterinstitution)
+
+
+     filtergraduate_program=""
+     if graduate_program_id!="":
+        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
+
+
+     sql="""
+
+     SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
+               r.name as researcher_name,i.name as institution,rp.articles as articles,
+                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
+                        r.orcid as orcid,rp.city  as city, i.image as image
+                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
+                         , institution i, researcher_production rp,patent p, researcher_patent_frequency rpf, city c 
+                           WHERE 
+                         
+                       
+                           r.city_id=c.id
+                 
+                           AND r.institution_id = i.id 
+                           AND rp.researcher_id = r.id 
+                           AND p.researcher_id = r.id
+                           AND rpf.researcher_id = r.id
+
+                           %s %s %s
+
+                         
+                      
+     
+     """   % (filter,filterinstitution,filtergraduate_program)
+    
+
+     reg = sgbdSQL.consultar_db(sql)
+
+     
+
+
+     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id','researcher_name','institution','articles','book_chapters','book','lattes','lattes_10_id','abstract','orcid','city','image'])
+     print (df_bd)
+     return df_bd
 
 #lists_area_speciality_term_initials_db("Mo","ciencias_exatas_e_da_terra")

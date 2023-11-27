@@ -7,6 +7,8 @@ import pandas as pd
 import logging
 import json
 from datetime import datetime
+import nltk
+from nltk.tokenize import RegexpTokenizer
 import sys
 
 
@@ -14,7 +16,7 @@ import project as project_
 import sys
 from Model.Year_Barema import Year_Barema
 
-project_.project_="7"
+project_.project_="5"
 
 def researcher_csv_db():
 
@@ -68,7 +70,62 @@ def dataLattes(dias):
       for i,infos in df_bd.iterrows():
            print(infos.name_)
            
+def testeSegundaPalavra(term):
+      
+      sql="""
 
+           SELECT   
+                  unnest(regexp_matches (unaccent(LOWER(bp.title)), ' %s\s+(\w+)','g')) as palavras FROM bibliographic_production AS bp where bp.type='ARTICLE'
+         """ % (term)
+      reg = sgbdSQL.consultar_db(sql)
+   
+   #logger.debug(sql)
+        
+   
+      df_bd = pd.DataFrame(reg, columns=['palavras']) 
+      stopwords_portuguese = nltk.corpus.stopwords.words('portuguese')
+      stopwords_english = nltk.corpus.stopwords.words('english')
+      tokens =[]
+      text=""
+      for i,infos in df_bd.iterrows():
+         
+          
+           
+
+     
+     
+      
+          if not((infos.palavras.lower() in stopwords_portuguese) or (infos.palavras.lower() in stopwords_english)):
+              text = text + " " + infos.palavras
+             
+              print(infos.palavras)
+
+      tokenize = RegexpTokenizer(r'\w+')    
+      tokens = tokenize.tokenize(text)    
+      print(tokens)
+      freq =nltk.FreqDist(tokens)
+      print(freq.most_common(10))
+      for word in freq.most_common(10):
+           print(word[0])
+           print(word[1])
+
+
+           sql= """SELECT b.title
+            FROM bibliographic_production AS b 
+           WHERE 
+           b.type='ARTICLE'
+        
+ 
+           AND  ts_rank(to_tsvector(unaccent(LOWER(b.title))), websearch_to_tsquery( '%s<->%s')) > 0.099""" % (term,word[0])
+
+           reg = sgbdSQL.consultar_db(sql)
+           df_bd = pd.DataFrame(reg, columns=['title']) 
+           for i,infos in df_bd.iterrows():
+                print(infos.title)
+           
+
+      
+          
 
 #hoje = datetime.today() - timedelta(days=5)
 #print(hoje.date())
@@ -80,7 +137,9 @@ def dataLattes(dias):
 
 #"1966167015825708;8933624812566216"
 
+testeSegundaPalavra("educacao")
 
+"""
 year = Year_Barema()
 year.article="2018"
 year.work_event="2018"
@@ -99,5 +158,5 @@ year.participation_events="1900"
 
 print(resarcher_baremaSQL.researcher_production_db("todos","",year))
 
-
+"""
 

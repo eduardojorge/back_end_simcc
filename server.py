@@ -12,7 +12,7 @@ from Model.Bibliographic_Production_Researcher import Bibliographic_Production_R
 from Model.Magazine import Magazine
 
 from Rest.researcherTermRest import researcherTermRest
-from Rest.areaRest import areaRest
+from Rest.area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
@@ -22,6 +22,8 @@ import Dao.generalSQL
 #from  Rest.researcherTermRest import researcherTermRest
 import project as project_
 import sys
+import nltk
+from nltk.tokenize import RegexpTokenizer
 project_.project_=sys.argv[1]
 
 
@@ -39,7 +41,49 @@ CORS(app, resources={r"/*":{"origins":"*"}})
 
 #if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
 
+@app.route('/secondWord', methods=['GET'])
+@cross_origin(origin="*", headers=["Content-Type"])
+def secondWord():
+      
+    term = request.args.get('term')
 
+
+      
+    
+    df_bd = Dao.generalSQL.listSecondWord_bd(term)
+   
+   #logger.debug(sql)
+        
+   
+     
+    stopwords_portuguese = nltk.corpus.stopwords.words('portuguese')
+    stopwords_portuguese.append("atraves")
+    stopwords_portuguese.append("desde")
+    stopwords_english = nltk.corpus.stopwords.words('english')
+    tokens =[]
+    text=""
+    for i,infos in df_bd.iterrows():
+  
+      
+          if not((infos.word.lower() in stopwords_portuguese) or (infos.word.lower() in stopwords_english)):
+              text = text + " " + infos.word
+             
+             
+
+    tokenize = RegexpTokenizer(r'\w+')    
+    tokens = tokenize.tokenize(text)    
+    
+    freq =nltk.FreqDist(tokens)
+    #print(freq.most_common(10))
+    list_second_word = []
+    for word in freq.most_common(10):
+           secondWord  =  {
+             
+           'word': word[0],
+           'freq':word[1]
+           }
+           list_second_word.append(secondWord)
+    return jsonify(list_second_word), 200           
 
 
 

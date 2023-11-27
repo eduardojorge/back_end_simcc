@@ -206,14 +206,13 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
 
      
      
-     filter= util.filterSQL(terms,";",boolean_condition,"rf.term")
+     
 
-
-
-
+    
+           
         
-     print(filter)
-
+     
+     filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
 
      filterinstitution=""
      filterinstitution= util.filterSQL(institution,";","or","i.name")
@@ -224,6 +223,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
 
      print("xxx - "+graduate_program_id)
      if (type=='ARTICLE'):
+                          #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
                             
                           sql = """SELECT rf.researcher_id as id,COUNT(distinct rf.bibliographic_production_id) AS qtd,
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
@@ -232,7 +232,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                           TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update
                         
                            FROM  researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
-                           researcher_frequency rf, institution i, researcher_production rp, city c
+                           researcher_frequency rf, institution i, researcher_production rp, city c, bibliographic_production b
                            WHERE 
                             c.id = r.city_id 
                           
@@ -241,6 +241,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                            AND rf.researcher_id = r.id 
                            AND r.institution_id = i.id 
                            AND rp.researcher_id = r.id 
+                            AND b.id = rf.bibliographic_production_id
                           
 
                            GROUP BY rf.researcher_id,r.name, i.name,articles, 
@@ -249,10 +250,13 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                            i.image,r.graduation,
                            rp.patent,rp.software,rp.brand,TO_CHAR(r.last_update,'dd/mm/yyyy') 
                            ORDER BY qtd desc""" % (filter,filterinstitution,filtergraduate_program)
-                          #print(sql)
+                          print(sql)
                           reg = sgbdSQL.consultar_db(sql)
+
+                          
      
      if (type=='ABSTRACT'):
+                          #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","abstract")
                             #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
                           sql ="""SELECT distinct rf.researcher_id as id,0 as qtd,
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
@@ -287,7 +291,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
 def lists_bibliographic_production_article_researcher_db(term,researcher_id,year,type,boolean_condition,qualis):
      
      term=unidecode.unidecode(term.lower())
-     filter = util.filterSQL(term,";",boolean_condition,"rf.term")
+     filter = util.filterSQLRank(term,";",boolean_condition,"rf.term","title")
      filterQualis = util.filterSQL(qualis,";","or","qualis")
      '''
      filtergraduate_program=""

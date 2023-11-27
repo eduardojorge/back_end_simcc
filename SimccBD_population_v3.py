@@ -445,7 +445,6 @@ print("Passo II")
 #create_area_ditionary_db()
 teste=True
 article=True
-"""
 create_researcher_dictionary_db(teste,article)
 
 
@@ -469,7 +468,7 @@ for i in range(4928):
 
       #insert_researcher_frequency_db(1)
 
-"""
+
 
 
 #lista = {}

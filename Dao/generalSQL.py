@@ -9,7 +9,25 @@ import Dao.util as util
 
 
 
+def listSecondWord_bd(term):
 
+        sql="""
+
+           SELECT   
+                  unnest(regexp_matches (unaccent(LOWER(bp.title)), ' %s\s+(\w+)','g')) as word FROM bibliographic_production AS bp where bp.type='ARTICLE'
+         """ % (term)
+        
+        reg = sgbdSQL.consultar_db(sql)
+        
+
+
+        df_bd = pd.DataFrame(reg, columns=['word'])
+    
+    
+     
+        return df_bd
+
+        
 def lists_magazine_db(initials,issn):
 
      filter=""

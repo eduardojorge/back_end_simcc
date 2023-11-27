@@ -105,11 +105,11 @@ def researcher_article_qualis_csv_db():
          	SELECT DISTINCT  title,
             
             
-            qualis,year,r.id as researcher_id,
+            bar.qualis as qualis,year,r.id as researcher_id,
             r.name as researcher_id,'institution' ,'city',
-			pm.name AS name_magazine,pm.issn AS issn,pm.jcr as jcr,jcr_link, b.type as type, 	CASE 
-			WHEN qualis IS NULL THEN 'SQ'
-			ELSE qualis
+			pm.name AS name_magazine,pm.issn AS issn,bar.jcr as jcr,bar.jcr_link as jcr_link, b.type as type, 	CASE 
+			WHEN bar.qualis IS NULL THEN 'SQ'
+			ELSE bar.qualis
 			END CASE 
                            
           FROM  
@@ -141,8 +141,8 @@ def researcher_article_qualis_csv_db():
 def article_qualis_csv_distinct_db():
    
    sql= """
-                                SELECT distinct title,qualis,jcr,year,i.acronym as institution,rd.city as city,
-                                       jcr_link
+                                SELECT distinct title,bar.qualis,bar.jcr,year,i.acronym as institution,rd.city as city,
+                                       bar.jcr_link
                               
                                   FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
 	                               periodical_magazine pm, researcher r, institution i, researcher_address rd 
@@ -154,8 +154,8 @@ def article_qualis_csv_distinct_db():
     
                                     AND   b.id = bar.bibliographic_production_id
                                     AND rd.researcher_id = r.id
-                                    group by title,qualis,jcr,year,i.acronym,rd.city,jcr_link
-                                    order by qualis desc
+                                    group by title,bar.qualis,bar.jcr,year,i.acronym,rd.city,bar.jcr_link
+                                    order by bar.qualis desc
 
         """
 
@@ -419,7 +419,7 @@ list_data.append(data)
 json_string = json.dumps(list_data)
 df = pd.read_json(json_string)
 df.to_csv(dir+'data.csv')
-
+"""
 print("Inicio: graduate_program_csv_db")
 graduate_program_csv_db()
 print("Fim: graduate_program_csv_db")
@@ -472,4 +472,3 @@ article_qualis_csv_distinct_db()
 researcher_csv_db()
 
 researcher_production_tecnical_year_csv_db()
-"""

@@ -7,6 +7,7 @@ from flask_cors import CORS,cross_origin
 import os
 
 import Dao.areaFlowSQL as areaFlowSQL
+import Dao.termFlowSQL as termFlowSQL
 
 from Model.Researcher import Researcher
 from Model.Bibliographic_Production_Researcher import Bibliographic_Production_Researcher
@@ -25,6 +26,56 @@ from Model.Bibliographic_Production_Researcher import Bibliographic_Production_R
 areaRest = Blueprint('areaRest', __name__)
 
 
+######### Patent 
+
+@areaRest.route('/researcherPatent', methods=['GET'])
+@cross_origin(origin="*", headers=["Content-Type"])
+def researcherPatent():
+    list_researcher_area_expertise  = []
+    
+    term = request.args.get('term')
+    if term=="":
+        return
+    #stemmer = nltk.RSLPStemmer()
+
+    graduate_program_id =request.args.get('graduate_program_id')
+    if graduate_program_id is None:
+        graduate_program_id =""
+    
+  
+    #termNovo=unidecode.unidecode(name.replace(";","&"))
+
+    university=""
+    university = str(request.args.get('university'))+""
+    
+    #print(termNovo)
+   # print(stemmer.stem(termNovo))
+    #df_bd =SimccBD.lista_researcher_name_db(name.lower())
+    df_bd =areaFlowSQL.lista_researcher_patent_db(term.lower(),university,graduate_program_id)
+    #df_bd.sort_values(by="articles", ascending=False, inplace=True)
+    for i,infos in df_bd.iterrows():
+        #area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
+        #area_=" "
+        researcher  = {
+        'id': str(infos.id),
+        'name': str(infos.researcher_name),
+        'articles':str(infos.articles),
+        'book_chapters':str(infos.book_chapters),
+        'book':str(infos.book),
+        'university':str(infos.institution),
+        'lattes_id':str(infos.lattes),
+        'lattes_10_id':str(infos.lattes_10_id),
+        'area':str(infos.area.replace("_"," ")),
+        'abstract':str(infos.abstract),   
+        'city':str(infos.city),
+        'orcid':str(infos.orcid),
+        'image':str(infos.image),
+        'area_specialty':str(infos.area_specialty)
+
+        }
+        #print(researcher)
+        list_researcher_area_expertise.append(researcher) 
+    return jsonify(list_researcher_area_expertise), 200
 
 
 ######### Fluxo Area
