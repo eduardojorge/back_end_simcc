@@ -345,7 +345,7 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      text = text.replace("&"," ")
      text = unidecode.unidecode(text.lower())
 
-     filter = util.filterSQLLike(text,";","or","rpf.term")
+     filter = util.filterSQLRank2(text,";","or","rpf.term","p.title")
      #filter= util.filterSQL(text,";","or","gae.name")
      
 
@@ -383,6 +383,8 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
                       
      
      """   % (filter,filterinstitution,filtergraduate_program)
+
+     print(sql)
     
 
      reg = sgbdSQL.consultar_db(sql)

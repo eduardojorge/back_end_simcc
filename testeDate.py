@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 import  Dao.resarcher_baremaSQL as  resarcher_baremaSQL
 
 import Dao.sgbdSQL as sgbdSQL
+import Dao.termFlowSQL as termFlowSQL
+import Dao.areaFlowSQL as areaFlowSQL
 import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
 import logging
@@ -16,7 +18,7 @@ import project as project_
 import sys
 from Model.Year_Barema import Year_Barema
 
-project_.project_="5"
+project_.project_="4"
 
 def researcher_csv_db():
 
@@ -137,7 +139,11 @@ def testeSegundaPalavra(term):
 
 #"1966167015825708;8933624812566216"
 
-testeSegundaPalavra("educacao")
+#testeSegundaPalavra("educacao")
+
+#print(termFlowSQL.list_researchers_originals_words_db("energia;solar","","ARTICLE","or",""))
+#print(termFlowSQL.list_researchers_originals_words_db("energia;","","ABSTRACT","or",""))
+print(areaFlowSQL.lista_researcher_patent_db("DECODIFICAÇÃO;IMAGENS","",""))
 
 """
 year = Year_Barema()

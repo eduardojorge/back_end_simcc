@@ -256,7 +256,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                           
      
      if (type=='ABSTRACT'):
-                          #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","abstract")
+                          filter= util.filterSQLRank2(terms,";",boolean_condition,"rf.term","abstract")
                             #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
                           sql ="""SELECT distinct rf.researcher_id as id,0 as qtd,
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
@@ -268,13 +268,13 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                          researcher_abstract_frequency rf, institution i, researcher_production rp, city c
                          WHERE 
                          c.id = r.city_id
-                         %s %s 
+                         %s %s %s 
                          AND rf.researcher_id = r.id
                          AND r.institution_id = i.id 
                          AND rp.researcher_id = r.id 
-                         AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true
+                         
                        
-                          ORDER BY qtd desc """ % (filterinstitution,filtergraduate_program,terms)
+                          ORDER BY qtd desc """ % (filter,filterinstitution,filtergraduate_program)
                           print(sql)
                           reg = sgbdSQL.consultar_db(sql)
 

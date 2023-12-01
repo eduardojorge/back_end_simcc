@@ -23,6 +23,25 @@ def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
       filter = " AND ("+filter+")" 
  return filter
 
+def filterSQLRank2(text,split,booleanOperator,attribute,attribute_2):
+
+ filter=" "
+ if text!="": 
+      t=[]
+      t= text.split(split)  
+      filter = ""
+      i=0;
+
+      if (len(t))==1:
+          filter = """ (translate(unaccent(LOWER(%s)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true   """ % (attribute,text)
+      else:     
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2,t[0],t[1],0.04)    
+      x = len(filter)   
+      filter = filter[0:x-3]
+      filter = " AND ("+filter+")" 
+ return filter
+
+
 
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
 def filterSQL(text,split,booleanOperator,attribute):
