@@ -305,6 +305,7 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
 
  
      filter = ""
+     """
      if text!="": 
   
       t=[]
@@ -318,36 +319,21 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
       x = len(filter)   
       filter = filter[0:x-3]
       filter = "AND ("+filter+")" 
+      """
+     
+     t= text.split(";")  
+     filter = ""
+     i=0;
 
+     if (len(t))==1:
+           filter =  " and LOWER(r.name) like '"+t[0]+"%'"
+         
+     else:    
         
+          filter= util.filterSQLRank(text,";","or","r.name","r.name")     
 
      print(filter)  
-     '''
-     reg = sgbdSQL.consultar_db('SELECT distinct r.id as id,'+
-                        'r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,'+
-                         'r.abstract as abstract,gae.name as area,c.name as city, i.image as image,r.orcid as orcid '+
-                         
-                         ' FROM  researcher r LEFT JOIN researcher_area_expertise re ON  re.researcher_id =r.id LEFT JOIN great_area_expertise gae ON  gae.id = re.great_area_expertise_id, city c, '
-                          #' researcher_frequency rf, researcher r ,
-                          
-                          
-                          
-                           ' institution i, researcher_production rp '
-                           
-                          ' WHERE '+
-                          
-                          '  c.id=r.city_id'
-                     
-
-                         # ' AND rf.researcher_id = r.id'
-                          ' AND r.institution_id = i.id '+
-                          ' AND rp.researcher_id = r.id '+
-                          " AND " + filter )
-                          #' AND term = \''+term+"\'"
-                          #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-                          #' GROUP BY rf.researcher_id,r.name, i.name,articles, book_chapters,book,r.lattes_id,r.lattes_10_id,r.abstract,gae.name'+
-                          #' ORDER BY qtd desc')
-          '''
+   
 
      sql="""SELECT distinct r.id as id,
              r.name as researcher_name,i.name as institution,rp.articles as articles,
@@ -366,6 +352,7 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
 
                            AND r.institution_id = i.id 
                            AND rp.researcher_id = r.id %s %s """ % (filter,filtergraduate_program)
+     print(sql)
      reg = sgbdSQL.consultar_db(sql)
                           #' AND term = \''+term+"\'"
                           #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +

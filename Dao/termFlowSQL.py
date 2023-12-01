@@ -457,8 +457,8 @@ def lista_institution_production_db(text,institution):
 
       
      text =  unidecode.unidecode(text)
-     text =  filter= util.filterSQL(text,";","or","rf.term")
-     print(text)
+     filter =  filter= util.filterSQLRank(text,";","or","rf.term","b.title")
+  
      filterinstitution= util.filterSQL(institution,";","or","i.name")
      '''
 
@@ -476,21 +476,24 @@ def lista_institution_production_db(text,institution):
       filter = " AND ("+filter+")" 
       ''' 
      print(filter)
-     reg = sgbdSQL.consultar_db('SELECT COUNT(rf.term) AS qtd,i.id as id, i.name as institution,image'+
+     sql="""SELECT  COUNT(distinct b.title) AS qtd,i.id as id, i.name as institution,image
    
                         
-                         ' FROM researcher_frequency rf, researcher r , institution i, researcher_production rp '+
-                          ' WHERE '+
-                          ' rf.researcher_id = r.id'
-                          ' AND r.institution_id = i.id '+
-                          ' AND rp.researcher_id = r.id '+
-                          ' AND acronym IS NOT NULL'+
-                           '%s'% filter +
-                           '%s'% filterinstitution +
-                          #' AND term = \''+term+"\'"
-                          #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-                          ' GROUP BY  i.id, i.name ')
+                          FROM researcher_frequency rf, researcher r , institution i, researcher_production rp, bibliographic_production AS b 
+                           WHERE 
+                           b.id = rf.bibliographic_production_id
+
+                           AND rf.researcher_id = r.id
+                           AND r.institution_id = i.id 
+                           AND rp.researcher_id = r.id 
+                           AND acronym IS NOT NULL
+                           %s
+                           %s
+                          
+                           GROUP BY  i.id, i.name """ % (filter,filterinstitution)
+     print(sql)
      
+     reg = sgbdSQL.consultar_db(sql)
      df_bd = pd.DataFrame(reg, columns=['qtd','id','institution','image'])
     
      return df_bd
