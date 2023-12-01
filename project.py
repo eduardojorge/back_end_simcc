@@ -12,8 +12,8 @@ def setProject(type):
 
 def getProject():
     global project_
-    print(project_)
+   # print(project_)
     if (project_==""):
         project_="1"
-    print("----------"+project_)
+    #print("----------"+project_)
     return   project_; 

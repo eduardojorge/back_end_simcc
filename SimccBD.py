@@ -430,7 +430,7 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
   
     term=unidecode.unidecode(term.lower())
 
-    filter = util.filterSQL(term,";","or","rf.term")
+    filter = util.filterSQLRank(term,";","or","rf.term","title")
 
     filterQualis = util.filterSQL(qualis,";","or","qualis")
 
@@ -463,7 +463,7 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
     
     if distinct=="0":
    
-       sql =""" SELECT title,year_,doi,qualis,periodical_magazine_name as magazine,r.name as researcher,
+       sql =""" SELECT distinct title,year_,doi,qualis,periodical_magazine_name as magazine,r.name as researcher,
        r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr, jcr_link 
        FROM institution i,researcher_frequency rf, PUBLIC.bibliographic_production b, bibliographic_production_article a,
        researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
@@ -478,7 +478,7 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
        reg = sgbdSQL.consultar_db(sql) 
                      
        df_bd = pd.DataFrame(reg, columns=['title','year','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jcr', 'jcr_link'])     
-       print(df_bd)
+       #print(df_bd)
        return df_bd
 
 

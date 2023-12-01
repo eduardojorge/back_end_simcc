@@ -233,7 +233,7 @@ def researcherName():
         r.lattes_update = str(infos.lattes_update)
 
 
-        print(r.getJson())
+        #print(r.getJson())
         
         researcher = r.getJson()
 

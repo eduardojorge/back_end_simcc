@@ -1,15 +1,31 @@
-DEBUG 2023-11-27 07:42:52,679 - Inicio
-DEBUG 2023-11-27 07:43:05,004 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+DEBUG 2023-11-30 10:42:55,336 - Inicio
+DEBUG 2023-11-30 10:42:57,771 - 
+      
+  
+                           
+                                 SELECT distinct  title,b.type as tipo,b.researcher_id,year,i.id,
+									                 bar.qualis,bar.periodical_magazine_name,bar.jcr,bar.jcr_link,
+									                 c.id
+                               from bibliographic_production AS b LEFT JOIN bibliographic_production_article bar ON b.id = bar.bibliographic_production_id,
+										      researcher r  LEFT JOIN  institution i ON r.institution_id = i.id  LEFT JOIN  city c ON r.city_id = c.id
+							
+                     
+                                where b.researcher_id is not null 
+                                  AND r.id =  b.researcher_id 
+                                  
+                                  ORDER  BY  YEAR desc
+                           
+                           
+                              
+                             
+                         
+                                
+
+
+    
+DEBUG 2023-11-30 10:42:59,812 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
 
         FROM  researcher r 
-DEBUG 2023-11-27 07:43:05,166 - 
-          SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
-          UNION
-          SELECT researcher_id,title,YEAR,'SOFTWARE' from software
-          UNION
-          SELECT researcher_id,title,YEAR,'BRAND' from brand
-          UNION
-          SELECT researcher_id,title,YEAR,'REPORT' from research_report
-
-    
+DEBUG 2023-11-30 10:42:59,935 -    SELECT i.id,i.name, i.acronym  FROM institution i 
+DEBUG 2023-11-30 10:43:00,049 -    SELECT c.id,c.name  FROM city c 
