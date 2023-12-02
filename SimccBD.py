@@ -375,6 +375,7 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
 def lists_researcher_initials_term_db(initials,graduate_program_id):
      
      initials=unidecode.unidecode(initials)
+     """
      t= initials.split(";")
      filter=""
      for word in t:
@@ -383,6 +384,8 @@ def lists_researcher_initials_term_db(initials,graduate_program_id):
      x = len(filter)   
      filter = filter[0:x-3]
      filter = "("+filter+")" 
+     """
+     filter = util.filterSQLRank2(initials,";","or","r.name","r.name")
 
 
      filtergraduate_program=""
@@ -391,8 +394,10 @@ def lists_researcher_initials_term_db(initials,graduate_program_id):
 
  
      sql="""SELECT distinct id, name as nome FROM PUBLIC.researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-     WHERE ( %s OR unaccent(LOWER(r.name)) LIKE '%s' ) %s
-     order by nome """ % (filter,initials.lower()+"%",filtergraduate_program)
+     WHERE   r.institution_id is NOT null %s %s 
+     order by nome """ % (filter,filtergraduate_program)
+     #(filter,initials.lower()+"%",filtergraduate_program)
+     #( %s OR unaccent(LOWER(r.name)) LIKE '%s' )
      print(sql)
                         
                         

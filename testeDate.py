@@ -12,6 +12,8 @@ from datetime import datetime
 import nltk
 from nltk.tokenize import RegexpTokenizer
 import sys
+import unidecode
+import Dao.util as util
 
 
 import project as project_
@@ -126,7 +128,217 @@ def testeSegundaPalavra(term):
                 print(infos.title)
            
 
-      
+
+def lista_researcher_patent_db(text,institution,graduate_program_id):
+    
+   
+     #reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
+      #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
+     print(text)
+     text = text.replace("&"," ")
+     text = unidecode.unidecode(text.lower())
+
+     filter = util.filterSQLRank2(text,";","or","rpf.term","p.title")
+     #filter= util.filterSQL(text,";","or","gae.name")
+     
+
+     filterinstitution= util.filterSQL(institution,";","or","i.name")
+     print("XXXXXXXXXXXXXXXXXXXXX" +text)
+     print(filterinstitution)
+
+
+     filtergraduate_program=""
+     if graduate_program_id!="":
+        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
+
+
+     sql="""
+
+     SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
+               r.name as researcher_name,i.name as institution,rp.articles as articles,
+                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
+                        r.orcid as orcid,rp.city  as city, i.image as image,'%s' as terms,p.title,p.development_year as year
+                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
+                         , institution i, researcher_production rp,patent p, researcher_patent_frequency rpf, city c 
+                           WHERE 
+                         
+                       
+                           r.city_id=c.id
+                 
+                           AND r.institution_id = i.id 
+                           AND rp.researcher_id = r.id 
+                           AND p.researcher_id = r.id
+                           AND rpf.researcher_id = r.id
+
+                           %s %s %s
+
+                         
+                      
+     
+     """   % (text,filter,filterinstitution,filtergraduate_program)
+
+     print(sql)
+    
+
+     reg = sgbdSQL.consultar_db(sql)    
+
+     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id',
+                                        'researcher_name','institution','articles','book_chapters','book',
+                                        'lattes','lattes_10_id','abstract','orcid','city','image','terms','title','year'])
+     print (df_bd)
+     return df_bd  
+
+
+
+ 
+# Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
+def list_researchers_article_tax_db(terms,type):
+     print(terms)
+
+     
+     
+     
+
+    
+           
+        
+     
+     filter= util.filterSQLRank(terms,";","or","rf.term","title")
+
+
+     
+     df_bd=pd.DataFrame()
+     if (type=='ARTICLE'):
+                          #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
+                            
+                          sql = """SELECT DISTINCT rf.researcher_id as id,b.title,
+                           r.institution_id,
+                           r.city_id,
+                          '%s' as terms,b.year,ba.qualis
+                        
+                           FROM  researcher r ,
+                           researcher_frequency rf,
+                           bibliographic_production b,
+                           bibliographic_production_article ba
+                           WHERE 
+                            b.id= ba.bibliographic_production_id
+                          
+                          
+                           %s 
+                          
+     
+                           AND rf.researcher_id = r.id 
+                        
+                            AND b.id = rf.bibliographic_production_id
+                          
+
+                          
+                           ORDER BY year desc""" % (terms,filter)
+                          print(sql)
+                          reg = sgbdSQL.consultar_db(sql)
+                          df_bd = pd.DataFrame(reg, columns=['researcher_id','title',
+                                                             'institution_id','city_id',
+                                                             'terms','year','qualis'])
+                           
+                         
+
+                          
+     
+     if (type=='ABSTRACT'):
+                          filter= util.filterSQLRank2(terms,";","or","rf.term","abstract")
+                            #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
+                          sql ="""SELECT distinct rf.researcher_id as id,0 as qtd,
+                          r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
+                          r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
+                          r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
+                           TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update, '%s' as terms
+                        
+                         FROM   researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
+                         researcher_abstract_frequency rf, institution i, researcher_production rp, city c
+                         WHERE 
+                         c.id = r.city_id
+                         %s 
+                         AND rf.researcher_id = r.id
+                         AND r.institution_id = i.id 
+                         AND rp.researcher_id = r.id 
+                         
+                       
+                          ORDER BY qtd desc """ % (terms,filter)
+                          print(sql)
+                          reg = sgbdSQL.consultar_db(sql)
+                          df_bd = pd.DataFrame(reg, columns=['id','qtd','researcher_name','institution',
+                                        'articles','book_chapters','book','lattes',
+                                        'lattes_10_id','abstract','area','city','orcid',
+                                        'image','graduation','patent','software','brand','lattes_update','terms'])
+
+     
+     return df_bd
+
+
+
+
+def lists_bibliographic_production_article_researcher_db(term,researcher_id,year,type,boolean_condition,qualis):
+     
+     term=unidecode.unidecode(term.lower())
+     filter = util.filterSQLRank(term,";",boolean_condition,"rf.term","title")
+     filterQualis = util.filterSQL(qualis,";","or","qualis")
+     '''
+     filtergraduate_program=""
+     if graduate_program_id!="":
+        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
+
+     '''   
+
+      #researcher r   LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
+
+    
+     if (type=='ARTICLE'):
+           sql= """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, periodical_magazine_name as magazine,
+               r.name as researcher,r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link 
+               FROM bibliographic_production b LEFT JOIN  researcher_frequency rf ON b.id = rf.bibliographic_production_id,
+                bibliographic_production_article ba,institution i, researcher r 
+                WHERE 
+                r.id = b.researcher_id
+               
+                AND   b.id = ba.bibliographic_production_id 
+                 AND r.institution_id=i.id
+                AND year_>=%s  %s %s
+                AND r.id=\'%s\' order by year desc""" % (year,filter,filterQualis,researcher_id)
+           
+           reg = sgbdSQL.consultar_db(sql)
+           print(sql)
+           df_bd = pd.DataFrame(reg, columns=['id','title','year','type','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jif','jcr_link'])
+          
+     if (type=='ABSTRACT'):
+
+          sql="""
+                SELECT distinct b.id as id,title,year,type, doi,qualis, periodical_magazine_name as magazine,r.name as researcher,
+                r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link
+                          FROM bibliographic_production b, researcher_abstract_frequency rf, 
+                          bibliographic_production_article ba, researcher r 
+                            WHERE  r.id = b.researcher_id
+                                   AND rf.researcher_id=r.id 
+                                   AND pm.id = ba.periodical_magazine_id 
+                                   AND   b.id = ba.bibliographic_production_id 
+                                   AND year_ >=%s %s %s
+                                   AND r.id='%s'
+                                     order by year desc"
+
+          """ % (year,filter,filterQualis,researcher_id)
+          reg = sgbdSQL.consultar_db(sql)
+          df_bd = pd.DataFrame(reg, columns=['id','title','year','type','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jif','jcr_link'])
+         
+                        
+                        
+     
+                       # "  AND  b.type = \'ARTICLE\' ")
+                       
+                        
+     
+                     
+     
+   
+     return df_bd
           
 
 #hoje = datetime.today() - timedelta(days=5)
@@ -141,9 +353,41 @@ def testeSegundaPalavra(term):
 
 #testeSegundaPalavra("educacao")
 
-#print(termFlowSQL.list_researchers_originals_words_db("energia;solar","","ARTICLE","or",""))
-#print(termFlowSQL.list_researchers_originals_words_db("energia;","","ABSTRACT","or",""))
-print(areaFlowSQL.lista_researcher_patent_db("DECODIFICAÇÃO;IMAGENS","",""))
+
+#df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
+df = pd.read_excel(r'files/tEnergiasRenovaveis.xlsx')
+print(df)
+TERMOS=0
+
+x=0
+
+for i,infos in df.iterrows():
+   
+
+    print("teste x "+ str(infos[TERMOS]))
+    
+    df1= list_researchers_article_tax_db(str(infos[TERMOS]),"ARTICLE")
+    #df1 =  lista_researcher_patent_db(str(infos[TERMOS]),"","")
+
+
+    if(x!=0):
+          df = pd.concat([df, df1], axis=0, join='inner')
+    else:
+         df=df1       
+
+ 
+     
+    x=x+1
+print(df)    
+print("Fim "+str(x) )   
+df.to_csv('c:\\simccv3\\article_tax.csv')      
+
+
+
+
+
+#print(termFlowSQL.list_researchers_originals_words_db("biomassa","","ABSTRACT","or",""))
+#print(areaFlowSQL.lista_researcher_patent_db("biomassa","",""))
 
 """
 year = Year_Barema()

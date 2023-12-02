@@ -229,7 +229,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
                           r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
                           r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
-                          TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update
+                          TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update,'%s' as terms
                         
                            FROM  researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
                            researcher_frequency rf, institution i, researcher_production rp, city c, bibliographic_production b
@@ -249,7 +249,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                            rp.great_area,rp.city, r.orcid, 
                            i.image,r.graduation,
                            rp.patent,rp.software,rp.brand,TO_CHAR(r.last_update,'dd/mm/yyyy') 
-                           ORDER BY qtd desc""" % (filter,filterinstitution,filtergraduate_program)
+                           ORDER BY qtd desc""" % (terms,filter,filterinstitution,filtergraduate_program)
                           print(sql)
                           reg = sgbdSQL.consultar_db(sql)
 
@@ -262,7 +262,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
                           r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
                           r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
-                           TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update
+                           TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update, '%s' as terms
                         
                          FROM   researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
                          researcher_abstract_frequency rf, institution i, researcher_production rp, city c
@@ -274,14 +274,14 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                          AND rp.researcher_id = r.id 
                          
                        
-                          ORDER BY qtd desc """ % (filter,filterinstitution,filtergraduate_program)
+                          ORDER BY qtd desc """ % (terms,filter,filterinstitution,filtergraduate_program)
                           print(sql)
                           reg = sgbdSQL.consultar_db(sql)
 
      df_bd = pd.DataFrame(reg, columns=['id','qtd','researcher_name','institution',
                                         'articles','book_chapters','book','lattes',
                                         'lattes_10_id','abstract','area','city','orcid',
-                                        'image','graduation','patent','software','brand','lattes_update'])
+                                        'image','graduation','patent','software','brand','lattes_update','terms'])
     
      return df_bd
 
