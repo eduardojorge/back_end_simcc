@@ -136,7 +136,7 @@ def lista_researcher_area_expertise_db(text,institution):
           reg = sgbdSQL.consultar_db("SELECT distinct rp.great_area as area,r.id as id,"+
                         "r.name as researcher_name,i.name as institution,rp.articles as articles,"+
                         " rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,"+
-                        "r.orcid as orcid,rp.city as city, i.image as image"
+                        "r.orcid as orcid,rp.city as city, i.image as image,rp.patent,rp.sofwtare,rp.brand,r.last_update "
                          ' FROM  researcher r , institution i, researcher_production rp,researcher_area_expertise re, great_area_expertise gae, city c '+
                           ' WHERE '+
                          
@@ -155,7 +155,7 @@ def lista_researcher_area_expertise_db(text,institution):
           reg = sgbdSQL.consultar_db("SELECT distinct rp.great_area as area,r.id as id,"+
                         "r.name as researcher_name,i.name as institution,rp.articles as articles,"+
                         " rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,"+
-                        "r.orcid as orcid,rp.city as city, i.image as image"
+                        "r.orcid as orcid,rp.city as city, i.image as image,,rp.patent,rp.sofwtare,rp.brand.r.last_update "+
                          ' FROM  researcher r , institution i, researcher_production rp,city c '+
                           ' WHERE '+
                          
@@ -172,7 +172,10 @@ def lista_researcher_area_expertise_db(text,institution):
 
 
 
-     df_bd = pd.DataFrame(reg, columns=['area','id','researcher_name','institution','articles','book_chapters','book','lattes','lattes_10_id','abstract','orcid','city','image'])
+     df_bd = pd.DataFrame(reg, columns=['area','id','researcher_name','institution',
+                                        'articles','book_chapters','book','lattes',
+                                        'lattes_10_id','abstract','orcid','city','image',
+                                        'patent','sofwtare','brand','last_update'])
     #print (df_bd)
      return df_bd
 
@@ -309,7 +312,7 @@ def lista_researcher_area_speciality_db(text,institution,graduate_program_id):
      reg = sgbdSQL.consultar_db("SELECT distinct rp.great_area as area,rp.area_specialty as area_specialty,r.id as id,"+
                         "r.name as researcher_name,i.name as institution,rp.articles as articles,"+
                         " rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,"+
-                        "r.orcid as orcid,rp.city  as city, i.image as image"
+                        "r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation "+
                          " FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id "
                          ", institution i, researcher_production rp,researcher_area_expertise re, great_area_expertise gae, city c "+
                           ' WHERE '+
@@ -332,7 +335,10 @@ def lista_researcher_area_speciality_db(text,institution,graduate_program_id):
      
 
 
-     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id','researcher_name','institution','articles','book_chapters','book','lattes','lattes_10_id','abstract','orcid','city','image'])
+     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id','researcher_name',
+                                        'institution','articles','book_chapters','book',
+                                        'lattes','lattes_10_id','abstract','orcid','city',
+                                        'image','patent','software','brand','last_update','graduation'])
      print (df_bd)
      return df_bd
 

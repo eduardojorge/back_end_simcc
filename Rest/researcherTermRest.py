@@ -477,7 +477,7 @@ def bibliographic_production_researcher():
     #terms = unidecode(terms.lower())
     #print(termNovo)
    # print(stemmer.stem(termNovo))
-    df_bd =termFlowSQL.lists_bibliographic_production_article_researcher_db(termNovo,researcher_id,1000,type,boolean_condition,qualis)
+    df_bd =termFlowSQL.lists_bibliographic_production_article_researcher_db(termNovo,researcher_id,year,type,boolean_condition,qualis)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
