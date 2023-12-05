@@ -529,7 +529,7 @@ def qualis_researcher():
         graduate_program_id =""
     df_bd =termFlowSQL.lists_bibliographic_production_qtd_qualis_researcher_db(researcher_id,year,graduate_program_id)
 
-    'qtd','term'
+   
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
         qualis  = {

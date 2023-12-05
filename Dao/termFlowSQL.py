@@ -361,19 +361,27 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(researcher_id,year,g
      if graduate_program_id!="":
        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
 
-     reg = sgbdSQL.consultar_db(  " SELECT count(*)  as qtd,bar.qualis"+
-                                  " FROM  PUBLIC.bibliographic_production b  LEFT JOIN graduate_program_researcher gpr ON  b.researcher_id =gpr.researcher_id,bibliographic_production_article bar,"+
-	                               "periodical_magazine pm " + 
-                                  "  WHERE "+
-                                  "  pm.id = bar.periodical_magazine_id"+
+
+     sql="""
+       SELECT count(*)  as qtd,bar.qualis
+                   FROM  PUBLIC.bibliographic_production b  
+                   LEFT JOIN graduate_program_researcher gpr ON  b.researcher_id =gpr.researcher_id,
+                   bibliographic_production_article bar,
+	                               periodical_magazine pm  
+                                   WHERE 
+                                    pm.id = bar.periodical_magazine_id
     
-                                   " AND   b.id = bar.bibliographic_production_id"+
+                                    AND   b.id = bar.bibliographic_production_id
        
 
-                        "  AND year_ >=%s" % year+
-                        filter+
-                        " %s " % filtergraduate_program+
-                        "  group by bar.qualis order by qualis asc")
+                         AND year_ >=%s
+                        %s
+                         %s  
+                          group by bar.qualis order by qualis asc
+     """  % (year,filter,filtergraduate_program)
+     print(sql)
+
+     reg = sgbdSQL.consultar_db( sql)
                         
                         
      
