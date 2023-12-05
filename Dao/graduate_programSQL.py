@@ -112,55 +112,55 @@ def production_general_db(graduate_program_id,year):
    else:
        sql="""
             
-         SELECT COUNT(r.id) as qtd, 'PATENT' as type,p.development_year::INT AS year
+         SELECT COUNT(r.id) as qtd, 'PATENT' as type
           FROM patent p,researcher r
           WHERE  r.id = p.researcher_id  and p.development_year::int  >=%s
-                group by  type,p.development_year::int
+                group by  type
                  UNION
-          SELECT COUNT(r.id) as qtd,'SOFTWARE' as TYPE,s.year 
+          SELECT COUNT(r.id) as qtd,'SOFTWARE' as TYPE 
           from software s,researcher r
           WHERE  r.id = s.researcher_id  and  s.year >=%s
-                 group by  TYPE, s.year
+                 group by  TYPE
 
        UNION
-          SELECT COUNT(r.id) as qtd ,'BRAND' as TYPE,b.year
+          SELECT COUNT(r.id) as qtd ,'BRAND' as TYPE
           from brand b,researcher r
           WHERE
                  r.id = b.researcher_id  and b.year >=%s
 
-                 group by  TYPE,b.year
+                 group by  TYPE
 
       UNION
 
-      SELECT COUNT(r.id) as qtd,'ARTICLE' as TYPE,b.year_
+      SELECT COUNT(r.id) as qtd,'ARTICLE' as TYPE
           FROM   PUBLIC.bibliographic_production b , researcher r
                          where  b.researcher_id =r.id AND TYPE='ARTICLE'   and year_ >=%s
 
 
-                 group BY  TYPE, b.year_
+                 group BY  TYPE
 
       UNION
-           SELECT COUNT(r.id) as qtd,'BOOK' as TYPE ,b.year_
+           SELECT COUNT(r.id) as qtd,'BOOK' as TYPE 
           FROM   PUBLIC.bibliographic_production b , researcher r
                          where  b.researcher_id =r.id AND TYPE='BOOK'  and year_ >=%s
 
 
-                 group BY TYPE,b.year_
+                 group BY TYPE
      UNION
-          SELECT COUNT(r.id) as qtd,'BOOK_CHAPTER' as TYPE,b.year_
+          SELECT COUNT(r.id) as qtd,'BOOK_CHAPTER' as TYPE
           FROM   PUBLIC.bibliographic_production b ,researcher r
                          where  b.researcher_id =r.id AND TYPE='BOOK_CHAPTER'  and year_ >=%s
 
 
-                 group BY TYPE, b.year_
+                 group BY TYPE
           UNION
 
-                        SELECT COUNT(r.id) as qtd,'WORK_IN_EVENT' as TYPE,b.year_
+                        SELECT COUNT(r.id) as qtd,'WORK_IN_EVENT' as TYPE
           FROM   PUBLIC.bibliographic_production b , researcher r
                          where  b.researcher_id =r.id AND TYPE='WORK_IN_EVENT'  and year_ >=%s
 
 
-                 group BY  TYPE, b.year_
+                 group BY  TYPE
 
            """    % (year,year,year,year,year,year,year)
    print(sql)
@@ -168,7 +168,7 @@ def production_general_db(graduate_program_id,year):
    if(filter!=""):
         df_bd = pd.DataFrame(reg, columns=['qtd','tipo','graduate_program_id','year'])
    else:     
-       df_bd = pd.DataFrame(reg, columns=['qtd','tipo','year'])
+       df_bd = pd.DataFrame(reg, columns=['qtd','tipo'])
 
 
   
