@@ -36,6 +36,8 @@ def graduate_program_profnit_db():
       """
 
    reg = sgbdSQL.consultar_db( sql)
+
+   print(sql)
         
    
    df_bd = pd.DataFrame(reg, columns=[ 'graduate_program_id','code','program','area','modality','type','rating','state','city','instituicao','url_image','region', 'sigla', 'latitude', 'longitude'])

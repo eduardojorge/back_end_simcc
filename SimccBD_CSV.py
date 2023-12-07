@@ -107,10 +107,8 @@ def researcher_article_qualis_csv_db():
             
             bar.qualis as qualis,year,r.id as researcher_id,
             r.name as researcher_id,'institution' ,'city',
-			pm.name AS name_magazine,pm.issn AS issn,bar.jcr as jcr,bar.jcr_link as jcr_link, b.type as type, 	CASE 
-			WHEN bar.qualis IS NULL THEN 'SQ'
-			ELSE bar.qualis
-			END CASE 
+			pm.name AS name_magazine,pm.issn AS issn,bar.jcr as jcr,bar.jcr_link as jcr_link, b.type as type
+			
                            
           FROM  
           PUBLIC.bibliographic_production b LEFT JOIN  (bibliographic_production_article bar 
@@ -133,7 +131,7 @@ def researcher_article_qualis_csv_db():
 
    reg = sgbdSQL.consultar_db(sql )
    
-   df_bd = pd.DataFrame(reg, columns=['title','qualis','year','researcher_id','researcher','institution','city','name_magazine','issn','jcr','jcr_link','type','case'])
+   df_bd = pd.DataFrame(reg, columns=['title','qualis','year','researcher_id','researcher','institution','city','name_magazine','issn','jcr','jcr_link','type'])
 
 
    df_bd.to_csv('C:/simccv3/article_qualis_year.csv')
@@ -186,7 +184,7 @@ def researcher_production_csv_db():
 
 def researcher_csv_db():
 
-   sql=""" SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+   sql=""" SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
         
 
         FROM  researcher r """
@@ -196,7 +194,7 @@ def researcher_csv_db():
    logger.debug(sql)
         
    
-   df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','last_update','graduation'])
+   df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','last_update','graduation','lattes_id'])
 
    df_bd.to_csv(dir+'researcher.csv')
 
@@ -419,7 +417,7 @@ list_data.append(data)
 json_string = json.dumps(list_data)
 df = pd.read_json(json_string)
 df.to_csv(dir+'data.csv')
-"""
+
 print("Inicio: graduate_program_csv_db")
 graduate_program_csv_db()
 print("Fim: graduate_program_csv_db")
@@ -458,7 +456,7 @@ print("Inicio: production_coauthors_csv_db")
 production_coauthors_csv_db()
 print("Fim: production_coauthors_csv_db")
 
-"""
+
 researcher_production_year_csv_db()
 
 researcher_production_year_distinct_csv_db()

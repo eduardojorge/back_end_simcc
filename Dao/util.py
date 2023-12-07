@@ -1,11 +1,14 @@
  
 import unidecode
+import nltk
+from nltk.tokenize import RegexpTokenizer
 
 
 
 
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
 def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
+ clean_stopwords(text)
 
  filter=" "
  if text!="": 
@@ -24,6 +27,8 @@ def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
  return filter
 
 def filterSQLRank2(text,split,booleanOperator,attribute,attribute_2):
+ 
+ clean_stopwords(text)
 
  filter=" "
  if text!="": 
@@ -81,3 +86,21 @@ def unidecodelower(text1,text2):
        return True
     else:
        return False
+    
+def clean_stopwords(text):
+    stopwords_portuguese = nltk.corpus.stopwords.words('portuguese')
+    stopwords_english = nltk.corpus.stopwords.words('english')
+    tokenize = RegexpTokenizer(r'\w+')
+    tokens =[]
+    tokens = tokenize.tokenize(text)   
+
+    text_new=""
+    for word in tokens:
+        
+        if not((word.lower() in stopwords_portuguese) or (word.lower() in stopwords_english)):
+               text_new=text_new+word.lower()+";"
+    return text_new[0:len(text_new)-1]
+
+
+print(clean_stopwords("banco de dados"))
+               
