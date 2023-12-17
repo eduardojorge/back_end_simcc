@@ -7,7 +7,7 @@ from nltk.tokenize import RegexpTokenizer
 
 
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
-def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
+def filterSQLRank(text,split,attribute_2):
  if (len(text.split(split)))==3:
     text=clean_stopwords(text)
 
@@ -19,7 +19,9 @@ def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
       i=0;
 
       if (len(t))==1:
-          filter = " unaccent(LOWER("+attribute+"))='"+t[0].lower()+"' "+booleanOperator+ ""+ filter
+          #filter = " unaccent(LOWER("+attribute+"))='"+t[0].lower()+"' "+booleanOperator+ ""+ filter
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.05)     
+          print("Rank"+text)
       
               
       else:     
@@ -29,7 +31,7 @@ def filterSQLRank(text,split,booleanOperator,attribute,attribute_2):
       filter = " AND ("+filter+")" 
  return filter
 
-def filterSQLRank2(text,split,booleanOperator,attribute,attribute_2):
+def filterSQLRank2(text,split,attribute_2):
  
  if (len(text.split(split)))==3:
       text=clean_stopwords(text)
@@ -42,7 +44,9 @@ def filterSQLRank2(text,split,booleanOperator,attribute,attribute_2):
       i=0;
 
       if (len(t))==1:
-          filter = """ (translate(unaccent(LOWER(%s)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true   """ % (attribute,text)
+          #filter = """ (translate(unaccent(LOWER(%s)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true   """ % (attribute,text)
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.05)     
+          print("Rank2"+text)
       else:     
           filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2,t[0],t[1],0.04)    
       x = len(filter)   

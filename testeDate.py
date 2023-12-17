@@ -138,7 +138,7 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      text = text.replace("&"," ")
      text = unidecode.unidecode(text.lower())
 
-     filter = util.filterSQLRank2(text,";","or","rpf.term","p.title")
+     filter = util.filterSQLRank2(text,";","p.title")
      #filter= util.filterSQL(text,";","or","gae.name")
      
 
@@ -203,11 +203,13 @@ def list_researchers_article_tax_db(terms,type):
            
         
      
-     filter= util.filterSQLRank(terms,";","or","rf.term","title")
+     filter= util.filterSQLRank(terms,";","title")
 
 
      
      df_bd=pd.DataFrame()
+     #researcher_frequency rf,
+     # AND rf.researcher_id = r.id 
      if (type=='ARTICLE'):
                           #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
                             
@@ -217,7 +219,7 @@ def list_researchers_article_tax_db(terms,type):
                           '%s' as terms,b.year,ba.qualis
                         
                            FROM  researcher r ,
-                           researcher_frequency rf,
+                           
                            bibliographic_production b,
                            bibliographic_production_article ba
                            WHERE 
@@ -227,7 +229,7 @@ def list_researchers_article_tax_db(terms,type):
                            %s 
                           
      
-                           AND rf.researcher_id = r.id 
+                          
                         
                             AND b.id = rf.bibliographic_production_id
                           
@@ -245,20 +247,22 @@ def list_researchers_article_tax_db(terms,type):
                           
      
      if (type=='ABSTRACT'):
-                          filter= util.filterSQLRank2(terms,";","or","rf.term","abstract")
+                          filter= util.filterSQLRank2(terms,";","abstract")
+                          #  researcher_abstract_frequency rf,
+                          #   AND rf.researcher_id = r.id
                             #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
-                          sql ="""SELECT distinct rf.researcher_id as id,0 as qtd,
+                          sql ="""SELECT distinct r.id as id,0 as qtd,
                           r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
                           r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
                           r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
                            TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update, '%s' as terms
                         
                          FROM   researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
-                         researcher_abstract_frequency rf, institution i, researcher_production rp, city c
+                         institution i, researcher_production rp, city c
                          WHERE 
                          c.id = r.city_id
                          %s 
-                         AND rf.researcher_id = r.id
+                      
                          AND r.institution_id = i.id 
                          AND rp.researcher_id = r.id 
                          
@@ -280,7 +284,7 @@ def list_researchers_article_tax_db(terms,type):
 def lists_bibliographic_production_article_researcher_db(term,researcher_id,year,type,boolean_condition,qualis):
      
      term=unidecode.unidecode(term.lower())
-     filter = util.filterSQLRank(term,";",boolean_condition,"rf.term","title")
+     filter = util.filterSQLRank(term,";","title")
      filterQualis = util.filterSQL(qualis,";","or","qualis")
      '''
      filtergraduate_program=""
@@ -293,9 +297,10 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
 
     
      if (type=='ARTICLE'):
+           #LEFT JOIN  researcher_frequency rf ON b.id = rf.bibliographic_production_id,
            sql= """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, periodical_magazine_name as magazine,
                r.name as researcher,r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link 
-               FROM bibliographic_production b LEFT JOIN  researcher_frequency rf ON b.id = rf.bibliographic_production_id,
+               FROM bibliographic_production b ,
                 bibliographic_production_article ba,institution i, researcher r 
                 WHERE 
                 r.id = b.researcher_id
@@ -310,14 +315,16 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
            df_bd = pd.DataFrame(reg, columns=['id','title','year','type','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jif','jcr_link'])
           
      if (type=='ABSTRACT'):
+          #researcher_abstract_frequency rf, 
+          # AND rf.researcher_id=r.id 
 
           sql="""
                 SELECT distinct b.id as id,title,year,type, doi,qualis, periodical_magazine_name as magazine,r.name as researcher,
                 r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link
-                          FROM bibliographic_production b, researcher_abstract_frequency rf, 
+                          FROM bibliographic_production b, 
                           bibliographic_production_article ba, researcher r 
                             WHERE  r.id = b.researcher_id
-                                   AND rf.researcher_id=r.id 
+                                  
                                    AND pm.id = ba.periodical_magazine_id 
                                    AND   b.id = ba.bibliographic_production_id 
                                    AND year_ >=%s %s %s

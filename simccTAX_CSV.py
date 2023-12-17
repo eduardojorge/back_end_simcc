@@ -35,8 +35,8 @@ def lista_researcher_patent_db(tax,term_p,term_i):
      term_p = unidecode.unidecode(term_p.lower())
      term_i = unidecode.unidecode(term_i.lower())
 
-     filter_p = util.filterSQLRank2(term_p,";","or","rpf.term","p.title")
-     filter_i = util.filterSQLRank2(term_i,";","or","rpf.term","p.title")
+     filter_p = util.filterSQLRank2(term_p,";","p.title")
+     filter_i = util.filterSQLRank2(term_i,";","p.title")
      filter_p = filter_p[5:len(filter_p)]
      filter_i = filter_i[5:len(filter_i)]
 
@@ -89,8 +89,8 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
      term_p = unidecode.unidecode(term_p.lower())
      term_i = unidecode.unidecode(term_i.lower())
 
-     filter_p = util.filterSQLRank2(term_p,";","or","rf.term","title")
-     filter_i = util.filterSQLRank2(term_i,";","or","rf.term","title")
+     filter_p = util.filterSQLRank2(term_p,";","title")
+     filter_i = util.filterSQLRank2(term_i,";","title")
      filter_p = filter_p[5:len(filter_p)]
      filter_i = filter_i[5:len(filter_i)]
     
@@ -110,26 +110,29 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
      df_bd=pd.DataFrame()
      if (type=='ARTICLE'):
                           #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
+                          # researcher_frequency rf,
+                           # AND rf.researcher_id = r.id 
+                        
+                          #  AND b.id = rf.bibliographic_production_id
                             
-                          sql = """SELECT DISTINCT rf.researcher_id as id,b.title,
+                          sql = """SELECT DISTINCT r.id as id,b.title,
                            r.institution_id,
                            r.city_id,
                           '%s' as terms,b.year,ba.qualis,'%s' as tax
                         
                            FROM  researcher r ,
-                           researcher_frequency rf,
+                          
                            bibliographic_production b,
                            bibliographic_production_article ba
                            WHERE 
                             b.id= ba.bibliographic_production_id
+                            AND r.id = b.researcher_id
                           
                           
                            AND (%s or %s)
                           
      
-                           AND rf.researcher_id = r.id 
-                        
-                            AND b.id = rf.bibliographic_production_id
+                         
                           
 
                           
@@ -145,20 +148,22 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
                           
      
      if (type=='ABSTRACT'):
-                           filter_p = util.filterSQLRank2(term_p,";","or","rf.term","abstract")
-                           filter_i = util.filterSQLRank2(term_i,";","or","rf.term","abstract")
+                           filter_p = util.filterSQLRank2(term_p,";","abstract")
+                           filter_i = util.filterSQLRank2(term_i,";","abstract")
                            filter_p = filter_p[5:len(filter_p)]
                            filter_i = filter_i[5:len(filter_i)]
+                           # researcher_abstract_frequency rf,
                            # filter= util.filterSQLRank2(terms,";","or","rf.term","abstract")
                             #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
-                           sql ="""SELECT distinct rf.researcher_id,r.abstract,   r.institution_id,
+                           #  rf.researcher_id = r.id
+                           sql ="""SELECT distinct r.id,r.abstract,   r.institution_id,
                            r.city_id, '%s' as terms,'%s' as tax
                         
                            FROM   researcher r ,
-                           researcher_abstract_frequency rf, institution i
+                            institution i
                           where
                          
-                         rf.researcher_id = r.id
+                       
                           AND ( %s or %s)
                        
                                                 

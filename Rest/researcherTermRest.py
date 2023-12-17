@@ -149,6 +149,8 @@ def research():
     for i,infos in df_bd.iterrows():
 
         #area = Dao.areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
+
+        print(" qtd=" +str(infos.qtd))
        
        
         r = Researcher()
@@ -457,13 +459,7 @@ def bibliographic_production_researcher():
 
     if boolean_condition is None:
        boolean_condition="or"
-    '''
-    graduate_program_id =request.args.get('graduate_program_id')
-    #print("yyyyy "+graduate_program_id  )
-    if graduate_program_id is None:
-        graduate_program_id =""
-
-    '''    
+     
    
 
    
@@ -600,7 +596,9 @@ def institutionFrequenci():
     #terms = unidecode(terms.lower())
     #print(termNovo)
    # print(stemmer.stem(termNovo))
-    df_bd =termFlowSQL.lista_institution_production_db(termNovo,university)
+    type_="ARTICLE"
+    print(type_)
+    df_bd =termFlowSQL.lista_institution_production_db(termNovo,university,type_)
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
         institution  = {

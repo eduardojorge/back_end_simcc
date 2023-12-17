@@ -351,7 +351,7 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      text = text.replace("&"," ")
      text = unidecode.unidecode(text.lower())
 
-     filter = util.filterSQLRank2(text,";","or","rpf.term","p.title")
+     filter = util.filterSQLRank2(text,";","p.title")
      #filter= util.filterSQL(text,";","or","gae.name")
      
 
@@ -364,15 +364,16 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      if graduate_program_id!="":
         filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
 
-
+     # AND rpf.researcher_id = r.id
+     #  #researcher_patent_frequency rpf,   
      sql="""
-
+    
      SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
                r.name as researcher_name,i.name as institution,rp.articles as articles,
                          rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
                         r.orcid as orcid,rp.city  as city, i.image as image,'%s' as terms,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
                           FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-                         , institution i, researcher_production rp,patent p, researcher_patent_frequency rpf, city c 
+                         , institution i, researcher_production rp,patent p,  city c 
                            WHERE 
                          
                        
@@ -381,7 +382,7 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
                            AND r.institution_id = i.id 
                            AND rp.researcher_id = r.id 
                            AND p.researcher_id = r.id
-                           AND rpf.researcher_id = r.id
+                          
 
                            %s %s %s
 

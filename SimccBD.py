@@ -385,7 +385,7 @@ def lists_researcher_initials_term_db(initials,graduate_program_id):
      filter = filter[0:x-3]
      filter = "("+filter+")" 
      """
-     filter = util.filterSQLRank2(initials,";","or","r.name","r.name")
+     filter = util.filterSQLRank2(initials,";","r.name")
 
 
      filtergraduate_program=""
@@ -422,7 +422,7 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
   
     term=unidecode.unidecode(term.lower())
 
-    filter = util.filterSQLRank(term,";","or","rf.term","title")
+    filter = util.filterSQLRank(term,";","title")
 
     filterQualis = util.filterSQL(qualis,";","or","qualis")
 
@@ -434,13 +434,13 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
     
     if distinct=="1":
        
-
+       # AND  b.id = rf.bibliographic_production_id 
         sql= """ SELECT distinct title,year_,doi,qualis,periodical_magazine_name as magazine,a.jcr, a.jcr_link 
-        FROM institution i,researcher_frequency rf, PUBLIC.bibliographic_production b, bibliographic_production_article a,
+        FROM institution i, PUBLIC.bibliographic_production b, bibliographic_production_article a,
         researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
         WHERE  r.id=b.researcher_id 
         
-        AND  b.id = rf.bibliographic_production_id 
+        
         AND a.bibliographic_production_id = b.id 
         AND i.id = r.institution_id %s %s %s %s
         AND year_ >=%s
@@ -454,14 +454,15 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
         return df_bd
     
     if distinct=="0":
-   
+       #,researcher_frequency rf,
+       #AND  b.id = rf.bibliographic_production_id 
        sql =""" SELECT distinct title,year_,doi,qualis,periodical_magazine_name as magazine,r.name as researcher,
        r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,a.jcr, a.jcr_link 
-       FROM institution i,researcher_frequency rf, PUBLIC.bibliographic_production b, bibliographic_production_article a,
+       FROM institution i, PUBLIC.bibliographic_production b, bibliographic_production_article a,
        researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
        WHERE  r.id=b.researcher_id 
       
-       AND  b.id = rf.bibliographic_production_id 
+       
        AND a.bibliographic_production_id = b.id 
        AND i.id = r.institution_id %s %s %s %s 
        AND year_ >=%s
