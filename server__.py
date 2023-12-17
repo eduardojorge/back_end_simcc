@@ -216,7 +216,8 @@ def total():
     total_ = [{
     "researcher": str(researcher_total),
     "publications": str(bibliographic_production_total),
-    "organizations": str(institution_total) 
+    "organizations": str(institution_total), 
+    "version":"1.0.1 (beta)"
 
     }]
    
