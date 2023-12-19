@@ -450,7 +450,7 @@ create_researcher_dictionary_db(teste,article)
 
 
 #Levenshtein Distance
-
+""""
 sql = "DELETE FROM researcher_frequency "
 sgbdSQL.execScript_db(sql)            
 sql = "DELETE FROM researcher_patent_frequency "
@@ -469,7 +469,7 @@ for i in range(4928):
       #insert_researcher_frequency_db(1)
 
 
-
+"""
 
 #lista = {}
 #lista ['Robótica'] = {"frequencia":1}
