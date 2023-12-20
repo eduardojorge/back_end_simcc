@@ -500,7 +500,7 @@ def lista_researcher_book_db(text,institution,graduate_program_id,type):
      # AND rpf.researcher_id = r.id
      #  #researcher_patent_frequency rpf,   
         
-     filterType=" AND b.type='"+type+"'"   
+     filterType=" AND b.type='"+type+"' OR  b.type='BOOK_CHAPTER' "   
      sql="""
     
      SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,

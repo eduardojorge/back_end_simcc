@@ -27,6 +27,14 @@ def list_research_dictionary_db(initials,type):
      if initials=="":
         filter ="" 
         fetch="  fetch FIRST 50 rows only"
+     filterType="" 
+     if type=='BOOK':
+          filterType = " type_='BOOK' or type_='BOOK_CHAPTER' "   
+     else:
+         filterType = " type_='"+type+"'"
+                
+
+
      filterGraduate_program=""   
     
      #LEFT JOIN graduate_program_researcher gpr ON  r.researcher_id =gpr.researcher_id    
@@ -39,11 +47,11 @@ def list_research_dictionary_db(initials,type):
                                  WHERE 
                              
                               
-                                  type_='%s'
+                                  %s
                                  %s 
                                                              
                                  GROUP BY unaccent(term),type_  ORDER BY frequency desc %s
-      """ % (type.upper(),filter,fetch)
+      """ % (filterType,filter,fetch)
      print(sql)
      reg = sgbdSQL.consultar_db(sql)
  
