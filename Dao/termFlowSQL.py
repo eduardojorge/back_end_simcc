@@ -322,7 +322,8 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
                 AND   b.id = ba.bibliographic_production_id 
                  AND r.institution_id=i.id
                 AND year_>=%s  %s %s
-                AND r.id=\'%s\' order by year desc""" % (year,filter,filterQualis,researcher_id)
+                AND r.id=\'%s\' 
+                order by year desc""" % (year,filter,filterQualis,researcher_id)
            
            reg = sgbdSQL.consultar_db(sql)
            print(sql)

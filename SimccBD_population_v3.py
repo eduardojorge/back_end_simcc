@@ -168,7 +168,7 @@ def insert_researcher_patent_frequency_caracter_bd(researcher_id):
 
 
 # Função para consultar o Banco SIMCC
-def create_researcher_dictionary_db(test,type):
+def create_researcher_dictionary_db(test):
  
 
   sql = "DELETE FROM research_dictionary "
@@ -177,10 +177,10 @@ def create_researcher_dictionary_db(test,type):
   
   filter=""
   if (test==1):
-      filter =  "  and b.created_at>= '%s'" % dataP
-      #+ "  OR "+researcher_teste2
+      filter = " OFFSET 0 ROWS FETCH FIRST 3 ROW ONLY" 
+    
         
-  sql="SELECT distinct  r.id from researcher r,bibliographic_production b where r.id=researcher_id " + filter 
+  sql="SELECT distinct  r.id from researcher r  " + filter 
   reg = sgbdSQL.consultar_db(sql)
 
   logger.debug(sql)
@@ -196,7 +196,7 @@ def create_researcher_dictionary_db(test,type):
         logger.debug("Total Pesquisador Article: "+str(i))
         
       
-      create_researcher_title_dictionary_db(infos.id,type)   
+      create_researcher_title_dictionary_db(infos.id)   
      
  
   # Abstract
@@ -215,7 +215,13 @@ def create_researcher_dictionary_db(test,type):
 
       create_researcher_patent_dictionary_db(infos.id)    
  
+#Patent
+  for i,infos in df_bd.iterrows():
+      if ((i % 100)==0):
+        print("Total Pesquisador Participacao Evento: "+str(i) )
+        logger.debug("Total Pesquisador Participacao Evento: "+str(i)) 
 
+      create_researcher_participation_events_dictionary_db(infos.id)    
 
 
     
@@ -223,23 +229,17 @@ def create_researcher_dictionary_db(test,type):
 
 
 
-def create_researcher_title_dictionary_db(researcher_id,article):
+def create_researcher_title_dictionary_db(researcher_id):
 
 
-  filter =""
-  if article==1:
-     filter =" AND  type='ARTICLE' AND created_at>= '%s'" % dataP
-  reg = sgbdSQL.consultar_db('SELECT  distinct title,b.type,year from bibliographic_production AS b'+
-  ' WHERE '+
- # is_new= true and 
-  'researcher_id=\''+ researcher_id +"\'"+filter+
-  # " AND char_length(unaccent(LOWER(r.term)))>3 AND to_tsvector('portuguese', unaccent(LOWER(r.term)))!='' and  unaccent(LOWER(r.term))!='sobre' "+
-   # " AND (       translate(unaccent(LOWER(title)),':','') ::tsvector@@ '"+unidecode.unidecode("robotica | educacional | educacao")+"'::tsquery)=true"+
-      #' AND "type" = \'ARTICLE\' '+
-      #' AND b.title LIKE \'%ROBÓTICA%\' '+
-      ' GROUP BY title,b.type,year')
+ 
+  filter =" AND  type in ('ARTICLE','BOOK','BOOK_CHAPTER') "
+  sql=""" SELECT  distinct title,b.type,year from bibliographic_production AS b  WHERE researcher_id='%s' %s """ % (researcher_id,filter)
+
+  reg = sgbdSQL.consultar_db(sql)
+
   logger.debug("Entrei nos artigos pesquisador "+researcher_id)
-  df_bd = pd.DataFrame(reg, columns=['title','b.type','year'])
+  df_bd = pd.DataFrame(reg, columns=['title','type_','year'])
     #print(df_bd.head())
   texto ="" 
   
@@ -252,25 +252,45 @@ def create_researcher_title_dictionary_db(researcher_id,article):
       tokens = tokenize.tokenize(infos.title)   
       #print(infos.title) 
       
-      insert_research_dictionary_db(tokens,"ARTICLE")
+      insert_research_dictionary_db(tokens,infos.type_)
+
+def create_researcher_participation_events_dictionary_db(researcher_id):
+   filter =""
+ 
+   sql="""SELECT  distinct title,year  as  year  from participation_events AS p
+          WHERE  type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')   and  p.researcher_id='%s' """ % (researcher_id)
 
 
+
+
+
+   reg = sgbdSQL.consultar_db(sql)
+  
+     
+   logger.debug("Entrei nos eventos  "+researcher_id)
+   df_bd = pd.DataFrame(reg, columns=['title','year'])
+   
+  
+   for i,infos in df_bd.iterrows():
+      #print(infos.title)
+      #print(infos.year)
+      #Retirando a pontuação
+      tokenize = RegexpTokenizer(r'\w+')
+      tokens =[]
+      tokens = tokenize.tokenize(infos.title)   
+      #print(infos.title) 
+      
+      insert_research_dictionary_db(tokens,"SPEAKER")
+    
   
 def create_researcher_patent_dictionary_db(researcher_id):
 
 
-  filter =""
-  if article==1:
-     filter =" and created_at>= '%s'" % dataP
-  reg = sgbdSQL.consultar_db('SELECT  distinct title,development_year  as  year  from patent AS b'+
-  ' WHERE '+
- # is_new= true and 
-  'researcher_id=\''+ researcher_id +"\'"+filter+
-  # " AND char_length(unaccent(LOWER(r.term)))>3 AND to_tsvector('portuguese', unaccent(LOWER(r.term)))!='' and  unaccent(LOWER(r.term))!='sobre' "+
-   # " AND (       translate(unaccent(LOWER(title)),':','') ::tsvector@@ '"+unidecode.unidecode("robotica | educacional | educacao")+"'::tsquery)=true"+
-      #' AND "type" = \'ARTICLE\' '+
-      #' AND b.title LIKE \'%ROBÓTICA%\' '+
-      ' GROUP BY  title,development_year ')
+ 
+  sql="""SELECT  distinct title,development_year  as  year  from patent AS b  WHERE researcher_id='%s' """ %researcher_id
+
+  reg = sgbdSQL.consultar_db(sql)
+ 
   logger.debug("Entrei nas patentes  "+researcher_id)
   df_bd = pd.DataFrame(reg, columns=['title','year'])
     #print(df_bd.head())
@@ -376,7 +396,8 @@ logger = logging.getLogger()
 logger.debug("Inicio")
 try:
 
-  lattes10.lattes_10_researcher_frequency_db(logger)
+  #lattes10.lattes_10_researcher_frequency_db(logger)
+  x=1  
 except Exception as e: 
           print (e)         
           traceback.print_exc()   
@@ -443,9 +464,9 @@ print("Passo II")
 
 
 #create_area_ditionary_db()
-teste=True
-article=True
-create_researcher_dictionary_db(teste,article)
+teste=0
+
+create_researcher_dictionary_db(teste)
 
 
 

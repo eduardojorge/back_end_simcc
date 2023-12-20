@@ -12,7 +12,7 @@ from Model.Bibliographic_Production_Researcher import Bibliographic_Production_R
 from Model.Magazine import Magazine
 
 from Rest.researcherTermRest import researcherTermRest
-from Rest.area_patentRest import areaRest
+from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
@@ -194,6 +194,9 @@ def researcher_image():
 def researcherName():
     list_researcher  = []
     name = request.args.get('name')
+    if name=="":
+         return jsonify(list_researcher), 200
+       
     #stemmer = nltk.RSLPStemmer()
  
     #termNovo=unidecode.unidecode(name.replace(";","&"))
