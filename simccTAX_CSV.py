@@ -25,7 +25,7 @@ project_.project_="4"
 
 
 
-def lista_researcher_patent_db(tax,term_p,term_i):
+def lista_researcher_patent_db(tax,term_p,term_i,termos):
     
    
      #reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
@@ -51,20 +51,19 @@ def lista_researcher_patent_db(tax,term_p,term_i):
      SELECT DISTINCT    r.id as researcher_id ,r.institution_id,r.city_id,
                
                
-                          '%s' as terms,p.title,p.development_year as year,'%s' as tax
+                          '%s' as terms_tax,p.title,p.development_year as year,'%s' as tax
                           FROM  researcher r  ,
-                          patent p, researcher_patent_frequency rpf
+                          patent p
                            WHERE 
                          
-                           rpf.researcher_id = r.id
-                           AND p.id = rpf.patent_id
+                      
 
-                           AND ( %s or %s )
+                            ( %s or %s )
 
                          
                       
      
-     """   % (term_p,tax,filter_p,filter_i)
+     """   % (termos,tax,filter_p,filter_i)
 
      print(sql)
     
@@ -80,7 +79,7 @@ def lista_researcher_patent_db(tax,term_p,term_i):
 
  
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
-def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
+def list_researchers_article_abstract_tax_db(tax,term_p,term_i,termos,type):
      
 
 
@@ -118,7 +117,7 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
                           sql = """SELECT DISTINCT r.id as id,b.title,
                            r.institution_id,
                            r.city_id,
-                          '%s' as terms,b.year,ba.qualis,'%s' as tax
+                          '%s' as terms_tax,b.year,ba.qualis,'%s' as tax,jcr
                         
                            FROM  researcher r ,
                           
@@ -136,12 +135,12 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
                           
 
                           
-                           ORDER BY year desc""" % (term_p,tax,filter_p,filter_i)
+                           ORDER BY year desc""" % (termos,tax,filter_p,filter_i)
                           print(sql)
                           reg = sgbdSQL.consultar_db(sql)
                           df_bd = pd.DataFrame(reg, columns=['researcher_id','title',
                                                              'institution_id','city_id',
-                                                             'terms','year','qualis','tax'])
+                                                             'terms','year','qualis','tax','jcr'])
                            
                          
 
@@ -157,17 +156,17 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
                             #AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
                            #  rf.researcher_id = r.id
                            sql ="""SELECT distinct r.id,r.abstract,   r.institution_id,
-                           r.city_id, '%s' as terms,'%s' as tax
+                           r.city_id, '%s' as terms_tax,'%s' as tax
                         
                            FROM   researcher r ,
                             institution i
                           where
                          
                        
-                          AND ( %s or %s)
+                           ( %s or %s)
                        
                                                 
-                          """ % (term_p,tax,filter_p,filter_i)
+                          """ % (termos,tax,filter_p,filter_i)
                            print(sql)
                            reg = sgbdSQL.consultar_db(sql)
                            df_bd = pd.DataFrame(reg, columns=['researcher_id','abstract',
@@ -182,11 +181,12 @@ def list_researchers_article_abstract_tax_db(tax,term_p,term_i,type):
       
 
 #df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
-df = pd.read_excel(r'files/tEnergiasRenovaveis.xlsx')
+df = pd.read_excel(r'C:\simccv3\tEnergiasRenovaveis.xlsx')
 print(df)
 TAX=0
 TERMOS_P=1
 TERMOS_I=2
+TERMOS=3
 x=0
 
 for i,infos in df.iterrows():
@@ -195,9 +195,9 @@ for i,infos in df.iterrows():
     print("teste x "+ str(infos[TAX]))
     
     #df1= list_researchers_article_abstract_tax_db(str(infos[TERMOS]),"ABSTRACT")
-    df1_patent =  lista_researcher_patent_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]))
-    df1_article =  list_researchers_article_abstract_tax_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),"ARTICLE")
-    df1_abstract =  list_researchers_article_abstract_tax_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),"ABSTRACT")
+    df1_patent =  lista_researcher_patent_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),str(infos[TERMOS]))
+    df1_article =  list_researchers_article_abstract_tax_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),str(infos[TERMOS]),"ARTICLE")
+    df1_abstract =  list_researchers_article_abstract_tax_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),str(infos[TERMOS]),"ABSTRACT")
 
 
 

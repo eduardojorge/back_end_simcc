@@ -1,98 +1,31 @@
-DEBUG 2023-12-19 04:38:03,061 - Inicio
-DEBUG 2023-12-19 04:38:03,787 - 
-      SELECT graduate_program_id,code,name,area,modality,type,rating 
-        FROM graduate_program gp
-    
-DEBUG 2023-12-19 04:38:04,478 - 
-    SELECT researcher_id,graduate_program_id,year,type_ 
-        FROM graduate_program_researcher
-    
-DEBUG 2023-12-19 04:38:06,478 - 
-        SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
-                             
-                                   FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
-			 									 ON b.id = bar.bibliographic_production_id , 
-	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
-                                   WHERE 
-                               
-                                    gpr.graduate_program_id = gp.graduate_program_id 
-                                   AND gpr.researcher_id = r.id 
-                                     AND r.id = b.researcher_id
-                                 
-                                   
-
-                        order by qualis desc
-    
-DEBUG 2023-12-19 04:38:07,889 - 
-         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
-                             
-                                   FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
-	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
-                                   WHERE 
-                               
-                                    gpr.graduate_program_id = gp.graduate_program_id 
-                                   AND gpr.researcher_id = r.id 
-                                     AND r.id = b.researcher_id
-                                 
-                                   AND   b.id = bar.bibliographic_production_id
-
-                        order by qualis desc
-   
-DEBUG 2023-12-19 04:38:09,860 - 
-            
-         	SELECT title,
-            
-            
-            qualis,year,r.id as researcher_id,
-            r.name as researcher,
-			bar.periodical_magazine_name as name_magazine,issn AS issn,jcr as jcr,jcr_link, b.type as type
-                           
-          FROM  
-            PUBLIC.bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
-			  ON b.id = bar.bibliographic_production_id , researcher r
-          WHERE 
-          
-         r.id =  b.researcher_id
+DEBUG 2023-12-20 07:45:54,826 - Inicio
+DEBUG 2023-12-20 07:45:57,962 - 
       
-         
-
-                    
-        
-         
-DEBUG 2023-12-19 04:38:10,987 - 
-          SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
-          UNION
-          SELECT researcher_id,title,YEAR,'SOFTWARE' from software
-          UNION
-          SELECT researcher_id,title,YEAR,'BRAND' from brand
-          UNION
-          SELECT researcher_id,title,YEAR,'REPORT' from research_report
-
-    
-DEBUG 2023-12-19 04:38:11,772 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
-        
-
-        FROM  researcher r 
-DEBUG 2023-12-19 04:38:13,160 - 
-           SELECT COUNT(*),a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
-		FROM bibliographic_production a LEFT JOIN bibliographic_production_article ba ON  a.id = ba.bibliographic_production_id, bibliographic_production b, 
-		 graduate_program_researcher gp
-      WHERE  (a.doi = b.doi OR a.title = b.title)    AND a.researcher_id = gp.researcher_id AND b.researcher_id = gp.researcher_id 
   
-      GROUP BY a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
-      HAVING COUNT(*)>1
+                           
+                                 SELECT distinct  title,b.type as tipo,b.researcher_id,year,i.id,
+									                 bar.qualis,bar.periodical_magazine_name,bar.jcr,bar.jcr_link,
+									                 c.id
+                               from bibliographic_production AS b LEFT JOIN bibliographic_production_article bar ON b.id = bar.bibliographic_production_id,
+										      researcher r  LEFT JOIN  institution i ON r.institution_id = i.id  LEFT JOIN  city c ON r.city_id = c.id
+							
+                     
+                                where b.researcher_id is not null 
+                                  AND r.id =  b.researcher_id 
+                                  
+                                  ORDER  BY  YEAR desc
+                           
+                           
+                              
+                             
+                         
+                                
+
+
     
-DEBUG 2023-12-19 04:38:21,364 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
+DEBUG 2023-12-20 07:45:59,867 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
 
         FROM  researcher r 
-DEBUG 2023-12-19 04:38:22,323 - 
-          SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
-          UNION
-          SELECT researcher_id,title,YEAR,'SOFTWARE' from software
-          UNION
-          SELECT researcher_id,title,YEAR,'BRAND' from brand
-          UNION
-          SELECT researcher_id,title,YEAR,'REPORT' from research_report
-
-    
+DEBUG 2023-12-20 07:45:59,996 -    SELECT i.id,i.name, i.acronym  FROM institution i 
+DEBUG 2023-12-20 07:46:00,116 -    SELECT c.id,c.name  FROM city c 
