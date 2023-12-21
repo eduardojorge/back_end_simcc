@@ -338,7 +338,7 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
      sql="""SELECT distinct r.id as id,
              r.name as researcher_name,i.name as institution,rp.articles as articles,
              rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,
-             r.abstract as abstract,rp.great_area as area,rp.city as city, i.image as image,r.orcid as orcid, 
+             r.abstract as abstract,rp.great_area as area,c.name as city, i.image as image,r.orcid as orcid, 
              r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
              TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update
              FROM  researcher  r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id  , city c, 

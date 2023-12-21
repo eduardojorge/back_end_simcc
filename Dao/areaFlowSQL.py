@@ -342,6 +342,85 @@ def lista_researcher_area_speciality_db(text,institution,graduate_program_id):
      print (df_bd)
      return df_bd
 
+
+
+
+
+
+
+def lista_researcher_participation_event_db(text,institution,graduate_program_id):
+    
+   
+     #reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
+      #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
+     print(text)
+     text = text.replace("&"," ")
+     text = unidecode.unidecode(text.lower())
+
+     filter = util.filterSQLRank2(text,";","p.title")
+     #filter= util.filterSQL(text,";","or","gae.name")
+     
+
+     filterinstitution= util.filterSQL(institution,";","or","i.name")
+     print("XXXXXXXXXXXXXXXXXXXXX" +text)
+     print(filterinstitution)
+
+
+     filtergraduate_program=""
+     if graduate_program_id!="":
+        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
+
+     # AND rpf.researcher_id = r.id
+     #  #researcher_patent_frequency rpf,   
+     sql="""
+    
+     SELECT DISTINCT COUNT(distinct p.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
+               r.name as researcher_name,i.name as institution,rp.articles as articles,
+                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
+                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
+                         , institution i, researcher_production rp,
+                                   participation_events p,  city c 
+                           WHERE 
+                           type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista') 
+                       
+                           AND r.city_id=c.id
+                 
+                           AND r.institution_id = i.id 
+                           AND rp.researcher_id = r.id 
+                           AND p.researcher_id = r.id
+                          
+
+                           %s %s %s
+                            Group by rp.great_area ,rp.area_specialty , r.id ,
+                           r.name ,i.name ,rp.articles ,
+                         rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
+                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+
+                         
+                      
+     
+     """   % (filter,filterinstitution,filtergraduate_program)
+
+     print(sql)
+    
+
+     reg = sgbdSQL.consultar_db(sql)
+
+     
+
+
+     df_bd = pd.DataFrame(reg, columns=['qtd','area','area_specialty','id','researcher_name',
+                                        'institution','articles','book_chapters',
+                                        'book','lattes','lattes_10_id',
+                                        'abstract','orcid','city','image',
+                                        'patent','software','brand','lattes_update',
+                                        'graduation'])
+     print (df_bd)
+     return df_bd
+
+
+
 def lista_researcher_patent_db(text,institution,graduate_program_id):
     
    
@@ -368,10 +447,10 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      #  #researcher_patent_frequency rpf,   
      sql="""
     
-     SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
+     SELECT DISTINCT COUNT(distinct p.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
                r.name as researcher_name,i.name as institution,rp.articles as articles,
                          rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,'%s' as terms,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
                           FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
                          , institution i, researcher_production rp,patent p,  city c 
                            WHERE 
@@ -385,11 +464,15 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
                           
 
                            %s %s %s
+                            Group by rp.great_area ,rp.area_specialty , r.id ,
+                           r.name ,i.name ,rp.articles ,
+                         rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
+                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
 
                          
                       
      
-     """   % (text,filter,filterinstitution,filtergraduate_program)
+     """   % (filter,filterinstitution,filtergraduate_program)
 
      print(sql)
     
@@ -399,10 +482,10 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
      
 
 
-     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id','researcher_name',
+     df_bd = pd.DataFrame(reg, columns=['qtd','area','area_specialty','id','researcher_name',
                                         'institution','articles','book_chapters',
                                         'book','lattes','lattes_10_id',
-                                        'abstract','orcid','city','image','terms',
+                                        'abstract','orcid','city','image',
                                         'patent','software','brand','lattes_update',
                                         'graduation'])
      print (df_bd)
@@ -500,13 +583,13 @@ def lista_researcher_book_db(text,institution,graduate_program_id,type):
      # AND rpf.researcher_id = r.id
      #  #researcher_patent_frequency rpf,   
         
-     filterType=" AND b.type='"+type+"' OR  b.type='BOOK_CHAPTER' "   
+     filterType=" AND (b.type='"+type+"' OR  b.type='BOOK_CHAPTER') "   
      sql="""
     
-     SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
+     SELECT DISTINCT COUNT(distinct b.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
                r.name as researcher_name,i.name as institution,rp.articles as articles,
                          rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,'%s' as terms,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
                           FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
                          , institution i, researcher_production rp,bibliographic_production b,  city c 
                            WHERE 
@@ -520,11 +603,19 @@ def lista_researcher_book_db(text,institution,graduate_program_id,type):
                           
 
                            %s %s %s %s
+                            GROUP BY rp.great_area ,rp.area_specialty , r.id ,
+                              r.name ,i.name ,rp.articles ,
+                         rp.book_chapters , rp.book , r.lattes_id ,r.lattes_10_id ,r.abstract ,
+                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                           ORDER BY qtd desc
+
+
+
 
                          
                       
      
-     """   % (text,filter,filterinstitution,filtergraduate_program,filterType)
+     """   % (filterinstitution,filtergraduate_program,filterType,filter)
 
      print(sql)
     
@@ -534,10 +625,10 @@ def lista_researcher_book_db(text,institution,graduate_program_id,type):
      
 
 
-     df_bd = pd.DataFrame(reg, columns=['area','area_specialty','id','researcher_name',
+     df_bd = pd.DataFrame(reg, columns=['qtd','area','area_specialty','id','researcher_name',
                                         'institution','articles','book_chapters',
                                         'book','lattes','lattes_10_id',
-                                        'abstract','orcid','city','image','terms',
+                                        'abstract','orcid','city','image',
                                         'patent','software','brand','lattes_update',
                                         'graduation'])
      print (df_bd)

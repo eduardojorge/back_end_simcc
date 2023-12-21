@@ -29,7 +29,7 @@ def list_research_dictionary_db(initials,type):
         fetch="  fetch FIRST 50 rows only"
      filterType="" 
      if type=='BOOK':
-          filterType = " type_='BOOK' or type_='BOOK_CHAPTER' "   
+          filterType = " (type_='BOOK' or type_='BOOK_CHAPTER') "   
      else:
          filterType = " type_='"+type+"'"
                 
@@ -65,7 +65,8 @@ def list_research_dictionary_db(initials,type):
 
 
 
-def lists_patent_production_researcher_db(researcher_id,year):
+def lists_patent_production_researcher_db(researcher_id,year,term):
+      filter= util.filterSQLRank(term,";","title")
       
 
       sql = """SELECT p.id as id, p.title as title, 
@@ -75,7 +76,8 @@ def lists_patent_production_researcher_db(researcher_id,year):
                            where 
                            researcher_id='%s'
                            AND p.development_year::integer>=%s
-                           ORDER BY development_year desc""" % (researcher_id,year)
+                           %s
+                           ORDER BY development_year desc""" % (researcher_id,year,filter)
                           #print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
@@ -85,7 +87,12 @@ def lists_patent_production_researcher_db(researcher_id,year):
     
       return df_bd
 
-def lists_book_production_researcher_db(researcher_id,year):
+def lists_book_production_researcher_db(researcher_id,year,term):
+
+      filter= util.filterSQLRank(term,";","title")
+
+
+
       sql = """SELECT b.id as id, b.title as title, 
             b.year as year,bb.isbn,bb.publishing_company
                         
@@ -95,7 +102,8 @@ def lists_book_production_researcher_db(researcher_id,year):
                            researcher_id='%s'
                            AND b.year_>=%s
                            AND b.type='%s'
-                           ORDER BY year_ desc""" % (researcher_id,year,"BOOK")
+                           %s
+                           ORDER BY year_ desc""" % (researcher_id,year,"BOOK",filter)
       print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
@@ -104,7 +112,10 @@ def lists_book_production_researcher_db(researcher_id,year):
       df_bd = pd.DataFrame(reg, columns=['id','title','year','isbn','publishing_company'])
 
       return df_bd
-def lists_book_chapter_production_researcher_db(researcher_id,year):
+
+def lists_book_chapter_production_researcher_db(researcher_id,year,term):
+      filter= util.filterSQLRank(term,";","title")
+
       sql = """SELECT b.id as id, b.title as title, 
             b.year as year,bc.isbn,bc.publishing_company
                         
@@ -114,7 +125,8 @@ def lists_book_chapter_production_researcher_db(researcher_id,year):
                            researcher_id='%s'
                            AND b.year_>=%s
                            AND b.type='%s'
-                           ORDER BY year_ desc""" % (researcher_id,year,"BOOK_CHAPTER")
+                           %s
+                           ORDER BY year_ desc""" % (researcher_id,year,"BOOK_CHAPTER",filter)
                           #print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
@@ -232,6 +244,9 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
      print("xxx - "+graduate_program_id)
 
      if (type=='ARTICLE'):
+                               
+                          filterType=" AND b.type='ARTICLE' "
+                                     
                           #filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
                           #researcher_frequency rf,
                           # AND rf.researcher_id = r.id 
@@ -248,13 +263,13 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                            WHERE 
                             c.id = r.city_id 
                           
-                           %s %s %s  
+                           %s %s %s %s 
      
                           
                            AND r.institution_id = i.id 
                            AND rp.researcher_id = r.id 
                            AND b.researcher_id = r.id
-                           AND b.type='ARTICLE'
+                           
                             
                           
 
@@ -263,7 +278,7 @@ def list_researchers_originals_words_db(terms,institution,type,boolean_condition
                            rp.great_area,rp.city, r.orcid, 
                            i.image,r.graduation,
                            rp.patent,rp.software,rp.brand,TO_CHAR(r.last_update,'dd/mm/yyyy') 
-                           ORDER BY qtd desc""" % (terms,filter,filterinstitution,filtergraduate_program)
+                           ORDER BY qtd desc""" % (terms,filter,filterinstitution,filtergraduate_program,filterType)
                           print(sql)
                           reg = sgbdSQL.consultar_db(sql)
 
@@ -496,19 +511,85 @@ def lista_institution_production_db(text,institution,type_):
      #researcher_frequency rf,
      #  AND rf.researcher_id = r.id
      print("type " + type_)
-     sql="""SELECT  COUNT(distinct b.title) AS qtd,i.id as id, i.name as institution,image 
-            FROM  researcher r , institution i, researcher_production rp, bibliographic_production AS b 
+     sql=""
+
+     if (type_=='SPEAKER' ):
+            
+         filter =  filter= util.filterSQLRank(text,";","event_name")
+            
+             
+         
+           
+         sql="""SELECT  COUNT(distinct r.id) AS qtd,i.id as id, i.name as institution,image 
+                  FROM  researcher r , institution i, researcher_production rp,   participation_events AS b 
                            WHERE 
                             r.institution_id = i.id 
                            AND r.id = b.researcher_id 
                            AND rp.researcher_id = r.id 
                            AND acronym IS NOT NULL
-                           AND b.type='%s'
+
+                           AND type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista') 
+                           
                            
                            %s
                            %s
                           
-                           GROUP BY  i.id, i.name """ % (type_,filter,filterinstitution)
+                           GROUP BY  i.id, i.name """ % (filter,filterinstitution)
+
+     if (type_=='ABSTRACT' ):
+            
+            filter =  filter= util.filterSQLRank(text,";","r.abstract")
+            
+            sql="""SELECT  COUNT(distinct r.id) AS qtd,i.id as id, i.name as institution,image 
+                  FROM  researcher r , institution i, researcher_production rp 
+                           WHERE 
+                            r.institution_id = i.id 
+                          
+                           AND rp.researcher_id = r.id 
+                           AND acronym IS NOT NULL
+                         
+                           
+                           %s
+                           %s
+                          
+                           GROUP BY  i.id, i.name """ % (filter,filterinstitution)
+
+     if (type_=='ARTICLE' or type_=='BOOK'):
+            filterType= " AND b.type='%s'" %type_
+            
+            if (type_=='BOOK'):
+                  filterType = " AND (b.type='%s' or b.type='BOOK_CHAPTER') " % type_ 
+           #AND acronym IS NOT NULL
+            sql="""SELECT  COUNT( r.id) AS qtd,i.id as id, i.name as institution,image 
+                  FROM  researcher r , institution i, researcher_production rp, bibliographic_production AS b 
+                           WHERE 
+                            r.institution_id = i.id 
+                           AND r.id = b.researcher_id 
+                           AND rp.researcher_id = r.id 
+                           AND acronym IS NOT NULL
+                           
+                           %s
+                           
+                           %s
+                           %s
+                          
+                           GROUP BY  i.id, i.name """ % (filterType,filter,filterinstitution)
+            
+
+     if (type_=='PATENT'):
+            sql="""SELECT  COUNT(distinct b.title) AS qtd,i.id as id, i.name as institution,image 
+                  FROM  researcher r , institution i, researcher_production rp, patent AS b 
+                           WHERE 
+                            r.institution_id = i.id 
+                           AND r.id = b.researcher_id 
+                           AND rp.researcher_id = r.id 
+                           AND acronym IS NOT NULL
+                         
+                           
+                           %s
+                           %s
+                          
+                           GROUP BY  i.id, i.name """ % (filter,filterinstitution)       
      print(sql)
      
      reg = sgbdSQL.consultar_db(sql)

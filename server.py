@@ -24,7 +24,17 @@ import project as project_
 import sys
 import nltk
 from nltk.tokenize import RegexpTokenizer
+
 project_.project_=sys.argv[1]
+
+try:
+        port=sys.argv[2]
+except (Exception) as error:
+        port="8080"
+   
+
+   
+
 
 
 
@@ -194,7 +204,7 @@ def researcher_image():
 def researcherName():
     list_researcher  = []
     name = request.args.get('name')
-    if name=="":
+    if name=="null":
          return jsonify(list_researcher), 200
        
     #stemmer = nltk.RSLPStemmer()
@@ -271,7 +281,7 @@ def total():
     "researcher": str(researcher_total),
     "publications": str(bibliographic_production_total),
     "organizations": str(institution_total), 
-    "version":"1.0.2 (beta)"
+    "version":"1.0.3 (beta)"
 
     }]
    
@@ -386,4 +396,5 @@ def bibliographic_production_article():
 if __name__ == '__main__':
     # run app in debug mode on port 5000
    # context = ('cert.pem', 'local.key')#certificate and key files
-    app.run(debug=True, port=5001, host='0.0.0.0')
+    
+    app.run(debug=True, port=port, host='0.0.0.0')

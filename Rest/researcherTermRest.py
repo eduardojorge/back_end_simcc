@@ -268,12 +268,14 @@ def book_production_researcher():
     #terms = request.args.get('terms')
     researcher_id = request.args.get('researcher_id')
     year=request.args.get('year')
-   
+    term= request.args.get('term')
 
    
 
    
-    df_bd =termFlowSQL.lists_book_production_researcher_db(researcher_id,1000)
+
+   
+    df_bd =termFlowSQL.lists_book_production_researcher_db(researcher_id,year,term)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
@@ -301,13 +303,14 @@ def book_chapter_production_researcher():
     list_book_chapter_production_researcher  = []
     #terms = request.args.get('terms')
     researcher_id = request.args.get('researcher_id')
+    term= request.args.get('term')
     year=request.args.get('year')
    
 
    
 
    
-    df_bd =termFlowSQL.lists_book_chapter_production_researcher_db(researcher_id,1000)
+    df_bd =termFlowSQL.lists_book_chapter_production_researcher_db(researcher_id,year,term)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
@@ -412,6 +415,7 @@ def software_production_researcher():
 def patent_production_researcher():
     list_patent_production_researcher  = []
     #terms = request.args.get('terms')
+    term= request.args.get('term')
     researcher_id = request.args.get('researcher_id')
     year=request.args.get('year')
    
@@ -419,7 +423,7 @@ def patent_production_researcher():
    
 
    
-    df_bd =termFlowSQL.lists_patent_production_researcher_db(researcher_id,1000)
+    df_bd =termFlowSQL.lists_patent_production_researcher_db(researcher_id,year,term)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
@@ -594,11 +598,13 @@ def institutionFrequenci():
     termNovo=terms.lower()
     print(terms)
     university = str(request.args.get('university'))+""
+
+    type_ = str(request.args.get('type'))+""
     #terms = unidecode(terms.lower())
     #print(termNovo)
    # print(stemmer.stem(termNovo))
-    type_="ARTICLE"
-    print(type_)
+    #type_="ARTICLE"
+    #print(type_)
     df_bd =termFlowSQL.lista_institution_production_db(termNovo,university,type_)
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():

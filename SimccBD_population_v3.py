@@ -168,11 +168,10 @@ def insert_researcher_patent_frequency_caracter_bd(researcher_id):
 
 
 # Função para consultar o Banco SIMCC
-def create_researcher_dictionary_db(test):
+def create_researcher_dictionary_db(test,article,abstract,patent,event):
  
 
-  sql = "DELETE FROM research_dictionary "
-  sgbdSQL.execScript_db(sql) 
+  
 
   
   filter=""
@@ -190,7 +189,11 @@ def create_researcher_dictionary_db(test):
 
   
   # Article
-  for i,infos in df_bd.iterrows():
+  if (article==1):
+    sql = "DELETE FROM research_dictionary where type_='ARTICLE'"  
+    sgbdSQL.execScript_db(sql) 
+    for i,infos in df_bd.iterrows():
+      
       if ((i % 100)==0):
         print("Total Pesquisador Article: "+str(i) )
         logger.debug("Total Pesquisador Article: "+str(i))
@@ -200,7 +203,10 @@ def create_researcher_dictionary_db(test):
      
  
   # Abstract
-  for i,infos in df_bd.iterrows():
+  if (abstract==1):
+    sql = "DELETE FROM research_dictionary where type_='ABSTRACT'"  
+    sgbdSQL.execScript_db(sql) 
+    for i,infos in df_bd.iterrows():
       if ((i % 100)==0):
         print("Total Pesquisador Abstract: "+str(i) )
         logger.debug("Total Pesquisador abstract: "+str(i)) 
@@ -208,15 +214,23 @@ def create_researcher_dictionary_db(test):
       create_researcher_abstract_dictionary_db(infos.id)    
 
  #Patent
-  for i,infos in df_bd.iterrows():
+ 
+  if (patent==1):
+    sql = "DELETE FROM research_dictionary where type_='PATENT'"  
+    sgbdSQL.execScript_db(sql)      
+    for i,infos in df_bd.iterrows():
       if ((i % 100)==0):
         print("Total Pesquisador Patent: "+str(i) )
         logger.debug("Total Pesquisador Patent: "+str(i)) 
 
       create_researcher_patent_dictionary_db(infos.id)    
  
-#Patent
-  for i,infos in df_bd.iterrows():
+#Event
+# Abstract
+  if (event==1):
+    sql = "DELETE FROM research_dictionary where type_='SPEAKER'"  
+    sgbdSQL.execScript_db(sql)       
+    for i,infos in df_bd.iterrows():
       if ((i % 100)==0):
         print("Total Pesquisador Participacao Evento: "+str(i) )
         logger.debug("Total Pesquisador Participacao Evento: "+str(i)) 
@@ -257,7 +271,7 @@ def create_researcher_title_dictionary_db(researcher_id):
 def create_researcher_participation_events_dictionary_db(researcher_id):
    filter =""
  
-   sql="""SELECT  distinct title,year  as  year  from participation_events AS p
+   sql="""SELECT  distinct event_name,year  as  year  from participation_events AS p
           WHERE  type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')   and  p.researcher_id='%s' """ % (researcher_id)
 
 
@@ -466,7 +480,7 @@ print("Passo II")
 #create_area_ditionary_db()
 teste=0
 
-create_researcher_dictionary_db(teste)
+create_researcher_dictionary_db(teste,0,0,0,1)
 
 
 

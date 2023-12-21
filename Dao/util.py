@@ -20,7 +20,7 @@ def filterSQLRank(text,split,attribute_2):
 
       if (len(t))==1:
           #filter = " unaccent(LOWER("+attribute+"))='"+t[0].lower()+"' "+booleanOperator+ ""+ filter
-          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.05)     
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.04)     
           print("Rank"+text)
       
               
