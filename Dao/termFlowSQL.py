@@ -202,7 +202,9 @@ def lists_guidance_researcher_db(researcher_id,year):
 
 
 
-def lists_pevent_researcher_db(researcher_id,year):
+def lists_pevent_researcher_db(researcher_id,year,term):
+      filter= util.filterSQLRank(term,";","event_name")
+
       sql = """SELECT p.id as id, event_name, nature,form_participation,year
            
                         
@@ -210,7 +212,8 @@ def lists_pevent_researcher_db(researcher_id,year):
                            where 
                            researcher_id='%s'
                            AND p.year>=%s
-                           ORDER BY year desc""" % (researcher_id,year)
+                           %s
+                           ORDER BY year desc""" % (researcher_id,year,filter)
                           #print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
