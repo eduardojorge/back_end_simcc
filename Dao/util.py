@@ -20,12 +20,12 @@ def filterSQLRank(text,split,attribute_2):
 
       if (len(t))==1:
           #filter = " unaccent(LOWER("+attribute+"))='"+t[0].lower()+"' "+booleanOperator+ ""+ filter
-          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.02)     
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2, unidecode.unidecode(text),0.02)     
           print("Rank"+text)
       
               
       else:     
-          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2,t[0],t[1],0.02)    
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2, unidecode.unidecode(t[0]), unidecode.unidecode(t[1]),0.02)    
       x = len(filter)   
       filter = filter[0:x-3]
       filter = " AND ("+filter+")" 
@@ -45,10 +45,10 @@ def filterSQLRank2(text,split,attribute_2):
 
       if (len(t))==1:
           #filter = """ (translate(unaccent(LOWER(%s)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true   """ % (attribute,text)
-          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2,text,0.02)     
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2, unidecode.unidecode(text),0.02)     
           print("Rank2"+text)
       else:     
-          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2,t[0],t[1],0.02)    
+          filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2, unidecode.unidecode(t[0]), unidecode.unidecode(t[1]),0.02)    
       x = len(filter)   
       filter = filter[0:x-3]
       filter = " AND ("+filter+")" 
@@ -66,7 +66,7 @@ def filterSQL(text,split,booleanOperator,attribute):
       filter = ""
       i=0;
       for word in t:
-          filter = " unaccent(LOWER("+attribute+"))='"+word.lower()+"' "+booleanOperator+ ""+ filter
+          filter = " unaccent(LOWER("+attribute+"))='"+ unidecode.unidecode(word.lower())+"' "+booleanOperator+ ""+ filter
           i=i+1
       x = len(filter)   
       filter = filter[0:x-3]
@@ -82,7 +82,7 @@ def filterSQLLike(text,split,booleanOperator,attribute):
       filter = ""
       i=0;
       for word in t:
-          filter = " unaccent(LOWER("+attribute+")) LIKE '%"+word.lower()+"%' "+booleanOperator+ ""+ filter
+          filter = " unaccent(LOWER("+attribute+")) LIKE '%"+ unidecode.unidecode(word.lower())+"%' "+booleanOperator+ ""+ filter
           i=i+1
       x = len(filter)   
       filter = filter[0:x-3]

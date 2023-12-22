@@ -202,8 +202,10 @@ def lists_guidance_researcher_db(researcher_id,year):
 
 
 
-def lists_pevent_researcher_db(researcher_id,year,term):
+def lists_pevent_researcher_db(researcher_id,year,term,nature):
       filter= util.filterSQLRank(term,";","event_name")
+      filterNature= util.filterSQL(nature,";","or","nature")
+
 
       sql = """SELECT p.id as id, event_name, nature,form_participation,year
            
@@ -213,10 +215,13 @@ def lists_pevent_researcher_db(researcher_id,year,term):
                            researcher_id='%s'
                            AND p.year>=%s
                            %s
-                           ORDER BY year desc""" % (researcher_id,year,filter)
+                           %s
+
+                           ORDER BY year desc""" % (researcher_id,year,filterNature,filter)
                           #print(sql)
 
       reg = sgbdSQL.consultar_db(sql)
+      print(sql)
 
 
       df_bd = pd.DataFrame(reg, columns=['id','event_name', 'nature','form_participation','year'])

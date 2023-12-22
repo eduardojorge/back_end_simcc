@@ -417,12 +417,14 @@ def pevent_researcher():
     year=request.args.get('year')
 
     term=request.args.get('term')
+
+    nature=request.args.get('nature')
    
 
    
 
    
-    df_bd =termFlowSQL.lists_pevent_researcher_db(researcher_id,year,term)
+    df_bd =termFlowSQL.lists_pevent_researcher_db(researcher_id,year,term,nature)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
