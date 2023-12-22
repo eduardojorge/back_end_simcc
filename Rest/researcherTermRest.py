@@ -17,6 +17,7 @@ from Model.Book_Chapter_Researcher import Book_Chapter_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.Researcher_Report import Researcher_Report
 from Model.Year_Barema import Year_Barema
+from Model.PEvent_Researcher import PEvent_Researcher
 import  Dao.resarcher_baremaSQL as  resarcher_baremaSQL
 import Dao.areaFlowSQL
 
@@ -385,7 +386,7 @@ def software_production_researcher():
    
 
    
-    df_bd =termFlowSQL.lists_software_production_researcher_db(researcher_id,1000)
+    df_bd =termFlowSQL.lists_software_production_researcher_db(researcher_id,year)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
@@ -407,7 +408,43 @@ def software_production_researcher():
     return jsonify(list_software_production_researcher), 200
 
 
+@researcherTermRest.route('/pevent_researcher', methods=['GET'])
+@cross_origin(origin="*", headers=["Content-Type"])
+def pevent_researcher():
+    list_pevent_researcher  = []
+    #terms = request.args.get('terms')
+    researcher_id = request.args.get('researcher_id')
+    year=request.args.get('year')
+   
 
+   
+
+   
+    df_bd =termFlowSQL.lists_pevent_researcher_db(researcher_id,year)
+
+    #df_bd.sort_values(by="articles", ascending=False, inplace=True)
+    for i,infos in df_bd.iterrows():
+
+        #print(str(infos.form_participation))
+
+        p = PEvent_Researcher()
+        p.id =  str(infos.id)
+        p.event_name = str(infos.event_name)
+        p.nature = str(infos.nature)
+        p.participation = str(infos.form_participation)
+        p.year =  str(infos.year)
+       # print(p.participation)
+     
+       
+
+
+        #print(researcher)
+        list_pevent_researcher.append(p.getJson()) 
+     
+
+
+ 
+    return jsonify(list_pevent_researcher), 200
 
 #lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route('/patent_production_researcher', methods=['GET'])

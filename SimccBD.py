@@ -329,8 +329,8 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
            filter =  " and LOWER(r.name) like '"+t[0]+"%'"
          
      else:    
-        
-          filter= util.filterSQLRank(text,";","or","r.name","r.name")     
+          filter = util.filterSQL(text,";","or","r.name")
+          #filter= util.filterSQLRank(text,";","r.name")     
 
      print(filter)  
    

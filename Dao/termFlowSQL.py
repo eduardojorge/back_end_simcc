@@ -197,7 +197,30 @@ def lists_guidance_researcher_db(researcher_id,year):
 
       return df_bd
       
-      
+
+
+
+
+
+def lists_pevent_researcher_db(researcher_id,year):
+      sql = """SELECT p.id as id, event_name, nature,form_participation,year
+           
+                        
+            FROM  participation_events p
+                           where 
+                           researcher_id='%s'
+                           AND p.year>=%s
+                           ORDER BY year desc""" % (researcher_id,year)
+                          #print(sql)
+
+      reg = sgbdSQL.consultar_db(sql)
+
+
+      df_bd = pd.DataFrame(reg, columns=['id','event_name', 'nature','form_participation','year'])
+    
+      return df_bd
+
+
 def lists_software_production_researcher_db(researcher_id,year):
       sql = """SELECT s.id as id, s.title as title, 
             s.year as year

@@ -89,6 +89,7 @@ def researcherEvent():
 
 
 
+
 ######### Patent 
 
 @areaRest.route('/researcherPatent', methods=['GET'])
