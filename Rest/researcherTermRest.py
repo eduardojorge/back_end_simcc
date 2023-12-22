@@ -350,7 +350,7 @@ def researcher_report():
    
 
    
-    df_bd =termFlowSQL.lists_Researcher_Report_db(researcher_id,1000)
+    df_bd =termFlowSQL.lists_Researcher_Report_db(researcher_id,year)
 
     #df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i,infos in df_bd.iterrows():
