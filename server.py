@@ -30,7 +30,7 @@ project_.project_=sys.argv[1]
 try:
         port=sys.argv[2]
 except (Exception) as error:
-        port="8080"
+        port=8080
    
 
    
@@ -281,7 +281,7 @@ def total():
     "researcher": str(researcher_total),
     "publications": str(bibliographic_production_total),
     "organizations": str(institution_total), 
-    "version":"1.0.3.2 (beta)"
+    "version":"1.0.4 (beta)"
 
     }]
    
