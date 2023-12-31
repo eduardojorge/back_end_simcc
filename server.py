@@ -281,7 +281,7 @@ def total():
     "researcher": str(researcher_total),
     "publications": str(bibliographic_production_total),
     "organizations": str(institution_total), 
-    "version":"1.0.4 (beta)"
+    "version":"1.0.5 (beta)"
 
     }]
    
