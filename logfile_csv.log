@@ -1,13 +1,13 @@
-DEBUG 2023-12-22 03:36:48,458 - Inicio
-DEBUG 2023-12-22 03:36:48,604 - 
+DEBUG 2023-12-28 04:45:16,158 - Inicio
+DEBUG 2023-12-28 04:45:16,330 - 
       SELECT graduate_program_id,code,name,area,modality,type,rating 
         FROM graduate_program gp
     
-DEBUG 2023-12-22 03:36:48,715 - 
+DEBUG 2023-12-28 04:45:16,383 - 
     SELECT researcher_id,graduate_program_id,year,type_ 
         FROM graduate_program_researcher
     
-DEBUG 2023-12-22 03:36:49,031 - 
+DEBUG 2023-12-28 04:45:16,815 - 
         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
                              
                                    FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
@@ -23,7 +23,7 @@ DEBUG 2023-12-22 03:36:49,031 -
 
                         order by qualis desc
     
-DEBUG 2023-12-22 03:36:49,322 - 
+DEBUG 2023-12-28 04:45:17,101 - 
          SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
                              
                                    FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
@@ -38,7 +38,7 @@ DEBUG 2023-12-22 03:36:49,322 -
 
                         order by qualis desc
    
-DEBUG 2023-12-22 03:36:51,548 - 
+DEBUG 2023-12-28 04:45:19,220 - 
             
          	SELECT title,
             
@@ -59,7 +59,7 @@ DEBUG 2023-12-22 03:36:51,548 -
                     
         
          
-DEBUG 2023-12-22 03:36:53,316 - 
+DEBUG 2023-12-28 04:45:21,673 - 
           SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
           UNION
           SELECT researcher_id,title,YEAR,'SOFTWARE' from software
@@ -69,11 +69,11 @@ DEBUG 2023-12-22 03:36:53,316 -
           SELECT researcher_id,title,YEAR,'REPORT' from research_report
 
     
-DEBUG 2023-12-22 03:36:53,464 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
+DEBUG 2023-12-28 04:45:21,921 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
         
 
         FROM  researcher r 
-DEBUG 2023-12-22 03:36:53,776 - 
+DEBUG 2023-12-28 04:45:22,159 - 
            SELECT COUNT(*),a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
 		FROM bibliographic_production a LEFT JOIN bibliographic_production_article ba ON  a.id = ba.bibliographic_production_id, bibliographic_production b, 
 		 graduate_program_researcher gp
@@ -82,11 +82,11 @@ DEBUG 2023-12-22 03:36:53,776 -
       GROUP BY a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
       HAVING COUNT(*)>1
     
-DEBUG 2023-12-22 03:37:08,982 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
+DEBUG 2023-12-28 04:45:36,249 -  SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
         
 
         FROM  researcher r 
-DEBUG 2023-12-22 03:37:09,134 - 
+DEBUG 2023-12-28 04:45:36,348 - 
           SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
           UNION
           SELECT researcher_id,title,YEAR,'SOFTWARE' from software
@@ -96,3 +96,7 @@ DEBUG 2023-12-22 03:37:09,134 -
           SELECT researcher_id,title,YEAR,'REPORT' from research_report
 
     
+DEBUG 2023-12-28 04:45:36,427 -  SELECT i.id, name, acronym 
+        
+
+        FROM  institution i 

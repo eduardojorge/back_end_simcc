@@ -198,6 +198,22 @@ def researcher_csv_db():
 
    df_bd.to_csv(dir+'researcher.csv')
 
+def institution_csv_db():
+
+      sql=""" SELECT i.id, name, acronym 
+        
+
+        FROM  institution i """
+
+      reg = sgbdSQL.consultar_db(sql)
+   
+      logger.debug(sql)
+        
+   
+      df_bd = pd.DataFrame(reg, columns=['institution_id','name','acronym'])
+
+      df_bd.to_csv(dir+'dim_institution.csv')
+
 
 def researcher_production_novo_csv_db():
    
@@ -470,3 +486,5 @@ article_qualis_csv_distinct_db()
 researcher_csv_db()
 
 researcher_production_tecnical_year_csv_db()
+
+institution_csv_db()
