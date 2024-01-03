@@ -1,30 +1,27 @@
+# README
 
-Passo I: Baixar Curriculos
+## Passo I: Baixar Currículos
 
-Soap_lattes.py
+Execute o script `Soap_lattes.py` para baixar os currículos.
 
-Passo II: Apache Hop
+## Passo II: Configuração do Apache Hop
 
-config\projects\Jade-Extrator-Hop\metadata\dataset\
+1. Navegue até `config\projects\Jade-Extrator-Hop\metadata\dataset\`.
+2. Copie os currículos baixados para a pasta XML.
+3. Copie a planilha Sucupira Qualis para a pasta CSV.
 
-Copiar os curriculos para pasta XML
+## Passo III: Atualizar Fotos
 
-Copiar a planilha sucupira qualis para a pasta csv
+Execute o script `lattes10.py` para atualizar as fotos.
 
-Passo III: Atualizar Fotos 
+## Passo IV: Atualizar Produção, Dicionário e Frequência de Termos
 
-lattes10.py
+Execute o script `SimccBD_population_v1.py` e atualize a tabela `bibliographic_production` com o comando SQL `UPDATE bibliographic_production SET YEAR_=YEAR::INTEGER;`.
 
-Passo IV: Atualizar Produção, Dicionário e Frequência de Termos
+## Passo V: Gerar CSV para Painel
 
-SimccBD_population_v1.py
-UPDATE bibliographic_production SET YEAR_=YEAR::INTEGER;
+Execute novamente o script `SimccBD_population_v1.py` para gerar o CSV necessário para o painel.
 
-Passo V: Gerar CSV para Painel
+## Passo VI: Rodar o Servidor Flask
 
-SimccBD_population_v1.py
-
-Passo IV: Rodar o Rest Flask 
-
-server.py
-
+Execute o script `server.py` para iniciar o servidor REST Flask.
