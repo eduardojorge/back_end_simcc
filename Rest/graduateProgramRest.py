@@ -103,8 +103,5 @@ def graduate_program_profnit():
     return jsonify(list_gradute_program), 200
 
 
-##############################################################################
-
-if __name__ == "__main__":
-    # run app in debug mode on port 5000
-    cimatecRest.run(debug=True, port=5001, host="0.0.0.0")
+# if __name__ == "__main__":
+# cimatecRest.run(debug=True, port=5001, host="0.0.0.0")
