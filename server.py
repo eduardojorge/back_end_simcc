@@ -17,6 +17,7 @@ from Model.Magazine import Magazine
 from Rest.researcherTermRest import researcherTermRest
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
+
 from Rest.researcherDataRest import researcherDataRest
 import SimccBD as SimccBD
 import Dao.areaFlowSQL

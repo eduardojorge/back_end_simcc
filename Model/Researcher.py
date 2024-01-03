@@ -1,6 +1,8 @@
 class Researcher(object):
     id = ""
     name = ""
+    lattes_id = ""
+    lattes_10_id = ""
     among = ""
     articles = ""
     book_chapters = ""
@@ -9,8 +11,6 @@ class Researcher(object):
     software = ""
     brand = ""
     university = ""
-    lattes_id = ""
-    lattes_10_id = ""
     abstract = ""
     area = ""
     city = ""
