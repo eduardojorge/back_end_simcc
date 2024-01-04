@@ -26,7 +26,11 @@ def download_image(id: str = None, name: str = None, lattes_id: str = None) -> N
     if response.status_code != 200:
         print("Erro para o pesquisador: {name}".format(name=name))
 
-    image_name = "files/image_researcher/{id}.jpg".format(id=id)
+    image_name = (
+        "/home/ejorge/simcc/back_end_simcc/files/image_researcher/{id}.jpg".format(
+            id=id
+        )
+    )
 
     with open(image_name, "wb") as file:
         file.write(response.content)

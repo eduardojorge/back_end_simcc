@@ -23,7 +23,8 @@ def researcher_search_city(city_id: str = None):
                 r.name AS researcher_name,
                 i.name AS institution,
                 i.image AS image,
-                c.name AS city
+                c.name AS city,
+                rp.great_area AS area
             FROM
                 researcher r
             LEFT JOIN
@@ -43,6 +44,7 @@ def researcher_search_city(city_id: str = None):
                 "institution",
                 "image",
                 "city",
+                "area",
             ],
         )
 

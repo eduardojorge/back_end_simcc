@@ -257,18 +257,15 @@ def bibliographic_production_article():
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    print(terms)
     termNovo = unidecode.unidecode(terms.lower())
-    print(terms)
     df_bd = SimccBD.lists_bibliographic_production_article_db(
         termNovo, year, qualis, university, distinct, graduate_program_id
     )
 
-    print(distinct)
-    print(df_bd)
     for i, infos in df_bd.iterrows():
         if distinct == "0":
             bibliographic_production_article_ = {
+                "researcher_id": str(infos.researcher_id),
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),
@@ -278,11 +275,11 @@ def bibliographic_production_article():
                 "lattes_id": str(infos.lattes_id),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
-                "researcher_id": str(infos.researcher_id),
             }
 
         if distinct == "1":
             bibliographic_production_article_ = {
+                "researcher_id": str(infos.researcher_id),
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),
@@ -290,7 +287,6 @@ def bibliographic_production_article():
                 "name_periodical": str(infos.magazine),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
-                "researcher_id": str(infos.researcher_id),
             }
 
         list_bibliographic_production_article.append(bibliographic_production_article_)

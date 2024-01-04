@@ -6,6 +6,7 @@ import pandas as pd
 
 import Dao.researcherSQL as researcherSQL
 import Dao.generalSQL as generalSQL
+
 from Model.City import City
 from Model.Researcher import Researcher
 
@@ -17,11 +18,19 @@ researcherDataRest = Blueprint("researcherDataRest", __name__)
 def image():
     researcher_id = request.args.get("researcher_id")
     try:
-        path_image = "files/image_researcher/{id}.jpg".format(id=researcher_id)
+        path_image = (
+            "/home/ejorge/simcc/back_end_simcc/files/image_researcher/{id}.jpg".format(
+                id=researcher_id
+            )
+        )
         return send_file(path_or_file=path_image)
     except:
         download_image(researcher_id)
-        path_image = "files/image_researcher/{id}.jpg".format(id=researcher_id)
+        path_image = (
+            "/home/ejorge/simcc/back_end_simcc/files/image_researcher/{id}.jpg".format(
+                id=researcher_id
+            )
+        )
         return send_file(path_or_file=path_image)
 
 
@@ -34,12 +43,19 @@ def byCity():
     JsonResearchers = list()
     for Index, researcher in researchers.iterrows():
         if city_id == None:
+            area = str(";").join(
+                [
+                    great_area.strip().replace("_", " ")
+                    for great_area in researcher["area"].split(";")
+                ]
+            )
             dict_researcher = {
                 "id": researcher["id"],
                 "researcher_name": researcher["researcher_name"],
                 "institution": researcher["institution"],
                 "image": researcher["image"],
                 "city": researcher["city"],
+                "area": area,
             }
             JsonResearchers.append(dict_researcher)
         else:
@@ -75,7 +91,7 @@ def byCity():
 @researcherDataRest.route("/ResearcherData/TaxonomyCSV", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def getCSV():
-    csv_taxonomy = pd.read_csv("/home/lilith/repository/back_simcc/article_tax.csv")
+    csv_taxonomy = pd.read_csv("/home/ejorge/simcc/back_end_simcc/article_tax.csv")
 
     JsonTax = list()
     for Index, Taxonomy in csv_taxonomy.iterrows():
