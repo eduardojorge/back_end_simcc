@@ -254,22 +254,16 @@ def bibliographic_production_article():
     distinct = str(request.args.get("distinct")) + ""
 
     graduate_program_id = request.args.get("graduate_program_id")
-    # print("yyyyy "+graduate_program_id  )
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    # stemmer = nltk.RSLPStemmer()
     print(terms)
     termNovo = unidecode.unidecode(terms.lower())
     print(terms)
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = SimccBD.lists_bibliographic_production_article_db(
         termNovo, year, qualis, university, distinct, graduate_program_id
     )
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     print(distinct)
     print(df_bd)
     for i, infos in df_bd.iterrows():
@@ -281,10 +275,10 @@ def bibliographic_production_article():
                 "qualis": str(infos.qualis),
                 "name_periodical": str(infos.magazine),
                 "researcher": str(infos.researcher),
-                "lattes_10_id": str(infos.lattes_10_id),
                 "lattes_id": str(infos.lattes_id),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
+                "researcher_id": str(infos.researcher_id),
             }
 
         if distinct == "1":
@@ -295,22 +289,14 @@ def bibliographic_production_article():
                 "qualis": str(infos.qualis),
                 "name_periodical": str(infos.magazine),
                 "jif": str(infos.jcr),
-                "jcr_link": str(infos.jcr_link)
-                # 'researcher':str(""),
-                # 'lattes_10_id':str(""),
-                #  'lattes_id':str("")
+                "jcr_link": str(infos.jcr_link),
+                "researcher_id": str(infos.researcher_id),
             }
 
-        # print(researcher)
         list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
 
-# if __name__ == "__main__":
-#    app.run(debug=True)
 if __name__ == "__main__":
-    # run app in debug mode on port 5000
-    # context = ('cert.pem', 'local.key')#certificate and key files
-
     app.run(debug=True, port=port, host="0.0.0.0")

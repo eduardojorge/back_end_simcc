@@ -45,7 +45,7 @@ def consultar_db(sql):
 def conecta_db():
     # database_ ="cimatec_v7"
     # database_ ="simcc_profnit_v1"
-    # password_ = "root"
+    password_ = "root"
 
     if (project_.getProject()) == "1":
         database_ = "cimatec_v7"

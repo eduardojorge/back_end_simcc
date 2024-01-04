@@ -4,7 +4,9 @@ import pandas as pd
 from Model.Researcher import Researcher
 
 
-def city_search(city_name: str) -> str:
+def city_search(city_name: str = None) -> str:
+    if city_name == None:
+        return None
     sql = """
         SELECT id FROM city WHERE LOWER(unaccent(name)) = LOWER(unaccent('{filter}'));
         """.format(
@@ -13,63 +15,93 @@ def city_search(city_name: str) -> str:
     return pd.DataFrame(db.consultar_db(sql=sql), columns=["id"])["id"][0]
 
 
-def researcher_search_city(city_id):
-    sql = """
-        SELECT DISTINCT
-            r.id AS id,
-            r.name AS researcher_name,
-            i.name AS institution,
-            rp.articles AS articles,
-            rp.book_chapters AS book_chapters,
-            rp.book AS book,
-            r.lattes_id AS lattes,
-            r.lattes_10_id AS lattes_10_id,
-            r.abstract AS abstract,
-            rp.great_area AS area,
-            c.name AS city,
-            i.image AS image,
-            r.orcid AS orcid,
-            r.graduation AS graduation,
-            rp.patent AS patent,
-            rp.software AS software,
-            rp.brand AS brand,
-            TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update
-        FROM
-            researcher r
-        LEFT JOIN
-            graduate_program_researcher gpr ON r.id = gpr.researcher_id
-        JOIN
-            city c ON c.id = r.city_id
-        JOIN
-            institution i ON r.institution_id = i.id
-        JOIN
-            researcher_production rp ON rp.researcher_id = r.id
-        WHERE
-            r.city_id = '{filter}';
-        """.format(
-        filter=city_id
-    )
+def researcher_search_city(city_id: str = None):
+    if city_id == None:
+        sql = """
+            SELECT DISTINCT
+                r.id AS researcher_id,
+                r.name AS researcher_name,
+                i.name AS institution,
+                i.image AS image,
+                c.name AS city
+            FROM
+                researcher r
+            LEFT JOIN
+                graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            JOIN
+                city c ON c.id = r.city_id
+            JOIN
+                institution i ON r.institution_id = i.id
+            JOIN
+                researcher_production rp ON rp.researcher_id = r.id
+            """
+        return pd.DataFrame(
+            db.consultar_db(sql=sql),
+            columns=[
+                "id",
+                "researcher_name",
+                "institution",
+                "image",
+                "city",
+            ],
+        )
 
-    return pd.DataFrame(
-        db.consultar_db(sql=sql),
-        columns=[
-            "id",
-            "researcher_name",
-            "institution",
-            "article",
-            "book_chapters",
-            "book",
-            "lattes",
-            "lattes_10_id",
-            "abstract",
-            "area",
-            "city",
-            "image",
-            "orcid",
-            "graduation",
-            "patent",
-            "software",
-            "brand",
-            "lattes_update",
-        ],
-    )
+    else:
+        sql = """
+            SELECT DISTINCT
+                r.id AS id,
+                r.name AS researcher_name,
+                i.name AS institution,
+                rp.articles AS articles,
+                rp.book_chapters AS book_chapters,
+                rp.book AS book,
+                r.lattes_id AS lattes,
+                r.lattes_10_id AS lattes_10_id,
+                r.abstract AS abstract,
+                rp.great_area AS area,
+                c.name AS city,
+                i.image AS image,
+                r.orcid AS orcid,
+                r.graduation AS graduation,
+                rp.patent AS patent,
+                rp.software AS software,
+                rp.brand AS brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update
+            FROM
+                researcher r
+            LEFT JOIN
+                graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            JOIN
+                city c ON c.id = r.city_id
+            JOIN
+                institution i ON r.institution_id = i.id
+            JOIN
+                researcher_production rp ON rp.researcher_id = r.id
+            WHERE
+                r.city_id = '{id}';
+            """.format(
+            id=city_id
+        )
+        return pd.DataFrame(
+            db.consultar_db(sql=sql),
+            columns=[
+                "id",
+                "researcher_name",
+                "institution",
+                "articles",
+                "book_chapters",
+                "book",
+                "lattes",
+                "lattes_10_id",
+                "abstract",
+                "area",
+                "city",
+                "image",
+                "orcid",
+                "graduation",
+                "patent",
+                "software",
+                "brand",
+                "lattes_update",
+            ],
+        )

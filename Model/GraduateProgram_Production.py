@@ -1,49 +1,30 @@
 class GraduateProgram_Production(object):
+    id = ""
 
-        id=""
-      
-        year=""
+    year = ""
 
-        patent=""
-        software=""
-        brand=""
-        book=""
-        article=""
-        book_chapter=""
-        work_in_event=""
-        researcher=""
+    patent = ""
+    software = ""
+    brand = ""
+    book = ""
+    article = ""
+    book_chapter = ""
+    work_in_event = ""
+    researcher = ""
 
-      
-       
+    def __init__(self):
+        self.id = ""
 
-        def __init__(self):
-          self.id=""
-          
-     
-        def getJson(self):
-         
-         graduateProgram_Production  =  {
-             
-         'id': self.id,   
-       
-        
-         'patent':self.patent,
-         'software': self.software,
-          'brand':self.brand,
-           'book':self.book,
-            'article':self.article,
-        'book_chapter':self.book_chapter,
-        'work_in_event':self.work_in_event,
-        'researcher':self.researcher
-         
-
-     
-        
-         
-
-         }
-         return  graduateProgram_Production
-          
-
-
-    
+    def getJson(self):
+        graduateProgram_Production = {
+            "id": self.id,
+            "patent": self.patent,
+            "software": self.software,
+            "brand": self.brand,
+            "book": self.book,
+            "article": self.article,
+            "book_chapter": self.book_chapter,
+            "work_in_event": self.work_in_event,
+            "researcher": self.researcher,
+        }
+        return graduateProgram_Production
