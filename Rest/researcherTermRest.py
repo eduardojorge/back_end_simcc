@@ -390,35 +390,27 @@ def patent_production_researcher():
     return jsonify(list_patent_production_researcher), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_researcher():
-    list_bibliographic_production_researcher = []
-    terms = request.args.get("terms")
-    researcher_id = request.args.get("researcher_id")
-    year = request.args.get("year")
-    boolean_condition = request.args.get("boolean_condition")
+    list_bibliographic_production_researcher = list()
 
+    boolean_condition = request.args.get("boolean_condition")
+    researcher_id = request.args.get("researcher_id")
     qualis = request.args.get("qualis")
+    terms = request.args.get("terms")
+    year = request.args.get("year")
+    type = request.args.get("type")
 
     if boolean_condition is None:
         boolean_condition = "or"
 
-    # stemmer = nltk.RSLPStemmer()
-
     termNovo = unidecode.unidecode(terms.lower())
-    type = request.args.get("type")
-    print(boolean_condition)
 
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
         termNovo, researcher_id, year, type, boolean_condition, qualis
     )
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         b = Bibliographic_Production_Researcher()
         b.id = str(infos.id)

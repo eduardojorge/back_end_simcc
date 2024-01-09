@@ -6,7 +6,7 @@ import maria
 mariaRest = Blueprint("mariaRest", __name__)
 
 
-@mariaRest.route("/Maria", methods=["GET"])
+@mariaRest.route("/Maria", methods=["POST"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def Maria():
     configMaria = request.get_json()

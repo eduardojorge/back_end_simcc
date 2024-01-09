@@ -398,29 +398,38 @@ def lists_bibliographic_production_article_researcher_db(
     term = unidecode.unidecode(term.lower())
     filter = util.filterSQLRank(term, ";", "title")
     filterQualis = util.filterSQL(qualis, ";", "or", "qualis")
-    """
-     filtergraduate_program=""
-     if graduate_program_id!="":
-        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
 
-     """
-
-    # researcher r   LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
-
-    # FROM bibliographic_production b LEFT JOIN  researcher_frequency rf ON b.id = rf.bibliographic_production_id,
     if type == "ARTICLE":
-        sql = """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, periodical_magazine_name as magazine,
-               r.name as researcher,r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link 
-               FROM bibliographic_production b, 
-                bibliographic_production_article ba,institution i, researcher r 
-                WHERE 
+        sql = """
+            SELECT DISTINCT
+                b.id AS id,
+                title,
+                b.year AS year,
+                type,
+                doi,
+                qualis,
+                periodical_magazine_name AS magazine,
+                r.name AS researcher,
+                r.lattes_10_id AS lattes_10_id,
+                r.lattes_id AS lattes_id,
+                jcr AS jif,
+                jcr_link
+            FROM
+                bibliographic_production b,
+                bibliographic_production_article ba,
+                institution i,
+                researcher r
+            WHERE
                 r.id = b.researcher_id
-               
-                AND   b.id = ba.bibliographic_production_id 
-                 AND r.institution_id=i.id
-                AND year_>=%s  %s %s
-                AND r.id=\'%s\' 
-                order by year desc""" % (
+                AND b.id = ba.bibliographic_production_id
+                AND r.institution_id = i.id
+                AND year_ >= {}
+                {}
+                {}
+                AND r.id = '{}'
+            ORDER BY
+                year DESC;
+            """.format(
             year,
             filter,
             filterQualis,

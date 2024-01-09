@@ -7,11 +7,11 @@ def text_generator(messages: list() = None, model: str() = None):
         messages = [
             {
                 "role": "system",
-                "content": "Você é um chatbot chamado Maria, e você faz listagens sobre temas academicos sobre temas academicos",
+                "content": "Voce é um chatbot chamada MarIA, e voce faz listagem de termos de taxonomias sobre temas acaddemicos",
             },
             {
                 "role": "user",
-                "content": "Diga oi",
+                "content": "Quero um",
             },
         ]
     if model == None:
