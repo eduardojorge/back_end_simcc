@@ -17,8 +17,9 @@ from Model.Magazine import Magazine
 from Rest.researcherTermRest import researcherTermRest
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
-
+from Rest.mariaRest import mariaRest
 from Rest.researcherDataRest import researcherDataRest
+
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
 import Dao.generalSQL
@@ -45,7 +46,7 @@ app.register_blueprint(researcherTermRest)
 app.register_blueprint(areaRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
-
+app.register_blueprint(mariaRest)
 app.config["CORS_HEADERS"] = "Content-Type"
 app.route("/")
 CORS(app, resources={r"/*": {"origins": "*"}})
