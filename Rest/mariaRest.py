@@ -8,10 +8,16 @@ mariaRest = Blueprint("mariaRest", __name__)
 
 @mariaRest.route("/Maria", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-def Question():
+def Maria():
     configMaria = request.get_json()
     responseMaria = maria.text_generator(
         model=configMaria["model"], messages=configMaria["messages"]
     )
 
-    return jsonify(responseMaria), 200
+    fullJson = list()
+    for sliceResponse in responseMaria.split("</s>"):
+        chat = sliceResponse.split("|>")
+
+        chat = {"role": f"{chat[0][2:]}", "content": f"{chat[1]}"}
+        fullJson.append(chat)
+    return jsonify(fullJson), 200

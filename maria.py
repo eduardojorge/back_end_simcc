@@ -37,3 +37,7 @@ def text_generator(messages: list() = None, model: str() = None):
     )
 
     return outputs[0]["generated_text"]
+
+
+if __name__ == "__name__":
+    print(text_generator)
