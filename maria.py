@@ -3,6 +3,7 @@ from transformers import pipeline
 
 
 def Question(messages: str = None, model: str = None):
+    print("Processando mensagem... ")
     if messages == None:
         messages = [
             {
@@ -11,7 +12,7 @@ def Question(messages: str = None, model: str = None):
             },
             {
                 "role": "user",
-                "content": "Quais termos estão relacionados ao sars Cov 2?",
+                "content": "Me dê sugestões de termos relacionados a Educação 5.0",
             },
         ]
     if model == None:
@@ -19,12 +20,13 @@ def Question(messages: str = None, model: str = None):
     pipe = pipeline(
         "text-generation",
         model=model,
-        torch_dtype=torch.bfloat16,
         device_map="auto",
     )
+
     prompt = pipe.tokenizer.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True
     )
+
     outputs = pipe(
         prompt,
         max_new_tokens=256,
@@ -36,5 +38,5 @@ def Question(messages: str = None, model: str = None):
     return str(outputs[0]["generated_text"])
 
 
-if __name__ == "__main__":
-    print(Question(model="TinyLlama/TinyLlama-1.1B-Chat-v1.0"))
+# if __name__ == "__main__":
+#     print(Question(model="TinyLlama/TinyLlama-1.1B-Chat-v1.0"))
