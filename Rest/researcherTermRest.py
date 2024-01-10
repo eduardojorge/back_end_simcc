@@ -408,7 +408,7 @@ def bibliographic_production_researcher():
     termNovo = unidecode.unidecode(terms.lower())
 
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
-        termNovo, researcher_id, year, type, boolean_condition, qualis
+        termNovo, researcher_id, year, type, qualis
     )
 
     for i, infos in df_bd.iterrows():
@@ -425,8 +425,8 @@ def bibliographic_production_researcher():
         b.lattes_id = str(infos.lattes_id)
         b.jif = str(infos.jif)
         b.jcr_link = str(infos.jcr_link)
+        b.researcher_id = str(infos.researcher_id)
 
-        # print(researcher)
         list_bibliographic_production_researcher.append(b.getJson())
 
     return jsonify(list_bibliographic_production_researcher), 200

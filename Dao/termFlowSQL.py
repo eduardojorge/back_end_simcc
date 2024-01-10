@@ -393,7 +393,7 @@ def list_researchers_originals_words_db(
 
 
 def lists_bibliographic_production_article_researcher_db(
-    term, researcher_id, year, type, boolean_condition, qualis
+    term, researcher_id, year, type, qualis
 ):
     term = unidecode.unidecode(term.lower())
     filter = util.filterSQLRank(term, ";", "title")
@@ -402,6 +402,7 @@ def lists_bibliographic_production_article_researcher_db(
     if type == "ARTICLE":
         sql = """
             SELECT DISTINCT
+                r.id as researcher_id,
                 b.id AS id,
                 title,
                 b.year AS year,
@@ -423,51 +424,62 @@ def lists_bibliographic_production_article_researcher_db(
                 r.id = b.researcher_id
                 AND b.id = ba.bibliographic_production_id
                 AND r.institution_id = i.id
-                AND year_ >= {}
-                {}
-                {}
-                AND r.id = '{}'
+                AND year_ >= {year_filter}
+                {filter}
+                {filterQualis}
+                AND r.id = '{researcher_id_filter}'
             ORDER BY
                 year DESC;
             """.format(
-            year,
-            filter,
-            filterQualis,
-            researcher_id,
+            year_filter=year,
+            filter=filter,
+            filterQualis=filterQualis,
+            researcher_id_filter=researcher_id,
         )
-
-        reg = sgbdSQL.consultar_db(sql)
-        print(sql)
-
     if type == "ABSTRACT":
-        #  FROM bibliographic_production b, researcher_abstract_frequency rf,
-
         sql = """
-                SELECT distinct b.id as id,title,year,type, doi,qualis, periodical_magazine_name as magazine,r.name as researcher,
-                r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link
-                          FROM bibliographic_production b,
-                          bibliographic_production_article ba, researcher r 
-                            WHERE  r.id = b.researcher_id
-                                   AND rf.researcher_id=r.id 
-                                   AND pm.id = ba.periodical_magazine_id 
-                                   AND   b.id = ba.bibliographic_production_id 
-                                   AND year_ >=%s %s %s
-                                   AND r.id='%s'
-                                     order by year desc"
-
-          """ % (
-            year,
-            filter,
-            filterQualis,
-            researcher_id,
+            SELECT DISTINCT
+                r.id as researcher_id,
+                b.id AS id,
+                title,
+                year,
+                type,
+                doi,
+                pm.qualis as qualis,
+                periodical_magazine_name AS magazine,
+                r.name AS researcher,
+                r.lattes_10_id AS lattes_10_id,
+                r.lattes_id AS lattes_id,
+                pm.jcr AS jif,
+                pm.jcr_link
+            FROM
+                bibliographic_production b,
+                bibliographic_production_article ba,
+                researcher r,
+                researcher_abstract_frequency rf,
+                periodical_magazine as pm
+            WHERE
+                r.id = b.researcher_id
+                AND rf.researcher_id = r.id
+                AND pm.id = ba.periodical_magazine_id
+                AND b.id = ba.bibliographic_production_id
+                AND year_ >= {year_filter}
+				{filter}
+                {filterQualis}
+                AND r.id = '{researcher_id_filter}'
+            ORDER BY
+                year DESC;
+            """.format(
+            year_filter=year,
+            filter=filter,
+            filterQualis=filterQualis,
+            researcher_id_filter=researcher_id,
         )
-        reg = sgbdSQL.consultar_db(sql)
-
-        # "  AND  b.type = \'ARTICLE\' ")
 
     df_bd = pd.DataFrame(
-        reg,
+        sgbdSQL.consultar_db(sql=sql),
         columns=[
+            "researcher_id",
             "id",
             "title",
             "year",
