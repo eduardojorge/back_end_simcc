@@ -1,13 +1,6 @@
 from flask import Flask, jsonify, request
-import json
-
-# import nltk
 import unidecode
 from flask_cors import CORS, cross_origin
-import os
-
-# import DaoPostgres.termFlow as termFlow
-
 from Model.Researcher import Researcher
 from Model.Bibliographic_Production_Researcher import (
     Bibliographic_Production_Researcher,
@@ -20,13 +13,13 @@ from Rest.graduateProgramRest import graduateProgramRest
 from Rest.mariaRest import mariaRest
 from Rest.researcherDataRest import researcherDataRest
 
-import SimccBD as SimccBD
+import etc.SimccBD as SimccBD
 import Dao.areaFlowSQL
 import Dao.generalSQL
 
 
 # from  Rest.researcherTermRest import researcherTermRest
-import project as project_
+import etc.project as project_
 import sys
 import nltk
 from nltk.tokenize import RegexpTokenizer

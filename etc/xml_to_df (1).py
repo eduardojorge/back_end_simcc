@@ -61,6 +61,7 @@ class MestradoExtractor(BaseExtractor):
 
         return df
 
+
 class ArtigosPublicadosExtractor(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -86,6 +87,7 @@ class ArtigosPublicadosExtractor(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class DoutoradoExtractor(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -101,8 +103,9 @@ class DoutoradoExtractor(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class PatenteExtractor(BaseExtractor):
     def extract(self):
@@ -119,8 +122,9 @@ class PatenteExtractor(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class AreaConhecimentoExtrator(BaseExtractor):
     def extract(self):
@@ -137,8 +141,9 @@ class AreaConhecimentoExtrator(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class SetoresAtividade(BaseExtractor):
     def extract(self):
@@ -155,8 +160,9 @@ class SetoresAtividade(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class Graduacao(BaseExtractor):
     def extract(self):
@@ -173,8 +179,9 @@ class Graduacao(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class PosDoutorado(BaseExtractor):
     def extract(self):
@@ -191,9 +198,9 @@ class PosDoutorado(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
-    
+
 
 class LinhaPesquisa(BaseExtractor):
     def extract(self):
@@ -210,9 +217,10 @@ class LinhaPesquisa(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
-    
+
+
 class ProjetoPesquisa(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -228,8 +236,9 @@ class ProjetoPesquisa(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
+
 
 class AtuacaoProfissional(BaseExtractor):
     def extract(self):
@@ -240,16 +249,16 @@ class AtuacaoProfissional(BaseExtractor):
             identificador, tree = self._parse_xml(xml)
             for atuacao in tree.findall(".//ATUACAO-PROFISSIONAL"):
                 row = {"cnpq_id": identificador}
-                
 
                 for k, v in atuacao.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
-    
+
+
 class Vinculos(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -265,9 +274,10 @@ class Vinculos(BaseExtractor):
                     row[key] = v
 
                 data.append(row)
-        
+
         return pd.DataFrame(data)
-    
+
+
 class TrabalhosEventos(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -279,7 +289,7 @@ class TrabalhosEventos(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = trabalho.find(".//DADOS-BASICOS-DO-TRABALHO")
                 detalhes_trabalho = trabalho.find(".//DETALHAMENTO-DO-TRABALHO")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -291,7 +301,8 @@ class TrabalhosEventos(BaseExtractor):
                 data.append(row)
 
         return pd.DataFrame(data)
-    
+
+
 class LivrosPublicados(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -303,7 +314,7 @@ class LivrosPublicados(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = livro.find(".//DADOS-BASICOS-DO-LIVRO")
                 detalhes_livro = livro.find(".//DETALHAMENTO-DO-LIVRO")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -316,6 +327,7 @@ class LivrosPublicados(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class CapituloPublicado(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -327,7 +339,7 @@ class CapituloPublicado(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = capitulo.find(".//DADOS-BASICOS-DO-CAPITULO")
                 detalhes_capitulo = capitulo.find(".//DETALHAMENTO-DO-CAPITULO")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -340,6 +352,7 @@ class CapituloPublicado(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class TextoJornal(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -351,7 +364,7 @@ class TextoJornal(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = texto.find(".//DADOS-BASICOS-DO-TEXTO")
                 detalhes_texto = texto.find(".//DETALHAMENTO-DO-TEXTO")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -363,7 +376,8 @@ class TextoJornal(BaseExtractor):
                 data.append(row)
 
         return pd.DataFrame(data)
-    
+
+
 class OutrasProducoes(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -375,7 +389,7 @@ class OutrasProducoes(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = producao.find(".//DADOS-BASICOS-DE-OUTRA-PRODUCAO")
                 detalhes_producao = producao.find(".//DETALHAMENTO-DE-OUTRA-PRODUCAO")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -387,7 +401,8 @@ class OutrasProducoes(BaseExtractor):
                 data.append(row)
 
         return pd.DataFrame(data)
-    
+
+
 class SoftwareExtractor(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -399,7 +414,7 @@ class SoftwareExtractor(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = software.find(".//DADOS-BASICOS-DO-SOFTWARE")
                 detalhes_software = software.find(".//DETALHAMENTO-DO-SOFTWARE")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -412,6 +427,7 @@ class SoftwareExtractor(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class ProdutoTecnologico(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -422,8 +438,10 @@ class ProdutoTecnologico(BaseExtractor):
             for produto in tree.findall(".//PRODUTO-TECNOLOGICO"):
                 row = {"cnpq_id": identificador}
                 dados_basicos = produto.find(".//DADOS-BASICOS-DO-PRODUTO-TECNOLOGICO")
-                detalhes_produto = produto.find(".//DETALHAMENTO-DO-PRODUTO-TECNOLOGICO")
-            
+                detalhes_produto = produto.find(
+                    ".//DETALHAMENTO-DO-PRODUTO-TECNOLOGICO"
+                )
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -436,6 +454,7 @@ class ProdutoTecnologico(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class PatenteExtractor(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -447,7 +466,7 @@ class PatenteExtractor(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = patente.find(".//DADOS-BASICOS-DA-PATENTE")
                 detalhes_patente = patente.find(".//DETALHAMENTO-DA-PATENTE")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -472,7 +491,7 @@ class DesenhoIndustrial(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = desenho.find(".//DADOS-BASICOS-DO-DESENHO-INDUSTRIAL")
                 detalhes_desenho = desenho.find(".//DETALHAMENTO-DO-DESENHO-INDUSTRIAL")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -485,6 +504,7 @@ class DesenhoIndustrial(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class Marca(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -496,7 +516,7 @@ class Marca(BaseExtractor):
                 row = {"cnpq_id": identificador}
                 dados_basicos = marca.find(".//DADOS-BASICOS-DA-MARCA")
                 detalhes_marca = marca.find(".//DETALHAMENTO-DA-MARCA")
-            
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -509,6 +529,7 @@ class Marca(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class Topografia(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -518,9 +539,13 @@ class Topografia(BaseExtractor):
             identificador, tree = self._parse_xml(xml)
             for topografia in tree.findall(".//TOPOGRAFIA-DE-CIRCUITO-INTEGRADO"):
                 row = {"cnpq_id": identificador}
-                dados_basicos = topografia.find(".//DADOS-BASICOS-DE-TOPOGRAFIA-DE-CIRCUITO-INTEGRADO")
-                detalhes_topografia = topografia.find(".//DETALHAMENTO-DE-TOPOGRAFIA-DE-CIRCUITO-INTEGRADO")
-            
+                dados_basicos = topografia.find(
+                    ".//DADOS-BASICOS-DE-TOPOGRAFIA-DE-CIRCUITO-INTEGRADO"
+                )
+                detalhes_topografia = topografia.find(
+                    ".//DETALHAMENTO-DE-TOPOGRAFIA-DE-CIRCUITO-INTEGRADO"
+                )
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v
@@ -533,6 +558,7 @@ class Topografia(BaseExtractor):
 
         return pd.DataFrame(data)
 
+
 class ProcessosTecnicas(BaseExtractor):
     def extract(self):
         xmls = os.listdir(self.xml_dir)
@@ -542,9 +568,13 @@ class ProcessosTecnicas(BaseExtractor):
             identificador, tree = self._parse_xml(xml)
             for processo in tree.findall(".//PROCESSOS-OU-TECNICAS"):
                 row = {"cnpq_id": identificador}
-                dados_basicos = processo.find(".//DADOS-BASICOS-DO-PROCESSOS-OU-TECNICAS")
-                detalhes_processo = processo.find(".//DETALHAMENTO-DO-PROCESSOS-OU-TECNICAS")
-            
+                dados_basicos = processo.find(
+                    ".//DADOS-BASICOS-DO-PROCESSOS-OU-TECNICAS"
+                )
+                detalhes_processo = processo.find(
+                    ".//DETALHAMENTO-DO-PROCESSOS-OU-TECNICAS"
+                )
+
                 for k, v in dados_basicos.attrib.items():
                     key = k.replace(" ", "_").replace("-", "_").lower()
                     row[key] = v

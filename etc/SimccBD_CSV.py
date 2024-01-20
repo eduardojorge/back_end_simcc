@@ -7,20 +7,15 @@ from datetime import datetime
 import sys
 
 import project as project_
-#import lattes10 as lattes10
 
-
-#dir="C:\\simccv3\\"
-#python3 SimccBD_CSV.py   "cimatec_v7"  "172.25.0.84" "C:\simccv3\" 
-
-dir= host_=sys.argv[2]
-project_.project_=sys.argv[1]
+dir = host_ = sys.argv[2]
+project_.project_ = sys.argv[1]
 print(dir)
+
+
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
-    
-    
-    sql= """
+    sql = """
           SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
           UNION
           SELECT researcher_id,title,YEAR,'SOFTWARE' from software
@@ -33,16 +28,16 @@ def researcher_production_tecnical_year_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=['researcher_id','title','year','type'])
-    
+    df_bd = pd.DataFrame(reg, columns=["researcher_id", "title", "year", "type"])
+
     print(df_bd)
     logger.debug(sql)
 
-    df_bd.to_csv(dir +'production_tecnical_year.csv')
+    df_bd.to_csv(dir + "production_tecnical_year.csv")
 
 
 # Função processar e inserir a produção de cada pesquisador
-'''
+"""
 def researcher_production_year_csv_db():
     
     
@@ -59,48 +54,43 @@ def researcher_production_year_csv_db():
     df_bd = pd.DataFrame(reg, columns=['title','tipo','researcher','year','institution','city'])
 
     df_bd.to_csv('C:/simccv3/production_year.csv')
-'''
-''
+"""
+""
+
+
 def researcher_production_year_csv_db():
+    reg = sgbdSQL.consultar_db(
+        "SELECT distinct  title,b.type as tipo,b.researcher_id,year,'institution' "
+        + " from bibliographic_production AS b, researcher r  "
+        + " where b.researcher_id is not null "
+        + "   AND r.id =  b.researcher_id "
+        + " GROUP BY title,tipo,b.researcher_id,year ORDER  BY year,Tipo desc"
+    )
 
-    
-    
-    reg = sgbdSQL.consultar_db("SELECT distinct  title,b.type as tipo,b.researcher_id,year,'institution' "+
-                               " from bibliographic_production AS b, researcher r  "+
-                     
-                               " where b.researcher_id is not null "+
-                               "   AND r.id =  b.researcher_id "+
-                              
-                             
-                         
-                               " GROUP BY title,tipo,b.researcher_id,year ORDER  BY year,Tipo desc")
+    df_bd = pd.DataFrame(
+        reg, columns=["title", "tipo", "researcher_id", "year", "institution"]
+    )
 
-    df_bd = pd.DataFrame(reg, columns=['title','tipo','researcher_id','year','institution'])
-
-    df_bd.to_csv('C:/simccv3/production_year.csv')
+    df_bd.to_csv("C:/simccv3/production_year.csv")
 
 
 def researcher_production_year_distinct_csv_db():
-    
-    
-    reg = sgbdSQL.consultar_db("SELECT  distinct year,title,type as tipo,i.acronym as institution"+
-                               " from bibliographic_production AS b,  institution i, researcher r "+
-                     
-                               " where  "+
-                               "   r.id =  b.researcher_id "+
-                               "  AND r.institution_id = i.id "
-                               
-                               " GROUP BY year,title,tipo,i.acronym ")
+    reg = sgbdSQL.consultar_db(
+        "SELECT  distinct year,title,type as tipo,i.acronym as institution"
+        + " from bibliographic_production AS b,  institution i, researcher r "
+        + " where  "
+        + "   r.id =  b.researcher_id "
+        + "  AND r.institution_id = i.id "
+        " GROUP BY year,title,tipo,i.acronym "
+    )
 
-    df_bd = pd.DataFrame(reg, columns=['year','title','tipo','institution'])
+    df_bd = pd.DataFrame(reg, columns=["year", "title", "tipo", "institution"])
 
-    df_bd.to_csv('C:/simccv3/production_year_distinct.csv')
+    df_bd.to_csv("C:/simccv3/production_year_distinct.csv")
+
 
 def researcher_article_qualis_csv_db():
-   
-
-   
-   sql ="""
+    sql = """
             
          	SELECT DISTINCT  title,
             
@@ -126,19 +116,31 @@ def researcher_article_qualis_csv_db():
         
          """
 
+    reg = sgbdSQL.consultar_db(sql)
 
-       
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "title",
+            "qualis",
+            "year",
+            "researcher_id",
+            "researcher",
+            "institution",
+            "city",
+            "name_magazine",
+            "issn",
+            "jcr",
+            "jcr_link",
+            "type",
+        ],
+    )
 
-   reg = sgbdSQL.consultar_db(sql )
-   
-   df_bd = pd.DataFrame(reg, columns=['title','qualis','year','researcher_id','researcher','institution','city','name_magazine','issn','jcr','jcr_link','type'])
+    df_bd.to_csv("C:/simccv3/article_qualis_year.csv")
 
 
-   df_bd.to_csv('C:/simccv3/article_qualis_year.csv')
-   
 def article_qualis_csv_distinct_db():
-   
-   sql= """
+    sql = """
                                 SELECT distinct title,bar.qualis,bar.jcr,year,i.acronym as institution,rd.city as city,
                                        bar.jcr_link
                               
@@ -157,13 +159,17 @@ def article_qualis_csv_distinct_db():
 
         """
 
-   reg = sgbdSQL.consultar_db( sql )
-   
-   df_bd = pd.DataFrame(reg, columns=['title','qualis','jcr','year','institution','city','jcr_link'])
-   df_bd.to_csv('C:/simccv3/article_qualis_year_institution.csv')
-   
+    reg = sgbdSQL.consultar_db(sql)
+
+    df_bd = pd.DataFrame(
+        reg,
+        columns=["title", "qualis", "jcr", "year", "institution", "city", "jcr_link"],
+    )
+    df_bd.to_csv("C:/simccv3/article_qualis_year_institution.csv")
+
+
 def researcher_production_csv_db():
-   sql="""
+    sql = """
         SELECT r.name AS researcher, r.id AS researcher_id,
          rp.articles AS articles,
          rp.book_chapters AS book_chapters,
@@ -174,52 +180,67 @@ def researcher_production_csv_db():
         FROM researcher_production rp, researcher r 
           WHERE r.id= rp.researcher_id
    """
-   reg = sgbdSQL.consultar_db(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','articles','book_chapters','book','work_in_event','great_area','area_specialty','graduation'])
+    reg = sgbdSQL.consultar_db(sql)
 
-   df_bd.to_csv('C:/simccv3/production__researcher.csv')
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "researcher",
+            "researcher_id",
+            "articles",
+            "book_chapters",
+            "book",
+            "work_in_event",
+            "great_area",
+            "area_specialty",
+            "graduation",
+        ],
+    )
+
+    df_bd.to_csv("C:/simccv3/production__researcher.csv")
 
 
 def researcher_csv_db():
-
-   sql=""" SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
+    sql = """ SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
         
 
         FROM  researcher r """
 
-   reg = sgbdSQL.consultar_db(sql)
-   
-   logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','last_update','graduation','lattes_id'])
+    reg = sgbdSQL.consultar_db(sql)
 
-   df_bd.to_csv(dir+'researcher.csv')
+    logger.debug(sql)
+
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "researcher",
+            "researcher_id",
+            "last_update",
+            "graduation",
+            "lattes_id",
+        ],
+    )
+
+    df_bd.to_csv(dir + "researcher.csv")
+
 
 def institution_csv_db():
-
-      sql=""" SELECT i.id, name, acronym 
+    sql = """ SELECT i.id, name, acronym 
         
 
         FROM  institution i """
 
-      reg = sgbdSQL.consultar_db(sql)
-   
-      logger.debug(sql)
-        
-   
-      df_bd = pd.DataFrame(reg, columns=['institution_id','name','acronym'])
+    reg = sgbdSQL.consultar_db(sql)
 
-      df_bd.to_csv(dir+'dim_institution.csv')
+    logger.debug(sql)
+
+    df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym"])
+
+    df_bd.to_csv(dir + "dim_institution.csv")
 
 
 def researcher_production_novo_csv_db():
-   
-
-   
-   sql ="""
+    sql = """
             
          	SELECT title,
             
@@ -241,25 +262,31 @@ def researcher_production_novo_csv_db():
         
          """
 
+    reg = sgbdSQL.consultar_db(sql)
 
-       
+    logger.debug(sql)
 
-   reg = sgbdSQL.consultar_db(sql )
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "title",
+            "qualis",
+            "year",
+            "researcher_id",
+            "researcher",
+            "name_magazine",
+            "issn",
+            "jcr",
+            "jcr_link",
+            "type",
+        ],
+    )
 
-   logger.debug(sql)
-   
-   df_bd = pd.DataFrame(reg, columns=['title','qualis','year','researcher_id','researcher','name_magazine','issn','jcr','jcr_link','type'])
+    df_bd.to_csv(dir + "researcher_production_novo_csv_db.csv")
 
-
-   df_bd.to_csv(dir+'researcher_production_novo_csv_db.csv')
-
-
-
-   
 
 def article_distinct_novo_csv_db():
-   
-   sql="""
+    sql = """
          SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
                              
                                    FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
@@ -275,19 +302,26 @@ def article_distinct_novo_csv_db():
                         order by qualis desc
    """
 
-   reg = sgbdSQL.consultar_db(sql)   
-   logger.debug(sql)
-   df_bd = pd.DataFrame(reg, columns=[ 'title','qualis','jcr','year','graduate_program_id','year_pos','name_magazine'])
-   
-   df_bd.to_csv(dir+'article_distinct_novo_csv_db.csv') 
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "title",
+            "qualis",
+            "jcr",
+            "year",
+            "graduate_program_id",
+            "year_pos",
+            "name_magazine",
+        ],
+    )
 
+    df_bd.to_csv(dir + "article_distinct_novo_csv_db.csv")
 
-
-      
 
 def production_coauthors_csv_db():
-   
-   sql="""
+    sql = """
            SELECT COUNT(*),a.doi,a.title,ba.qualis,a.year,gp.graduate_program_id,gp.year,a."type"
 		FROM bibliographic_production a LEFT JOIN bibliographic_production_article ba ON  a.id = ba.bibliographic_production_id, bibliographic_production b, 
 		 graduate_program_researcher gp
@@ -297,17 +331,27 @@ def production_coauthors_csv_db():
       HAVING COUNT(*)>1
     """
 
-   reg = sgbdSQL.consultar_db(sql)   
-   logger.debug(sql)
-   df_bd = pd.DataFrame(reg, columns=['qtd','doi','title','qualis','year','graduate_program_id','year_pos','type'])
-   
-   df_bd.to_csv(dir+'production_coauthors_csv_db.csv') 
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "qtd",
+            "doi",
+            "title",
+            "qualis",
+            "year",
+            "graduate_program_id",
+            "year_pos",
+            "type",
+        ],
+    )
 
+    df_bd.to_csv(dir + "production_coauthors_csv_db.csv")
 
 
 def production_distinct_novo_csv_db():
-   
-   sql="""
+    sql = """
         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
                              
                                    FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
@@ -324,19 +368,27 @@ def production_distinct_novo_csv_db():
                         order by qualis desc
     """
 
-   reg = sgbdSQL.consultar_db(sql)   
-   logger.debug(sql)
-   df_bd = pd.DataFrame(reg, columns=[ 'title','qualis','jcr','year','graduate_program_id','year_pos','type'])
-   
-   df_bd.to_csv(dir+'production_distinct_novo_csv_db.csv') 
-       
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "title",
+            "qualis",
+            "jcr",
+            "year",
+            "graduate_program_id",
+            "year_pos",
+            "type",
+        ],
+    )
 
-        
+    df_bd.to_csv(dir + "production_distinct_novo_csv_db.csv")
+
+
 # Função processar e inserir a produção de cada pesquisador
 def production_tecnical_year_novo_csv_db():
-    
-    
-    sql= """
+    sql = """
           SELECT distinct title,development_year::int AS year, 'PATENT' as type, gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
           FROM patent p,graduate_program_researcher gpr,  graduate_program gp 
           WHERE  gpr.graduate_program_id = gp.graduate_program_id 
@@ -365,81 +417,87 @@ def production_tecnical_year_novo_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=['title','year','type','graduate_program_id','year_pos'])
+    df_bd = pd.DataFrame(
+        reg, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
+    )
 
-    df_bd.to_csv(dir+'production_tecnical_year_novo_csv_db.csv')
+    df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
+
 
 def graduate_program_researcher_csv_db():
-   sql="""
+    sql = """
     SELECT researcher_id,graduate_program_id,year,type_ 
         FROM graduate_program_researcher
     """
-   reg = sgbdSQL.consultar_db(sql )
-   logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=[ 'researcher_id','graduate_program_id','year','type_'])
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
 
-   df_bd.to_csv(dir+'cimatec_graduate_program_researcher.csv')     
+    df_bd = pd.DataFrame(
+        reg, columns=["researcher_id", "graduate_program_id", "year", "type_"]
+    )
+
+    df_bd.to_csv(dir + "cimatec_graduate_program_researcher.csv")
+
 
 def graduate_program_csv_db():
-
-   sql="""
+    sql = """
       SELECT graduate_program_id,code,name,area,modality,type,rating 
         FROM graduate_program gp
     """
 
-   reg = sgbdSQL.consultar_db(sql )
-   logger.debug(sql)
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
 
-        
-   
-   df_bd = pd.DataFrame(reg, columns=[ 'graduate_program_id','code','name','area','modality','type','rating'])
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "graduate_program_id",
+            "code",
+            "name",
+            "area",
+            "modality",
+            "type",
+            "rating",
+        ],
+    )
 
-   df_bd.to_csv(dir+'cimatec_graduate_program.csv')
-  
+    df_bd.to_csv(dir + "cimatec_graduate_program.csv")
+
 
 def profnit_graduate_program_csv_db():
+    df_bd = graduate_programSQL.graduate_program_profnit_db()
+    logger.debug(profnit_graduate_program_csv_db)
 
-   df_bd = graduate_programSQL.graduate_program_profnit_db()
-   logger.debug(profnit_graduate_program_csv_db)
-
-   df_bd.to_csv(dir+'profnit_graduate_program.csv')
+    df_bd.to_csv(dir + "profnit_graduate_program.csv")
 
 
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
-logging.basicConfig(filename = "logfile_csv.log",
-                    filemode = "w",
-                    format = Log_Format, 
-                    level = logging.DEBUG)
+logging.basicConfig(
+    filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
+)
 
 logger = logging.getLogger()
 
-       
+
 logger.debug("Inicio")
-list_data=[]
+list_data = []
 hoje = str(datetime.now())
 print(hoje)
 
-data  = {
-        'data': hoje
-        
-       
-
-        }
+data = {"data": hoje}
 
 list_data.append(data)
 json_string = json.dumps(list_data)
 df = pd.read_json(json_string)
-df.to_csv(dir+'data.csv')
+df.to_csv(dir + "data.csv")
 
 print("Inicio: graduate_program_csv_db")
 graduate_program_csv_db()
 print("Fim: graduate_program_csv_db")
 
 print("Inicio: graduate_program_researcher_csv_db")
-graduate_program_researcher_csv_db()   
+graduate_program_researcher_csv_db()
 print("Fim: graduate_program_researcher_csv_db")
 
 
@@ -459,9 +517,8 @@ print("Inicio: researcher_production_tecnical_year_csv_db")
 researcher_production_tecnical_year_csv_db()
 print("Fim: researcher_production_tecnical_year_csv_db")
 
-if project_.project_=="2":
-   profnit_graduate_program_csv_db()
-
+if project_.project_ == "2":
+    profnit_graduate_program_csv_db()
 
 
 print("Inicio: researcher_csv_db")

@@ -18,8 +18,6 @@ def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
     filter_p = filter_p[5 : len(filter_p)]
     filter_i = filter_i[5 : len(filter_i)]
 
-    # filter= util.filterSQL(text,";","or","gae.name")
-
     sql = """
 
      SELECT DISTINCT    r.id as researcher_id ,r.institution_id,r.city_id,

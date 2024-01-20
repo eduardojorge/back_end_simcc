@@ -1,8 +1,5 @@
 # import requests
-import json
 import pandas as pd
-import psycopg2
-import nltk
 from nltk.tokenize import RegexpTokenizer
 import unidecode
 import Dao.sgbdSQL as sgbdSQL

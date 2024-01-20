@@ -71,26 +71,19 @@ WHERE subquery.eissn=p.issn
 
 UPDATE bibliographic_production_article  SET qualis='B1' WHERE periodical_magazine_name='Journal Of Bioengineering, Technologies And Health'
 
-
-
- UPDATE  periodical_magazine p SET jcr= translate(jcr,'<','')
+UPDATE  periodical_magazine p SET jcr= translate(jcr,'<','')
  
- 
-
-
-
 SELECT (p.jcr) AS t FROM periodical_magazine p WHERE p.jcr IS NOT NULL
- ORDER BY p.jcr desc
+ORDER BY p.jcr desc
 
 SELECT * from bibliographic_production b
- WHERE b.researcher_id='cc04c3fb-78cf-4f4f-a0af-1a4232008e37' AND b.year='2023'
+WHERE b.researcher_id='cc04c3fb-78cf-4f4f-a0af-1a4232008e37' AND b.year='2023'
  
 SELECT * FROM bibliographic_production_article ba
 WHERE ba.bibliographic_production_id='f41157c7-c04e-4931-9822-b27137e6f870'
 
 SELECT * FROM periodical_magazine p 
 WHERE  p.id='4459b244-68a9-42f6-8760-1049afd51361' OR p.id='0e5a30d5-e9a1-4b3c-8aef-7636da775fa7'
-
 
 DELETE FROM bibliographic_production_article ba where ba.id='184e0eca-7897-419c-b391-824c8b1fc0d8'
 

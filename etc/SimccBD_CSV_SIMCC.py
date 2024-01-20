@@ -1,5 +1,4 @@
 import Dao.sgbdSQL as sgbdSQL
-import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
 import logging
 import json
@@ -7,20 +6,15 @@ from datetime import datetime
 import sys
 
 import project as project_
-#import lattes10 as lattes10
 
 
-#dir="C:\\simccv3\\"
-#python3 SimccBD_CSV.py   "cimatec_v7"  "172.25.0.84" "C:\simccv3\" 
-
-dir= host_=sys.argv[2]
-project_.project_=sys.argv[1]
+dir = host_ = sys.argv[2]
+project_.project_ = sys.argv[1]
 print(dir)
-  
+
 
 def fat_simcc_bibliographic_production():
-
-   sql="""
+    sql = """
       
   
                            
@@ -45,65 +39,72 @@ def fat_simcc_bibliographic_production():
 
     """
 
-   reg = sgbdSQL.consultar_db(sql )
-   logger.debug(sql)
+    reg = sgbdSQL.consultar_db(sql)
+    logger.debug(sql)
 
-        
-   
-   df_bd = pd.DataFrame(reg, columns=[ 'title','tipo','researcher_id','year','institution_id','qualis','periodical_magazine_name','jcr','jcr_link','city_id'])
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "title",
+            "tipo",
+            "researcher_id",
+            "year",
+            "institution_id",
+            "qualis",
+            "periodical_magazine_name",
+            "jcr",
+            "jcr_link",
+            "city_id",
+        ],
+    )
 
-   df_bd.to_csv(dir+'fat_simcc_bibliographic_production.csv')
-  
+    df_bd.to_csv(dir + "fat_simcc_bibliographic_production.csv")
+
 
 def dim_researcher_csv_db():
-
-   sql=""" SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
+    sql = """ SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation
         
 
         FROM  researcher r """
 
-   reg = sgbdSQL.consultar_db(sql)
-   
-   logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['researcher','researcher_id','last_update','graduation'])
+    reg = sgbdSQL.consultar_db(sql)
 
-   df_bd.to_csv(dir+'dim_researcher.csv')
+    logger.debug(sql)
+
+    df_bd = pd.DataFrame(
+        reg, columns=["researcher", "researcher_id", "last_update", "graduation"]
+    )
+
+    df_bd.to_csv(dir + "dim_researcher.csv")
+
 
 def dim_institution_csv_db():
+    sql = """   SELECT i.id,i.name, i.acronym  FROM institution i """
 
-   sql="""   SELECT i.id,i.name, i.acronym  FROM institution i """
+    reg = sgbdSQL.consultar_db(sql)
 
-   reg = sgbdSQL.consultar_db(sql)
-   
-   logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['institution_id','name','acronym '])
+    logger.debug(sql)
 
-   df_bd.to_csv(dir+'dim_institution.csv')
+    df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym "])
+
+    df_bd.to_csv(dir + "dim_institution.csv")
 
 
 def dim_city_csv_db():
+    sql = """   SELECT c.id,c.name  FROM city c """
 
-   sql="""   SELECT c.id,c.name  FROM city c """
+    reg = sgbdSQL.consultar_db(sql)
 
-   reg = sgbdSQL.consultar_db(sql)
-   
-   logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['city_id','name'])
+    logger.debug(sql)
 
-   df_bd.to_csv(dir+'dim_city.csv')
+    df_bd = pd.DataFrame(reg, columns=["city_id", "name"])
+
+    df_bd.to_csv(dir + "dim_city.csv")
 
 
 # Função processar e inserir a produção de cada pesquisador
 def fat_production_tecnical_year_novo_csv_db():
-    
-    
-    sql= """
+    sql = """
               SELECT distinct title,development_year::int AS year, 'PATENTE' as TYPE,p.researcher_id,r.city_id,r.institution_id
           FROM patent p, researcher r
           WHERE 
@@ -134,38 +135,34 @@ def fat_production_tecnical_year_novo_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=['title','year','type','researcher_id','city_id','institution_id'])
+    df_bd = pd.DataFrame(
+        reg,
+        columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
+    )
 
-    df_bd.to_csv(dir+'fat_production_tecnical_year_novo_csv_db.csv')   
+    df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
+
 
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
-logging.basicConfig(filename = "logfile_csv.log",
-                    filemode = "w",
-                    format = Log_Format, 
-                    level = logging.DEBUG)
+logging.basicConfig(
+    filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
+)
 
 logger = logging.getLogger()
 
-       
+
 logger.debug("Inicio")
-list_data=[]
+list_data = []
 hoje = str(datetime.now())
 print(hoje)
 
-data  = {
-        'data': hoje
-        
-       
-
-        }
+data = {"data": hoje}
 
 list_data.append(data)
 json_string = json.dumps(list_data)
 df = pd.read_json(json_string)
-df.to_csv(dir+'data.csv')
-
-
+df.to_csv(dir + "data.csv")
 
 
 print("Inicio: fat_simcc_bibliographic_production")
