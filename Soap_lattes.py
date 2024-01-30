@@ -62,7 +62,8 @@ def salvarCV(id, dir):
          zip_ref.extractall(dir+'/atual')
          if os.path.exists(id + '.zip'):
             os.remove(id + '.zip')
-    except:
+    except Exception as E:
+        print(E)
         #    print('----------Err:Currículo não  existe')  
         logger.error('----------Err:Currículo não  existe')
         
@@ -100,21 +101,21 @@ print(df)
 LATTES_ID=0
 
 x=0
-for i,infos in df.iterrows():
+# for i,infos in df.iterrows():
    
 
-    print("teste x "+ str(infos[LATTES_ID]))
-    print(len(str(infos[LATTES_ID])))
-    if (len(str(infos[LATTES_ID]))==14):
-        lattes_id="00"+str(infos[LATTES_ID])
-    elif (len(str(infos[LATTES_ID]))==15):
-        lattes_id="0"+str(infos[LATTES_ID])
-    else:
-        lattes_id=str(infos[LATTES_ID])
+#     print("teste x "+ str(infos[LATTES_ID]))
+#     print(len(str(infos[LATTES_ID])))
+#     if (len(str(infos[LATTES_ID]))==14):
+#         lattes_id="00"+str(infos[LATTES_ID])
+#     elif (len(str(infos[LATTES_ID]))==15):
+#         lattes_id="0"+str(infos[LATTES_ID])
+#     else:
+#         lattes_id=str(infos[LATTES_ID])
 
 
-    salvarCV( lattes_id,'/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos')
-    x=x+1
+salvarCV( "",'/home/eduardomfjorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/curriculos')
+x=x+1
 print("Fim "+str(x) )    
 logger.debug("Fim Total:"+str(x) )
 
