@@ -635,6 +635,8 @@ article=True
 #sql = "DELETE FROM researcher_frequency "
 #sgbdSQL.execScript_db(sql)            
 #insert_researcher_frequency_bigrama_db(1)
+
+"""
 for i in range(4928):
   if (i%100)==0:
       print(i)
@@ -645,7 +647,7 @@ for i in range(4928):
 
       #insert_researcher_frequency_db(1)
 
-
+"""
 
 
 #lista = {}

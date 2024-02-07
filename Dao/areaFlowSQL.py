@@ -396,6 +396,7 @@ def lista_researcher_participation_event_db(text,institution,graduate_program_id
                            r.name ,i.name ,rp.articles ,
                          rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
                         r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                        order by qtd desc
 
                          
                       
@@ -468,6 +469,7 @@ def lista_researcher_patent_db(text,institution,graduate_program_id):
                            r.name ,i.name ,rp.articles ,
                          rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
                         r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
+                        order by  qtd desc
 
                          
                       

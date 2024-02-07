@@ -22,7 +22,10 @@ def get_researcher_address_db(researcher_id):
  # Função para listar a palavras do dicionário passando as iniciais 
 def list_research_dictionary_db(initials,type):
      initials=unidecode.unidecode(initials)
-     filter =  " AND   LOWER(unaccent(term)) LIKE \'"+initials+"%\' "
+
+
+     #filter =  " AND   LOWER(unaccent(term)) LIKE \'"+initials+"%\' "
+     filter= util.filterSQLRank(initials,";","term")
      fetch = " fetch FIRST 10 rows only"
      if initials=="":
         filter ="" 
@@ -380,7 +383,7 @@ def lists_bibliographic_production_article_researcher_db(term,researcher_id,year
                 order by year desc""" % (year,filter,filterQualis,researcher_id)
            
            reg = sgbdSQL.consultar_db(sql)
-           print(sql)
+           #print(sql)
           
      if (type=='ABSTRACT'):
           
