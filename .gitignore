@@ -1,1 +1,6 @@
 *.log
+__pycache__/
+*.jpg
+*.log
+.*
+test*
