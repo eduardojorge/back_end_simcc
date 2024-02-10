@@ -1,65 +1,55 @@
-from flask import Flask, jsonify, request,Blueprint
+from flask import jsonify, request, Blueprint
 
-import json
-#import nltk
-import unidecode
-from flask_cors import CORS,cross_origin
-import os
+from flask_cors import cross_origin
 
 import Dao.graduate_programSQL as graduate_programSQL
-import Dao.sgbdSQL as sgbdSQL
 
-from Model.GraduateProgram  import GraduateProgram 
-from Model.Bibliographic_Production_Researcher import Bibliographic_Production_Researcher
-
-
-import project as project_
+from Model.GraduateProgram import GraduateProgram
 
 
 ##from server import app
 
-#https://www.fullstackpython.com/flask-json-jsonify-examples.html
-#app = Flask(__name__)
-#app.config["CORS_HEADERS"] = "Content-Type"
-#app.route('/')
-#CORS(app, resources={r"/*":{"origins":"*"}})
-#app = Flask(__name__)
+# https://www.fullstackpython.com/flask-json-jsonify-examples.html
+# app = Flask(__name__)
+# app.config["CORS_HEADERS"] = "Content-Type"
+# app.route('/')
+# CORS(app, resources={r"/*":{"origins":"*"}})
+# app = Flask(__name__)
 
-#if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
+# if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
 
 
-graduateProgramRest = Blueprint('graduateProgramRest', __name__)
+graduateProgramRest = Blueprint("graduateProgramRest", __name__)
 
-#print(list_originals_words_initials_term_db("rob")) 
-@graduateProgramRest.route('/graduate_program_production', methods=['GET'])
+
+# print(list_originals_words_initials_term_db("rob"))
+@graduateProgramRest.route("/graduate_program_production", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-
 def graduate_program_production():
-  
+    graduate_program_id = request.args.get("graduate_program_id")
 
-  graduate_program_id =request.args.get('graduate_program_id')
+    year = request.args.get("year")
 
-  year =request.args.get('year')
-  
-  return jsonify(graduate_programSQL.production_general_db(graduate_program_id,year)),200
-
+    return (
+        jsonify(graduate_programSQL.production_general_db(graduate_program_id, year)),
+        200,
+    )
 
 
 ######### Fluxo Area
 
-#print(list_originals_words_initials_term_db("rob")) 
-@graduateProgramRest.route('/graduate_program', methods=['GET'])
+
+# print(list_originals_words_initials_term_db("rob"))
+@graduateProgramRest.route("/graduate_program", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-
 def graduate_program():
-
-    list_gradute_program =[]
-    institution_id =request.args.get('institution_id')
-    #print("yyyyy "+graduate_program_id  )
+    list_gradute_program = []
+    institution_id = request.args.get("institution_id")
+    # print("yyyyy "+graduate_program_id  )
     if institution_id is None:
-        institution_id =""
+        institution_id = ""
     df_bd = graduate_programSQL.graduate_program_db(institution_id)
-    for i,infos in df_bd.iterrows():
+    for i, infos in df_bd.iterrows():
         graduateProgram = GraduateProgram()
         graduateProgram.graduate_program_id = str(infos.graduate_program_id)
         graduateProgram.code = str(infos.code)
@@ -69,37 +59,28 @@ def graduate_program():
         graduateProgram.type = str(infos.type)
         graduateProgram.rating = str(infos.rating)
 
-      
+        list_gradute_program.append(graduateProgram.getJson())
 
-        list_gradute_program.append(graduateProgram.getJson()) 
-
-    return jsonify(list_gradute_program),200
+    return jsonify(list_gradute_program), 200
 
 
-
-
-#print(list_originals_words_initials_term_db("rob")) 
-@graduateProgramRest.route('/graduate_program_profnit', methods=['GET'])
+# print(list_originals_words_initials_term_db("rob"))
+@graduateProgramRest.route("/graduate_program_profnit", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-
 def graduate_program_profnit():
+    list_gradute_program = []
 
-    list_gradute_program =[]
-
-    id =request.args.get('id')
+    id = request.args.get("id")
 
     #
     # project_.project_=id
-   
-   
 
-
-    #institution_id =request.args.get('institution_id')
-    #print("yyyyy "+graduate_program_id  )
-    #if institution_id is None:
-       # institution_id =""
+    # institution_id =request.args.get('institution_id')
+    # print("yyyyy "+graduate_program_id  )
+    # if institution_id is None:
+    # institution_id =""
     df_bd = graduate_programSQL.graduate_program_profnit_db()
-    for i,infos in df_bd.iterrows():
+    for i, infos in df_bd.iterrows():
         graduateProgram = GraduateProgram()
         graduateProgram.graduate_program_id = str(infos.graduate_program_id)
         graduateProgram.code = str(infos.code)
@@ -109,7 +90,7 @@ def graduate_program_profnit():
         graduateProgram.type = str(infos.type)
         graduateProgram.rating = str(infos.rating)
         graduateProgram.state = str(infos.state)
-        graduateProgram.city =str(infos.city)
+        graduateProgram.city = str(infos.city)
         graduateProgram.instituicao = str(infos.instituicao)
         graduateProgram.url_image = str(infos.url_image)
         graduateProgram.region = str(infos.region)
@@ -117,21 +98,10 @@ def graduate_program_profnit():
         graduateProgram.longitude = infos.longitude
         graduateProgram.sigla = infos.sigla
 
+        list_gradute_program.append(graduateProgram.getJson())
+
+    return jsonify(list_gradute_program), 200
 
 
-      
-
-        list_gradute_program.append(graduateProgram.getJson()) 
-
-    return jsonify(list_gradute_program),200
-
-
-
-
-
-
-##############################################################################
-
-if __name__ == '__main__':
-    # run app in debug mode on port 5000
-    cimatecRest.run(debug=True, port=5001, host='0.0.0.0')
+# if __name__ == "__main__":
+# cimatecRest.run(debug=True, port=5001, host="0.0.0.0")
