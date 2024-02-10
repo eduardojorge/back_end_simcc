@@ -19,7 +19,7 @@ def image():
     researcher_id = request.args.get("researcher_id")
     try:
         path_image = (
-            "/home/ejorge/simcc/back_end_simcc/files/image_researcher/{id}.jpg".format(
+            "/home/ejorge/simcc/back_end_simcc/Files/image_researcher/{id}.jpg".format(
                 id=researcher_id
             )
         )
@@ -27,7 +27,7 @@ def image():
     except:
         download_image(researcher_id)
         path_image = (
-            "/home/ejorge/simcc/back_end_simcc/files/image_researcher/{id}.jpg".format(
+            "/home/ejorge/simcc/back_end_simcc/Files/image_researcher/{id}.jpg".format(
                 id=researcher_id
             )
         )
