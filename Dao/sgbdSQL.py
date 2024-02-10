@@ -40,6 +40,7 @@ def consultar_db(sql):
 def conecta_db():
     password_ = "root"
     host_ = "127.0.0.1"
+
     if (project.getProject()) == "1":
         database_ = "cimatec_v7"
         host_ = "172.25.0.84"
@@ -59,7 +60,6 @@ def conecta_db():
     if (project.getProject()) == "8":
         print("Dentro do ambiente administrativo")
         database_ = "adm_simcc"
-        password_ = "987456"
 
     con = psycopg2.connect(
         host=host_,
