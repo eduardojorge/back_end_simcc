@@ -16,11 +16,11 @@ import unidecode
 import Dao.util as util
 
 
-import project as project_
+import project
 import sys
 from Model.Year_Barema import Year_Barema
 
-project_.project_ = "4"
+project.project_env = "4"
 
 
 def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
