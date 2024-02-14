@@ -1,24 +1,8 @@
-from datetime import datetime, timedelta
-import Dao.resarcher_baremaSQL as resarcher_baremaSQL
-
 import Dao.sgbdSQL as sgbdSQL
-import Dao.termFlowSQL as termFlowSQL
-import Dao.areaFlowSQL as areaFlowSQL
-import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
-import logging
-import json
-from datetime import datetime
-import nltk
-from nltk.tokenize import RegexpTokenizer
-import sys
 import unidecode
 import Dao.util as util
-
-
 import project
-import sys
-from Model.Year_Barema import Year_Barema
 
 project.project_env = "4"
 
