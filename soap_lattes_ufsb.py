@@ -7,7 +7,6 @@ import pandas as pd
 
 import logging
 from datetime import datetime
-import Dao.sgbdSQL as db
 import project as project
 
 
@@ -30,7 +29,6 @@ def last_update(xml_filename):
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
     CPF = extract_int(CPF)
-
     resultado = client.service.getIdentificadorCNPq(
         nomeCompleto=name, dataNascimento=date, cpf=CPF
     )
@@ -66,8 +64,14 @@ def salvarCV(id, dir):
         logger.error("\nErro: Currículo não  existe")
 
 
-def extract_int(string: str):
-    return [int(i) for i in string.split() if i.isdigit()]
+def extract_int(string: str) -> str:
+    sanitized_string = str()
+
+    for character in string:
+        if character.isdigit():
+            sanitized_string += character
+
+    return sanitized_string
 
 
 if __name__ == "__main__":
@@ -84,7 +88,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.debug("Inicio")
 
-    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-SIMCC/metadata/dataset/xml"
 
     for files in os.listdir(dir):
         try:
@@ -96,10 +100,9 @@ if __name__ == "__main__":
     quant_curriculos = 0
 
     df = pd.read_excel("Files/researcher_ufsb.xlsx")
-
     for Index, Data in df.iterrows():
-
-        lattes_id = get_id_cnpq(CPF=Data["CPF"])
+        quant_curriculos += 1
+        lattes_id = get_id_cnpq(CPF=extract_int(str(Data["CPF"])))
 
         print(f"Curriculo número: {quant_curriculos}\nID do pesquisador: {lattes_id}")
 
