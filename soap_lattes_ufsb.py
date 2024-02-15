@@ -29,16 +29,15 @@ def last_update(xml_filename):
 
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
-    CPF = CPF.replace(".", "")
-    CPF = CPF.replace("-", "")
+    CPF = extract_int(CPF)
 
     resultado = client.service.getIdentificadorCNPq(
         nomeCompleto=name, dataNascimento=date, cpf=CPF
     )
-    if resultado != None:
-        return resultado
+    if resultado:
+        return resultado.zfill(16)
     else:
-        print("Pesquisador não encontrado")
+        return str("0" * 16)
 
 
 def salvarCV(id, dir):
@@ -67,21 +66,8 @@ def salvarCV(id, dir):
         logger.error("\nErro: Currículo não  existe")
 
 
-def get_researcher_adm_simcc():
-    project.project_env = "8"
-
-    script_sql = """
-        SELECT 
-            name,
-            lattes_id
-        FROM
-            researcher;
-        """
-    registry = db.consultar_db(script_sql)
-
-    df = pd.DataFrame(registry, columns=["name", "lattes_id"])
-
-    return df
+def extract_int(string: str):
+    return [int(i) for i in string.split() if i.isdigit()]
 
 
 if __name__ == "__main__":
@@ -116,11 +102,6 @@ if __name__ == "__main__":
         lattes_id = get_id_cnpq(CPF=Data["CPF"])
 
         print(f"Curriculo número: {quant_curriculos}\nID do pesquisador: {lattes_id}")
-
-        if len(lattes_id) == 14:
-            lattes_id = "00" + str(Data["lattes_id"])
-        elif len(lattes_id) == 15:
-            lattes_id = "0" + str(Data["lattes_id"])
 
         salvarCV(
             lattes_id,
