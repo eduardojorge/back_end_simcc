@@ -35,7 +35,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
     if resultado:
         return resultado.zfill(16)
     else:
-        return str("0" * 16)
+        return resultado
 
 
 def salvarCV(id, dir):
@@ -97,20 +97,21 @@ if __name__ == "__main__":
             logger.error("Erro 003: Directory")
     logger.debug("Arquivos XML removidos")
 
-    quant_curriculos = 0
+    quant_loss = 0
 
     df = pd.read_excel("Files/researcher_ufsb.xlsx")
+
     for Index, Data in df.iterrows():
-        quant_curriculos += 1
+        print(f"Loading: {Index}")
         lattes_id = get_id_cnpq(CPF=extract_int(str(Data["CPF"])))
 
-        print(f"Curriculo número: {quant_curriculos}\nID do pesquisador: {lattes_id}")
+        if lattes_id:
+            salvarCV(
+                lattes_id,
+                dir,
+            )
+        else:
+            quant_loss += 1
 
-        salvarCV(
-            lattes_id,
-            dir,
-        )
-        quant_curriculos += 1
-
-    logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    logger.debug(f"Download concluido, quantidade de perdas: {str(quant_loss)}")
+    print(f"FIM, Quantidade de curriculos processados: {str(quant_loss)}")
