@@ -90,9 +90,9 @@ if __name__ == "__main__":
 
     dir = "/home/ejorge/hop/config/projects/Jade-Extrator-SIMCC/metadata/dataset/xml"
 
-    for files in os.listdir(dir):
+    for Files in os.listdir(dir):
         try:
-            os.remove(os.path.join(dir, files))
+            os.remove(os.path.join(dir, Files))
         except:
             logger.error("Erro 003: Directory")
     logger.debug("Arquivos XML removidos")

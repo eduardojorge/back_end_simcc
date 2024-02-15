@@ -419,40 +419,6 @@ logger.debug(SCRIPT_SQL)
 
 print("Passo II")
 
-
-# create_researcher_production_db(0 )
-
-
-# create_area_ditionary_db()
 TESTE = 0
 
 create_researcher_dictionary_db(TESTE, 0, 0, 0, 1)
-
-
-# Levenshtein Distance
-""""
-sql = "DELETE FROM researcher_frequency "
-sgbdSQL.execScript_db(sql)            
-sql = "DELETE FROM researcher_patent_frequency "
-sgbdSQL.execScript_db(sql) 
-sql = "DELETE FROM researcher_abstract_frequency "
-sgbdSQL.execScript_db(sql)            
-#insert_researcher_frequency_bigrama_db(1)
-for i in range(4928):
-  if (i%100)==0:
-      print(i)
-      t=threading.Thread(target=insert_researcher_frequency_db,args=(teste,article,i), name='t'+str(i))
-      t.start()
-      print("Thread ativa %x " % threading.active_count())
-      #t.start()
-      #insert_researcher_frequency_db(1)
-"""
-
-# lista = {}
-# lista ['Robótica'] = {"frequencia":1}
-# lista ['Educacao'] = {"frequencia":0}
-
-# print(lista['Robótica'].get("termo"))
-# print(lista['Robótica'].get("frequencia"))
-# lista['Robótica'].update( {"frequencia":12})
-# print(lista['Robótica'].get("frequencia"))

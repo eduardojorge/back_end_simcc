@@ -127,7 +127,7 @@ def list_researchers_article_abstract_tax_db(tax_id, term, word, type):
     return df_bd
 
 
-# df = pd.read_excel(r'files/pesquisadoresCimatec_v1.xlsx')
+# df = pd.read_excel(r'Files/pesquisadoresCimatec_v1.xlsx')
 # df = pd.read_excel(r'C:\simccv3\tEnergiasRenovaveis.xlsx')
 df = pd.read_excel(r"C:\simccv3\Taxonomia.xlsx")
 
