@@ -37,6 +37,8 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
     )
     if resultado != None:
         return resultado
+    else:
+        print("Pesquisador não encontrado")
 
 
 def salvarCV(id, dir):

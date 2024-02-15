@@ -1,26 +1,12 @@
+from nltk.tokenize import RegexpTokenizer
+from datetime import datetime, timedelta
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
-import psycopg2
-import nltk
-from nltk.tokenize import RegexpTokenizer
-import unidecode
-import string
-import threading
-import time
 import traceback
-import Dao.areaFlowSQL as areaFlowSQL
-import Dao.util as util
-import Dao.termFlowSQL as termFlowSQL
 import logging
-from datetime import datetime, timedelta
-import lattes10
-
-# import Soap_lattes
-
-
-import concurrent.futures
-
 import project
+import nltk
+import time
 
 dataP = datetime.today() - timedelta(days=100000)
 
@@ -28,15 +14,13 @@ import sys
 
 project.project_env = sys.argv[1]
 researcher_teste1 = "r.name LIKE 'Manoel %' OR r.name LIKE 'Gesil Sampaio%' "
-# researcher_teste2 ="r.name LIKE \'Hugo Saba%\' OR r.name LIKE \'Josemar Rodri%\'"
 
 
 def insert_researcher_frequency_db(teste, article, offset):
     time.sleep(3)
     filter = ""
     if teste == True:
-        filter = " and  b.created_at>= '%s'" % dataP
-        # + " or " +researcher_teste2
+        filter = f" and  b.created_at>= '{dataP}'"
 
     reg = sgbdSQL.consultar_db(
         "SELECT  distinct  r.id from researcher r, bibliographic_production b where r.id =b.researcher_id "
@@ -53,7 +37,7 @@ def insert_researcher_frequency_db(teste, article, offset):
         researcher_id = infos.id
         print(infos.id)
         print((i + offset))
-        logger.debug(sql)
+        logger.debug(SCRIPT_SQL)
         insert_researcher_frequency_caracter_bd(researcher_id, article)
         insert_researcher_abstract_frequency_caracter_bd(researcher_id)
         insert_researcher_patent_frequency_caracter_bd(researcher_id)
@@ -117,8 +101,8 @@ def insert_researcher_abstract_frequency_caracter_bd(researcher_id):
 
         sgbdSQL.execScript_db(sql)
 
-    except Exception as e:
-        print(e)
+    except Exception as ERROR:
+        print(ERROR)
         traceback.print_exc()
 
 
@@ -387,51 +371,50 @@ except Exception as e:
     print(e)
     traceback.print_exc()
 
-sql = """
+SCRIPT_SQL = """
 
 UPDATE bibliographic_production_article ba SET qualis='A4' WHERE ba.issn='17412242'
 
 """
-sgbdSQL.execScript_db(sql)
-logger.debug(sql)
+sgbdSQL.execScript_db(SCRIPT_SQL)
+logger.debug(SCRIPT_SQL)
 
-sql = """
+SCRIPT_SQL = """
 
 UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,eissn,url_revista
       FROM  "JCR_novo_link_v1" ) AS subquery
 WHERE translate(subquery.eissn,'-','')=p.issn
 """
-sgbdSQL.execScript_db(sql)
+sgbdSQL.execScript_db(SCRIPT_SQL)
 
-logger.debug(sql)
+logger.debug(SCRIPT_SQL)
 
-sql = """
-
+SCRIPT_SQL = """
 UPDATE  bibliographic_production_article p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,issn,url_revista
       FROM  "JCR_novo_link_v1" ) AS subquery
 WHERE translate(subquery.issn,'-','')=p.issn
 """
-sgbdSQL.execScript_db(sql)
+sgbdSQL.execScript_db(SCRIPT_SQL)
 
-logger.debug(sql)
+logger.debug(SCRIPT_SQL)
 
 
 # print(areaFlowSQL.lists_area_speciality_researcher_db('215a5c60-d882-4936-9445-da4742c14802'))
-sql = """
+SCRIPT_SQL = """
       UPDATE bibliographic_production SET YEAR_=YEAR::INTEGER
         """
 
-sgbdSQL.execScript_db(sql)
-logger.debug(sql)
+sgbdSQL.execScript_db(SCRIPT_SQL)
+logger.debug(SCRIPT_SQL)
 
 
-sql = """ UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' OR issn='2764622'"""
+SCRIPT_SQL = """ UPDATE bibliographic_production_article  SET qualis='B2' WHERE issn='26748568' OR issn='2764622'"""
 
-sgbdSQL.execScript_db(sql)
+sgbdSQL.execScript_db(SCRIPT_SQL)
 
-logger.debug(sql)
+logger.debug(SCRIPT_SQL)
 
 
 print("Passo II")
@@ -441,9 +424,9 @@ print("Passo II")
 
 
 # create_area_ditionary_db()
-teste = 0
+TESTE = 0
 
-create_researcher_dictionary_db(teste, 0, 0, 0, 1)
+create_researcher_dictionary_db(TESTE, 0, 0, 0, 1)
 
 
 # Levenshtein Distance
@@ -462,10 +445,7 @@ for i in range(4928):
       t.start()
       print("Thread ativa %x " % threading.active_count())
       #t.start()
-
       #insert_researcher_frequency_db(1)
-
-
 """
 
 # lista = {}

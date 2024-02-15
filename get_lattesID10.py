@@ -1,7 +1,6 @@
 import urllib3
 import time
 import requests
-from requests.adapters import HTTPAdapter, Retry
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 
@@ -53,11 +52,10 @@ def lattes_10_researcher_frequency_db():
 
         lattes_10_id = ""
         lattes_10_id = getLattesId10(infos.lattes)
-        sql = """
-        UPDATE  researcher set lattes_10_id='%s' where id=\'%s\' """ % (
-            lattes_10_id,
-            infos.id,
-        )
+        sql = f"""
+            UPDATE researcher set lattes_10_id='{lattes_10_id}' where id='{infos.id}' 
+            """
+
         print(sql)
 
         sgbdSQL.execScript_db(sql)
