@@ -531,15 +531,22 @@ def lists_word_researcher_db(researcher_id, graduate_program_id):
 
     filter = ""
     if researcher_id != "":
-        filter = " where b.researcher_id =''%s'' " + researcher_id + "'"
+        filter = "AND b.researcher_id =''%s'' " + researcher_id + "'"
 
-    sql = """    SELECT ndoc as qtd, word as term FROM ts_stat('SELECT translate(unaccent(LOWER(b.title)),''-\.:;'','' '')::tsvector  FROM bibliographic_production b 
-	  %s ')  WHERE CHAR_LENGTH(word)>3 AND word != 'para'
-	 order by ndoc DESC fetch FIRST 20 rows only """ % (
-        filter
-    )
-    print(sql)
-
+    sql = f"""
+        SELECT 
+        	ndoc as qtd,
+        	word as term
+        FROM 
+        	ts_stat('SELECT translate(unaccent(LOWER(b.title)), ''-\.:;,'', '' '')::tsvector FROM bibliographic_production b')  
+        WHERE 
+        	CHAR_LENGTH(word)> 3 
+        	AND word != 'para'
+            {filter}
+        order by
+        	ndoc DESC 
+        fetch FIRST 20 rows only
+        """
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(reg, columns=["qtd", "term"])
