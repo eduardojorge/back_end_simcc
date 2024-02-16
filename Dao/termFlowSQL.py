@@ -531,23 +531,14 @@ def lists_word_researcher_db(researcher_id, graduate_program_id):
 
     filter = ""
     if researcher_id != "":
-        filter = "AND r.researcher_id='" + researcher_id + "'"
-
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+        filter = " where b.researcher_id =''%s'' " + researcher_id + "'"
 
     sql = """    SELECT ndoc as qtd, word as term FROM ts_stat('SELECT translate(unaccent(LOWER(b.title)),''-\.:;'','' '')::tsvector  FROM bibliographic_production b 
-	 where b.researcher_id =''%s''  ')  WHERE CHAR_LENGTH(word)>3 AND word != 'para'
+	  %s ')  WHERE CHAR_LENGTH(word)>3 AND word != 'para'
 	 order by ndoc DESC fetch FIRST 20 rows only """ % (
-        researcher_id
+        filter
     )
     print(sql)
-
-    ##sql =""" SELECT distinct count(unaccent(LOWER(r.term))) AS qtd, unaccent(LOWER(r.term)) as term
-    ## from researcher_frequency r LEFT JOIN graduate_program_researcher gpr ON  r.researcher_id =gpr.researcher_id
-    # WHERE char_length(unaccent(LOWER(r.term)))>3 AND to_tsvector('portuguese', unaccent(LOWER(r.term)))!='' and  unaccent(LOWER(r.term))!='sobre'
-    # % s %s group by r.term  ORDER BY qtd DESC fetch FIRST 20 rows only""" % (filter,filtergraduate_program)
 
     reg = sgbdSQL.consultar_db(sql)
 

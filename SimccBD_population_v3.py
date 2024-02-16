@@ -278,6 +278,13 @@ if __name__ == "__main__":
     sgbdSQL.execScript_db(script_sql)
     logger.debug(script_sql)
 
+    script_sql = """
+        UPDATE bibliographic_production
+        SET title = translate(title, '''', ' ')
+        """
+    sgbdSQL.execScript_db(script_sql)
+    logger.debug(script_sql)
+
     TESTE = 0
 
-    create_researcher_dictionary_db(TESTE, 1, 1, 1, 0)
+    create_researcher_dictionary_db(TESTE, 1, 1, 1, 1)
