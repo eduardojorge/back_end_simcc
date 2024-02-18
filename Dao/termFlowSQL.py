@@ -22,9 +22,9 @@ def get_researcher_address_db(researcher_id):
 
 # Função para listar a palavras do dicionário passando as iniciais
 def list_research_dictionary_db(initials, type):
-    initials = unidecode.unidecode(initials)
 
-    # filter =  " AND   LOWER(unaccent(term)) LIKE \'"+initials+"%\' "
+    initials = unidecode.unidecode(initials.lower())
+
     filter = util.filterSQLRank(initials, ";", "term")
     fetch = " fetch FIRST 10 rows only"
     if initials == "":
@@ -37,8 +37,6 @@ def list_research_dictionary_db(initials, type):
         filterType = " type_='" + type + "'"
 
     filterGraduate_program = ""
-
-    # LEFT JOIN graduate_program_researcher gpr ON  r.researcher_id =gpr.researcher_id
 
     sql = """
            SELECT  distinct unaccent(term) as term,count(frequency) as frequency ,type_  
@@ -57,7 +55,6 @@ def list_research_dictionary_db(initials, type):
         filter,
         fetch,
     )
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])

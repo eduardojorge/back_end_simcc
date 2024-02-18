@@ -38,36 +38,36 @@ def consultar_db(sql):
 
 
 def conecta_db():
-    password = ""
+    password = "987456"
     host = "localhost"
 
     if (project.getProject()) == "1":
-        database_ = "cimatec_v7"
+        database = "cimatec_v7"
         host = "172.25.0.84"
 
         password = 'wn6H4!16NBcb}4%hy6"h'
     if (project.getProject()) == "2":
-        database_ = "simcc_profnit_v1"
+        database = "simcc_profnit_v1"
 
     if (project.getProject()) == "3":
-        database_ = "simcc_ifba"
+        database = "simcc_ifba"
 
     if (project.getProject()) == "4":
-        database_ = "simcc_"
+        database = "simcc_"
 
     if (project.getProject()) == "5":
-        database_ = "proforte"
+        database = "proforte"
 
     if (project.getProject()) == "7":
-        database_ = "inovacao"
+        database = "inovacao"
 
     if (project.getProject()) == "8":
         print("Dentro do ambiente administrativo")
-        database_ = "adm_simcc"
+        database = "adm_simcc"
 
     con = psycopg2.connect(
         host=host,
-        database=database_,
+        database=database,
         user="postgres",
         password=password,
     )
