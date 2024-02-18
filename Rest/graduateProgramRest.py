@@ -68,18 +68,11 @@ def graduate_program():
 @graduateProgramRest.route("/graduate_program_profnit", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def graduate_program_profnit():
-    list_gradute_program = []
 
-    id = request.args.get("id")
+    list_gradute_program = list()
+    graduate_program_id = request.args.get("id")
 
-    #
-    # project_.project_=id
-
-    # institution_id =request.args.get('institution_id')
-    # print("yyyyy "+graduate_program_id  )
-    # if institution_id is None:
-    # institution_id =""
-    df_bd = graduate_programSQL.graduate_program_profnit_db()
+    df_bd = graduate_programSQL.graduate_program_profnit_db(graduate_program_id)
     for i, infos in df_bd.iterrows():
         graduateProgram = GraduateProgram()
         graduateProgram.graduate_program_id = str(infos.graduate_program_id)
