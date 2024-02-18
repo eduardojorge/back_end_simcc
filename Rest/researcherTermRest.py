@@ -71,15 +71,16 @@ def resarcher_barema():
 @researcherTermRest.route("/originals_words", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def originals_words():
+    
     initials = request.args.get("initials")
     type = request.args.get("type")
 
-    df_bd = termFlowSQL.list_research_dictionary_db(initials.lower(), type)
+    df_bd = termFlowSQL.list_research_dictionary_db(initials, type)
 
     list = []
     for i, infos in df_bd.iterrows():
         research_dictionary = {
-            "term": str(infos.term),
+            "term": str(infos.term).capitalize(),
             "frequency": str(infos.frequency),
             "type": str(infos.type),
             "checkbox": 0,
