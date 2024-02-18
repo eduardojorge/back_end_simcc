@@ -527,49 +527,48 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
     return df_bd
 
 
-def lists_word_researcher_db(researcher_id, graduate_program_id):
+def lists_word_researcher_db(researcher_id, graduate_program):
 
-    filter = ""
-    if researcher_id != "":
-        filter = "AND b.researcher_id =''%s'' " + researcher_id + "'"
+    filter_researcher = str()
+    filter_graduate_program = str()
 
-    sql = f"""
-        SELECT 
+    if researcher_id:
+        filter_researcher = f"WHERE b.researcher_id = ''{researcher_id}''"
+    elif graduate_program:
+        filter_graduate_program = f"""
+        JOIN
+        	graduate_program_researcher gpr ON
+        		b.researcher_id = gpr.researcher_id
+        WHERE gpr.graduate_program_id = ''{graduate_program}''
+        """
+
+    script_sql = f"""
+        SELECT
+            to_tsvector(''portuguese'', translate(unaccent(LOWER(b.title)), ''-'' || E''\'''' || E''\'''' || ''.'' || '':'' || '';'' || '','', '' ''))
+        FROM
+            bibliographic_production b
+        {filter_researcher}
+        {filter_graduate_program}
+        """
+
+    script_sql = f"""
+        SELECT
         	ndoc as qtd,
         	word as term
-        FROM 
-        	ts_stat('SELECT translate(unaccent(LOWER(b.title)), ''-\.:;,'', '' '')::tsvector FROM bibliographic_production b')  
-        WHERE 
-        	CHAR_LENGTH(word)> 3 
-        	AND word != 'para'
-            {filter}
-        order by
-        	ndoc DESC 
-        fetch FIRST 20 rows only
+        FROM
+        	ts_stat('{script_sql}')
+        WHERE
+        	CHAR_LENGTH(word)> 3
+        ORDER BY
+        	ndoc DESC
+        FETCH FIRST 20 ROWS ONLY;
         """
-    reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=["qtd", "term"])
+    reg = sgbdSQL.consultar_db(script_sql)
 
-    return df_bd
+    data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
 
-
-"""
- reg = sgbdSQL.consultar_db("SELECT  (term_1 || ' '|| term_2) as term,frequency "+
-                        " FROM research_dictionary_bigram WHERE  term_1 <> term_2 AND LOWER(unaccent(term_1)) LIKE \'"+initials+"%\'"+
-
-                        " ORDER BY frequency desc fetch FIRST 10 rows only")
-
-                         
-     df_bd = pd.DataFrame(reg, columns=['term','frequency'])
-  
-     for i,infos in df_bd.iterrows():
-        research_dictionary  = {
-        'term': str(infos.term),
-        'frequency': str(infos.frequency),
-         }
-        list.append( research_dictionary )
-"""
+    return data_frame
 
 
 def lista_institution_production_db(text, institution, type_):

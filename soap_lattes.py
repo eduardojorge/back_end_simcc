@@ -128,4 +128,3 @@ if __name__ == "__main__":
 
     print("------------Registro:" + str(x))
     print("------------Fim " + str(x))
-    # salvarCV('5674134492786099','/home/eduardomfjorge/teste/curriculos')

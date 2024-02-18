@@ -453,7 +453,7 @@ def qualis_researcher():
     for i, infos in df_bd.iterrows():
         qualis = {
             "among": str(infos.qtd),
-            "qualis": str(infos.qualis)
+            "qualis": str(infos.qualis),
             # 'year':str(infos.year)
         }
         # print(researcher)
@@ -472,17 +472,10 @@ def lists_word_researcher():
         graduate_program_id = ""
 
     lists_word = []
-
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = termFlowSQL.lists_word_researcher_db(researcher_id, graduate_program_id)
 
-    "qtd", "term"
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
+    for Index, infos in df_bd.iterrows():
         words = {"among": str(infos.qtd), "term": str(infos.term)}
-        # print(researcher)
         lists_word.append(words)
 
     return jsonify(lists_word), 200
