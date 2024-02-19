@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
-import logging
+import project
 
 
 def getLattesId10(lattes_id: str) -> str:
@@ -21,8 +21,8 @@ def getLattesId10(lattes_id: str) -> str:
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
     }
 
-    url = "http://lattes.cnpq.br/" + lattes_id
-    # url="https://buscatextual.cnpq.br/buscatextual/download.do?metodo=apresentar&idcnpq=6716225567627323"
+    url = f"http://lattes.cnpq.br/{lattes_id}"
+
     response = requests.get(url, headers=headers, stream=True)
     with open("name", "wb") as f:
         f.write(response.content)
@@ -37,29 +37,33 @@ def getLattesId10(lattes_id: str) -> str:
     return None
 
 
-def lattes_10_researcher_frequency_db(logger):
+def update_lattes_id_10():
 
-    reg = sgbdSQL.consultar_db(
-        "SELECT r.id as id, r.lattes_id as lattes from researcher r "
-    )
-    #'where id=\'35e6c140-7fbb-4298-b301-c5348725c467\''+
-    #' OR id=\'c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf\' ')
-    df_bd = pd.DataFrame(reg, columns=["id", "lattes"])
-    # print (df_bd)
-    for i, infos in df_bd.iterrows():
+    project.project_env = "4"
 
-        lattes_10_id = ""
-        lattes_10_id = getLattesId10(infos.lattes)
-        sql = """
-        UPDATE  researcher set lattes_10_id='%s' where id=\'%s\' """ % (
-            lattes_10_id,
-            infos.id,
-        )
+    script_sql = """
+        SELECT 
+            r.id as id, 
+            r.lattes_id as lattes 
+        FROM 
+            researcher r;
+        """
 
-        print(sql)
-        logger.debug(sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
-        sgbdSQL.execScript_db(sql)
+    data_frame = pd.DataFrame(reg, columns=["id", "lattes"])
+
+    for Index, infos in data_frame.iterrows():
+
+        lattes_10_id = getLattesId10(infos["lattes"])
+
+        script_sql = f"""
+            UPDATE researcher 
+            SET lattes_10_id = '{lattes_10_id}' WHERE id = '{infos['id']}';
+            """
+
+        print(f"Sucesso com o pesquisador número: {Index}")
+        sgbdSQL.execScript_db(script_sql)
 
 
-print("Passo I")
+update_lattes_id_10()
