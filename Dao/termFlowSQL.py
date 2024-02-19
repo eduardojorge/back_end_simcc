@@ -414,34 +414,35 @@ def lists_bibliographic_production_article_researcher_db(
     if type == "ARTICLE":
         script_sql = f""" 
             SELECT DISTINCT 
-            b.id AS id,
-            title,
-            b.year AS year,
-            type,
-            doi,
-            qualis,
-            periodical_magazine_name AS magazine,
-            r.name AS researcher,
-            r.lattes_10_id AS lattes_10_id,
-            r.lattes_id AS lattes_id,
-            jcr AS jif,
-            jcr_link 
-        FROM 
-            bibliographic_production b, 
-            bibliographic_production_article ba,
-            institution i, 
-            researcher r 
-        WHERE 
-            r.id = b.researcher_id
-            AND b.id = ba.bibliographic_production_id 
-            AND r.institution_id = i.id
-            AND year_ >= {year}  
-            {filter} 
-            {filter_qualis}
-            AND r.id = '{researcher_id}' 
-        ORDER BY 
-            year DESC
-        """
+                b.id AS id,
+                title,
+                b.year AS year,
+                type,
+                doi,
+                qualis,
+                periodical_magazine_name AS magazine,
+                r.name AS researcher,
+                r.lattes_10_id AS lattes_10_id,
+                r.lattes_id AS lattes_id,
+                jcr AS jif,
+                jcr_link,
+                r.id as researcher_id
+            FROM 
+                bibliographic_production b, 
+                bibliographic_production_article ba,
+                institution i, 
+                researcher r 
+            WHERE 
+                r.id = b.researcher_id
+                AND b.id = ba.bibliographic_production_id 
+                AND r.institution_id = i.id
+                AND year_ >= {year}  
+                {filter} 
+                {filter_qualis}
+                AND r.id = '{researcher_id}' 
+            ORDER BY 
+                year DESC
+            """
 
     if type == "ABSTRACT":
         script_sql = """
@@ -474,6 +475,8 @@ def lists_bibliographic_production_article_researcher_db(
         ORDER BY 
             year DESC
         """
+
+    print(script_sql)
 
     reg = sgbdSQL.consultar_db(script_sql)
 

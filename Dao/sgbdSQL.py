@@ -58,6 +58,9 @@ def conecta_db():
     if (project.getProject()) == "5":
         database = "proforte"
 
+    if (project.getProject()) == "6":
+        database = "old_simcc_"
+
     if (project.getProject()) == "7":
         database = "inovacao"
 
