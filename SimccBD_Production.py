@@ -6,7 +6,10 @@ import logging
 import project
 import sys
 
-project.project_env = sys.argv[1]
+try:
+    project.project_env = sys.argv[1]
+except:
+    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
 
 # Função processar e inserir a produção de cada pesquisador

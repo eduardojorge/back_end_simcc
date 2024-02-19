@@ -5,18 +5,16 @@ import logging
 import json
 from datetime import datetime
 import sys
-
 import project
 
-# import lattes10 as lattes10
-
-
-# dir="C:\\simccv3\\"
-# python3 SimccBD_CSV.py   "cimatec_v7"  "172.25.0.84" "C:\simccv3\"
 
 dir = host_ = sys.argv[2]
-project.project_env = sys.argv[1]
-print(dir)
+
+
+try:
+    project.project_env = sys.argv[1]
+except:
+    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
 
 # Função processar e inserir a produção de cada pesquisador

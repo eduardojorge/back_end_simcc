@@ -9,8 +9,10 @@ import sys
 import project
 
 dir = host_ = sys.argv[2]
-project.project_env = sys.argv[1]
-print(dir)
+try:
+    project.project_env = sys.argv[1]
+except:
+    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
 
 def fat_simcc_bibliographic_production():

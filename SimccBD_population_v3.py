@@ -182,8 +182,10 @@ def insert_research_dictionary_db(tokens, type):
 
 if __name__ == "__main__":
 
-    project.project_env = sys.argv[1]
-    researcher_teste1 = "r.name LIKE 'Manoel %' OR r.name LIKE 'Gesil Sampaio%' "
+    try:
+        project.project_env = sys.argv[1]
+    except:
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 

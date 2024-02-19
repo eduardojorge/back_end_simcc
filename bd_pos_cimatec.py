@@ -3,7 +3,10 @@ import pandas as pd
 import project
 import sys
 
-project.project_env = sys.argv[1]
+try:
+    project.project_env = sys.argv[1]
+except:
+    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
 
 def insert_researcher_graduate_program_db(table, graduate_program_id, year):
