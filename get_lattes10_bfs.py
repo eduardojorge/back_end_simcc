@@ -46,7 +46,9 @@ def update_lattes_id_10():
             r.id as id, 
             r.lattes_id as lattes 
         FROM 
-            researcher r;
+            researcher r
+        WHERE
+            r.lattes_10_id IS NULL;
         """
 
     reg = sgbdSQL.consultar_db(script_sql)

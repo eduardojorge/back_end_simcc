@@ -228,7 +228,6 @@ def cimatec_production_tecnical_year_csv_db():
         WHERE
             gpr.graduate_program_id = gp.graduate_program_id
             AND gpr.researcher_id = s.researcher_id
-
         UNION
 
         SELECT DISTINCT

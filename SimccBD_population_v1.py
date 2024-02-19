@@ -13,7 +13,7 @@ import Dao.util as util
 import Dao.termFlowSQL as termFlowSQL
 import logging
 from datetime import datetime, timedelta
-import lattes10
+import get_lattes10_bfs
 
 # import Soap_lattes
 
@@ -570,7 +570,7 @@ logger = logging.getLogger()
 logger.debug("Inicio")
 try:
 
-    lattes10.lattes_10_researcher_frequency_db(logger)
+    get_lattes10_bfs.lattes_10_researcher_frequency_db(logger)
 except Exception as e:
     print(e)
     traceback.print_exc()
