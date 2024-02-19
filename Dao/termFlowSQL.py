@@ -495,6 +495,7 @@ def lists_bibliographic_production_article_researcher_db(
             "lattes_id",
             "jif",
             "jcr_link",
+            "researcher_id",
         ],
     )
 
