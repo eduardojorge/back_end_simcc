@@ -71,7 +71,7 @@ def resarcher_barema():
 @researcherTermRest.route("/originals_words", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def originals_words():
-    
+
     initials = request.args.get("initials")
     type = request.args.get("type")
 
@@ -381,6 +381,7 @@ def patent_production_researcher():
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_researcher():
+
     list_bibliographic_production_researcher = list()
 
     boolean_condition = request.args.get("boolean_condition")
@@ -393,10 +394,10 @@ def bibliographic_production_researcher():
     if boolean_condition is None:
         boolean_condition = "or"
 
-    termNovo = unidecode.unidecode(terms.lower())
+    terms = unidecode.unidecode(terms.lower())
 
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
-        termNovo, researcher_id, year, type, qualis
+        term=terms, researcher_id=researcher_id, year=year, type=type, qualis=qualis
     )
 
     for i, infos in df_bd.iterrows():

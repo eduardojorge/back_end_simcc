@@ -395,63 +395,89 @@ def list_researchers_originals_words_db(
 
 
 def lists_bibliographic_production_article_researcher_db(
-    term, researcher_id, year, type, boolean_condition, qualis
+    term: str = None,
+    researcher_id: str = None,
+    year: int = None,
+    type: str = None,
+    boolean_condition: str = None,
+    qualis: str = None,
 ):
 
-    term = unidecode.unidecode(term.lower())
-    filter = util.filterSQLRank(term, ";", "title")
-    filterQualis = util.filterSQL(qualis, ";", "or", "qualis")
+    filter = str()
+    if term:
+        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
+
+    filter_qualis = str()
+    if qualis:
+        filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
     if type == "ARTICLE":
-        sql = """ SELECT distinct b.id as id,title,b.year as year,type, doi,qualis, periodical_magazine_name as magazine,
-               r.name as researcher,r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link 
-               FROM bibliographic_production b, 
-                bibliographic_production_article ba,institution i, researcher r 
-                WHERE 
-                r.id = b.researcher_id
-               
-                AND   b.id = ba.bibliographic_production_id 
-                 AND r.institution_id=i.id
-                AND year_>=%s  %s %s
-                AND r.id=\'%s\' 
-                order by year desc""" % (
-            year,
-            filter,
-            filterQualis,
-            researcher_id,
-        )
-
-        reg = sgbdSQL.consultar_db(sql)
-        # print(sql)
+        script_sql = f""" 
+            SELECT DISTINCT 
+            b.id AS id,
+            title,
+            b.year AS year,
+            type,
+            doi,
+            qualis,
+            periodical_magazine_name AS magazine,
+            r.name AS researcher,
+            r.lattes_10_id AS lattes_10_id,
+            r.lattes_id AS lattes_id,
+            jcr AS jif,
+            jcr_link 
+        FROM 
+            bibliographic_production b, 
+            bibliographic_production_article ba,
+            institution i, 
+            researcher r 
+        WHERE 
+            r.id = b.researcher_id
+            AND b.id = ba.bibliographic_production_id 
+            AND r.institution_id = i.id
+            AND year_ >= {year}  
+            {filter} 
+            {filter_qualis}
+            AND r.id = '{researcher_id}' 
+        ORDER BY 
+            year DESC
+        """
 
     if type == "ABSTRACT":
-
-        #  FROM bibliographic_production b, researcher_abstract_frequency rf,
-
-        sql = """
-                SELECT distinct b.id as id,title,year,type, doi,qualis, periodical_magazine_name as magazine,r.name as researcher,
-                r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,jcr as jif,jcr_link
-                          FROM bibliographic_production b,
-                          bibliographic_production_article ba, researcher r 
-                            WHERE  r.id = b.researcher_id
-                                   AND rf.researcher_id=r.id 
-                                   AND pm.id = ba.periodical_magazine_id 
-                                   AND   b.id = ba.bibliographic_production_id 
-                                   AND year_ >=%s %s %s
-                                   AND r.id='%s'
-                                     order by year desc"
-
-          """ % (
+        script_sql = """
+        SELECT DISTINCT 
+            b.id AS id,
+            title,
             year,
-            filter,
-            filterQualis,
-            researcher_id,
-        )
-        reg = sgbdSQL.consultar_db(sql)
+            type,
+            doi,
+            qualis,
+            periodical_magazine_name AS magazine,
+            r.name AS researcher,
+            r.lattes_10_id AS lattes_10_id,
+            r.lattes_id AS lattes_id,
+            jcr AS jif,
+            jcr_link
+        FROM 
+            bibliographic_production b,
+            bibliographic_production_article ba, 
+            researcher r 
+        WHERE  
+            r.id = b.researcher_id
+            AND rf.researcher_id = r.id 
+            AND pm.id = ba.periodical_magazine_id 
+            AND b.id = ba.bibliographic_production_id 
+            AND year_ >= {year} 
+            {filter} 
+            {filterQualis}
+            AND r.id = '{researcher_id}'
+        ORDER BY 
+            year DESC
+        """
 
-        # "  AND  b.type = \'ARTICLE\' ")
+    reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "id",
@@ -469,7 +495,7 @@ def lists_bibliographic_production_article_researcher_db(
         ],
     )
 
-    return df_bd
+    return data_frame
 
 
 def lists_bibliographic_production_qtd_qualis_researcher_db(
