@@ -38,7 +38,7 @@ def consultar_db(sql):
 
 
 def conecta_db():
-    password = "root"
+    password = "987456"
     host = "localhost"
 
     if (project.getProject()) == "1":

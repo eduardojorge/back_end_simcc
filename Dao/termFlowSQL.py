@@ -562,7 +562,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
 
     script_sql = f"""
         SELECT
-            to_tsvector(''portuguese'', translate(unaccent(LOWER(b.title)), ''-'' || E''\'''' || E''\'''' || ''.'' || '':'' || '';'' || '','', '' ''))
+            to_tsvector(''portuguese'', translate(unaccent(LOWER(b.title)), ''-'' || ''.'' || '':'' || '';'' || '','' || ''\'' || ''/'' || '''' , '' ''))
         FROM
             bibliographic_production b
         {filter_researcher}
@@ -581,6 +581,8 @@ def lists_word_researcher_db(researcher_id, graduate_program):
         	ndoc DESC
         FETCH FIRST 20 ROWS ONLY;
         """
+
+    print(script_sql)
 
     reg = sgbdSQL.consultar_db(script_sql)
 

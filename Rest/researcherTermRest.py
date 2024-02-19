@@ -460,7 +460,7 @@ def lists_word_researcher():
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    lists_word = []
+    lists_word = list()
     df_bd = termFlowSQL.lists_word_researcher_db(researcher_id, graduate_program_id)
 
     for Index, infos in df_bd.iterrows():
