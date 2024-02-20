@@ -562,7 +562,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
 
     script_sql = f"""
         SELECT
-            to_tsvector(''portuguese'', translate(unaccent(LOWER(b.title)), ''-'' || ''.'' || '':'' || '';'' || '','' || ''\'' || ''/'' || '''' , '' ''))
+            to_tsvector(translate(unaccent(LOWER(b.title)), ''-'' || ''.'' || '':'' || '';'' || '','' || ''/'', '' ''))
         FROM
             bibliographic_production b
         {filter_researcher}

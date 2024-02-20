@@ -475,20 +475,11 @@ def lists_word_researcher():
 def institutionFrequenci():
     list_institutionFrequenci = []
     terms = request.args.get("terms")
-    # stemmer = nltk.RSLPStemmer()
-    print(terms)
     termNovo = terms.lower()
-    print(terms)
     university = str(request.args.get("university")) + ""
-
     type_ = str(request.args.get("type")) + ""
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # type_="ARTICLE"
-    # print(type_)
     df_bd = termFlowSQL.lista_institution_production_db(termNovo, university, type_)
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
+
     for i, infos in df_bd.iterrows():
         institution = {
             "id": str(infos.id),
