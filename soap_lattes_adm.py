@@ -80,6 +80,7 @@ def get_researcher_adm_simcc():
 
     return df
 
+
 if __name__ == "__main__":
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.debug("Inicio")
 
-    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-SIMCC/metadata/dataset/xml"
 
     for Files in os.listdir(dir):
         try:
@@ -109,10 +110,12 @@ if __name__ == "__main__":
 
     for Index, Data in df.iterrows():
 
-        print(f"Curriculo número: {quant_curriculos}\nID do pesquisador: {Data["lattes_id"]}")
-        
+        print(
+            f"Curriculo número: {quant_curriculos}\nID do pesquisador: {Data['lattes_id']}"
+        )
+
         lattes_id = str(Data["lattes_id"])
-        
+
         if len(str(Data["lattes_id"])) == 14:
             lattes_id = "00" + str(Data["lattes_id"])
         elif len(str(Data["lattes_id"])) == 15:
