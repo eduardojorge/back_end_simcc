@@ -569,7 +569,8 @@ def lists_word_researcher_db(researcher_id, graduate_program):
 
     script_sql = f"""
             SELECT 
-            * 
+                word AS term,
+                ndoc AS qtd
             FROM 
                 ts_stat('{script_sql}')
             WHERE 
