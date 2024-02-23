@@ -559,8 +559,8 @@ def lists_word_researcher_db(researcher_id, graduate_program):
         """
 
     script_sql = f"""
-        SELECT 
-            translate(unaccent(LOWER(b.title)),''-\.:;'','' '')::tsvector  
+        SELECT
+            translate(unaccent(LOWER(b.title)),''-\\.:;,'', '' '')::tsvector  
         FROM 
             bibliographic_production b
         {filter_researcher}
@@ -570,17 +570,18 @@ def lists_word_researcher_db(researcher_id, graduate_program):
     script_sql = f"""
             SELECT 
                 ndoc AS qtd,
-                word AS term
+                INITCAP(word) AS term
             FROM 
                 ts_stat('{script_sql}')
             WHERE 
                 CHAR_LENGTH(word)>3 
                 AND word != 'para'
-        	order by 
+        	ORDER BY 
                 ndoc DESC 
             FETCH FIRST 20 ROWS ONLY;
             """
 
+    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
@@ -589,9 +590,6 @@ def lists_word_researcher_db(researcher_id, graduate_program):
 
 
 def lista_institution_production_db(text, institution, type_):
-
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
 
     text = unidecode.unidecode(text)
     filter = filter = util.filterSQLRank(text, ";", "b.title")
