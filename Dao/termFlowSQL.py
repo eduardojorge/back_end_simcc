@@ -538,8 +538,6 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
 
     reg = sgbdSQL.consultar_db(sql)
 
-    # "  AND  b.type = \'ARTICLE\' ")
-
     df_bd = pd.DataFrame(reg, columns=["qtd", "qualis"])
 
     return df_bd
@@ -561,28 +559,27 @@ def lists_word_researcher_db(researcher_id, graduate_program):
         """
 
     script_sql = f"""
-        SELECT
-            to_tsvector(translate(unaccent(LOWER(b.title)), ''-'' || ''.'' || '':'' || '';'' || '','' || ''/'', '' ''))
-        FROM
+        SELECT 
+            translate(unaccent(LOWER(b.title)),''-\.:;'','' '')::tsvector  
+        FROM 
             bibliographic_production b
         {filter_researcher}
         {filter_graduate_program}
         """
 
     script_sql = f"""
-        SELECT
-        	ndoc as qtd,
-        	word as term
-        FROM
-        	ts_stat('{script_sql}')
-        WHERE
-        	CHAR_LENGTH(word)> 3
-        ORDER BY
-        	ndoc DESC
-        FETCH FIRST 20 ROWS ONLY;
-        """
-
-    print(script_sql)
+            SELECT 
+                ndoc AS qtd,
+                word AS term
+            FROM 
+                ts_stat('{script_sql}')
+            WHERE 
+                CHAR_LENGTH(word)>3 
+                AND word != 'para'
+        	order by 
+                ndoc DESC 
+            FETCH FIRST 20 ROWS ONLY;
+            """
 
     reg = sgbdSQL.consultar_db(script_sql)
 
