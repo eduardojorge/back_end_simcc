@@ -28,15 +28,14 @@ def list_research_dictionary_db(initials, type):
     filter = util.filterSQLRank(initials, ";", "term")
     fetch = " fetch FIRST 10 rows only"
     if initials == "":
-        filter = ""
+        filter = " AND   LOWER(unaccent(term)) LIKE '" + initials + "%' "
+
         fetch = "  fetch FIRST 50 rows only"
     filterType = ""
     if type == "BOOK":
         filterType = " (type_='BOOK' or type_='BOOK_CHAPTER') "
     else:
         filterType = " type_='" + type + "'"
-
-    filterGraduate_program = ""
 
     sql = """
            SELECT  distinct unaccent(term) as term,count(frequency) as frequency ,type_  
