@@ -225,7 +225,7 @@ if __name__ == "__main__":
                 eissn,
                 url_revista
             FROM 
-                "JCR_novo_link_v1"
+                "JCR"
             ) AS subquery
         WHERE 
             translate(subquery.eissn,'-','') = p.issn
@@ -248,7 +248,7 @@ if __name__ == "__main__":
             issn,
             url_revista
         FROM  
-            "JCR_novo_link_v1"
+            "JCR"
         ) AS subquery
     WHERE
         translate(subquery.issn,'-','')=p.issn

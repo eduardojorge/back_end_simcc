@@ -88,7 +88,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.debug("Inicio")
 
-    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-SIMCC/metadata/dataset/xml"
+    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
 
     for Files in os.listdir(dir):
         try:
