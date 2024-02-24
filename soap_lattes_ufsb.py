@@ -33,6 +33,8 @@ if __name__ == "__main__":
     curriculos_perdidos = list
     df = pd.read_excel("Files/researcher_ufsb.xlsx")
 
+    project.project_env = "8"
+
     for Index, Data in df.iterrows():
         print(f"Loading: {Index}")
         lattes_id = get_id_cnpq(CPF=extract_int(str(Data["CPF"])))
@@ -41,7 +43,7 @@ if __name__ == "__main__":
             script_sql = f"""
                 INSERT INTO public.researcher(
                 	name, lattes_id, institution_id)
-                	VALUES ('{Data["Nome"]}', '498cadc8-b8f6-4008-902e-76281109187d', '{lattes_id}');
+                	VALUES ('{Data["Nome"]}', '{lattes_id}', '498cadc8-b8f6-4008-902e-76281109187d');
                 """
             db.execScript_db(script_sql)
         else:
