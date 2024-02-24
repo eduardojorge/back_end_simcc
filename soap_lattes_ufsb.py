@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 	name, lattes_id, institution_id)
                 	VALUES ('{Data["Nome"]}', '498cadc8-b8f6-4008-902e-76281109187d', '{lattes_id}');
                 """
-            db.consultar_db()
+            db.execScript_db(script_sql)
         else:
             quant_loss += 1
             curriculos_perdidos.append(str(Data["CPF"]))
