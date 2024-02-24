@@ -38,7 +38,7 @@ def consultar_db(sql):
 
 
 def conecta_db():
-    password = "987456"
+    password = "root"
     host = "localhost"
 
     if (project.getProject()) == "1":
@@ -59,7 +59,7 @@ def conecta_db():
         database = "proforte"
 
     if (project.getProject()) == "6":
-        database = "old_simcc_"
+        database = "new_simcc_"
 
     if (project.getProject()) == "7":
         database = "inovacao"
