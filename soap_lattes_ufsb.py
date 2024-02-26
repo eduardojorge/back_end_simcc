@@ -48,6 +48,5 @@ if __name__ == "__main__":
             db.execScript_db(script_sql)
         else:
             quant_loss += 1
-            curriculos_perdidos.append(str(Data["CPF"]))
 
     print(f"Fim!\nCurriculos perdidos: {quant_loss}")

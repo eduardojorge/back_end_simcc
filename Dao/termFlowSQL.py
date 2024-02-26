@@ -2,7 +2,7 @@ import Dao.sgbdSQL as sgbdSQL
 import unidecode
 import pandas as pd
 import Dao.util as util
-
+import nltk
 
 # Função que lista  as áreas de expertrize por Iniciais
 
@@ -540,6 +540,9 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
 
 def lists_word_researcher_db(researcher_id, graduate_program):
 
+    stopwords = nltk.corpus.stopwords.words("portuguese")
+    stopwords += nltk.corpus.stopwords.words("english")
+
     filter_researcher = str()
     filter_graduate_program = str()
 
@@ -550,12 +553,12 @@ def lists_word_researcher_db(researcher_id, graduate_program):
         JOIN
         	graduate_program_researcher gpr ON
         		b.researcher_id = gpr.researcher_id
-        WHERE gpr.graduate_program_id = ''{graduate_program}''
+        WHERE gpr.graduate_program_id = '{graduate_program}'
         """
 
     script_sql = f"""
         SELECT
-            translate(unaccent(LOWER(b.title)),''-\\.:;,'', '' '')::tsvector  
+            translate(unaccent(LOWER(b.title)),'-\\.:;,', ' ')::tsvector  
         FROM 
             bibliographic_production b
         {filter_researcher}
@@ -567,11 +570,11 @@ def lists_word_researcher_db(researcher_id, graduate_program):
                 ndoc AS qtd,
                 INITCAP(word) AS term
             FROM 
-                ts_stat('{script_sql}')
+                ts_stat($${script_sql}$$)
             WHERE 
                 CHAR_LENGTH(word)>3 
-                AND word != 'para'
-        	ORDER BY 
+                AND word NOT IN {tuple(stopwords)}
+        	ORDER BY
                 ndoc DESC 
             FETCH FIRST 20 ROWS ONLY;
             """
