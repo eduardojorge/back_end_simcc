@@ -547,7 +547,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
     filter_graduate_program = str()
 
     if researcher_id:
-        filter_researcher = f"WHERE b.researcher_id = ''{researcher_id}''"
+        filter_researcher = f"WHERE b.researcher_id = '{researcher_id}'"
     elif graduate_program:
         filter_graduate_program = f"""
         JOIN
@@ -558,7 +558,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
 
     script_sql = f"""
         SELECT
-            translate(unaccent(LOWER(b.title)),'-\\.:;,', ' ')::tsvector  
+            translate(unaccent(LOWER(b.title)),'-\\.:;?(),', ' ')::tsvector  
         FROM 
             bibliographic_production b
         {filter_researcher}
