@@ -435,7 +435,7 @@ def lists_bibliographic_production_article_db(term,year,qualis,institution,disti
     if distinct=="1":
        
        # AND  b.id = rf.bibliographic_production_id 
-        sql= """ SELECT distinct title,year_,doi,qualis,periodical_magazine_name as magazine,a.jcr, a.jcr_link 
+        sql= """ SELECT distinct title,year_,doi,a.qualis,periodical_magazine_name as magazine,a.jcr, a.jcr_link 
         FROM institution i, PUBLIC.bibliographic_production b, bibliographic_production_article a,
         researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
         WHERE  r.id=b.researcher_id 

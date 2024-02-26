@@ -458,32 +458,25 @@ def researcherArea_specialty():
 @areaRest.route("/bibliographic_production_article_area", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article_area():
+
     list_bibliographic_production_article = []
+
     great_area = request.args.get("great_area")
     area_specialty = request.args.get("area_specialty")
     year = request.args.get("year")
     qualis = request.args.get("qualis")
 
-    # stemmer = nltk.RSLPStemmer()
-
     great_area = unidecode.unidecode(great_area.lower())
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
     graduate_program_id = request.args.get("graduate_program_id")
-    # print("yyyyy "+graduate_program_id  )
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = areaFlowSQL.lista_production_article_area_expertise_db(
         great_area, area_specialty, year, qualis, graduate_program_id
     )
 
-    # 'bp.title','ba.res_name','r.lattes_id','area','year','pm.name','doi','qualis'
-
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         bibliographic_production_article_ = {
             "id": str(infos.id),
@@ -499,7 +492,6 @@ def bibliographic_production_article_area():
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
         }
-        # print(researcher)
         list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200

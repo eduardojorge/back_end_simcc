@@ -203,14 +203,10 @@ def lista_researcher_area_expertise_db(text, institution):
 def lista_production_article_area_expertise_db(
     great_area_expertise, area_specialty, year, qualis, graduate_program_id
 ):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
 
     great_area_expertise = great_area_expertise.replace(" ", "_")
     filter = util.filterSQL(great_area_expertise, ";", "or", "rp.great_area_expertise")
-    # filter_specialty = util.filterSQL(area_specialty,";","or","asp.name")
 
-    print(area_specialty)
     area_specialty = area_specialty.replace("&", " ")
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
@@ -218,36 +214,54 @@ def lista_production_article_area_expertise_db(
         area_specialty, ";", "or", "rp.area_specialty"
     )
 
-    print("ssss" + filter_specialty)
-
     filterQualis = util.filterSQL(qualis, ";", "or", "qualis")
 
     filtergraduate_program = ""
     if graduate_program_id != "":
         filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
 
-    reg = sgbdSQL.consultar_db(
-        "SELECT distinct bp.id as id ,bp.title as title,r.name as researcher,"
-        "r.lattes_id as lattes_id,lattes_10_id,rp.great_area as area,bp.year as year,periodical_magazine_name as magazine, doi,qualis,jcr,jcr_link"
-        + " FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id,"
-        " researcher_production rp, "
-        + "bibliographic_production bp,bibliographic_production_article bar"
-        + " WHERE  "
-        +
-        # " AND asp.id= re. area_specialty_id"
-        " bp.id = bar.bibliographic_production_id"
-        + " AND bp.researcher_id = r.id "
-        + " AND rp.researcher_id =r.id "
-        +
-        # " AND gae.id = re.great_area_expertise_id "+
-        "%s" % filter
-        + "%s" % filterQualis
-        + "%s" % filter_specialty
-        + "%s " % filtergraduate_program
-        + "  AND year_ >=%s" % year
-        + " Group by bp.id  ,bp.title ,r.name ,"
-        + "r.lattes_id, lattes_10_id,great_area ,bp.year,periodical_magazine_name , doi,qualis,jcr,jcr_link"
-    )
+    script_sql = f"""
+        SELECT DISTINCT
+            bp.id AS id,
+            bp.title AS title,
+            r.name AS researcher,
+            r.lattes_id AS lattes_id,
+            lattes_10_id,
+            rp.great_area AS area,
+            bp.year AS year,
+            periodical_magazine_name AS magazine,
+            doi,
+            qualis,
+            jcr,
+            jcr_link
+        FROM
+            researcher r
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            JOIN researcher_production rp ON r.id = rp.researcher_id
+            JOIN bibliographic_production bp ON bp.researcher_id = r.id
+            JOIN bibliographic_production_article bar ON bp.id = bar.bibliographic_production_id
+        WHERE
+            bp.year >= {year}
+            {filter}
+            {filterQualis}
+            {filter_specialty}
+            {filtergraduate_program}
+        GROUP BY
+            bp.id,
+            bp.title,
+            r.name,
+            r.lattes_id,
+            lattes_10_id,
+            rp.great_area,
+            bp.year,
+            periodical_magazine_name,
+            doi,
+            qualis,
+            jcr,
+            jcr_link;
+        """
+
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
         reg,
