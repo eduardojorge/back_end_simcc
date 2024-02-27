@@ -221,6 +221,7 @@ def bibliographic_production_article():
         termNovo, year, qualis, university, distinct, graduate_program_id
     )
 
+    print(df_bd)
     for i, infos in df_bd.iterrows():
         if distinct == "0":
             bibliographic_production_article_ = {

@@ -297,42 +297,24 @@ def lista_researcher_name_db(text):
 def lista_researcher_full_name_db_(text,graduate_program_id):
     
    
-     #reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-      #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
      filtergraduate_program=""
      if graduate_program_id!="":
         filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
 
  
      filter = ""
-     """
-     if text!="": 
-  
-      t=[]
-      t= text.split(";")  
      
-      i=0;
-      for word in t:
-          #filter = "LOWER(r.name)='"+word.lower()+"' or "+ filter
-          filter = "translate(LOWER(r.name),'''','')='"+word.lower().replace("'","")+"' or "+ filter
-          i=i+1
-      x = len(filter)   
-      filter = filter[0:x-3]
-      filter = "AND ("+filter+")" 
-      """
      
      t= text.split(";")  
+     
      filter = ""
-     i=0;
 
      if (len(t))==1:
            filter =  " and LOWER(r.name) like '"+t[0]+"%'"
          
      else:    
           filter = util.filterSQL(text,";","or","r.name")
-          #filter= util.filterSQLRank(text,";","r.name")     
 
-     print(filter)  
    
 
      sql="""SELECT distinct r.id as id,
@@ -352,13 +334,7 @@ def lista_researcher_full_name_db_(text,graduate_program_id):
 
                            AND r.institution_id = i.id 
                            AND rp.researcher_id = r.id %s %s """ % (filter,filtergraduate_program)
-     print(sql)
      reg = sgbdSQL.consultar_db(sql)
-                          #' AND term = \''+term+"\'"
-                          #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-                          #' GROUP BY rf.researcher_id,r.name, i.name,articles, book_chapters,book,r.lattes_id,r.lattes_10_id,r.abstract,gae.name'+
-                          #' ORDER BY qtd desc')
-
 
 
      df_bd = pd.DataFrame(reg, columns=['id','researcher_name','institution','articles',
@@ -415,64 +391,85 @@ def lists_researcher_initials_term_db(initials,graduate_program_id):
 
 
 def lists_bibliographic_production_article_db(term,year,qualis,institution,distinct,graduate_program_id):
-     
 
-
-    filterinstitution=util.filterSQL(institution,";","or","i.name")
+    filter_institution=util.filterSQL(institution,";","or","i.name")
   
     term=unidecode.unidecode(term.lower())
 
-    filter = util.filterSQLRank(term,";","title")
+    filter_term = util.filterSQLRank(term,";","title")
 
-    filterQualis = util.filterSQL(qualis,";","or","qualis")
+    filter_qualis = util.filterSQL(qualis,";","or","qualis")
 
-    filtergraduate_program=""
+    filter_graduate_program=""
     if graduate_program_id!="":
-        filtergraduate_program = "AND gpr.graduate_program_id="+graduate_program_id
+        filter_graduate_program = "AND gpr.graduate_program_id="+graduate_program_id
     #distinct=""
   
     
     if distinct=="1":
-       
-       # AND  b.id = rf.bibliographic_production_id 
-        sql= """ SELECT distinct title,year_,doi,a.qualis,periodical_magazine_name as magazine,a.jcr, a.jcr_link 
-        FROM institution i, PUBLIC.bibliographic_production b, bibliographic_production_article a,
-        researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
-        WHERE  r.id=b.researcher_id 
+        script_sql= f"""
+            SELECT DISTINCT title,
+                 r.id AS researcher_id,
+                 year_,
+                 doi,
+                 qualis,
+                 periodical_magazine_name AS magazine,
+                 a.jcr,
+                 a.jcr_link
+            FROM institution i,
+                 public.bibliographic_production b,
+                 bibliographic_production_article a,
+                 researcher r
+            LEFT JOIN graduate_program_researcher gpr
+              ON r.id = gpr.researcher_id
+           WHERE r.id = b.researcher_id
+             AND a.bibliographic_production_id = b.id
+             AND i.id = r.institution_id 
+             {filter_term} 
+             {filter_institution} 
+             {filter_graduate_program} 
+             {filter_qualis}
+             AND year_ >= {year}
+             AND b.type = 'ARTICLE'
+           ORDER BY year_ DESC
+           """
         
-        
-        AND a.bibliographic_production_id = b.id 
-        AND i.id = r.institution_id %s %s %s %s
-        AND year_ >=%s
-        AND  b.type = \'ARTICLE\' order by year_ desc""" % (filter,filterinstitution,filtergraduate_program,filterQualis,year)
-        print(sql)
-        
-        reg = sgbdSQL.consultar_db(sql)
+        reg = sgbdSQL.consultar_db(script_sql)
 
-        df_bd = pd.DataFrame(reg, columns=['title','year','doi','qualis','magazine','jcr', 'jcr_link'])
-        print(df_bd)
-        return df_bd
+        data_frame = pd.DataFrame(reg, columns=['title','researcher_id', 'year','doi','qualis','magazine','jcr', 'jcr_link'])
+        return data_frame
     
     if distinct=="0":
-       #,researcher_frequency rf,
-       #AND  b.id = rf.bibliographic_production_id 
-       sql =""" SELECT distinct title,year_,doi,qualis,periodical_magazine_name as magazine,r.name as researcher,
-       r.lattes_10_id as lattes_10_id,r.lattes_id as lattes_id,a.jcr, a.jcr_link 
-       FROM institution i, PUBLIC.bibliographic_production b, bibliographic_production_article a,
-       researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id
-       WHERE  r.id=b.researcher_id 
-      
+       script_sql = f"""
+          SELECT DISTINCT title,
+                r.id AS researcher_id,
+                year_,
+                doi,
+                a.qualis as qualisP,
+                periodical_magazine_name AS magazine,
+                r.name AS researcher,
+                r.lattes_10_id AS lattes_10_id,
+                r.lattes_id AS lattes_id,
+                a.jcr,
+                a.jcr_link
+           FROM institution i,
+                public.bibliographic_production b,
+                bibliographic_production_article a,
+                researcher r
+           LEFT JOIN graduate_program_researcher gpr
+             ON r.id = gpr.researcher_id
+          WHERE r.id = b.researcher_id
+            AND a.bibliographic_production_id = b.id
+            AND i.id = r.institution_id {filter_term} {filter_institution} {filter_graduate_program} {filter_qualis}
+            AND year_ >= {year}
+            AND b.type = 'ARTICLE'
+          ORDER BY year_ DESC
+          """
        
-       AND a.bibliographic_production_id = b.id 
-       AND i.id = r.institution_id %s %s %s %s 
-       AND year_ >=%s
-       AND  b.type = \'ARTICLE\' order by year_ desc""" %  (filter,filterinstitution,filtergraduate_program,filterQualis,year)
-       print(sql)
-       reg = sgbdSQL.consultar_db(sql) 
+       reg = sgbdSQL.consultar_db(script_sql) 
                      
-       df_bd = pd.DataFrame(reg, columns=['title','year','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jcr', 'jcr_link'])     
-       #print(df_bd)
-       return df_bd
+       data_frame = pd.DataFrame(reg, columns=['title','researcher_id','year','doi','qualis','magazine','researcher','lattes_10_id','lattes_id','jcr', 'jcr_link'])     
+       return data_frame
 
 
 
