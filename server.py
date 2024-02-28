@@ -151,7 +151,8 @@ def researcherName():
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    df_bd = SimccBD.lista_researcher_full_name_db_(name.lower(), graduate_program_id)
+    df_bd = SimccBD.lista_researcher_full_name_db_(
+        name.lower(), graduate_program_id)
     for i, infos in df_bd.iterrows():
 
         r = Researcher()
@@ -249,7 +250,8 @@ def bibliographic_production_article():
                 "jcr_link": str(infos.jcr_link),
             }
 
-        list_bibliographic_production_article.append(bibliographic_production_article_)
+        list_bibliographic_production_article.append(
+            bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
