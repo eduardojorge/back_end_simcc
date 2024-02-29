@@ -303,7 +303,7 @@ def lists_bibliographic_production_article_db(term, year, qualis, institution, d
                 r.id AS researcher_id,
                 year_,
                 doi,
-                a.qualis as qualisP,
+                a.qualis as qualis,
                 periodical_magazine_name AS magazine,
                 r.name AS researcher,
                 r.lattes_10_id AS lattes_10_id,
