@@ -204,7 +204,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             r.lattes_10_id AS lattes_10_id,
             r.abstract AS abstract,
             rp.great_area AS area,
-            c.name AS city,
+            rp.city AS city,
             i.image AS image,
             r.orcid AS orcid,
             r.graduation AS graduation,
