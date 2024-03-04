@@ -182,7 +182,8 @@ def lists_Researcher_Report_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
+        reg, columns=["id", "title", "year",
+                      "project_name", "financing_institutionc"]
     )
 
     return df_bd
@@ -209,7 +210,8 @@ def lists_guidance_researcher_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
+        reg, columns=["id", "title", "nature",
+                      "oriented", "type", "status", "year"]
     )
 
     return df_bd
@@ -241,7 +243,8 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     print(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name", "nature", "form_participation", "year"]
+        reg, columns=["id", "event_name",
+                      "nature", "form_participation", "year"]
     )
 
     return df_bd
@@ -400,7 +403,8 @@ def lists_bibliographic_production_article_researcher_db(
 
     filter = str()
     if term:
-        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
+        filter = util.filterSQLRank(
+            unidecode.unidecode(term.lower()), ";", "title")
 
     filter_qualis = str()
     if qualis:
@@ -579,7 +583,6 @@ def lists_word_researcher_db(researcher_id, graduate_program):
             FETCH FIRST 20 ROWS ONLY;
             """
 
-    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
@@ -719,10 +722,10 @@ def lista_researcher_id_db(researcher_id):
         % researcher_id
     )
     reg = sgbdSQL.consultar_db(sql)
-    #' AND term = \''+term+"\'"
-    #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-    #' GROUP BY rf.researcher_id,r.name, i.name,articles, book_chapters,book,r.lattes_id,r.lattes_10_id,r.abstract,gae.name'+
-    #' ORDER BY qtd desc')
+    # ' AND term = \''+term+"\'"
+    # ' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
+    # ' GROUP BY rf.researcher_id,r.name, i.name,articles, book_chapters,book,r.lattes_id,r.lattes_10_id,r.abstract,gae.name'+
+    # ' ORDER BY qtd desc')
 
     df_bd = pd.DataFrame(
         reg,
