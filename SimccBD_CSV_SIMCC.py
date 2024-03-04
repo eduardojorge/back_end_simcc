@@ -195,7 +195,7 @@ if __name__ == "__main__":
     try:
         dir = sys.argv[2]
     except:
-        project.project_env = 'Files/indicadores_simcc/'
+        project.project_env = '/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/'
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
