@@ -8,16 +8,6 @@ import sys
 import project
 
 
-dir = host_ = sys.argv[2]
-
-
-try:
-    project.project_env = sys.argv[1]
-except:
-    project.project_env = str(
-        input("Código do banco que sera utilizado [1-8]: "))
-
-
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
 
@@ -43,28 +33,6 @@ def researcher_production_tecnical_year_csv_db():
     df_bd.to_csv(dir + "production_tecnical_year.csv")
 
 
-# Função processar e inserir a produção de cada pesquisador
-"""
-def researcher_production_year_csv_db():
-    
-    
-    reg = sgbdSQL.consultar_db("SELECT   title,b.type as tipo,b.researcher_id as researcher,year,i.acronym as institution, rd.city as city "+
-                               " from bibliographic_production AS b, researcher r, institution i, researcher_address rd  "+
-                     
-                               " where b.researcher_id is not null "+
-                               "   AND r.id =  b.researcher_id "+
-                               "  AND r.institution_id = i.id "
-                               " AND rd.researcher_id = r.id"
-                         
-                               " GROUP BY title,tipo,b.researcher_id,year,i.acronym, rd.city  ORDER  BY Tipo desc")
-
-    df_bd = pd.DataFrame(reg, columns=['title','tipo','researcher','year','institution','city'])
-
-    df_bd.to_csv('C:/simccv3/production_year.csv')
-"""
-""
-
-
 def researcher_production_year_csv_db():
 
     reg = sgbdSQL.consultar_db(
@@ -79,7 +47,7 @@ def researcher_production_year_csv_db():
         reg, columns=["title", "tipo", "researcher_id", "year", "institution"]
     )
 
-    df_bd.to_csv("C:/simccv3/production_year.csv")
+    df_bd.to_csv(dir + "production_year.csv")
 
 
 def researcher_production_year_distinct_csv_db():
@@ -95,7 +63,7 @@ def researcher_production_year_distinct_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["year", "title", "tipo", "institution"])
 
-    df_bd.to_csv("C:/simccv3/production_year_distinct.csv")
+    df_bd.to_csv(dir + "production_year_distinct.csv")
 
 
 def researcher_article_qualis_csv_db():
@@ -146,7 +114,7 @@ def researcher_article_qualis_csv_db():
         ],
     )
 
-    df_bd.to_csv("C:/simccv3/article_qualis_year.csv")
+    df_bd.to_csv(dir + "article_qualis_year.csv")
 
 
 def article_qualis_csv_distinct_db():
@@ -177,7 +145,7 @@ def article_qualis_csv_distinct_db():
         columns=["title", "qualis", "jcr", "year",
                  "institution", "city", "jcr_link"],
     )
-    df_bd.to_csv("C:/simccv3/article_qualis_year_institution.csv")
+    df_bd.to_csv(dir + "article_qualis_year_institution.csv")
 
 
 def researcher_production_csv_db():
@@ -209,7 +177,7 @@ def researcher_production_csv_db():
         ],
     )
 
-    df_bd.to_csv("C:/simccv3/production__researcher.csv")
+    df_bd.to_csv(dir + "production__researcher.csv")
 
 
 def researcher_csv_db():
@@ -493,77 +461,85 @@ def graduate_program_csv_db():
     df_bd.to_csv(dir + "cimatec_graduate_program.csv")
 
 
-Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+if __name__ == "__main__":
+    try:
+        project.project_env = sys.argv[1]
+    except:
+        project.project_env = str(
+            input("Código do banco que sera utilizado [1-8]: "))
 
-logging.basicConfig(
-    filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
-)
+    try:
+        dir = sys.argv[2]
+    except:
+        project.project_env = '/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/'
 
-logger = logging.getLogger()
+    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
+    logging.basicConfig(
+        filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
+    )
 
-logger.debug("Inicio")
-list_data = []
-hoje = str(datetime.now())
-print(hoje)
+    logger = logging.getLogger()
 
-data = {"data": hoje}
+    logger.debug("Inicio")
+    list_data = []
+    hoje = str(datetime.now())
+    print(hoje)
 
-list_data.append(data)
-json_string = json.dumps(list_data)
-df = pd.read_json(json_string)
-df.to_csv(dir + "data.csv")
+    data = {"data": hoje}
 
-print("Inicio: graduate_program_csv_db")
-graduate_program_csv_db()
-print("Fim: graduate_program_csv_db")
+    list_data.append(data)
+    json_string = json.dumps(list_data)
+    df = pd.read_json(json_string)
+    df.to_csv(dir + "data.csv")
 
-print("Inicio: graduate_program_researcher_csv_db")
-graduate_program_researcher_csv_db()
-print("Fim: graduate_program_researcher_csv_db")
+    print("Inicio: graduate_program_csv_db")
+    graduate_program_csv_db()
+    print("Fim: graduate_program_csv_db")
 
+    print("Inicio: graduate_program_researcher_csv_db")
+    graduate_program_researcher_csv_db()
+    print("Fim: graduate_program_researcher_csv_db")
 
-print("Inicio: production_distinct_novo_csv_db")
-production_distinct_novo_csv_db()
-print("Fim: production_distinct_novo_csv_db")
+    print("Inicio: production_distinct_novo_csv_db")
+    production_distinct_novo_csv_db()
+    print("Fim: production_distinct_novo_csv_db")
 
-print("Inicio: article_distinct_novo_csv_db")
-article_distinct_novo_csv_db()
-print("Fim: article_distinct_novo_csv_db")
+    print("Inicio: article_distinct_novo_csv_db")
+    article_distinct_novo_csv_db()
+    print("Fim: article_distinct_novo_csv_db")
 
-print("Inicio: researcher_production_novo_csv_db")
-researcher_production_novo_csv_db()
-print("Fim: researcher_production_novo_csv_db")
+    print("Inicio: researcher_production_novo_csv_db")
+    researcher_production_novo_csv_db()
+    print("Fim: researcher_production_novo_csv_db")
 
-print("Inicio: researcher_production_tecnical_year_csv_db")
-researcher_production_tecnical_year_csv_db()
-print("Fim: researcher_production_tecnical_year_csv_db")
+    print("Inicio: researcher_production_tecnical_year_csv_db")
+    researcher_production_tecnical_year_csv_db()
+    print("Fim: researcher_production_tecnical_year_csv_db")
 
-if project.project_env == "2":
-    profnit_graduate_program_csv_db()
+    if project.project_env == "2":
+        profnit_graduate_program_csv_db()
 
+    print("Inicio: researcher_csv_db")
+    researcher_csv_db()
+    print("Fim: researcher_csv_db")
 
-print("Inicio: researcher_csv_db")
-researcher_csv_db()
-print("Fim: researcher_csv_db")
+    print("Inicio: production_coauthors_csv_db")
+    production_coauthors_csv_db()
+    print("Fim: production_coauthors_csv_db")
 
-print("Inicio: production_coauthors_csv_db")
-production_coauthors_csv_db()
-print("Fim: production_coauthors_csv_db")
+    researcher_production_year_csv_db()
 
+    researcher_production_year_distinct_csv_db()
 
-researcher_production_year_csv_db()
+    researcher_article_qualis_csv_db()
 
-researcher_production_year_distinct_csv_db()
+    researcher_production_csv_db()
 
-researcher_article_qualis_csv_db()
+    article_qualis_csv_distinct_db()
 
-researcher_production_csv_db()
+    researcher_csv_db()
 
-article_qualis_csv_distinct_db()
+    researcher_production_tecnical_year_csv_db()
 
-researcher_csv_db()
-
-researcher_production_tecnical_year_csv_db()
-
-institution_csv_db()
+    institution_csv_db()
