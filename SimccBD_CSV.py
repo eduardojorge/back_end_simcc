@@ -14,7 +14,8 @@ dir = host_ = sys.argv[2]
 try:
     project.project_env = sys.argv[1]
 except:
-    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
+    project.project_env = str(
+        input("Código do banco que sera utilizado [1-8]: "))
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -33,7 +34,8 @@ def researcher_production_tecnical_year_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=["researcher_id", "title", "year", "type"])
+    df_bd = pd.DataFrame(
+        reg, columns=["researcher_id", "title", "year", "type"])
 
     print(df_bd)
     logger.debug(sql)
@@ -172,7 +174,8 @@ def article_qualis_csv_distinct_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "qualis", "jcr", "year", "institution", "city", "jcr_link"],
+        columns=["title", "qualis", "jcr", "year",
+                 "institution", "city", "jcr_link"],
     )
     df_bd.to_csv("C:/simccv3/article_qualis_year_institution.csv")
 
@@ -434,7 +437,8 @@ def production_tecnical_year_novo_csv_db():
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
+        reg, columns=["title", "year", "type",
+                      "graduate_program_id", "year_pos"]
     )
 
     df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
@@ -453,6 +457,14 @@ def graduate_program_researcher_csv_db():
     )
 
     df_bd.to_csv(dir + "cimatec_graduate_program_researcher.csv")
+
+
+def profnit_graduate_program_csv_db():
+
+    df_bd = graduate_programSQL.graduate_program_profnit_db()
+    logger.debug(profnit_graduate_program_csv_db)
+
+    df_bd.to_csv(dir + "profnit_graduate_program.csv")
 
 
 def graduate_program_csv_db():
@@ -479,14 +491,6 @@ def graduate_program_csv_db():
     )
 
     df_bd.to_csv(dir + "cimatec_graduate_program.csv")
-
-
-def profnit_graduate_program_csv_db():
-
-    df_bd = graduate_programSQL.graduate_program_profnit_db()
-    logger.debug(profnit_graduate_program_csv_db)
-
-    df_bd.to_csv(dir + "profnit_graduate_program.csv")
 
 
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
