@@ -6,11 +6,6 @@ import logging
 import project
 import sys
 
-try:
-    project.project_env = sys.argv[1]
-except:
-    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
-
 
 # Função processar e inserir a produção de cada pesquisador
 def researcher_software_db(researcher_id):
@@ -95,7 +90,7 @@ def new_researcher_production_db(researcher_id):
         GROUP BY 
             tipo 
         ORDER BY 
-            Tipo 
+            tipo 
         DESC;
             """
 
@@ -170,6 +165,10 @@ def new_researcher_production_db(researcher_id):
 
 
 if __name__ == "__main__":
+    try:
+        project.project_env = sys.argv[1]
+    except:
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
