@@ -74,7 +74,7 @@ if __name__ == "__main__":
     year.participation_events = "1900"
 
     script_sql = """
-    SELECT lattes_id FROM researcher LIMIT 10;
+    SELECT lattes_id FROM researcher;
     """
 
     reg = sgbdSQL.consultar_db(script_sql)
@@ -96,6 +96,8 @@ if __name__ == "__main__":
             AND e.degree = 'DOUTORADO';
         """
         reg = sgbdSQL.consultar_db(script_sql)
+
+        print(reg, Data["lattes_id"])
 
         json_barema = resarcher_baremaSQL.researcher_production_db(
             "",
