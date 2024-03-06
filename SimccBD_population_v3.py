@@ -14,7 +14,7 @@ def create_researcher_dictionary_db(test, article, abstract, patent, event):
     if test == 1:
         filter = " OFFSET 0 ROWS FETCH FIRST 3 ROW ONLY"
 
-    sql = "SELECT distinct  r.id from researcher r  " + filter
+    sql = "SELECT r.id from researcher r  " + filter
     reg = sgbdSQL.consultar_db(sql)
 
     logger.debug(sql)
@@ -225,7 +225,7 @@ if __name__ == "__main__":
                 eissn,
                 url_revista
             FROM 
-                "JCR"
+                JCR
             ) AS subquery
         WHERE 
             translate(subquery.eissn,'-','') = p.issn
@@ -248,7 +248,7 @@ if __name__ == "__main__":
             issn,
             url_revista
         FROM  
-            "JCR"
+            JCR
         ) AS subquery
     WHERE
         translate(subquery.issn,'-','')=p.issn

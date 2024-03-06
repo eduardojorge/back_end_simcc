@@ -48,25 +48,25 @@ UPDATE periodical_magazine p SET qualis='SQ' WHERE p.qualis IS NULL
 
 UPDATE  periodical_magazine p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,issn,url_revista
-      FROM  "JCR" ) AS subquery
+      FROM  JCR ) AS subquery
 WHERE translate(subquery.issn,'-','')=p.issn
 
 
 UPDATE  periodical_magazine p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,issn,url_revista
-      FROM  "JCR" ) AS subquery
+      FROM  JCR ) AS subquery
 WHERE subquery.issn=p.issn
 
 
 
 UPDATE  periodical_magazine p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,eissn,url_revista
-      FROM  "JCR" ) AS subquery
+      FROM  JCR ) AS subquery
 WHERE translate(subquery.eissn,'-','')=p.issn
 
 UPDATE  periodical_magazine p SET jcr=(subquery.jif2019),jcr_link=url_revista
 FROM (SELECT jif2019,eissn,url_revista
-      FROM  "JCR" ) AS subquery
+      FROM  JCR ) AS subquery
 WHERE subquery.eissn=p.issn
 
 UPDATE bibliographic_production_article  SET qualis='B1' WHERE periodical_magazine_name='Journal Of Bioengineering, Technologies And Health'

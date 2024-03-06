@@ -438,8 +438,17 @@ def profnit_graduate_program_csv_db():
 def graduate_program_csv_db():
 
     sql = """
-      SELECT graduate_program_id,code,name,area,modality,type,rating 
-        FROM graduate_program gp
+        SELECT
+            graduate_program_id,
+            code,
+            name,
+            area,
+            modality,
+            type,
+            rating,
+            institution_id
+        FROM 
+            graduate_program gp
     """
 
     reg = sgbdSQL.consultar_db(sql)

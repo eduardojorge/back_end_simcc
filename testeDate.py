@@ -1,110 +1,96 @@
 from datetime import datetime, timedelta
-import  Dao.resarcher_baremaSQL as  resarcher_baremaSQL
-
+import Dao.resarcher_baremaSQL as resarcher_baremaSQL
 import Dao.sgbdSQL as sgbdSQL
-import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
-import logging
-import json
 from datetime import datetime
-import sys
-
-
-import project as project_
-import sys
 from Model.Year_Barema import Year_Barema
 
-project_.project_="7"
+import project
+
 
 def researcher_csv_db():
 
-   sql=""" SELECT r.lattes_id
-        
+    sql = """
+        SELECT 
+            r.lattes_id
+        FROM  
+            researcher r"""
 
-        FROM  researcher r """
+    reg = sgbdSQL.consultar_db(sql)
 
-   reg = sgbdSQL.consultar_db(sql)
-   
-   #logger.debug(sql)
-        
-   
-   df_bd = pd.DataFrame(reg, columns=['lattes_id'])
+    df_bd = pd.DataFrame(reg, columns=["lattes_id"])
 
-   df_bd.to_csv('researcher_simmc.csv')
+    df_bd.to_csv("researcher_simmc.csv")
 
 
 def testeDiciopnario():
-      
-      sql="""
+
+    sql = """
 
             SELECT   translate(unaccent(LOWER(b.title)),':;''','') ::tsvector as palavras from researcher r,bibliographic_production b 
             WHERE b.researcher_id='9d22c219-d3f7-46a3-b4c3-ef04eb9c31c8' and b.type='ARTICLE'
-         """ 
-      reg = sgbdSQL.consultar_db(sql)
-   
-   #logger.debug(sql)
-        
-   
-      df_bd = pd.DataFrame(reg, columns=['palavras']) 
+        """
+    reg = sgbdSQL.consultar_db(sql)
 
-      for i,infos in df_bd.iterrows():
-           print(infos.palavras)
-           
+    # logger.debug(sql)
+
+    df_bd = pd.DataFrame(reg, columns=["palavras"])
+
+    for i, infos in df_bd.iterrows():
+        print(infos.palavras)
+
+
 def dataLattes(dias):
-      
-      dataP = datetime.today() - timedelta(days=dias)
-      
-      sql="""
 
-            SELECT  name from researcher where last_update <='%s'
-         """ % (dataP)
-      reg = sgbdSQL.consultar_db(sql)
-   
-   #logger.debug(sql)
-        
-   
-      df_bd = pd.DataFrame(reg, columns=['name_']) 
+    dataP = datetime.today() - timedelta(days=dias)
 
-      for i,infos in df_bd.iterrows():
-           print(infos.name_)
-           
+    sql = """
 
-def bigrama():
-     
-   reg = sgbdSQL.consultar_db("SELECT  distinct  b.title from researcher r, bibliographic_production b where r.id =b.researcher_id "
-                              +filter+" OFFSET "+str(offset) +" ROWS FETCH FIRST 100 ROW ONLY")
-                    #'where id=\'35e6c140-7fbb-4298-b301-c5348725c467\''+
-                    #' OR id=\'c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf\' ')
-   df_bd = pd.DataFrame(reg, columns=['id'])
- 
-#hoje = datetime.today() - timedelta(days=5)
-#print(hoje.date())
+         SELECT  name from researcher where last_update <='%s'
+      """ % (
+        dataP
+    )
+    reg = sgbdSQL.consultar_db(sql)
 
-#dataLattes(180)
+    df_bd = pd.DataFrame(reg, columns=["name_"])
 
-#testeDiciopnario()
-#researcher_csv_db()
-
-#"1966167015825708;8933624812566216"
+    for i, infos in df_bd.iterrows():
+        print(infos.name_)
 
 
-year = Year_Barema()
-year.article="2018"
-year.work_event="2018"
-year.book="1900" 
+if __name__ == "__main__":
+    project.project_env = "4"
 
-year.chapter_book="1900"
+    year = Year_Barema()
+    year.article = "2018"
+    year.work_event = "2018"
+    year.book = "1900"
+    year.chapter_book = "1900"
+    year.patent = "1900"
+    year.software = "1900"
+    year.brand = "1900"
+    year.resource_progress = "1900"
+    year.resource_completed = "1900"
+    year.participation_events = "1900"
 
-year.patent="1900"
-year.software="1900"
-year.brand="1900"
-year.resource_progress="1900"
-year.resource_completed="1900"
-year.participation_events="1900"
+    sql = """
+   SELECT lattes_id FROM researcher;
+   """
 
+    reg = sgbdSQL.consultar_db(sql)
 
+    data_frame_lattes = pd.DataFrame(reg, columns=["lattes_id"])
 
-print(resarcher_baremaSQL.researcher_production_db("todos","",year))
+    lista = list()
+    for Index, Data in data_frame_lattes.iterrows():
+        lista.append(
+            resarcher_baremaSQL.researcher_production_db(
+                "",
+                Data["lattes_id"],
+                year,
+            )[0]
+        )
 
+    data_frame_dados = pd.DataFrame(lista)
 
-
+    data_frame_dados.to_csv("Files/researcher_group.csv")
