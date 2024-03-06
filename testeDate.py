@@ -73,24 +73,42 @@ if __name__ == "__main__":
     year.resource_completed = "1900"
     year.participation_events = "1900"
 
-    sql = """
-   SELECT lattes_id FROM researcher;
-   """
+    script_sql = """
+    SELECT lattes_id FROM researcher LIMIT 10;
+    """
 
-    reg = sgbdSQL.consultar_db(sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame_lattes = pd.DataFrame(reg, columns=["lattes_id"])
 
     lista = list()
     for Index, Data in data_frame_lattes.iterrows():
-        lista.append(
-            resarcher_baremaSQL.researcher_production_db(
-                "",
-                Data["lattes_id"],
-                year,
-            )[0]
-        )
+
+        script_sql = f"""
+        SELECT 
+            MIN(e.education_end) as menor_education_end
+        FROM 
+            education e
+        JOIN researcher r
+        ON r.id = e.researcher_id
+        WHERE 
+            r.lattes_id = '{Data["lattes_id"]}'
+            AND e.degree = 'DOUTORADO';
+        """
+        reg = sgbdSQL.consultar_db(script_sql)
+
+        json_barema = resarcher_baremaSQL.researcher_production_db(
+            "",
+            Data["lattes_id"],
+            year,
+        )[0]
+
+        json_barema["first_doc"] = reg[0][0]
+
+        lista.append(json_barema)
 
     data_frame_dados = pd.DataFrame(lista)
 
     data_frame_dados.to_csv("Files/researcher_group.csv")
+
+    print(data_frame_dados)

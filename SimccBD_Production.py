@@ -81,8 +81,7 @@ def new_researcher_production_db(researcher_id):
     sql = f"""
         SELECT 
             count(title) as qtd, 
-            b.type as 
-            tipo 
+            b.type as tipo 
         FROM 
             bibliographic_production AS b 
         WHERE 

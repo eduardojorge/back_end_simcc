@@ -11,16 +11,18 @@ import Dao.util as util
 
 def lists_great_area_expertise_researcher_db(researcher_id):
     reg = sgbdSQL.consultar_db(
-        "SELECT distinct gae.name as area from great_area_expertise gae, researcher_area_expertise r "
-        "  WHERE "
-        " gae.id =r.great_area_expertise_id "
-        "  AND r.researcher_id='%s'" % researcher_id
+        f"""
+        SELECT distinct gae.name as area 
+        FROM great_area_expertise gae, researcher_area_expertise r
+        WHERE 
+        gae.id = r.great_area_expertise_id 
+        AND r.researcher_id='{researcher_id}'"""
     )
 
     df_bd = pd.DataFrame(reg, columns=["area"])
     area = ""
-    for i, infos in df_bd.iterrows():
-        area = infos.area + " ; " + area
+    for Index, Data in df_bd.iterrows():
+        area = Data.area + " ; " + area
 
     x = len(area)
     area = area[0 : x - 2]
