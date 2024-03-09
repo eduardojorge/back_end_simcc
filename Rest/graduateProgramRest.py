@@ -37,9 +37,6 @@ def graduate_program_production():
     )
 
 
-# Fluxo Area
-
-
 # print(list_originals_words_initials_term_db("rob"))
 @graduateProgramRest.route("/graduate_program", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
