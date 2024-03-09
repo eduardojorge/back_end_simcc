@@ -187,7 +187,8 @@ def lists_Researcher_Report_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
+        reg, columns=["id", "title", "year",
+                      "project_name", "financing_institutionc"]
     )
 
     return df_bd
@@ -214,7 +215,8 @@ def lists_guidance_researcher_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
+        reg, columns=["id", "title", "nature",
+                      "oriented", "type", "status", "year"]
     )
 
     return df_bd
@@ -246,7 +248,8 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     print(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name", "nature", "form_participation", "year"]
+        reg, columns=["id", "event_name",
+                      "nature", "form_participation", "year"]
     )
 
     return df_bd
@@ -273,7 +276,6 @@ def lists_software_production_researcher_db(researcher_id, year):
     return df_bd
 
 
-# Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
 def list_researchers_originals_words_db(
     terms, institution, type, boolean_condition, graduate_program_id
 ):
@@ -429,7 +431,8 @@ def lists_bibliographic_production_article_researcher_db(
 
     filter = str()
     if term:
-        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
+        filter = util.filterSQLRank(
+            unidecode.unidecode(term.lower()), ";", "title")
 
     filter_qualis = str()
     if qualis:
@@ -532,33 +535,25 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
 
     filter = ""
     if researcher_id != "":
-        filter = " AND b.researcher_id='" + researcher_id + "' "
-    filtergraduate_program = ""
+        filter = f"AND b.researcher_id='{researcher_id}'"
+    filter_graduate_program = ""
     if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"
 
-    sql = """
-       SELECT count(*)  as qtd,bar.qualis
-                   FROM  PUBLIC.bibliographic_production b  
-                   LEFT JOIN graduate_program_researcher gpr ON  b.researcher_id =gpr.researcher_id,
-                   bibliographic_production_article bar,
-	                               periodical_magazine pm  
-                                   WHERE 
-                                    pm.id = bar.periodical_magazine_id
-    
-                                    AND   b.id = bar.bibliographic_production_id
-       
-
-                         AND year_ >=%s
-                        %s
-                         %s  
-                          group by bar.qualis order by qualis asc
-     """ % (
-        year,
-        filter,
-        filtergraduate_program,
-    )
-    print(sql)
+    sql = f"""
+        SELECT COUNT(*) AS qtd, bar.qualis
+        FROM PUBLIC.bibliographic_production b
+        LEFT JOIN graduate_program_researcher gpr ON b.researcher_id = gpr.researcher_id,
+        bibliographic_production_article bar,
+        periodical_magazine pm
+        WHERE pm.id = bar.periodical_magazine_id
+        AND b.id = bar.bibliographic_production_id
+        AND year_ >= {year}
+        {filter}
+        {filter_graduate_program}
+        GROUP BY bar.qualis
+        ORDER BY qualis ASC
+        """
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -747,7 +742,6 @@ def lista_researcher_id_db(researcher_id):
         % researcher_id
     )
     reg = sgbdSQL.consultar_db(sql)
-
 
     df_bd = pd.DataFrame(
         reg,
