@@ -58,20 +58,21 @@ def researcher_patent_db(researcher_id):
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(teste):
 
-    sql = "DELETE FROM researcher_production"
-    sgbdSQL.execScript_db(sql)
+    script_sql = "DELETE FROM researcher_production"
+
+    sgbdSQL.execScript_db(script_sql)
 
     filter = str()
     if teste == 1:
-        filter = " WHERE r.id='c932854c-c5c6-4998-9f10-5b50cfb1366b'"
+        filter = "WHERE r.id='1d29e9d1-9b86-4e18-ac74-7a3eeaf29c62'"
 
-    reg = sgbdSQL.consultar_db("SELECT id from researcher r" + filter)
+    script_sql = f"SELECT id from researcher r {filter}"
+
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["id"])
 
     for Index, infos in df_bd.iterrows():
-        print(infos.id)
-        print("total=%d" % Index)
         logger.debug("total=" + str(Index))
         new_researcher_production_db(infos.id)
 
@@ -119,6 +120,8 @@ def new_researcher_production_db(researcher_id):
     qtd_brand = researcher_brand_db(researcher_id)
 
     df_bd = termFlowSQL.get_researcher_address_db(researcher_id)
+
+    print(df_bd)
 
     city = ""
     organ = ""

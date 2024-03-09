@@ -64,9 +64,7 @@ def graduate_program_profnit_db(graduate_program_id):
             gp.instituicao,
             gp.url_image,
             gp.region,
-            gp.sigla,
-            gp.latitude,
-            gp.longitude 
+            gp.sigla
         FROM 
             graduate_program gp
         {filter_graduate_program}
@@ -89,9 +87,7 @@ def graduate_program_profnit_db(graduate_program_id):
             "instituicao",
             "url_image",
             "region",
-            "sigla",
-            "latitude",
-            "longitude",
+            "sigla"
         ],
     )
 
@@ -292,6 +288,7 @@ def production_general_db(graduate_program_id, year):
 
         graduateProgram_Production_.researcher = str(infos.qtd)
 
-    list_graduateProgram_Production.append(graduateProgram_Production_.getJson())
+    list_graduateProgram_Production.append(
+        graduateProgram_Production_.getJson())
 
     return list_graduateProgram_Production

@@ -105,30 +105,21 @@ def research():
         return jsonify(list_researcher), 200
     university = ""
     university = str(request.args.get("university")) + ""
-    # stemmer = nltk.RSLPStemmer()
     print(terms)
     termNovo = unidecode.unidecode(terms.lower())
     print(terms)
     type = request.args.get("type")
 
     graduate_program_id = request.args.get("graduate_program_id")
-    # print("yyyyy "+graduate_program_id  )
     if graduate_program_id is None:
         graduate_program_id = ""
     if graduate_program_id == "0":
         graduate_program_id = ""
 
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = termFlowSQL.list_researchers_originals_words_db(
         termNovo, university, type, boolean_condition, graduate_program_id
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
-        # area = Dao.areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-
-        print(" qtd=" + str(infos.qtd))
 
         r = Researcher()
         r.id = str(infos.id)
@@ -151,17 +142,14 @@ def research():
         r.graduation = str(infos.graduation)
         r.lattes_update = str(infos.lattes_update)
 
-        # print(r.getJson())
 
         researcher = r.getJson()
 
-        # print(researcher)
         list_researcher.append(researcher)
 
     return jsonify(list_researcher), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/guidance_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def guidance_researcher():

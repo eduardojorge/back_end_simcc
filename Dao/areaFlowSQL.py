@@ -105,19 +105,7 @@ def lists_area_speciality_term_initials_db(initials, area, graduate_program_id):
         # " AND  LOWER(gea.name)='%s'" % area.lower()+
         " ORDER BY  ae.name,asp.name %s" % fetch
     )
-    """
-     reg = sgbdSQL.consultar_db("SELECT asp.id as id,gea.name as great_area ,ae.name as area_expertise ,sue.name as  sub_area_expertise,asp.name as area_specialty"+
-                                " FROM area_expertise ae, area_specialty asp, great_area_expertise gea, sub_area_expertise sue "+
 
-                                " WHERE "+
-                                " ae.great_area_expertise_id = gea.id "+ 
-                                " AND sue.area_expertise_id = ae.id "+
-                                " AND asp.sub_area_expertise_id=sue.id "+
-                                " AND LOWER(unaccent(asp.name)) LIKE \'"+initials.lower()+"%\' "+
-                                "%s" % filter+
-                                #" AND  LOWER(gea.name)='%s'" % area.lower()+
-                                " ORDER BY  gea.name,ae.name,sue.name,asp.name ")
-      """
 
     df_bd = pd.DataFrame(reg, columns=["area_expertise", "area_specialty"])
 

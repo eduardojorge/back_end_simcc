@@ -7,7 +7,7 @@ import Dao.graduate_programSQL as graduate_programSQL
 from Model.GraduateProgram import GraduateProgram
 
 
-##from server import app
+# from server import app
 
 # https://www.fullstackpython.com/flask-json-jsonify-examples.html
 # app = Flask(__name__)
@@ -31,12 +31,13 @@ def graduate_program_production():
     year = request.args.get("year")
 
     return (
-        jsonify(graduate_programSQL.production_general_db(graduate_program_id, year)),
+        jsonify(graduate_programSQL.production_general_db(
+            graduate_program_id, year)),
         200,
     )
 
 
-######### Fluxo Area
+# Fluxo Area
 
 
 # print(list_originals_words_initials_term_db("rob"))
@@ -72,7 +73,8 @@ def graduate_program_profnit():
     list_gradute_program = list()
     graduate_program_id = request.args.get("id")
 
-    df_bd = graduate_programSQL.graduate_program_profnit_db(graduate_program_id)
+    df_bd = graduate_programSQL.graduate_program_profnit_db(
+        graduate_program_id)
     for i, infos in df_bd.iterrows():
         graduateProgram = GraduateProgram()
         graduateProgram.graduate_program_id = str(infos.graduate_program_id)
@@ -87,8 +89,6 @@ def graduate_program_profnit():
         graduateProgram.instituicao = str(infos.instituicao)
         graduateProgram.url_image = str(infos.url_image)
         graduateProgram.region = str(infos.region)
-        graduateProgram.latitude = str(infos.latitude)
-        graduateProgram.longitude = infos.longitude
         graduateProgram.sigla = infos.sigla
 
         list_gradute_program.append(graduateProgram.getJson())

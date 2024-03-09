@@ -9,11 +9,16 @@ import nltk
 
 def get_researcher_address_db(researcher_id):
 
-    reg = sgbdSQL.consultar_db(
-        "SELECT distinct city,organ from researcher_address ra "
-        "  WHERE "
-        "  ra.researcher_id='%s'" % researcher_id
-    )
+    script_sql = f"""
+        SELECT 
+            distinct city, 
+            organ 
+        FROM 
+            researcher_address ra 
+        WHERE 
+            ra.researcher_id = '{researcher_id}'"""
+
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["city", "organ"])
 
@@ -182,8 +187,7 @@ def lists_Researcher_Report_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year",
-                      "project_name", "financing_institutionc"]
+        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
     )
 
     return df_bd
@@ -210,8 +214,7 @@ def lists_guidance_researcher_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature",
-                      "oriented", "type", "status", "year"]
+        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
     )
 
     return df_bd
@@ -243,8 +246,7 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     print(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name",
-                      "nature", "form_participation", "year"]
+        reg, columns=["id", "event_name", "nature", "form_participation", "year"]
     )
 
     return df_bd
@@ -275,92 +277,116 @@ def lists_software_production_researcher_db(researcher_id, year):
 def list_researchers_originals_words_db(
     terms, institution, type, boolean_condition, graduate_program_id
 ):
-    print(terms)
-
     filter = util.filterSQLRank(terms, ";", "title")
 
-    filterinstitution = ""
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
+    filter_institution = ""
+    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
     filtergraduate_program = ""
     if graduate_program_id != "":
         filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
 
-    print("xxx - " + graduate_program_id)
-
     if type == "ARTICLE":
 
         filterType = " AND b.type='ARTICLE' "
 
-        # filter= util.filterSQLRank(terms,";",boolean_condition,"rf.term","title")
-        # researcher_frequency rf,
-        # AND rf.researcher_id = r.id
-        # AND b.id = rf.bibliographic_production_id
-
-        sql = """SELECT r.id as id,COUNT(distinct b.id) AS qtd,
-                          r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
-                          r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
-                          r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
-                          TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update,'%s' as terms
-                        
-                           FROM  researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
-                           institution i, researcher_production rp, city c, bibliographic_production b
-                           WHERE 
-                            c.id = r.city_id 
-                          
-                           %s %s %s %s 
-     
-                          
-                           AND r.institution_id = i.id 
-                           AND rp.researcher_id = r.id 
-                           AND b.researcher_id = r.id
-                           
-                            
-                          
-
-                           GROUP BY r.id,r.name, i.name,articles, 
-                           book_chapters,book,r.lattes_id,lattes_10_id,abstract, 
-                           rp.great_area,rp.city, r.orcid, 
-                           i.image,r.graduation,
-                           rp.patent,rp.software,rp.brand,TO_CHAR(r.last_update,'dd/mm/yyyy') 
-                           ORDER BY qtd desc""" % (
-            terms,
-            filter,
-            filterinstitution,
-            filtergraduate_program,
-            filterType,
-        )
-        print(sql)
+        sql = f"""
+            SELECT r.id AS id,
+                COUNT(DISTINCT b.id) AS qtd,
+                r.name AS researcher_name,
+                i.name AS institution,
+                rp.articles AS articles,
+                rp.book_chapters AS book_chapters,
+                rp.book AS book,
+                r.lattes_id AS lattes,
+                r.lattes_10_id AS lattes_10_id,
+                abstract,
+                rp.great_area AS area,
+                rp.city AS city,
+                r.orcid AS orcid,
+                i.image AS image,
+                r.graduation AS graduation,
+                rp.patent AS patent,
+                rp.software AS software,
+                rp.brand AS brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update,
+                '{terms}' AS terms
+            FROM researcher r
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+                institution i,
+                researcher_production rp,
+                city c,
+                bibliographic_production b
+            WHERE c.id = r.city_id
+                {filter}
+                {filter_institution} 
+                {filtergraduate_program} 
+                {filterType}
+                AND r.institution_id = i.id
+                AND rp.researcher_id = r.id
+                AND b.researcher_id = r.id
+            GROUP BY r.id,
+                    r.name,
+                    i.name,
+                    articles,
+                    book_chapters,
+                    book,
+                    r.lattes_id,
+                    lattes_10_id,
+                    abstract,
+                    rp.great_area,
+                    rp.city,
+                    r.orcid,
+                    i.image,
+                    r.graduation,
+                    rp.patent,
+                    rp.software,
+                    rp.brand,
+                    TO_CHAR(r.last_update, 'dd/mm/yyyy')
+            ORDER BY qtd DESC;
+            """
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
         filter = util.filterSQLRank2(terms, ";", "abstract")
-        # AND (translate(unaccent(LOWER(rf.term)),\':\',\'\') ::tsvector@@ \''%s'\'::tsquery)=true
-        #  researcher_abstract_frequency rf,
-        # AND rf.researcher_id = r.id
-        sql = """SELECT distinct r.id as id,0 as qtd,
-                          r.name as researcher_name,i.name as institution,rp.articles as articles,rp.book_chapters as book_chapters, rp.book as book,
-                          r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,abstract,rp.great_area as area,rp.city as city,r.orcid as orcid,i.image as image,
-                          r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
-                           TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update, '%s' as terms
-                        
-                         FROM   researcher r LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id , 
-                         institution i, researcher_production rp, city c
-                         WHERE 
-                         c.id = r.city_id
-                         %s %s %s 
-                       
-                         AND r.institution_id = i.id 
-                         AND rp.researcher_id = r.id 
-                         
-                       
-                          ORDER BY qtd desc """ % (
-            terms,
-            filter,
-            filterinstitution,
-            filtergraduate_program,
-        )
-        print(sql)
+
+        sql = f"""
+            SELECT 
+                DISTINCT r.id AS id,
+                0 AS qtd,
+                r.name AS researcher_name,
+                i.name AS institution,
+                rp.articles AS articles,
+                rp.book_chapters AS book_chapters,
+                rp.book AS book,
+                r.lattes_id AS lattes,
+                r.lattes_10_id AS lattes_10_id,
+                abstract,
+                rp.great_area AS area,
+                rp.city AS city,
+                r.orcid AS orcid,
+                i.image AS image,
+                r.graduation AS graduation,
+                rp.patent AS patent,
+                rp.software AS software,
+                rp.brand AS brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update,
+                '{terms}' AS terms
+            FROM 
+                researcher r
+            LEFT JOIN graduate_program_researcher gpr 
+            ON r.id = gpr.researcher_id,
+                institution i,
+                researcher_production rp,
+                city c
+            WHERE c.id = r.city_id
+                {filter} 
+                {filter_institution} 
+                {filtergraduate_program}
+                AND r.institution_id = i.id
+                AND rp.researcher_id = r.id
+            ORDER BY qtd DESC;
+            """
         reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
@@ -403,8 +429,7 @@ def lists_bibliographic_production_article_researcher_db(
 
     filter = str()
     if term:
-        filter = util.filterSQLRank(
-            unidecode.unidecode(term.lower()), ";", "title")
+        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
 
     filter_qualis = str()
     if qualis:
@@ -722,10 +747,7 @@ def lista_researcher_id_db(researcher_id):
         % researcher_id
     )
     reg = sgbdSQL.consultar_db(sql)
-    # ' AND term = \''+term+"\'"
-    # ' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-    # ' GROUP BY rf.researcher_id,r.name, i.name,articles, book_chapters,book,r.lattes_id,r.lattes_10_id,r.abstract,gae.name'+
-    # ' ORDER BY qtd desc')
+
 
     df_bd = pd.DataFrame(
         reg,

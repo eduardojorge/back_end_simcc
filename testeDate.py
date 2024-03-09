@@ -27,7 +27,7 @@ def testeDiciopnario():
 
     sql = """
 
-            SELECT   translate(unaccent(LOWER(b.title)),':;''','') ::tsvector as palavras from researcher r,bibliographic_production b 
+            SELECT translate(unaccent(LOWER(b.title)),':;''','') ::tsvector as palavras from researcher r,bibliographic_production b 
             WHERE b.researcher_id='9d22c219-d3f7-46a3-b4c3-ef04eb9c31c8' and b.type='ARTICLE'
         """
     reg = sgbdSQL.consultar_db(sql)
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     year.participation_events = "1900"
 
     script_sql = """
-    SELECT lattes_id FROM researcher;
+    SELECT lattes_id FROM researcher LIMIT 100;
     """
 
     reg = sgbdSQL.consultar_db(script_sql)
