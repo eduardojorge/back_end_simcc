@@ -24,8 +24,7 @@ def researcher_production_tecnical_year_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(
-        reg, columns=["researcher_id", "title", "year", "type"])
+    df_bd = pd.DataFrame(reg, columns=["researcher_id", "title", "year", "type"])
 
     print(df_bd)
     logger.debug(sql)
@@ -142,8 +141,7 @@ def article_qualis_csv_distinct_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "qualis", "jcr", "year",
-                 "institution", "city", "jcr_link"],
+        columns=["title", "qualis", "jcr", "year", "institution", "city", "jcr_link"],
     )
     df_bd.to_csv(dir + "article_qualis_year_institution.csv")
 
@@ -405,8 +403,7 @@ def production_tecnical_year_novo_csv_db():
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "type",
-                      "graduate_program_id", "year_pos"]
+        reg, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
     )
 
     df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
@@ -464,6 +461,7 @@ def graduate_program_csv_db():
             "modality",
             "type",
             "rating",
+            "institution_id",
         ],
     )
 
@@ -474,13 +472,9 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
-    try:
-        dir = sys.argv[2]
-    except:
-        dir = '/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/'
+    dir = "/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/"
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
