@@ -4,6 +4,7 @@ import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 from datetime import datetime
 from Model.Year_Barema import Year_Barema
+import sys
 
 import project
 
@@ -59,22 +60,25 @@ def dataLattes(dias):
 
 
 if __name__ == "__main__":
-    project.project_env = "4"
+    try:
+        project.project_env = sys.argv[1]
+    except:
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     year = Year_Barema()
-    year.article = "2018"
-    year.work_event = "2018"
-    year.book = "1900"
-    year.chapter_book = "1900"
-    year.patent = "1900"
-    year.software = "1900"
-    year.brand = "1900"
-    year.resource_progress = "1900"
-    year.resource_completed = "1900"
-    year.participation_events = "1900"
+    year.article = "2014"
+    year.work_event = "2014"
+    year.book = "2014"
+    year.chapter_book = "2014"
+    year.patent = "2014"
+    year.software = "2014"
+    year.brand = "2014"
+    year.resource_progress = "2014"
+    year.resource_completed = "2014"
+    year.participation_events = "2014"
 
     script_sql = """
-    SELECT lattes_id FROM researcher LIMIT 100;
+    SELECT lattes_id FROM researcher;
     """
 
     reg = sgbdSQL.consultar_db(script_sql)
@@ -85,19 +89,17 @@ if __name__ == "__main__":
     for Index, Data in data_frame_lattes.iterrows():
 
         script_sql = f"""
-        SELECT 
+        SELECT
             MIN(e.education_end) as menor_education_end
-        FROM 
+        FROM
             education e
         JOIN researcher r
         ON r.id = e.researcher_id
-        WHERE 
+        WHERE
             r.lattes_id = '{Data["lattes_id"]}'
             AND e.degree = 'DOUTORADO';
         """
         reg = sgbdSQL.consultar_db(script_sql)
-
-        print(reg, Data["lattes_id"])
 
         json_barema = resarcher_baremaSQL.researcher_production_db(
             "",
@@ -112,5 +114,3 @@ if __name__ == "__main__":
     data_frame_dados = pd.DataFrame(lista)
 
     data_frame_dados.to_csv("Files/researcher_group.csv")
-
-    print(data_frame_dados)

@@ -137,7 +137,6 @@ def production_general_db(name, lattes_id, year):
     elif name != "todos":
         filter = f"r.name='{name}' AND "
 
-    year_work_event = 1900
     script_sql = f"""
         SELECT 
             COUNT(p.id) AS qtd, 
@@ -364,50 +363,50 @@ def production_general_db(name, lattes_id, year):
             resarcher_Production.event_organization = Data.qtd
         if Data.tipo == "PARTICIPATION_EVENTS":
             resarcher_Production.participation_event = Data.qtd
-    try:
+    if reg:
         lists_guidance_researcher_db(year, resarcher_Production)
-    except:
-        print(lattes_id)
     return resarcher_Production.getJson()
 
 
-def researcher_production_db(list_name, list_resarcher_lattes_id, year):
-    if list_resarcher_lattes_id != "":
-        t = []
-        t = list_resarcher_lattes_id.split(";")
+def researcher_production_db(list_name, lattes_id, year):
 
-        list_resarcher = []
+    if lattes_id:
+        lattes_id_list = list()
+        lattes_id_list = lattes_id.split(";")
 
-        i = 0
-        for word in t:
-            list_resarcher.append(production_general_db("", word, year))
-            i = i + 1
+        cont = 0
+        json_researcher = list()
+        for lattes_id in lattes_id_list:
+            cont += 1
+            print(cont, " | ", lattes_id)
+            json_researcher.append(production_general_db("", lattes_id, year))
 
-        return list_resarcher
+        return json_researcher
 
+    elif list_name.upper() == "TODOS":
+        script_sql = "SELECT lattes_id FROM researcher;"
+
+        reg = sgbdSQL.consultar_db(script_sql)
+
+        cont = 0
+        json_researcher = list()
+        df_bd = pd.DataFrame(reg, columns=["lattes_id"])
+
+        for cont, Data in df_bd.iterrows():
+            cont += 1
+            print(cont, " | ", Data["lattes_id"])
+            json_researcher.append(production_general_db("", Data["lattes_id"], year))
+
+        return json_researcher
     else:
-        if list_name != "todos":
-            t = []
-            t = list_name.split(";")
+        name_list = list()
+        name_list = list_name.split(";")
 
-            list_resarcher = []
+        cont = 0
+        json_researcher = list()
+        for name in name_list:
+            cont += 1
+            print(cont, " | ", name)
+            json_researcher.append(production_general_db(name, "", year))
 
-            i = 0
-            for word in t:
-                list_resarcher.append(production_general_db(word, "", year))
-                i = i + 1
-
-            return list_resarcher
-        else:
-            sql = "select name from researcher "
-            reg = sgbdSQL.consultar_db(sql)
-            list_resarcher = []
-            x = 0
-            df_bd = pd.DataFrame(reg, columns=["name_"])
-            for i, infos in df_bd.iterrows():
-                list_resarcher.append(production_general_db(infos.name_, "", year))
-                # i=i+1
-                x = x + 1
-                print(str(x))
-
-            return list_resarcher
+        return json_researcher

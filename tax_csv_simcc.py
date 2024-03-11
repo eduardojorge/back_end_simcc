@@ -9,15 +9,12 @@ project.project_env = "4"
 
 def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
 
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    # print(text)
-
     term_p = unidecode.unidecode(term_p.lower())
     term_i = unidecode.unidecode(term_i.lower())
 
     filter_p = util.filterSQLRank2(term_p, ";", "p.title")
     filter_i = util.filterSQLRank2(term_i, ";", "p.title")
+
     filter_p = filter_p[5 : len(filter_p)]
     filter_i = filter_i[5 : len(filter_i)]
 
