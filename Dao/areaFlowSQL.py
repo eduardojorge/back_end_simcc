@@ -483,7 +483,9 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
 
     filtergraduate_program = ""
     if not graduate_program_id or graduate_program_id == 0:
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+        filtergraduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
 
     # AND rpf.researcher_id = r.id
     #  #researcher_patent_frequency rpf,
