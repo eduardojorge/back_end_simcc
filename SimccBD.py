@@ -222,7 +222,9 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
 
     filter_graduate_program = str()
     if graduate_program_id != "":
-        filter_graduate_program = "AND gpr.graduate_program_id = " + graduate_program_id
+        filter_graduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
     filter_name = str()
     if name != "":
         filter_name = f"AND to_tsvector('portuguese', unaccent(r.name)) @@ to_tsquery('portuguese', unaccent('{name.replace(';', '&')}'))"
