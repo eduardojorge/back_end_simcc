@@ -478,17 +478,13 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
     # filter= util.filterSQL(text,";","or","gae.name")
 
     filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-    print("XXXXXXXXXXXXXXXXXXXXX" + text)
-    print(filterinstitution)
 
     filtergraduate_program = ""
-    if not graduate_program_id or graduate_program_id == 0:
+    if graduate_program_id != 0 and graduate_program_id != "":
         filtergraduate_program = (
             f"AND gpr.graduate_program_id = '{graduate_program_id}'"
         )
 
-    # AND rpf.researcher_id = r.id
-    #  #researcher_patent_frequency rpf,
     sql = """
     
      SELECT DISTINCT COUNT(distinct p.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
@@ -523,8 +519,6 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
         filtergraduate_program,
     )
 
-    print(sql)
-
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
@@ -552,7 +546,6 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
             "graduation",
         ],
     )
-    print(df_bd)
     return df_bd
 
 
