@@ -468,19 +468,14 @@ def lista_researcher_participation_event_db(text, institution, graduate_program_
 
 
 def lista_researcher_patent_db(text, institution, graduate_program_id):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    print(text)
     text = text.replace("&", " ")
     text = unidecode.unidecode(text.lower())
 
     filter = util.filterSQLRank2(text, ";", "p.title")
-    # filter= util.filterSQL(text,";","or","gae.name")
-
     filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
 
     filtergraduate_program = ""
-    if graduate_program_id != 0 and graduate_program_id != "":
+    if graduate_program_id != "0" and graduate_program_id != "":
         filtergraduate_program = (
             f"AND gpr.graduate_program_id = '{graduate_program_id}'"
         )
