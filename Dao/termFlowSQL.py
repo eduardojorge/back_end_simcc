@@ -187,8 +187,7 @@ def lists_Researcher_Report_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year",
-                      "project_name", "financing_institutionc"]
+        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
     )
 
     return df_bd
@@ -215,8 +214,7 @@ def lists_guidance_researcher_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature",
-                      "oriented", "type", "status", "year"]
+        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
     )
 
     return df_bd
@@ -248,8 +246,7 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     print(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name",
-                      "nature", "form_participation", "year"]
+        reg, columns=["id", "event_name", "nature", "form_participation", "year"]
     )
 
     return df_bd
@@ -286,7 +283,9 @@ def list_researchers_originals_words_db(
 
     filtergraduate_program = ""
     if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+        filtergraduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
 
     if type == "ARTICLE":
 
@@ -431,8 +430,7 @@ def lists_bibliographic_production_article_researcher_db(
 
     filter = str()
     if term:
-        filter = util.filterSQLRank(
-            unidecode.unidecode(term.lower()), ";", "title")
+        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
 
     filter_qualis = str()
     if qualis:
@@ -538,7 +536,9 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
         filter = f"AND b.researcher_id='{researcher_id}'"
     filter_graduate_program = ""
     if graduate_program_id != "":
-        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        filter_graduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
 
     sql = f"""
         SELECT COUNT(*) AS qtd, bar.qualis
