@@ -106,7 +106,6 @@ def lists_area_speciality_term_initials_db(initials, area, graduate_program_id):
         " ORDER BY  ae.name,asp.name %s" % fetch
     )
 
-
     df_bd = pd.DataFrame(reg, columns=["area_expertise", "area_specialty"])
 
     print(df_bd)
@@ -483,7 +482,7 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
     print(filterinstitution)
 
     filtergraduate_program = ""
-    if graduate_program_id != "":
+    if not graduate_program_id or graduate_program_id == 0:
         filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
 
     # AND rpf.researcher_id = r.id
