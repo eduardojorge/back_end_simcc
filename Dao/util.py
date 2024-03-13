@@ -9,6 +9,16 @@ def filterSQLRank(text,split,attribute_2):
  text=text.replace("-"," ")
  if (len(text.split(split)))==3:
     text=clean_stopwords(text)
+  if (len(text.split("|")))==2:
+     t=[]
+     t= text.split("|")  
+     filter = ""
+     i=0;
+     filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2, unidecode.unidecode(t[0]),0.04)   
+     filter = "AND ("+filter+ " OR ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """ % (attribute_2, unidecode.unidecode(t[1]),0.04) +")"    
+     print("0")
+     print(filter) 
+     return filter  
 
 
  filter=" "
