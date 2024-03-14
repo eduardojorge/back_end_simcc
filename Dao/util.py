@@ -9,7 +9,7 @@ def filterSQLRank(text,split,attribute_2):
  text=text.replace("-"," ")
  if (len(text.split(split)))==3:
     text=clean_stopwords(text)
-  if (len(text.split("|")))==2:
+ if (len(text.split("|")))==2:
      t=[]
      t= text.split("|")  
      filter = ""
@@ -22,7 +22,7 @@ def filterSQLRank(text,split,attribute_2):
 
 
  filter=" "
- if text!="": 
+if text!="": 
       t=[]
       t= text.split(split)  
       filter = ""
