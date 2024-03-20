@@ -124,12 +124,8 @@ def list_researchers_article_abstract_tax_db(tax_id, term, word, type):
     return df_bd
 
 
-# df = pd.read_excel(r'Files/pesquisadoresCimatec_v1.xlsx')
-# df = pd.read_excel(r'C:\simccv3\tEnergiasRenovaveis.xlsx')
 df = pd.read_excel(r"C:\simccv3\Taxonomia.xlsx")
 
-
-print(df)
 CODIGO = 0
 HIERARQUIA = 1
 TERMOS = 2
@@ -140,9 +136,6 @@ x = 0
 for i, infos in df.iterrows():
 
     print("teste x " + str(infos[TERMOS]))
-
-    # df1= list_researchers_article_abstract_tax_db(str(infos[TERMOS]),"ABSTRACT")
-    # df1_patent =  lista_researcher_patent_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),str(infos[TERMOS]),str(infos[TAX_ID]))
 
     t = []
     t = str(infos[COMBINACAO]).split(";")

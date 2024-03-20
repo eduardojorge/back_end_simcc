@@ -289,7 +289,7 @@ def list_researchers_originals_words_db(
 
     if type == "ARTICLE":
 
-        filterType = " AND b.type='ARTICLE' "
+        filter_type = " AND b.type='ARTICLE' "
 
         sql = f"""
             SELECT r.id AS id,
@@ -322,7 +322,7 @@ def list_researchers_originals_words_db(
                 {filter}
                 {filter_institution} 
                 {filtergraduate_program} 
-                {filterType}
+                {filter_type}
                 AND r.institution_id = i.id
                 AND rp.researcher_id = r.id
                 AND b.researcher_id = r.id
@@ -719,9 +719,6 @@ def lista_institution_production_db(text, institution, type_):
 
 
 def lista_researcher_id_db(researcher_id):
-
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
 
     sql = (
         """

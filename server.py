@@ -8,6 +8,7 @@ from Rest.researcherTermRest import researcherTermRest
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
+from Rest.mariaRest import mariaRest
 
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
@@ -38,6 +39,8 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
+app.register_blueprint(mariaRest)
+
 app.config["CORS_HEADERS"] = "Content-Type"
 
 app.route("/")
@@ -151,8 +154,7 @@ def researcherName():
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    df_bd = SimccBD.lista_researcher_full_name_db_(
-        name.lower(), graduate_program_id)
+    df_bd = SimccBD.lista_researcher_full_name_db_(name.lower(), graduate_program_id)
     for i, infos in df_bd.iterrows():
 
         r = Researcher()
@@ -250,8 +252,7 @@ def bibliographic_production_article():
                 "jcr_link": str(infos.jcr_link),
             }
 
-        list_bibliographic_production_article.append(
-            bibliographic_production_article_)
+        list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 

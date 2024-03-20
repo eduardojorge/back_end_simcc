@@ -44,8 +44,8 @@ def conecta_db():
     if (project.getProject()) == "1":
         database = "cimatec_v7"
         host = "172.25.0.84"
-
         password = 'wn6H4!16NBcb}4%hy6"h'
+
     if (project.getProject()) == "2":
         database = "simcc_profnit_v1"
 
@@ -65,7 +65,6 @@ def conecta_db():
         database = "inovacao"
 
     if (project.getProject()) == "8":
-        print("Dentro do ambiente administrativo")
         database = "adm_simcc"
 
     con = psycopg2.connect(

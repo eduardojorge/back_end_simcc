@@ -1,5 +1,4 @@
 from nltk.tokenize import RegexpTokenizer
-from datetime import datetime, timedelta
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 import logging
@@ -8,7 +7,13 @@ import nltk
 import sys
 
 
-def create_researcher_dictionary_db(test, article, abstract, patent, event):
+def create_researcher_dictionary_db(
+    test: bool = False,
+    article: bool = False,
+    abstract: bool = False,
+    patent: bool = False,
+    event: bool = False,
+):
 
     filter = str()
     if test == 1:

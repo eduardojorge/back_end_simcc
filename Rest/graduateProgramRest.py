@@ -1,23 +1,7 @@
 from flask import jsonify, request, Blueprint
-
 from flask_cors import cross_origin
-
 import Dao.graduate_programSQL as graduate_programSQL
-
 from Model.GraduateProgram import GraduateProgram
-
-
-# from server import app
-
-# https://www.fullstackpython.com/flask-json-jsonify-examples.html
-# app = Flask(__name__)
-# app.config["CORS_HEADERS"] = "Content-Type"
-# app.route('/')
-# CORS(app, resources={r"/*":{"origins":"*"}})
-# app = Flask(__name__)
-
-# if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
-
 
 graduateProgramRest = Blueprint("graduateProgramRest", __name__)
 
@@ -31,8 +15,7 @@ def graduate_program_production():
     year = request.args.get("year")
 
     return (
-        jsonify(graduate_programSQL.production_general_db(
-            graduate_program_id, year)),
+        jsonify(graduate_programSQL.production_general_db(graduate_program_id, year)),
         200,
     )
 
@@ -70,8 +53,7 @@ def graduate_program_profnit():
     list_gradute_program = list()
     graduate_program_id = request.args.get("id")
 
-    df_bd = graduate_programSQL.graduate_program_profnit_db(
-        graduate_program_id)
+    df_bd = graduate_programSQL.graduate_program_profnit_db(graduate_program_id)
     for i, infos in df_bd.iterrows():
         graduateProgram = GraduateProgram()
         graduateProgram.graduate_program_id = str(infos.graduate_program_id)
