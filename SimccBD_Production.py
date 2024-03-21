@@ -56,15 +56,15 @@ def researcher_patent_db(researcher_id):
 
 
 # Função para listar todos os pesquisadores e criar a sua produção
-def create_researcher_production_db(teste):
+def create_researcher_production_db(test: bool = False):
 
-    script_sql = "DELETE FROM researcher_production"
+    script_sql = "DELETE FROM researcher_production WHERE researcher_id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
 
     sgbdSQL.execScript_db(script_sql)
 
     filter = str()
-    if teste == 1:
-        filter = "WHERE r.id='1d29e9d1-9b86-4e18-ac74-7a3eeaf29c62'"
+    if test:
+        filter = "WHERE id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
 
     script_sql = f"SELECT id from researcher r {filter}"
 
@@ -130,7 +130,7 @@ def new_researcher_production_db(researcher_id):
         organ = df_bd["organ"].iloc[0]
 
     sql = f"""
-        INSERT into public.researcher_production (
+        INSERT INTO researcher_production (
             researcher_id,
             articles,
             book_chapters,
@@ -182,4 +182,4 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    create_researcher_production_db(0)
+    create_researcher_production_db(1)

@@ -259,7 +259,6 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             {filter_name} 
             {filter_graduate_program}"""
 
-    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(

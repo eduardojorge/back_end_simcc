@@ -9,28 +9,25 @@ import sys
 
 def create_researcher_dictionary_db(
     test: bool = False,
-    article: bool = False,
-    abstract: bool = False,
-    patent: bool = False,
-    event: bool = False,
+    article: bool = True,
+    abstract: bool = True,
+    patent: bool = True,
+    event: bool = True,
 ):
 
     filter = str()
-    if test == 1:
-        filter = " OFFSET 0 ROWS FETCH FIRST 3 ROW ONLY"
+    if test:
+        filter = "LIMIT 10"
 
-    sql = "SELECT r.id from researcher r  " + filter
-    reg = sgbdSQL.consultar_db(sql)
+    script_sql = f"SELECT r.id FROM researcher r {filter}"
+    reg = sgbdSQL.consultar_db(script_sql)
+    data_frame = pd.DataFrame(reg, columns=["id"])
 
-    logger.debug(sql)
+    if article:
+        script_sql = "DELETE FROM research_dictionary where type_='ARTICLE'"
 
-    df_bd = pd.DataFrame(reg, columns=["id"])
-
-    if article == 1:
-        sql = "DELETE FROM research_dictionary where type_='ARTICLE'"
-
-        sgbdSQL.execScript_db(sql)
-        for i, infos in df_bd.iterrows():
+        sgbdSQL.execScript_db(script_sql)
+        for i, infos in data_frame.iterrows():
 
             if (i % 100) == 0:
                 print("Total Pesquisador Article: " + str(i))
@@ -38,31 +35,30 @@ def create_researcher_dictionary_db(
 
             create_researcher_title_dictionary_db(infos.id)
 
-    # Abstract
-    if abstract == 1:
-        sql = "DELETE FROM research_dictionary where type_='ABSTRACT'"
-        sgbdSQL.execScript_db(sql)
-        for i, infos in df_bd.iterrows():
+    if abstract:
+        script_sql = "DELETE FROM research_dictionary where type_='ABSTRACT'"
+        sgbdSQL.execScript_db(script_sql)
+        for i, infos in data_frame.iterrows():
             if (i % 100) == 0:
                 print("Total Pesquisador Abstract: " + str(i))
                 logger.debug("Total Pesquisador abstract: " + str(i))
 
             create_researcher_abstract_dictionary_db(infos.id)
 
-    if patent == 1:
-        sql = "DELETE FROM research_dictionary where type_='PATENT'"
-        sgbdSQL.execScript_db(sql)
-        for i, infos in df_bd.iterrows():
+    if patent:
+        script_sql = "DELETE FROM research_dictionary where type_='PATENT'"
+        sgbdSQL.execScript_db(script_sql)
+        for i, infos in data_frame.iterrows():
             if (i % 100) == 0:
                 print("Total Pesquisador Patent: " + str(i))
                 logger.debug("Total Pesquisador Patent: " + str(i))
 
             create_researcher_patent_dictionary_db(infos.id)
 
-    if event == 1:
-        sql = "DELETE FROM research_dictionary where type_='SPEAKER'"
-        sgbdSQL.execScript_db(sql)
-        for i, infos in df_bd.iterrows():
+    if event:
+        script_sql = "DELETE FROM research_dictionary where type_='SPEAKER'"
+        sgbdSQL.execScript_db(script_sql)
+        for i, infos in data_frame.iterrows():
             if (i % 100) == 0:
                 print("Total Pesquisador Participacao Evento: " + str(i))
                 logger.debug("Total Pesquisador Participacao Evento: " + str(i))
@@ -72,19 +68,23 @@ def create_researcher_dictionary_db(
 
 def create_researcher_title_dictionary_db(researcher_id):
 
-    filter = " AND  type in ('ARTICLE','BOOK','BOOK_CHAPTER') "
-    sql = (
-        """ SELECT  distinct title,b.type,year from bibliographic_production AS b  WHERE researcher_id='%s' %s """
-        % (researcher_id, filter)
-    )
+    script_sql = f"""
+        SELECT  
+            distinct title,
+            b.type,
+            year 
+        FROM 
+            bibliographic_production AS b  
+        WHERE 
+            researcher_id = '{researcher_id}' 
+            AND type in ('ARTICLE','BOOK','BOOK_CHAPTER')"""
 
-    reg = sgbdSQL.consultar_db(sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
     logger.debug("Entrei nos artigos pesquisador " + researcher_id)
     df_bd = pd.DataFrame(reg, columns=["title", "type_", "year"])
 
-    for i, infos in df_bd.iterrows():
-
+    for Index, infos in df_bd.iterrows():
         tokenize = RegexpTokenizer(r"\w+")
         tokens = []
         tokens = tokenize.tokenize(infos.title)
@@ -165,7 +165,6 @@ def insert_research_dictionary_db(tokens, type):
             ):
 
                 try:
-
                     sql = """
                       INSERT into public.research_dictionary  (term,frequency,type_)  VALUES ('%s',1,'%s') 
                       ON CONFLICT (term,type_) 
@@ -292,6 +291,4 @@ if __name__ == "__main__":
     sgbdSQL.execScript_db(script_sql)
     logger.debug(script_sql)
 
-    TESTE = 0
-
-    create_researcher_dictionary_db(TESTE, 1, 1, 1, 1)
+    create_researcher_dictionary_db()

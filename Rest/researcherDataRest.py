@@ -18,10 +18,8 @@ researcherDataRest = Blueprint("researcherDataRest", __name__)
 def image():
     researcher_id = request.args.get("researcher_id")
     try:
-        path_image = (
-            "/home/ejorge/simcc/back_end_simcc/Files/image_researcher/{id}.jpg".format(
-                id=researcher_id
-            )
+        path_image = "/home/lilith/repository/back_end_simcc/Files/image_researcher/{id}.jpg".format(
+            id=researcher_id
         )
         return send_file(path_or_file=path_image)
     except:
