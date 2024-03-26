@@ -58,14 +58,14 @@ def researcher_patent_db(researcher_id):
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
-    script_sql = "DELETE FROM researcher_production WHERE researcher_id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
 
-    sgbdSQL.execScript_db(script_sql)
 
     filter = str()
     if test:
         filter = "WHERE id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
 
+    script_sql = "DELETE FROM researcher_production"
+    sgbdSQL.execScript_db(script_sql)
     script_sql = f"SELECT id from researcher r {filter}"
 
     reg = sgbdSQL.consultar_db(script_sql)
