@@ -22,9 +22,11 @@ def last_update(id: str):
 
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
     
-    registry = db.consultar_db(script_sql)[0][0]
+    registry = db.consultar_db(script_sql)
     
-    return registry
+    if registry:
+        return registry[0][0]
+
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
     resultado = client.service.getIdentificadorCNPq(
@@ -36,7 +38,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 
 def save_cv(id, dir):
 
-    if get_data_att(id) <= last_update(id):
+    if  get_data_att(id) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
