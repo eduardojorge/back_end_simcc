@@ -37,7 +37,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 
 
 def save_cv(id, dir):
-
+    print(last_update(id), get_data_att(id), last_update(id))
     if  last_update(id) and get_data_att(id) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
@@ -70,7 +70,7 @@ def get_researcher_adm_simcc():
             name,
             lattes_id
         FROM
-            researcher;
+            researcher WHERE lattes_id = '5120716508582679';
         """
     registry = db.consultar_db(script_sql)
 
