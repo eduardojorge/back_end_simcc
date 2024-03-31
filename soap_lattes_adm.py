@@ -13,9 +13,9 @@ import project as project
 
 def get_data_att(id: str) -> datetime:
     resultado = client.service.getDataAtualizacaoCV(id)
-    if resultado != None:
-        return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
-
+    if resultado == None:
+        resultado = '0000-00-00 00:00:00'
+    return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
 
 def last_update(id: str):
     project.project_env = "4"
@@ -37,8 +37,8 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 
 
 def save_cv(id, dir):
-    print(last_update(id), get_data_att(id), last_update(id))
-    if  last_update(id) and get_data_att(id) <= last_update(id):
+
+    if  get_data_att(id) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
@@ -53,6 +53,7 @@ def save_cv(id, dir):
         arquivo = open(f"{dir}/zip/{id}.zip", "wb")
         arquivo.write(resultado)
         arquivo.close()
+
         with zipfile.ZipFile(f"{dir}/zip/{id}.zip", "r") as zip_ref:
             zip_ref.extractall(dir)
             zip_ref.extractall(f"{dir}/atual")
@@ -80,6 +81,7 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
+
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
@@ -93,6 +95,7 @@ if __name__ == "__main__":
     logger.debug("Inicio")
 
     dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+    
     for Files in os.listdir(dir):
         try:
             os.remove(os.path.join(dir, Files))
