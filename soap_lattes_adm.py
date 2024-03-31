@@ -38,7 +38,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 
 def save_cv(id, dir):
 
-    if  get_data_att(id) <= last_update(id):
+    if  last_update(id) and get_data_att(id) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
