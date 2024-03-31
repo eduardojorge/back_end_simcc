@@ -2,6 +2,7 @@ from rest_imageResearcher import download_image
 from flask import Blueprint, send_file, request, jsonify
 from flask_cors import cross_origin
 
+from os.path import dirname, abspath
 import pandas as pd
 
 import Dao.researcherSQL as researcherSQL
@@ -16,19 +17,15 @@ researcherDataRest = Blueprint("researcherDataRest", __name__)
 @researcherDataRest.route("/ResearcherData/Image", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def image():
+
+    directory = dirname(dirname(abspath(__file__)))
     researcher_id = request.args.get("researcher_id")
     try:
-        path_image = "/home/lilith/repository/back_end_simcc/Files/image_researcher/{id}.jpg".format(
-            id=researcher_id
-        )
+        path_image = f"{directory}/Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
     except:
         download_image(researcher_id)
-        path_image = (
-            "/home/ejorge/simcc/back_end_simcc/Files/image_researcher/{id}.jpg".format(
-                id=researcher_id
-            )
-        )
+        path_image = f"{directory}/Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
 
 

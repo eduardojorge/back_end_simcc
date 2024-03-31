@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 import sys
 import project
+from os.path import dirname, abspath
 
 
 def fat_simcc_bibliographic_production():
@@ -192,12 +193,15 @@ if __name__ == "__main__":
     try:
         dir = sys.argv[2]
     except:
-        dir = "/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/"
+        dir = f"{dirname(abspath(__file__))}/Files/indicadores_simcc/"
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
+        filename="Log/logfile_csv.log",
+        filemode="w",
+        format=Log_Format,
+        level=logging.DEBUG,
     )
 
     logger = logging.getLogger()

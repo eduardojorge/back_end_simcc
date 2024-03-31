@@ -14,19 +14,20 @@ import project as project
 def get_data_att(id: str) -> datetime:
     resultado = client.service.getDataAtualizacaoCV(id)
     if resultado == None:
-        resultado = '01/01/0001 00:00:00'
+        resultado = "01/01/0001 00:00:00"
     return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
+
 
 def last_update(id: str):
     project.project_env = "4"
 
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
-    
+
     registry = db.consultar_db(script_sql)
-    
+
     if registry:
         return registry[0][0]
-    resultado = '01/01/0001 00:00:00'
+    resultado = "01/01/0001 00:00:00"
     return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
 
 
@@ -40,7 +41,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 
 def save_cv(id, dir):
 
-    if  get_data_att(id) <= last_update(id):
+    if get_data_att(id) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
@@ -88,7 +89,7 @@ if __name__ == "__main__":
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename="logfile_soap_lattes_adm.log",
+        filename="Log/logfile_soap_lattes_adm.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
@@ -97,7 +98,7 @@ if __name__ == "__main__":
     logger.debug("Inicio")
 
     dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
-    
+
     for Files in os.listdir(dir):
         try:
             os.remove(os.path.join(dir, Files))

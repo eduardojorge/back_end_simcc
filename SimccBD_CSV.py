@@ -7,6 +7,8 @@ from datetime import datetime
 import sys
 import project
 
+from os.path import dirname, abspath
+
 
 # Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
@@ -474,12 +476,15 @@ if __name__ == "__main__":
     except:
         project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
-    dir = "/home/ejorge/simcc/back_end_simcc/Files/indicadores_simcc/"
+    dir = f"{dirname(abspath(__file__))}/Files/indicadores_simcc/"
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_csv.log", filemode="w", format=Log_Format, level=logging.DEBUG
+        filename="Log/logfile_csv.log",
+        filemode="w",
+        format=Log_Format,
+        level=logging.DEBUG,
     )
 
     logger = logging.getLogger()

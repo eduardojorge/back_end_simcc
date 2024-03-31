@@ -58,8 +58,6 @@ def researcher_patent_db(researcher_id):
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
-
-
     filter = str()
     if test:
         filter = "WHERE id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
@@ -174,7 +172,7 @@ if __name__ == "__main__":
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_Production.log",
+        filename="Log/logfile_Production.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,

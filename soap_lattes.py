@@ -79,7 +79,7 @@ if __name__ == "__main__":
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_SOAP_Lattes.log",
+        filename="Log/logfile_SOAP_Lattes.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
