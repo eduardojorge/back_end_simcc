@@ -14,7 +14,7 @@ import project as project
 def get_data_att(id: str) -> datetime:
     resultado = client.service.getDataAtualizacaoCV(id)
     if resultado == None:
-        resultado = '0000-00-00 00:00:00'
+        resultado = '01/01/0001 00:00:00'
     return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
 
 def last_update(id: str):
@@ -26,6 +26,8 @@ def last_update(id: str):
     
     if registry:
         return registry[0][0]
+    resultado = '01/01/0001 00:00:00'
+    return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
 
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
@@ -71,7 +73,7 @@ def get_researcher_adm_simcc():
             name,
             lattes_id
         FROM
-            researcher WHERE lattes_id = '5120716508582679';
+            researcher;
         """
     registry = db.consultar_db(script_sql)
 
