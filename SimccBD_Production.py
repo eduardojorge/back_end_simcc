@@ -58,7 +58,6 @@ def researcher_patent_db(researcher_id):
 
 def list_researcher_to_update():
     dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
-    dir = "/home/lilith/Projects/hop/assemblies/client/target/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
 
     list_researcher = list()
     for file in os.listdir(dir):
