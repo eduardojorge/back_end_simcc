@@ -1,10 +1,11 @@
-import Dao.sgbdSQL as sgbdSQL
-import pandas as pd
 import Dao.areaFlowSQL as areaFlowSQL
 import Dao.termFlowSQL as termFlowSQL
+import Dao.sgbdSQL as sgbdSQL
+import pandas as pd
 import logging
 import project
 import sys
+import os
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -55,16 +56,30 @@ def researcher_patent_db(researcher_id):
     return qtd_patent
 
 
+def list_researcher_to_update():
+    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+    dir = "/home/lilith/Projects/hop/assemblies/client/target/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+
+    list_researcher = list()
+    for file in os.listdir(dir):
+        if file.endswith(".xml"):
+            list_researcher.append(file[:-4])
+
+    return tuple(list_researcher)
+
+
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
-    filter = str()
-    if test:
-        filter = "WHERE id = 'df781763-49c5-4591-a33f-4b4e5d586251'"
+    filter = str(
+        f"SELECT id FROM researcher WHERE lattes_id IN {list_researcher_to_update()}"
+    )
 
-    script_sql = "DELETE FROM researcher_production"
+    script_sql = f"DELETE FROM researcher_production WHERE researcher_id IN ({filter})"
+
     sgbdSQL.execScript_db(script_sql)
-    script_sql = f"SELECT id from researcher r {filter}"
+
+    script_sql = filter
 
     reg = sgbdSQL.consultar_db(script_sql)
 
@@ -180,4 +195,4 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    create_researcher_production_db(1)
+    create_researcher_production_db(0)
