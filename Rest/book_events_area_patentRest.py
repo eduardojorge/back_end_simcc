@@ -1,31 +1,9 @@
-from flask import Flask, jsonify, request, Blueprint
-
-import json
-
-# import nltk
 import unidecode
-from flask_cors import CORS, cross_origin
-import os
-
-import Dao.areaFlowSQL as areaFlowSQL
-import Dao.termFlowSQL as termFlowSQL
-
+from flask import jsonify, request, Blueprint
 from Model.Researcher import Researcher
-from Model.Bibliographic_Production_Researcher import (
-    Bibliographic_Production_Researcher,
-)
+import Dao.areaFlowSQL as areaFlowSQL
+from flask_cors import cross_origin
 
-
-##from server import app
-
-# https://www.fullstackpython.com/flask-json-jsonify-examples.html
-# app = Flask(__name__)
-# app.config["CORS_HEADERS"] = "Content-Type"
-# app.route('/')
-# CORS(app, resources={r"/*":{"origins":"*"}})
-# app = Flask(__name__)
-
-# if __name__ == '__main__': app.run(host='192.168.15.69',port=5000)
 areaRest = Blueprint("areaRest", __name__)
 
 
@@ -37,27 +15,18 @@ def researcherEvent():
     term = request.args.get("term")
     if term == "":
         return
-    # stemmer = nltk.RSLPStemmer()
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
     university = ""
     university = str(request.args.get("university")) + ""
 
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
     df_bd = areaFlowSQL.lista_researcher_event_db(
         term.lower(), university, graduate_program_id
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
 
         r = Researcher()
         r.id = str(infos.id)
@@ -80,12 +49,8 @@ def researcherEvent():
         r.graduation = str(infos.graduation)
         r.lattes_update = str(infos.lattes_update)
 
-        # print(researcher)
         list_researcher_area_expertise.append(r.getJson())
     return jsonify(list_researcher_area_expertise), 200
-
-
-######### Patent
 
 
 @areaRest.route("/researcherPatent", methods=["GET"])
@@ -96,27 +61,18 @@ def researcherPatent():
     term = request.args.get("term")
     if term == "":
         return
-    # stemmer = nltk.RSLPStemmer()
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
     university = ""
     university = str(request.args.get("university")) + ""
 
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
     df_bd = areaFlowSQL.lista_researcher_patent_db(
         term.lower(), university, graduate_program_id
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
 
         r = Researcher()
         r.id = str(infos.id)
@@ -140,12 +96,8 @@ def researcherPatent():
         r.graduation = str(infos.graduation)
         r.lattes_update = str(infos.lattes_update)
 
-        # print(researcher)
         list_researcher_area_expertise.append(r.getJson())
     return jsonify(list_researcher_area_expertise), 200
-
-
-######### Patent
 
 
 @areaRest.route("/researcherParticipationEvent", methods=["GET"])
@@ -156,7 +108,6 @@ def researcherParticipationEvent():
     term = request.args.get("term")
     if term == "":
         return
-    # stemmer = nltk.RSLPStemmer()
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
@@ -263,7 +214,7 @@ def researcherBook():
     return jsonify(list_researcher), 200
 
 
-######### Fluxo Area
+# Fluxo Area
 
 
 # print(list_originals_words_initials_term_db("rob"))
@@ -273,7 +224,8 @@ def area_expertiseInitials():
     list_area_expertise = []
     initials = request.args.get("initials")
 
-    df_bd = areaFlowSQL.lists_great_area_expertise_term_initials_db(initials.lower())
+    df_bd = areaFlowSQL.lists_great_area_expertise_term_initials_db(
+        initials.lower())
 
     for i, infos in df_bd.iterrows():
         print(infos.nome)
@@ -308,7 +260,7 @@ def area_specialitInitials():
             # 'id': str(infos.id),
             #  'great_area':str(infos.great_area.replace("_"," ")) ,
             "area_expertise": str(infos.area_expertise),
-            #'sub_area_expertise':str(infos.sub_area_expertise),
+            # 'sub_area_expertise':str(infos.sub_area_expertise),
             "area_specialty": str(infos.area_specialty),
         }
         # print(researcher)
@@ -332,7 +284,8 @@ def researcherArea_expertise():
     # print(termNovo)
     # print(stemmer.stem(termNovo))
     # df_bd =SimccBD.lista_researcher_name_db(name.lower())
-    df_bd = areaFlowSQL.lista_researcher_area_expertise_db(area.lower(), university)
+    df_bd = areaFlowSQL.lista_researcher_area_expertise_db(
+        area.lower(), university)
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
@@ -492,7 +445,8 @@ def bibliographic_production_article_area():
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
         }
-        list_bibliographic_production_article.append(bibliographic_production_article_)
+        list_bibliographic_production_article.append(
+            bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 

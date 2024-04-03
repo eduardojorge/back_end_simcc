@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename="Log/logfile_soap_lattes_adm.log",
+        filename="/home/ejorge/simcc/back_end_simcc/Log/logfile_soap_lattes_adm.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
@@ -130,4 +130,5 @@ if __name__ == "__main__":
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    print(
+        f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
