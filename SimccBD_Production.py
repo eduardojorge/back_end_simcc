@@ -59,19 +59,19 @@ def researcher_patent_db(researcher_id):
 def list_researcher_to_update():
     dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
 
-    list_researcher = list()
+    list_researcher = str()
     for file in os.listdir(dir):
         if file.endswith(".xml"):
-            list_researcher.append(file[:-4])
+            list_researcher += f"{file[:-4]}, "
 
-    return tuple(list_researcher)
+    return list_researcher[:-2]
 
 
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
     filter = str(
-        f"SELECT id FROM researcher WHERE lattes_id IN {list_researcher_to_update()}"
+        f"SELECT id FROM researcher WHERE lattes_id IN ({list_researcher_to_update()})"
     )
 
     script_sql = f"DELETE FROM researcher_production WHERE researcher_id IN ({filter})"
@@ -182,7 +182,8 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(
+            input("Código do banco que sera utilizado [1-8]: "))
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
@@ -194,4 +195,5 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    create_researcher_production_db(0)
+    # create_researcher_production_db(0)
+    print(list_researcher_to_update())
