@@ -76,7 +76,7 @@ def salvarCV(id, dir):
 Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
 logging.basicConfig(
-    filename="/home/ejorge/simcc/back_end_simcc/Log/logfile_soap_Lattes_profnit.log",
+    filename="logfile_soap_Lattes_profnit.log",
     filemode="w",
     format=Log_Format,
     level=logging.DEBUG,

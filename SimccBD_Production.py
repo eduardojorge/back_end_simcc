@@ -187,7 +187,7 @@ if __name__ == "__main__":
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="Log/logfile_Production.log",
+        filename="logfile_Production.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,

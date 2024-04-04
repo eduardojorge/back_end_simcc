@@ -485,7 +485,7 @@ if __name__ == "__main__":
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="Log/logfile_csv.log",
+        filename="logfile_csv.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
