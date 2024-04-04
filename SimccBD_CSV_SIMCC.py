@@ -77,7 +77,8 @@ def dim_researcher_csv_db():
     logger.debug(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["researcher", "researcher_id", "last_update", "graduation"]
+        reg, columns=["researcher", "researcher_id",
+                      "last_update", "graduation"]
     )
 
     df_bd.to_csv(dir + "dim_researcher.csv")
@@ -177,7 +178,8 @@ def fat_production_tecnical_year_novo_csv_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
+        columns=["title", "year", "type",
+                 "researcher_id", "city_id", "institution_id"],
     )
 
     df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
@@ -188,7 +190,8 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(
+            input("Código do banco que sera utilizado [1-8]: "))
 
     try:
         dir = sys.argv[2]
