@@ -26,7 +26,7 @@ if __name__ == "__main__":
     year.participation_events = year_input
 
     script_sql = """
-    SELECT id, lattes_id FROM researcher;
+    SELECT id, lattes_id FROM researcher LIMIT 10;
     """
 
     reg = sgbdSQL.consultar_db(script_sql)

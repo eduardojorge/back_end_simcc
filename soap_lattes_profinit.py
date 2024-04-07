@@ -100,7 +100,6 @@ for f in os.listdir(dir):
 
 logger.debug("Arquivos XML removidos")
 
-# df = pd.read_excel(r'Files/pesquisadoresCimatec_v1.xlsx')
 df = pd.read_excel(r"Files/PesquisadoresProfnit.xlsx")
 print(df)
 LATTES_ID = 0

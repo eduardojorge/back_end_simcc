@@ -480,7 +480,7 @@ if __name__ == "__main__":
         project.project_env = str(
             input("Código do banco que sera utilizado [1-8]: "))
 
-    dir = f"{dirname(abspath(__file__))}/Files/indicadores_simcc/"
+    dir = "Files/indicadores_simcc/"
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 

@@ -18,14 +18,13 @@ researcherDataRest = Blueprint("researcherDataRest", __name__)
 @cross_origin(origin="*", headers=["Content-Type"])
 def image():
 
-    directory = dirname(dirname(abspath(__file__)))
     researcher_id = request.args.get("researcher_id")
     try:
-        path_image = f"{directory}/Files/image_researcher/{researcher_id}.jpg"
+        path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
     except:
         download_image(researcher_id)
-        path_image = f"{directory}/Files/image_researcher/{researcher_id}.jpg"
+        path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
 
 
