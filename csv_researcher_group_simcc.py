@@ -73,7 +73,6 @@ if __name__ == "__main__":
 
         script_sql = f"""
             SELECT
-                i.name,
                 r.institution_id
             FROM
                 researcher r
@@ -84,9 +83,8 @@ if __name__ == "__main__":
             """
         registry = sgbdSQL.consultar_db(script_sql)
         data_frame_institution = pd.DataFrame(
-            registry, columns=['name', 'institution_id'])
+            registry, columns=['institution_id'])
 
-        json_barema['institution_name'] = data_frame_institution['name'][0]
         json_barema['institution_id'] = data_frame_institution['institution_id'][0]
 
         ind_prod = 0
