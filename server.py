@@ -261,4 +261,4 @@ def bibliographic_production_article():
 
 if __name__ == "__main__":
     app.run(debug=True, port=port, host="0.0.0.0",
-            ssl_context=('gs_root.pem', 'intermediate.pem'))
+            ssl_context=('cert.pem', 'key.pem'))
