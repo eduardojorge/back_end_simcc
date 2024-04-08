@@ -57,35 +57,35 @@ if __name__ == "__main__":
         )[0]
         json_barema["id"] = Data["id"]
 
-        script_sql = f"""
-        SELECT
-            MIN(e.education_end) as menor_education_end
-        FROM
-            education e
-        JOIN researcher r
-        ON r.id = e.researcher_id
-        WHERE
-            r.lattes_id = '{Data["lattes_id"]}'
-            AND e.degree = 'DOUTORADO';
-        """
-        registry = sgbdSQL.consultar_db(script_sql)
-        json_barema["first_doc"] = str(registry[0][0])
+        # script_sql = f"""
+        # SELECT
+        #     MIN(e.education_end) as menor_education_end
+        # FROM
+        #     education e
+        # JOIN researcher r
+        # ON r.id = e.researcher_id
+        # WHERE
+        #     r.lattes_id = '{Data["lattes_id"]}'
+        #     AND e.degree = 'DOUTORADO';
+        # """
+        # registry = sgbdSQL.consultar_db(script_sql)
+        # json_barema["first_doc"] = str(registry[0][0])
 
-        script_sql = f"""
-            SELECT
-                r.institution_id
-            FROM
-                researcher r
-            JOIN institution i
-            ON i.id = r.institution_id
-            WHERE
-            r.lattes_id = '{Data["lattes_id"]}';
-            """
-        registry = sgbdSQL.consultar_db(script_sql)
-        data_frame_institution = pd.DataFrame(
-            registry, columns=['institution_id'])
+        # script_sql = f"""
+        #     SELECT
+        #         r.institution_id
+        #     FROM
+        #         researcher r
+        #     JOIN institution i
+        #     ON i.id = r.institution_id
+        #     WHERE
+        #     r.lattes_id = '{Data["lattes_id"]}';
+        #     """
+        # registry = sgbdSQL.consultar_db(script_sql)
+        # data_frame_institution = pd.DataFrame(
+        #     registry, columns=['institution_id'])
 
-        json_barema['institution_id'] = data_frame_institution['institution_id'][0]
+        # json_barema['institution_id'] = data_frame_institution['institution_id'][0]
 
         ind_prod = 0
 
