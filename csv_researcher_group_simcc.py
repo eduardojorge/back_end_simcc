@@ -40,12 +40,12 @@ if __name__ == "__main__":
     year.participation_events = year_input
 
     script_sql = """
-    SELECT id, lattes_id FROM researcher;
+    SELECT name, lattes_id FROM researcher WHERE lattes_id = '0033562409950075';
     """
 
     registry = sgbdSQL.consultar_db(script_sql)
 
-    data_frame_lattes = pd.DataFrame(registry, columns=["id", "lattes_id"])
+    data_frame_lattes = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
     lista = list()
     for Index, Data in data_frame_lattes.iterrows():
@@ -55,45 +55,47 @@ if __name__ == "__main__":
             Data["lattes_id"],
             year,
         )[0]
-        json_barema["id"] = Data["id"]
+        json_barema["name"] = Data["name"]
 
-        # script_sql = f"""
-        # SELECT
-        #     MIN(e.education_end) as menor_education_end
-        # FROM
-        #     education e
-        # JOIN researcher r
-        # ON r.id = e.researcher_id
-        # WHERE
-        #     r.lattes_id = '{Data["lattes_id"]}'
-        #     AND e.degree = 'DOUTORADO';
-        # """
-        # registry = sgbdSQL.consultar_db(script_sql)
-        # json_barema["first_doc"] = str(registry[0][0])
+        script_sql = f"""
+        SELECT
+            MIN(e.education_end) as menor_education_end
+        FROM
+            education e
+        JOIN researcher r
+        ON r.id = e.researcher_id
+        WHERE
+            r.lattes_id = '{Data["lattes_id"]}'
+            AND e.degree = 'DOUTORADO';
+        """
+        registry = sgbdSQL.consultar_db(script_sql)
+        json_barema["first_doc"] = str(registry[0][0])
 
-        # script_sql = f"""
-        #     SELECT
-        #         r.institution_id
-        #     FROM
-        #         researcher r
-        #     JOIN institution i
-        #     ON i.id = r.institution_id
-        #     WHERE
-        #     r.lattes_id = '{Data["lattes_id"]}';
-        #     """
-        # registry = sgbdSQL.consultar_db(script_sql)
-        # data_frame_institution = pd.DataFrame(
-        #     registry, columns=['institution_id'])
+        script_sql = f"""
+            SELECT
+                i.acronym
+            FROM
+                researcher r
+            JOIN institution i
+            ON i.id = r.institution_id
+            WHERE
+            r.lattes_id = '{Data["lattes_id"]}';
+            """
+        registry = sgbdSQL.consultar_db(script_sql)
+        data_frame_institution = pd.DataFrame(
+            registry, columns=['institution_id'])
 
-        # json_barema['institution_id'] = data_frame_institution['institution_id'][0]
+        json_barema['institution_id'] = data_frame_institution['institution_id'][0]
 
-        ind_prod = 0
+        # ind_prod = 0
 
-        for key, value in qualis_barema.items():
-            if json_barema[key]:
-                ind_prod += qualis_barema[key] * json_barema[key]
+        # for key, value in qualis_barema.items():
+        #     if json_barema[key]:
+        #         print(qualis_barema[key], json_barema[key]
+        #               )
+        #         ind_prod += qualis_barema[key] * json_barema[key]
 
-        json_barema['ind_prod'] = ind_prod
+        # json_barema['ind_prod'] = ind_prod
         lista.append(json_barema)
 
     data_frame_dados = pd.DataFrame(lista)

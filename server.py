@@ -8,7 +8,7 @@ from Rest.researcherTermRest import researcherTermRest
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
-from Rest.mariaRest import mariaRest
+# from Rest.mariaRest import mariaRest
 
 import SimccBD as SimccBD
 import Dao.areaFlowSQL
@@ -20,8 +20,10 @@ import sys
 import nltk
 from nltk.tokenize import RegexpTokenizer
 
-project.project_env = sys.argv[1]
-
+try:
+    project.project_env = sys.argv[1]
+except Exception as error:
+    project.project_env = '4'
 try:
     port = sys.argv[2]
 except Exception as error:
@@ -39,7 +41,7 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
-app.register_blueprint(mariaRest)
+# app.register_blueprint(mariaRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 
@@ -261,4 +263,4 @@ def bibliographic_production_article():
 
 if __name__ == "__main__":
     app.run(debug=True, port=port, host="0.0.0.0",
-            ssl_context=('cert.pem', 'key.pem'))
+            ssl_context=('example.com+5.pem', 'example.com+5-key.pem'))
