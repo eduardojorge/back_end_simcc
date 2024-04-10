@@ -40,7 +40,7 @@ if __name__ == "__main__":
     year.participation_events = year_input
 
     script_sql = """
-    SELECT name, lattes_id FROM researcher WHERE lattes_id = '0033562409950075';
+    SELECT name, lattes_id FROM researcher;
     """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -83,19 +83,17 @@ if __name__ == "__main__":
             """
         registry = sgbdSQL.consultar_db(script_sql)
         data_frame_institution = pd.DataFrame(
-            registry, columns=['institution_id'])
+            registry, columns=['acronym'])
 
-        json_barema['institution_id'] = data_frame_institution['institution_id'][0]
+        json_barema['acronym'] = data_frame_institution['acronym'][0]
 
-        # ind_prod = 0
+        ind_prod = 0
 
-        # for key, value in qualis_barema.items():
-        #     if json_barema[key]:
-        #         print(qualis_barema[key], json_barema[key]
-        #               )
-        #         ind_prod += qualis_barema[key] * json_barema[key]
+        for key, value in qualis_barema.items():
+            if json_barema[key]:
+                ind_prod += qualis_barema[key] * json_barema[key]
 
-        # json_barema['ind_prod'] = ind_prod
+        json_barema['ind_prod'] = ind_prod
         lista.append(json_barema)
 
     data_frame_dados = pd.DataFrame(lista)

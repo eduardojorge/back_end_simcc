@@ -333,8 +333,6 @@ def production_general_db(name, lattes_id, year):
             r.id;
         """
 
-    print(script_sql)
-
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(
         reg,
