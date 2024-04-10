@@ -9,7 +9,8 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(
+            input("Código do banco que sera utilizado [1-8]: "))
 
     year_input = str(input("Procurar produções a partir do ano: "))
 
@@ -26,12 +27,13 @@ if __name__ == "__main__":
     year.participation_events = year_input
 
     script_sql = """
-    SELECT id, lattes_id FROM researcher LIMIT 10;
+    SELECT id, lattes_id, institution_id FROM researcher LIMIT 10;
     """
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    data_frame_lattes = pd.DataFrame(reg, columns=["id", "lattes_id"])
+    data_frame_lattes = pd.DataFrame(
+        reg, columns=["id", "lattes_id", 'institution_id'])
 
     lista = list()
     for Index, Data in data_frame_lattes.iterrows():
@@ -56,6 +58,20 @@ if __name__ == "__main__":
         )[0]
 
         json_barema["first_doc"] = str(reg[0][0])
+
+        script_sql = f"""
+            SELECT 
+                acronym
+            FROM 
+                institution 
+            WHERE 
+                id = '{Data['institution_id']}';
+            """
+
+        reg = sgbdSQL.consultar_db(script_sql)
+
+        json_barema["institution"] = str(reg[0][0])
+
         json_barema["id"] = Data["id"]
         lista.append(json_barema)
 
