@@ -62,7 +62,8 @@ def lists_guidance_researcher_db(year, resarcher_Production):
             resarcher_Production.guidance_m_c = infos.qtd
 
         if (
-            util.unidecodelower(infos.nature.lower(), "Dissertação De Mestrado")
+            util.unidecodelower(infos.nature.lower(),
+                                "Dissertação De Mestrado")
             and infos.status == "Em andamento"
         ):
             resarcher_Production.guidance_m_a = infos.qtd
@@ -333,10 +334,10 @@ def production_general_db(name, lattes_id, year):
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
-
     df_bd = pd.DataFrame(
         reg,
-        columns=["qtd", "tipo", "name_", "lattes_10_id", "graduation", "researcher_id"],
+        columns=["qtd", "tipo", "name_", "lattes_10_id",
+                 "graduation", "researcher_id"],
     )
     resarcher_Production = Resarcher_Production.Resarcher_Production()
 
@@ -396,7 +397,8 @@ def researcher_production_db(list_name, lattes_id, year):
         for cont, Data in df_bd.iterrows():
             cont += 1
             print(cont, " | ", Data["lattes_id"])
-            json_researcher.append(production_general_db("", Data["lattes_id"], year))
+            json_researcher.append(
+                production_general_db("", Data["lattes_id"], year))
 
         return json_researcher
     else:

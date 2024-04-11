@@ -12,10 +12,23 @@ if __name__ == "__main__":
         project.project_env = str(
             input("Código do banco que sera utilizado [1-8]: "))
 
-    year_input = str(input("Procurar produções a partir do ano: "))
+    qualis_barema = {'article_A1': 1.000, 'article_A2': 0.875, 'article_A3': 0.750, 'article_A4': 0.625,
+                     'article_B1': 0.500, 'article_B2': 0.370, 'article_B3': 0.250, 'article_B4': 0.125}
+
+    if int(input('Modificar os pesos para o indice de produção? [1 - Sim/0 - Não]')):
+        for key, value in qualis_barema.items():
+            qualis_barema[key] = int(
+                input(f'Alterando o peso para produções({key}).\nDe {value} para: '))
 
     year = Year_Barema()
+
+    year_input = str(input("Procurar produções(Artigos) a partir do ano: "))
+
     year.article = year_input
+
+    year_input = str(
+        input("Procurar demais produções(livros) a partir do ano: "))
+
     year.work_event = year_input
     year.book = year_input
     year.chapter_book = year_input
@@ -27,16 +40,31 @@ if __name__ == "__main__":
     year.participation_events = year_input
 
     script_sql = """
+<<<<<<< HEAD
     SELECT id, lattes_id, institution_id FROM researcher LIMIT 10;
+=======
+    SELECT name, lattes_id FROM researcher;
+>>>>>>> in-progress
     """
 
-    reg = sgbdSQL.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
+<<<<<<< HEAD
     data_frame_lattes = pd.DataFrame(
         reg, columns=["id", "lattes_id", 'institution_id'])
+=======
+    data_frame_lattes = pd.DataFrame(registry, columns=["name", "lattes_id"])
+>>>>>>> in-progress
 
     lista = list()
     for Index, Data in data_frame_lattes.iterrows():
+
+        json_barema = resarcher_baremaSQL.researcher_production_db(
+            "",
+            Data["lattes_id"],
+            year,
+        )[0]
+        json_barema["name"] = Data["name"]
 
         script_sql = f"""
         SELECT
@@ -49,14 +77,24 @@ if __name__ == "__main__":
             r.lattes_id = '{Data["lattes_id"]}'
             AND e.degree = 'DOUTORADO';
         """
-        reg = sgbdSQL.consultar_db(script_sql)
+        registry = sgbdSQL.consultar_db(script_sql)
+        json_barema["first_doc"] = str(registry[0][0])
 
-        json_barema = resarcher_baremaSQL.researcher_production_db(
-            "",
-            Data["lattes_id"],
-            year,
-        )[0]
+        script_sql = f"""
+            SELECT
+                i.acronym
+            FROM
+                researcher r
+            JOIN institution i
+            ON i.id = r.institution_id
+            WHERE
+            r.lattes_id = '{Data["lattes_id"]}';
+            """
+        registry = sgbdSQL.consultar_db(script_sql)
+        data_frame_institution = pd.DataFrame(
+            registry, columns=['acronym'])
 
+<<<<<<< HEAD
         json_barema["first_doc"] = str(reg[0][0])
 
         script_sql = f"""
@@ -73,6 +111,17 @@ if __name__ == "__main__":
         json_barema["institution"] = str(reg[0][0])
 
         json_barema["id"] = Data["id"]
+=======
+        json_barema['acronym'] = data_frame_institution['acronym'][0]
+
+        ind_prod = 0
+
+        for key, value in qualis_barema.items():
+            if json_barema[key]:
+                ind_prod += qualis_barema[key] * json_barema[key]
+
+        json_barema['ind_prod'] = ind_prod
+>>>>>>> in-progress
         lista.append(json_barema)
 
     data_frame_dados = pd.DataFrame(lista)
