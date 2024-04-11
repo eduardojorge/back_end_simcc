@@ -24,10 +24,10 @@ try:
     project.project_env = sys.argv[1]
 except Exception as error:
     project.project_env = '4'
-<<<<<<< HEAD
+<< << << < HEAD
 
-=======
->>>>>>> in-progress
+== == == =
+>>>>>> > in -progress
 try:
     port = sys.argv[2]
 except Exception as error:
@@ -266,10 +266,5 @@ def bibliographic_production_article():
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-    app.run(debug=True, port=port, host="0.0.0.0",
-            ssl_context=('example.com+5.pem', 'example.com+5-key.pem'))
-=======
     app.run(debug=True, port=port, host="0.0.0.0", ssl_context=(
         '/etc/apache2/ssl/certificado/simcc.uesc.br.crt', '/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key'))
->>>>>>> in-progress
