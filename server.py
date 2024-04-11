@@ -24,10 +24,7 @@ try:
     project.project_env = sys.argv[1]
 except Exception as error:
     project.project_env = '4'
-<< << << < HEAD
 
-== == == =
->>>>>> > in -progress
 try:
     port = sys.argv[2]
 except Exception as error:
