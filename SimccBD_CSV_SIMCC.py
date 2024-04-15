@@ -1,11 +1,13 @@
-import Dao.sgbdSQL as sgbdSQL
-import pandas as pd
-import logging
 import json
-from datetime import datetime
+import logging
 import sys
+from datetime import datetime
+from os.path import abspath, dirname
+
+import pandas as pd
+
+import Dao.sgbdSQL as sgbdSQL
 import project
-from os.path import dirname, abspath
 
 
 def fat_simcc_bibliographic_production():
@@ -67,7 +69,8 @@ def dim_researcher_csv_db():
             r.name AS researcher, 
             r.id AS researcher_id, 
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS date_,
-            r.graduation AS graduation
+            r.graduation AS graduation,
+            r.institution_id
         FROM  
             researcher r
         """
@@ -77,8 +80,14 @@ def dim_researcher_csv_db():
     logger.debug(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["researcher", "researcher_id",
-                      "last_update", "graduation"]
+        reg,
+        columns=[
+            "researcher",
+            "researcher_id",
+            "last_update",
+            "graduation",
+            "institution_id",
+        ],
     )
 
     df_bd.to_csv(dir + "dim_researcher.csv")
@@ -178,8 +187,7 @@ def fat_production_tecnical_year_novo_csv_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "year", "type",
-                 "researcher_id", "city_id", "institution_id"],
+        columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
     )
 
     df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
@@ -190,8 +198,7 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     try:
         dir = sys.argv[2]
