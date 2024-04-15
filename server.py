@@ -1,29 +1,27 @@
-from flask import Flask, jsonify, request
+import sys
+
+import nltk
 import unidecode
+from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from Model.Researcher import Researcher
-from Model.Magazine import Magazine
+from nltk.tokenize import RegexpTokenizer
 
-from Rest.researcherTermRest import researcherTermRest
-from Rest.book_events_area_patentRest import areaRest
-from Rest.graduateProgramRest import graduateProgramRest
-from Rest.researcherDataRest import researcherDataRest
-# from Rest.mariaRest import mariaRest
-
-import SimccBD as SimccBD
 import Dao.areaFlowSQL
 import Dao.generalSQL
-
-
 import project
-import sys
-import nltk
-from nltk.tokenize import RegexpTokenizer
+import SimccBD as SimccBD
+from Model.Magazine import Magazine
+from Model.Researcher import Researcher
+from Rest.book_events_area_patentRest import areaRest
+from Rest.graduateProgramRest import graduateProgramRest
+from Rest.mariaRest import mariaRest
+from Rest.researcherDataRest import researcherDataRest
+from Rest.researcherTermRest import researcherTermRest
 
 try:
     project.project_env = sys.argv[1]
 except Exception as error:
-    project.project_env = '4'
+    project.project_env = "4"
 
 try:
     port = sys.argv[2]
@@ -42,7 +40,7 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
-# app.register_blueprint(mariaRest)
+app.register_blueprint(mariaRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 
@@ -157,8 +155,7 @@ def researcherName():
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    df_bd = SimccBD.lista_researcher_full_name_db_(
-        name.lower(), graduate_program_id)
+    df_bd = SimccBD.lista_researcher_full_name_db_(name.lower(), graduate_program_id)
     for i, infos in df_bd.iterrows():
 
         r = Researcher()
@@ -256,12 +253,19 @@ def bibliographic_production_article():
                 "jcr_link": str(infos.jcr_link),
             }
 
-        list_bibliographic_production_article.append(
-            bibliographic_production_article_)
+        list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=port, host="0.0.0.0", ssl_context=(
-        '/etc/apache2/ssl/certificado/simcc.uesc.br.crt', '/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key'))
+
+    app.run(
+        debug=True,
+        port=port,
+        host="0.0.0.0",
+        ssl_context=(
+            "/etc/apache2/ssl/certificado/simcc.uesc.br.crt",
+            "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
+        ),
+    )

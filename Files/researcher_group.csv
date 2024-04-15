@@ -1,17 +1,4 @@
-<<<<<<< HEAD
-,id,patent,software,brand,book,article_A1,article_A2,article_A3,article_A4,article_B1,article_B2,article_B3,article_B4,article_C,article_SQ,graduation,guidance_ic_a,guidance_ic_c,guidance_m_a,guidance_m_c,guidance_d_a,guidance_d_c,guidance_g_a,guidance_g_c,guidance_e_a,guidance_e_c,first_doc,institution
-0,9d2d9d1c-0af9-4dfe-8be1-fc26c8e8a227,,,,,,,,,,,,,,,,,,,,,,,,,,None,UICL
-1,1d6969ac-6797-4c31-83ac-8dd5303fb2a0,,,,,,,,,,,,,,,,,,,,,,,,,,2019,UICL
-2,e3d19280-634d-41df-bfa1-83d7c5e8b86b,,,,1,,,,,6,2,3,,1,4,Doutorado,1,3,2,,,,,3,,,2021,UEFS
-3,b64a650b-1f29-4c88-9e00-7625e0b17965,,,,,,,,,,,,,,,,,,,,,,,,,,2009,UICL
-4,a7a19490-84bd-4cea-b666-ac7d700945a1,,,,,,,,,,,,,,,,,,,,,,,,,,2013,UESC
-5,28698d70-8ef0-44fd-b70a-09621873485d,,,,,,,,,,,,,,,,,,,,,,,,,,2015,UNEB
-6,9c11b1b5-1c8f-4216-8cc4-99b2fe7acec0,,,,,,,,,,,,,1,,Doutorado,,,,,,,,,,,2021,UICL
-7,38434fa3-3ba6-42e4-9ae6-cfb7263962a1,,,,,,,,,,,,,,,,,,,,,,,,,,2011,UEFS
-8,e733058d-cdf0-4c99-a4b8-588ba3e5cf58,,,,,,,,,,,,,,,Doutorado,,,,,,,,,,,2014,UESC
-9,4b4a6930-84df-49b4-ad4f-17f8f9f65af1,,,,,,,,,,,,,,,,,,,,,,,,,,None,UICL
-=======
-,id,patent,software,brand,book,article_A1,article_A2,article_A3,article_A4,article_B1,article_B2,article_B3,article_B4,article_C,article_SQ,graduation,guidance_ic_a,guidance_ic_c,guidance_m_a,guidance_m_c,guidance_d_a,guidance_d_c,guidance_g_a,guidance_g_c,guidance_e_a,guidance_e_c,name,first_doc,acronym,ind_prod
+,id,patent,software,brand,book,article_A1,article_A2,article_A3,article_A4,article_B1,article_B2,article_B3,article_B4,article_C,article_SQ,graduation,guidance_ic_a,guidance_ic_c,guidance_m_a,guidance_m_c,guidance_d_a,guidance_d_c,guidance_g_a,guidance_g_c,guidance_e_a,guidance_e_c,name,first_doc,institution,ind_prod
 0,8973f820-47de-45a2-b51d-9068f48b041c,,,,5,1,4,,5,1,,5,,1,,Doutorado,3,7,4,13,9,,,,,,Adriana Stella Cardoso Lessa de Oliveira,2008,UESB,9.375
 1,3d1d34db-acb0-4908-a71b-6e886e1378dd,,,,1,1,,4,,,,,,,,Doutorado,3,3,1,,,,,6,,,Magno Clery da Palma-Santos,2021,UESB,4.0
 2,40485c46-411a-4030-b218-23f8163e9554,,,,2,,,,1,1,1,1,,3,3,Mestrado,,,,,,,,17,,,Joelma Boaventura Da Silva,None,UNEB,1.745
@@ -5192,4 +5179,3 @@
 5177,846a1876-0b90-402d-bc2f-7472f8c05873,,,,,,1,1,2,,,1,,2,,Doutorado,1,13,7,5,1,4,,,,5,Vera Lúcia Costa Vale,2005,UNEB,3.125
 5178,5cbe8263-4464-4884-af9d-865ac4fa9a72,,,,2,,,1,,,,,,8,,Doutorado,2,3,,,,,,12,,,Helânia Thomazine Porto,2019,UNEB,0.75
 5179,58ed7088-81c1-491e-8bf6-173a9cf50c82,,,,,,2,,,,,,,1,1,Pós-Doutorado,,1,4,16,3,20,,2,,,Livia Alessandra Fialho da Costa,2002,UNEB,1.75
->>>>>>> in-progress

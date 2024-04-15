@@ -1,9 +1,11 @@
-import rest_maria
-from flask import jsonify, request, Blueprint
+from pprint import pprint
+
+from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
+
+import rest_maria
 from Dao import taxonomySQL
 from Model.Researcher import Researcher
-from pprint import pprint
 
 mariaRest = Blueprint("mariaRest", __name__)
 
@@ -11,6 +13,7 @@ mariaRest = Blueprint("mariaRest", __name__)
 @mariaRest.route("/Maria/Chat", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def chat():
+
     return
 
 
