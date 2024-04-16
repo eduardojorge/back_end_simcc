@@ -22,7 +22,6 @@ try:
     project.project_env = sys.argv[1]
 except Exception as error:
     project.project_env = "4"
-
 try:
     port = sys.argv[2]
 except Exception as error:
@@ -259,7 +258,6 @@ def bibliographic_production_article():
 
 
 if __name__ == "__main__":
-
     app.run(
         debug=True,
         port=port,
@@ -269,3 +267,8 @@ if __name__ == "__main__":
             "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
         ),
     )
+    # app.run(
+    #     debug=True,
+    #     port=port,
+    #     host="0.0.0.0",
+    # )
