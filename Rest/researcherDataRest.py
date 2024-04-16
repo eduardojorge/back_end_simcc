@@ -1,15 +1,15 @@
-from rest_imageResearcher import download_image
-from flask import Blueprint, send_file, request, jsonify
+from os.path import abspath, dirname
+
+import pandas as pd
+from flask import Blueprint, jsonify, request, send_file
 from flask_cors import cross_origin
 
-from os.path import dirname, abspath
-import pandas as pd
-
-import Dao.researcherSQL as researcherSQL
 import Dao.generalSQL as generalSQL
-
+import Dao.researcherSQL as researcherSQL
+from Dao import sgbdSQL
 from Model.City import City
 from Model.Researcher import Researcher
+from rest_imageResearcher import download_image
 
 researcherDataRest = Blueprint("researcherDataRest", __name__)
 
@@ -19,6 +19,12 @@ researcherDataRest = Blueprint("researcherDataRest", __name__)
 def image():
 
     researcher_id = request.args.get("researcher_id")
+    if not researcher_id:
+        name = request.args.get("name")
+        researcher_id = sgbdSQL.consultar_db(
+            f"SELECT id FROM researcher WHERE name ILIKE '{name}';"
+        )[0][0]
+
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)

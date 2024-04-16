@@ -1,7 +1,8 @@
-import requests
 import pandas as pd
-from Dao import sgbdSQL as db
+import requests
+
 import project
+from Dao import sgbdSQL as db
 
 
 def download_image(id: str = None, name: str = None, lattes_id: str = None) -> None:
