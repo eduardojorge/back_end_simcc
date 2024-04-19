@@ -1,8 +1,9 @@
-import Dao.sgbdSQL as sgbdSQL
-import unidecode
-import pandas as pd
-import Dao.util as util
 import nltk
+import pandas as pd
+import unidecode
+
+import Dao.sgbdSQL as sgbdSQL
+import Dao.util as util
 
 # Função que lista  as áreas de expertrize por Iniciais
 
@@ -273,9 +274,7 @@ def lists_software_production_researcher_db(researcher_id, year):
     return df_bd
 
 
-def list_researchers_originals_words_db(
-    terms, institution, type, boolean_condition, graduate_program_id
-):
+def list_researchers_originals_words_db(terms, institution, type, graduate_program_id):
     filter = util.filterSQLRank(terms, ";", "title")
 
     filter_institution = ""
@@ -346,6 +345,8 @@ def list_researchers_originals_words_db(
                     TO_CHAR(r.last_update, 'dd/mm/yyyy')
             ORDER BY qtd DESC;
             """
+
+        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
@@ -388,6 +389,7 @@ def list_researchers_originals_words_db(
                 AND rp.researcher_id = r.id
             ORDER BY qtd DESC;
             """
+        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(

@@ -1,5 +1,5 @@
-import unidecode
 import nltk
+import unidecode
 from nltk.tokenize import RegexpTokenizer
 
 
@@ -30,10 +30,8 @@ def filterSQLRank(text, split, attribute_2):
         t = []
         t = text.split(split)
         filter = ""
-        i = 0
 
         if (len(t)) == 1:
-            # filter = " unaccent(LOWER("+attribute+"))='"+t[0].lower()+"' "+booleanOperator+ ""+ filter
             filter = (
                 """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """
                 % (attribute_2, unidecode.unidecode(text), 0.04)
@@ -59,15 +57,9 @@ def filterSQLRank(text, split, attribute_2):
                     0.04,
                 )
             )
-            # filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """ % (attribute_2, unidecode.unidecode(t[0]), unidecode.unidecode(t[1]),0.04)
             x = len(filter)
             filter = filter[0 : x - 3]
             filter = " AND (" + filter + ")"
-            # t[1] =t[1].strip().replace(" ","&")
-            # filter = filter + """ AND  (translate(unaccent(LOWER(%s)),'-\.:;''',' ') ::tsvector@@ unaccent(LOWER( '%s'))::tsquery)=TRUE """ % (attribute_2, unidecode.unidecode(t[1]))
-        # x = len(filter)
-        # filter = filter[0:x-3]
-        # filter = " AND ("+filter+")"
     return filter
 
 

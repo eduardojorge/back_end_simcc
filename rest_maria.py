@@ -85,6 +85,3 @@ def read_json(json: dict, terms_list: list = list()) -> list:
 
     if json["id"] == 1:
         return terms_list
-
-
-chating_maria()

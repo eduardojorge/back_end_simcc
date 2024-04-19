@@ -27,4 +27,4 @@ for Data in doi:
             print(Data[0])
         time.sleep(12)
     else:
-        print(".")
+        print(f"{Data[0], Data[1]} - OK")

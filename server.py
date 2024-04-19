@@ -14,11 +14,9 @@ from Model.Magazine import Magazine
 from Model.Researcher import Researcher
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
+from Rest.mariaRest import mariaRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
-
-# from Rest.mariaRest import mariaRest
-
 
 try:
     project.project_env = sys.argv[1]
@@ -41,7 +39,7 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
-# app.register_blueprint(mariaRest)
+app.register_blueprint(mariaRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 
@@ -52,7 +50,8 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route("/secondWord", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def secondWord():
-    term = request.args.get("term")
+    if not (term := unidecode.unidecode(request.args.get("term").lower())):
+        return jsonify("No Content"), 204
 
     df_bd = Dao.generalSQL.listSecondWord_bd(term)
 
@@ -62,6 +61,7 @@ def secondWord():
     stopwords_english = nltk.corpus.stopwords.words("english")
     tokens = []
     text = ""
+
     for i, infos in df_bd.iterrows():
         if not (
             (infos.word.lower() in stopwords_portuguese)
