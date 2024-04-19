@@ -74,47 +74,42 @@ def originals_words():
 @researcherTermRest.route("/researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def research():
-    list_researcher = []
+    list_researcher = list()
+    university = str()
 
-    if not (terms := request.args.get("term").lower()):
+    if not (terms := unidecode.unidecode(request.args.get("terms"))):
         return jsonify("No Content"), 204
+    if graduate_program_id := request.args.get("graduate_program_id"):
+        graduate_program_id = str()
 
-    university = ""
-    university = str(request.args.get("university"))
-    termNovo = unidecode.unidecode(terms.lower())
-    type = request.args.get("type")
+    university = request.args.get("university")
+    production_type = request.args.get("type")
 
-    graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None or "0":
-        graduate_program_id = ""
-    if graduate_program_id == "0":
-        graduate_program_id = ""
-
-    df_bd = termFlowSQL.list_researchers_originals_words_db(
-        termNovo, university, type, graduate_program_id
+    data_frame = termFlowSQL.list_researchers_originals_words_db2(
+        terms, university, production_type, graduate_program_id
     )
-    for i, infos in df_bd.iterrows():
+    for Index, Data in data_frame.iterrows():
 
         r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str(infos.qtd)
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
+        r.id = str(Data.id)
+        r.name = str(Data.researcher_name)
+        r.among = str(Data.qtd)
+        r.articles = str(Data.articles)
+        r.book_chapters = str(Data.book_chapters)
+        r.book = str(Data.book)
+        r.patent = str(Data.patent)
+        r.software = str(Data.software)
+        r.brand = str(Data.brand)
+        r.university = str(Data.institution)
+        r.lattes_id = str(Data.lattes)
+        r.lattes_10_id = str(Data.lattes_10_id)
+        r.abstract = str(Data.abstract)
+        r.area = str(Data.area.replace("_", " "))
+        r.city = str(Data.city)
+        r.orcid = str(Data.orcid)
+        r.image_university = str(Data.image)
+        r.graduation = str(Data.graduation)
+        r.lattes_update = str(Data.lattes_update)
 
         researcher = r.getJson()
 

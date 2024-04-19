@@ -346,7 +346,6 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
             ORDER BY qtd DESC;
             """
 
-        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
@@ -389,7 +388,6 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
                 AND rp.researcher_id = r.id
             ORDER BY qtd DESC;
             """
-        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
@@ -763,6 +761,151 @@ def lista_researcher_id_db(researcher_id):
             "software",
             "brand",
             "lattes_update",
+        ],
+    )
+
+    return df_bd
+
+
+def list_researchers_originals_words_db2(terms, institution, type, graduate_program_id):
+    filter = util.filterSQLRank3(terms, "title")
+
+    filter_institution = ""
+    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
+
+    filtergraduate_program = ""
+    if graduate_program_id != "":
+        filtergraduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
+
+    if type == "ARTICLE":
+
+        filter_type = " AND b.type='ARTICLE' "
+
+        sql = f"""
+            SELECT r.id AS id,
+                COUNT(DISTINCT b.id) AS qtd,
+                r.name AS researcher_name,
+                i.name AS institution,
+                rp.articles AS articles,
+                rp.book_chapters AS book_chapters,
+                rp.book AS book,
+                r.lattes_id AS lattes,
+                r.lattes_10_id AS lattes_10_id,
+                abstract,
+                rp.great_area AS area,
+                rp.city AS city,
+                r.orcid AS orcid,
+                i.image AS image,
+                r.graduation AS graduation,
+                rp.patent AS patent,
+                rp.software AS software,
+                rp.brand AS brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update,
+                '{terms}' AS terms
+            FROM researcher r
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+                institution i,
+                researcher_production rp,
+                city c,
+                bibliographic_production b
+            WHERE c.id = r.city_id
+                {filter}
+                {filter_institution} 
+                {filtergraduate_program} 
+                {filter_type}
+                AND r.institution_id = i.id
+                AND rp.researcher_id = r.id
+                AND b.researcher_id = r.id
+            GROUP BY r.id,
+                    r.name,
+                    i.name,
+                    articles,
+                    book_chapters,
+                    book,
+                    r.lattes_id,
+                    lattes_10_id,
+                    abstract,
+                    rp.great_area,
+                    rp.city,
+                    r.orcid,
+                    i.image,
+                    r.graduation,
+                    rp.patent,
+                    rp.software,
+                    rp.brand,
+                    TO_CHAR(r.last_update, 'dd/mm/yyyy')
+            ORDER BY qtd DESC;
+            """
+
+        reg = sgbdSQL.consultar_db(sql)
+
+    if type == "ABSTRACT":
+        filter = util.filterSQLRank2(terms, ";", "abstract")
+
+        sql = f"""
+            SELECT 
+                DISTINCT r.id AS id,
+                0 AS qtd,
+                r.name AS researcher_name,
+                i.name AS institution,
+                rp.articles AS articles,
+                rp.book_chapters AS book_chapters,
+                rp.book AS book,
+                r.lattes_id AS lattes,
+                r.lattes_10_id AS lattes_10_id,
+                abstract,
+                rp.great_area AS area,
+                rp.city AS city,
+                r.orcid AS orcid,
+                i.image AS image,
+                r.graduation AS graduation,
+                rp.patent AS patent,
+                rp.software AS software,
+                rp.brand AS brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update,
+                '{terms}' AS terms
+            FROM 
+                researcher r
+            LEFT JOIN graduate_program_researcher gpr 
+            ON r.id = gpr.researcher_id,
+                institution i,
+                researcher_production rp,
+                city c
+            WHERE c.id = r.city_id
+                {filter} 
+                {filter_institution} 
+                {filtergraduate_program}
+                AND r.institution_id = i.id
+                AND rp.researcher_id = r.id
+            ORDER BY qtd DESC;
+            """
+        reg = sgbdSQL.consultar_db(sql)
+
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "id",
+            "qtd",
+            "researcher_name",
+            "institution",
+            "articles",
+            "book_chapters",
+            "book",
+            "lattes",
+            "lattes_10_id",
+            "abstract",
+            "area",
+            "city",
+            "orcid",
+            "image",
+            "graduation",
+            "patent",
+            "software",
+            "brand",
+            "lattes_update",
+            "terms",
         ],
     )
 

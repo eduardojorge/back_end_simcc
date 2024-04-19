@@ -186,3 +186,59 @@ def clean_stopwords(text):
         ):
             text_new = text_new + word.lower() + ";"
     return text_new[0 : len(text_new) - 1]
+
+
+def mk_string_ftx(string_of_terms):
+    low_level_filter = [str(), string_of_terms]
+
+    def parse_comma(low_level_filter, parse):
+        filter_part = f'"{low_level_filter[1][:parse]}" & '
+        low_level_filter[0] += filter_part
+        low_level_filter[1] = low_level_filter[1][parse + 1 :]
+        return low_level_filter
+
+    def parse_dot(low_level_filter, parse):
+        filter_part = f'-"{low_level_filter[1][:parse]}" '
+        low_level_filter[0] += filter_part
+        low_level_filter[1] = low_level_filter[1][parse + 1 :]
+        return low_level_filter
+
+    def parse_semicolon(low_level_filter, parse):
+        filter_part = f'"{low_level_filter[1][:parse]}" or '
+        low_level_filter[0] += filter_part
+        low_level_filter[1] = low_level_filter[1][parse + 1 :]
+        return low_level_filter
+
+    grammar = {
+        ",": parse_comma,
+        ".": parse_dot,
+        ";": parse_semicolon,
+    }
+
+    def make_string_filter(low_level_filter):
+        characters = ["(", ",", ";", "."]
+
+        if order := [
+            value
+            for value in [low_level_filter[1].find(char) for char in characters]
+            if value >= 0
+        ]:
+
+            low_level_filter = grammar[low_level_filter[1][min(order)]](
+                low_level_filter, min(order)
+            )
+            return low_level_filter
+        low_level_filter[0] += low_level_filter[1]
+        low_level_filter[1] = str()
+        return low_level_filter
+
+    while low_level_filter[1]:
+        low_level_filter = make_string_filter(low_level_filter)
+
+    return low_level_filter[0]
+
+
+def filterSQLRank3(text, parameter):
+    text = mk_string_ftx(text)
+    filter = f"AND (ts_rank(to_tsvector(translate(unaccent(LOWER({parameter})),'-\.:;''',' ')), websearch_to_tsquery('{text}')) > 0.04)"
+    return filter
