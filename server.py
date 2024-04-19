@@ -50,7 +50,8 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route("/secondWord", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def secondWord():
-    term = request.args.get("term")
+    if not (term := unidecode.unidecode(request.args.get("term").lower())):
+        return jsonify("No Content"), 204
 
     df_bd = Dao.generalSQL.listSecondWord_bd(term)
 
@@ -60,6 +61,7 @@ def secondWord():
     stopwords_english = nltk.corpus.stopwords.words("english")
     tokens = []
     text = ""
+
     for i, infos in df_bd.iterrows():
         if not (
             (infos.word.lower() in stopwords_portuguese)
@@ -224,7 +226,6 @@ def bibliographic_production_article():
         termNovo, year, qualis, university, distinct, graduate_program_id
     )
 
-    print(df_bd)
     for i, infos in df_bd.iterrows():
         if distinct == "0":
             bibliographic_production_article_ = {

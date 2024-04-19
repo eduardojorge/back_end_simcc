@@ -1,24 +1,23 @@
-from flask import jsonify, request, Blueprint
-
 # import nltk
 import unidecode
+from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
-import Dao.termFlowSQL as termFlowSQL
 
-from Model.Researcher import Researcher
+import Dao.resarcher_baremaSQL as resarcher_baremaSQL
+import Dao.termFlowSQL as termFlowSQL
 from Model.Bibliographic_Production_Researcher import (
     Bibliographic_Production_Researcher,
 )
-from Model.Patent_Researcher import Patent_Researcher
-from Model.Software_Researcher import Software_Researcher
-from Model.Brand_Researcher import Brand_Researcher
-from Model.Book_Researcher import Book_Researcher
 from Model.Book_Chapter_Researcher import Book_Chapter_Researcher
+from Model.Book_Researcher import Book_Researcher
+from Model.Brand_Researcher import Brand_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
-from Model.Researcher_Report import Researcher_Report
-from Model.Year_Barema import Year_Barema
+from Model.Patent_Researcher import Patent_Researcher
 from Model.PEvent_Researcher import PEvent_Researcher
-import Dao.resarcher_baremaSQL as resarcher_baremaSQL
+from Model.Researcher import Researcher
+from Model.Researcher_Report import Researcher_Report
+from Model.Software_Researcher import Software_Researcher
+from Model.Year_Barema import Year_Barema
 
 researcherTermRest = Blueprint("researcherTermRest", __name__)
 
@@ -33,10 +32,8 @@ def resarcher_barema():
 
     year.article = request.args.get("yarticle")
     year.work_event = request.args.get("ywork_event")
-
     year.book = request.args.get("ybook")
     year.chapter_book = request.args.get("ychapter_book")
-
     year.patent = request.args.get("ypatent")
     year.software = request.args.get("ysoftware")
     year.brand = request.args.get("ybrand")
@@ -60,9 +57,7 @@ def originals_words():
 
     initials = request.args.get("initials")
     type = request.args.get("type")
-
     df_bd = termFlowSQL.list_research_dictionary_db(initials, type)
-
     list = []
     for i, infos in df_bd.iterrows():
         research_dictionary = {
@@ -79,54 +74,42 @@ def originals_words():
 @researcherTermRest.route("/researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def research():
-    list_researcher = []
+    list_researcher = list()
+    university = str()
 
-    terms = str(request.args.get("terms"))
+    if not (terms := unidecode.unidecode(request.args.get("terms"))):
+        return jsonify("No Content"), 204
+    if graduate_program_id := request.args.get("graduate_program_id"):
+        graduate_program_id = str()
 
-    boolean_condition = request.args.get("boolean_condition")
-    if boolean_condition is None:
-        boolean_condition = "or"
+    university = request.args.get("university")
+    production_type = request.args.get("type")
 
-    if terms == "":
-        return jsonify(list_researcher), 200
-    university = ""
-    university = str(request.args.get("university")) + ""
-    print(terms)
-    termNovo = unidecode.unidecode(terms.lower())
-    print(terms)
-    type = request.args.get("type")
-
-    graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None or "0":
-        graduate_program_id = ""
-    if graduate_program_id == "0":
-        graduate_program_id = ""
-
-    df_bd = termFlowSQL.list_researchers_originals_words_db(
-        termNovo, university, type, boolean_condition, graduate_program_id
+    data_frame = termFlowSQL.list_researchers_originals_words_db2(
+        terms, university, production_type, graduate_program_id
     )
-    for i, infos in df_bd.iterrows():
+    for Index, Data in data_frame.iterrows():
 
         r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str(infos.qtd)
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
+        r.id = str(Data.id)
+        r.name = str(Data.researcher_name)
+        r.among = str(Data.qtd)
+        r.articles = str(Data.articles)
+        r.book_chapters = str(Data.book_chapters)
+        r.book = str(Data.book)
+        r.patent = str(Data.patent)
+        r.software = str(Data.software)
+        r.brand = str(Data.brand)
+        r.university = str(Data.institution)
+        r.lattes_id = str(Data.lattes)
+        r.lattes_10_id = str(Data.lattes_10_id)
+        r.abstract = str(Data.abstract)
+        r.area = str(Data.area.replace("_", " "))
+        r.city = str(Data.city)
+        r.orcid = str(Data.orcid)
+        r.image_university = str(Data.image)
+        r.graduation = str(Data.graduation)
+        r.lattes_update = str(Data.lattes_update)
 
         researcher = r.getJson()
 
@@ -171,8 +154,7 @@ def brand_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_brand_production_researcher_db(
-        researcher_id, 1000)
+    df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, 1000)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -197,8 +179,7 @@ def book_production_researcher():
     year = request.args.get("year")
     term = request.args.get("term")
 
-    df_bd = termFlowSQL.lists_book_production_researcher_db(
-        researcher_id, year, term)
+    df_bd = termFlowSQL.lists_book_production_researcher_db(researcher_id, year, term)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -280,8 +261,7 @@ def software_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_software_production_researcher_db(
-        researcher_id, year)
+    df_bd = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -308,8 +288,7 @@ def pevent_researcher():
 
     nature = request.args.get("nature")
 
-    df_bd = termFlowSQL.lists_pevent_researcher_db(
-        researcher_id, year, term, nature)
+    df_bd = termFlowSQL.lists_pevent_researcher_db(researcher_id, year, term, nature)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -339,8 +318,7 @@ def patent_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_patent_production_researcher_db(
-        researcher_id, year, term)
+    df_bd = termFlowSQL.lists_patent_production_researcher_db(researcher_id, year, term)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -433,8 +411,7 @@ def lists_word_researcher():
         graduate_program_id = ""
 
     lists_word = list()
-    df_bd = termFlowSQL.lists_word_researcher_db(
-        researcher_id, graduate_program_id)
+    df_bd = termFlowSQL.lists_word_researcher_db(researcher_id, graduate_program_id)
 
     for Index, infos in df_bd.iterrows():
         words = {"among": str(infos.qtd), "term": str(infos.term)}
@@ -451,8 +428,7 @@ def institutionFrequenci():
     termNovo = terms.lower()
     university = str(request.args.get("university")) + ""
     type_ = str(request.args.get("type")) + ""
-    df_bd = termFlowSQL.lista_institution_production_db(
-        termNovo, university, type_)
+    df_bd = termFlowSQL.lista_institution_production_db(termNovo, university, type_)
 
     for i, infos in df_bd.iterrows():
         institution = {

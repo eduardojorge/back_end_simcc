@@ -1,12 +1,13 @@
 import os
-from Dao import sgbdSQL as bd
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.memory import ChatMessageHistory
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
 
+from langchain.memory import ChatMessageHistory
+from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_openai import ChatOpenAI
+
+from Dao import sgbdSQL as bd
 
 maria = ChatOpenAI(model="gpt-3.5-turbo", api_key=os.environ["OPENAI_API_KEY"])
 
@@ -47,8 +48,6 @@ def create_taxonomy(
 
     chain = prompt | maria | parser
 
-    # for json_fragment in chain.stream({"question": question}):
-    #     yield json_fragment
     return chain.invoke({"question": question})
 
 
