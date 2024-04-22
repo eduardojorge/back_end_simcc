@@ -188,57 +188,41 @@ def clean_stopwords(text):
     return text_new[0 : len(text_new) - 1]
 
 
-def mk_string_ftx(string_of_terms):
-    low_level_filter = [str(), string_of_terms]
+def web_search_filter(string_of_terms, table):
 
-    def parse_comma(low_level_filter, parse):
-        filter_part = f'"{low_level_filter[1][:parse]}" & '
-        low_level_filter[0] += filter_part
-        low_level_filter[1] = low_level_filter[1][parse + 1 :]
-        return low_level_filter
+    position_to_skip = 0
+    term = str()
+    web_search_filter = str()
 
-    def parse_dot(low_level_filter, parse):
-        filter_part = f'-"{low_level_filter[1][:parse]}" '
-        low_level_filter[0] += filter_part
-        low_level_filter[1] = low_level_filter[1][parse + 1 :]
-        return low_level_filter
+    def __add_parse(term):
+        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nAND\n """
 
-    def parse_semicolon(low_level_filter, parse):
-        filter_part = f'"{low_level_filter[1][:parse]}" or '
-        low_level_filter[0] += filter_part
-        low_level_filter[1] = low_level_filter[1][parse + 1 :]
-        return low_level_filter
+    def __or_parse(term):
+        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nOR\n """
 
-    grammar = {
-        ",": parse_comma,
-        ".": parse_dot,
-        ";": parse_semicolon,
-    }
+    def __not_parse(term):
+        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nAND NOT\n """
 
-    def make_string_filter(low_level_filter):
-        characters = ["(", ",", ";", "."]
+    def __priority(term):
+        end_of_priority = string_of_terms.find(")", position)
+        return web_search_filter(string_of_terms[position + 1 : end_of_priority], table)
 
-        if order := [
-            value
-            for value in [low_level_filter[1].find(char) for char in characters]
-            if value >= 0
-        ]:
+    sintax_simbols = [",", ".", ";", "("]
 
-            low_level_filter = grammar[low_level_filter[1][min(order)]](
-                low_level_filter, min(order)
-            )
-            return low_level_filter
-        low_level_filter[0] += low_level_filter[1]
-        low_level_filter[1] = str()
-        return low_level_filter
+    grammatic = {",": __add_parse, ".": __not_parse, ";": __or_parse, "(": __priority}
 
-    while low_level_filter[1]:
-        low_level_filter = make_string_filter(low_level_filter)
-
-    return low_level_filter[0]
-
-
-def filterSQLRank3(text, parameter):
-    text = mk_string_ftx(text)
-    filter = f"AND (ts_rank(to_tsvector(translate(unaccent(LOWER({parameter})),'-\.:;''',' ')), websearch_to_tsquery('{text}')) > 0.04)"
-    return filter
+    for position, char in enumerate(string_of_terms):
+        if char in sintax_simbols:
+            web_search_filter += grammatic[char](term)
+            term = str()
+            if char == str("("):
+                position_to_skip = string_of_terms.find(")", position)
+            if position_to_skip:
+                position_to_skip -= 1
+                break
+        else:
+            term += char
+    if term:
+        web_search_filter += f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
+        term = str()
+    return f"""({web_search_filter})"""

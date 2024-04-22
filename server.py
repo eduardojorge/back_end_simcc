@@ -209,24 +209,26 @@ def total():
 @app.route("/bibliographic_production_article", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
+
     list_bibliographic_production_article = []
-    terms = request.args.get("terms")
+    if term := request.args.get("terms"):
+        term = unidecode.unidecode(term.lower())
     year = request.args.get("year")
     qualis = request.args.get("qualis")
+
     university = ""
-    university = str(request.args.get("university")) + ""
-    distinct = str(request.args.get("distinct")) + ""
+    university = str(request.args.get("university"))
+    distinct = str(request.args.get("distinct"))
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    termNovo = unidecode.unidecode(terms.lower())
-    df_bd = SimccBD.lists_bibliographic_production_article_db(
-        termNovo, year, qualis, university, distinct, graduate_program_id
+    data_frame = SimccBD.lists_bibliographic_production_article_db(
+        term, year, qualis, university, distinct, graduate_program_id
     )
 
-    for i, infos in df_bd.iterrows():
+    for i, infos in data_frame.iterrows():
         if distinct == "0":
             bibliographic_production_article_ = {
                 "researcher_id": str(infos.researcher_id),
