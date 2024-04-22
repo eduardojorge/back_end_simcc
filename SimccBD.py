@@ -1,6 +1,7 @@
 import pandas as pd
-from nltk.tokenize import RegexpTokenizer
 import unidecode
+from nltk.tokenize import RegexpTokenizer
+
 import Dao.sgbdSQL as sgbdSQL
 import Dao.util as util
 
@@ -312,10 +313,12 @@ def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
 ):
 
-    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
-
-    term = unidecode.unidecode(term.lower())
+    most_recent = str()
+    if not term:
+        most_recent = ", b.created_at DESC LIMIT 30"
     filter_term = util.filterSQLRank(term, ";", "title")
+
+    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
     filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
@@ -332,7 +335,8 @@ def lists_bibliographic_production_article_db(
                  qualis,
                  periodical_magazine_name AS magazine,
                  a.jcr,
-                 a.jcr_link
+                 a.jcr_link,
+                 b.created_at
             FROM institution i,
                  public.bibliographic_production b,
                  bibliographic_production_article a,
@@ -348,7 +352,7 @@ def lists_bibliographic_production_article_db(
              {filter_qualis}
              AND year_ >= {year}
              AND b.type = 'ARTICLE'
-           ORDER BY year_ DESC
+           ORDER BY year_ DESC {most_recent}
            """
         print(script_sql)
         reg = sgbdSQL.consultar_db(script_sql)
@@ -364,6 +368,7 @@ def lists_bibliographic_production_article_db(
                 "magazine",
                 "jcr",
                 "jcr_link",
+                "created_at",
             ],
         )
         return data_frame
@@ -380,7 +385,8 @@ def lists_bibliographic_production_article_db(
                 r.lattes_10_id AS lattes_10_id,
                 r.lattes_id AS lattes_id,
                 a.jcr,
-                a.jcr_link
+                a.jcr_link,
+                b.created_at
             FROM institution i,
                 public.bibliographic_production b,
                 bibliographic_production_article a,
@@ -392,8 +398,9 @@ def lists_bibliographic_production_article_db(
             AND i.id = r.institution_id {filter_term} {filter_institution} {filter_graduate_program} {filter_qualis}
             AND year_ >= {year}
             AND b.type = 'ARTICLE'
-            ORDER BY year_ DESC
+            ORDER BY year_ DESC {most_recent}
             """
+        print(script_sql)
 
         reg = sgbdSQL.consultar_db(script_sql)
 
@@ -411,6 +418,7 @@ def lists_bibliographic_production_article_db(
                 "lattes_id",
                 "jcr",
                 "jcr_link",
+                "created_at",
             ],
         )
         return data_frame
