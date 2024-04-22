@@ -206,6 +206,33 @@ def total():
     return jsonify(total_), 200
 
 
+@app.route("/recently_updated", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def recently_updated():
+    list_bibliographic_production_article = list()
+    year = request.args.get("year")
+    university = str(request.args.get("university"))
+
+    data_frame = SimccBD.recently_updated(year, university)
+
+    for Index, Data in data_frame.iterrows():
+        bibliographic_production_article_ = {
+            "researcher_id": str(Data.researcher_id),
+            "title": str(Data.title),
+            "year": str(Data.year),
+            "doi": str(Data.doi),
+            "qualis": str(Data.qualis),
+            "name_periodical": str(Data.magazine),
+            "researcher": str(Data.researcher),
+            "lattes_id": str(Data.lattes_id),
+            "jif": str(Data.jcr),
+            "jcr_link": str(Data.jcr_link),
+        }
+        list_bibliographic_production_article.append(bibliographic_production_article_)
+
+    return jsonify(list_bibliographic_production_article), 200
+
+
 @app.route("/bibliographic_production_article", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
@@ -261,17 +288,17 @@ def bibliographic_production_article():
 
 
 if __name__ == "__main__":
-    app.run(
-        debug=True,
-        port=port,
-        host="0.0.0.0",
-        ssl_context=(
-            "/etc/apache2/ssl/certificado/simcc.uesc.br.crt",
-            "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
-        ),
-    )
     # app.run(
     #     debug=True,
     #     port=port,
     #     host="0.0.0.0",
+    #     ssl_context=(
+    #         "/etc/apache2/ssl/certificado/simcc.uesc.br.crt",
+    #         "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
+    #     ),
     # )
+    app.run(
+        debug=True,
+        port=port,
+        host="0.0.0.0",
+    )

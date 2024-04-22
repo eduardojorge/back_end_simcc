@@ -309,13 +309,64 @@ def lists_researcher_initials_term_db(initials, graduate_program_id):
     return df_bd
 
 
+def recently_updated(year, filter_institution):
+
+    filter_institution = util.filterSQL(filter_institution, ";", "or", "i.name")
+
+    script_sql = f"""
+        SELECT DISTINCT title,
+            r.id AS researcher_id,
+            year_,
+            doi,
+            a.qualis as qualis,
+            periodical_magazine_name AS magazine,
+            r.name AS researcher,
+            r.lattes_10_id AS lattes_10_id,
+            r.lattes_id AS lattes_id,
+            a.jcr,
+            a.jcr_link,
+            b.created_at
+        FROM institution i,
+            public.bibliographic_production b,
+            bibliographic_production_article a,
+            researcher r
+        LEFT JOIN graduate_program_researcher gpr
+        ON r.id = gpr.researcher_id
+        WHERE r.id = b.researcher_id
+        AND a.bibliographic_production_id = b.id
+        AND i.id = r.institution_id 
+        {filter_institution}
+        AND year_ >= {year}
+        AND b.type = 'ARTICLE'
+        ORDER BY year_ DESC, created_at DESC;
+    """
+
+    print(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    return pd.DataFrame(
+        registry,
+        columns=[
+            "title",
+            "researcher_id",
+            "year",
+            "doi",
+            "qualis",
+            "magazine",
+            "researcher",
+            "lattes_10_id",
+            "lattes_id",
+            "jcr",
+            "jcr_link",
+            "created_at",
+        ],
+    )
+
+
 def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
 ):
 
-    most_recent = str()
-    if not term:
-        most_recent = ", b.created_at DESC LIMIT 30"
     filter_term = util.filterSQLRank(term, ";", "title")
 
     filter_institution = util.filterSQL(institution, ";", "or", "i.name")
@@ -352,9 +403,8 @@ def lists_bibliographic_production_article_db(
              {filter_qualis}
              AND year_ >= {year}
              AND b.type = 'ARTICLE'
-           ORDER BY year_ DESC {most_recent}
+           ORDER BY year_ DESC
            """
-        print(script_sql)
         reg = sgbdSQL.consultar_db(script_sql)
 
         data_frame = pd.DataFrame(
@@ -368,7 +418,6 @@ def lists_bibliographic_production_article_db(
                 "magazine",
                 "jcr",
                 "jcr_link",
-                "created_at",
             ],
         )
         return data_frame
@@ -386,7 +435,6 @@ def lists_bibliographic_production_article_db(
                 r.lattes_id AS lattes_id,
                 a.jcr,
                 a.jcr_link,
-                b.created_at
             FROM institution i,
                 public.bibliographic_production b,
                 bibliographic_production_article a,
@@ -398,9 +446,8 @@ def lists_bibliographic_production_article_db(
             AND i.id = r.institution_id {filter_term} {filter_institution} {filter_graduate_program} {filter_qualis}
             AND year_ >= {year}
             AND b.type = 'ARTICLE'
-            ORDER BY year_ DESC {most_recent}
+            ORDER BY year_ DESC
             """
-        print(script_sql)
 
         reg = sgbdSQL.consultar_db(script_sql)
 
@@ -418,7 +465,6 @@ def lists_bibliographic_production_article_db(
                 "lattes_id",
                 "jcr",
                 "jcr_link",
-                "created_at",
             ],
         )
         return data_frame
