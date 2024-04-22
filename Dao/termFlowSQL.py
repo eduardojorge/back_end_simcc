@@ -768,7 +768,7 @@ def lista_researcher_id_db(researcher_id):
 
 
 def list_researchers_originals_words_db2(terms, institution, type, graduate_program_id):
-    filter = util.filterSQLRank3(terms, "title")
+    filter = util.web_search_filter(terms, "title")
 
     filter_institution = ""
     filter_institution = util.filterSQL(institution, ";", "or", "i.name")
@@ -811,6 +811,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 city c,
                 bibliographic_production b
             WHERE c.id = r.city_id
+            AND
                 {filter}
                 {filter_institution} 
                 {filtergraduate_program} 
@@ -839,6 +840,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
             ORDER BY qtd DESC;
             """
 
+        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
