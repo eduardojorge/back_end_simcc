@@ -288,17 +288,17 @@ def bibliographic_production_article():
 
 
 if __name__ == "__main__":
-    # app.run(
-    #     debug=True,
-    #     port=port,
-    #     host="0.0.0.0",
-    #     ssl_context=(
-    #         "/etc/apache2/ssl/certificado/simcc.uesc.br.crt",
-    #         "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
-    #     ),
-    # )
     app.run(
         debug=True,
         port=port,
         host="0.0.0.0",
+        ssl_context=(
+            "/etc/apache2/ssl/certificado/simcc.uesc.br.crt",
+            "/etc/apache2/ssl/chave/simcc.uesc.br.unlock.key",
+        ),
     )
+    # app.run(
+    #     debug=True,
+    #     port=port,
+    #     host="0.0.0.0",
+    # )
