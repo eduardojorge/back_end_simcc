@@ -24,6 +24,8 @@ for Data in doi:
                 json.dump(response.json(), arquivo)
             print("OK")
         else:
+            with open(f"Files/json_doi/{Data[1]}.json", "w") as arquivo:
+                arquivo.write(str(response.status_code))
             print(Data[0])
         time.sleep(12)
     else:
