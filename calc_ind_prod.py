@@ -30,8 +30,8 @@ script_sql = """
         name 
     FROM 
         researcher
-    LIMIT 2
     """
+
 
 registry = sgbdSQL.consultar_db(script_sql)
 
@@ -154,7 +154,7 @@ def patent_prod(Data):
 
     df_ind_prod_base_patent = pd.DataFrame(registry, columns=["year", "count_patent"])
 
-    df_ind_prod_base_patent["count_patent"] = (
+    df_ind_prod_base_patent["ind_prod_patent"] = (
         df_ind_prod_base_patent["count_patent"] * weights["PATENT"]
     )
     df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
@@ -180,7 +180,7 @@ def software_prod(Data):
         registry, columns=["year", "count_software"]
     )
 
-    df_ind_prod_base_software["count_software"] = (
+    df_ind_prod_base_software["ind_prod_software"] = (
         df_ind_prod_base_software["count_software"] * weights["SOFTWARE"]
     )
     df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(int)
