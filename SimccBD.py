@@ -418,6 +418,7 @@ def lists_bibliographic_production_article_db(
                 "magazine",
                 "jcr",
                 "jcr_link",
+                "created_at",
             ],
         )
         return data_frame

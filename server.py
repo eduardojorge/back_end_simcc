@@ -268,6 +268,7 @@ def bibliographic_production_article():
                 "lattes_id": str(infos.lattes_id),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
+                "created_at": str(infos.created_at),
             }
 
         if distinct == "1":
