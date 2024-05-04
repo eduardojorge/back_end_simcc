@@ -1,10 +1,7 @@
-from pprint import pprint
-
-from flask import Blueprint, jsonify, request
-from flask_cors import cross_origin
-
 import rest_maria
 from Dao import taxonomySQL
+from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from Model.Researcher import Researcher
 
 mariaRest = Blueprint("mariaRest", __name__)

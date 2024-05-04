@@ -54,7 +54,7 @@ def conecta_db():
         database = "simcc_ifba"
 
     if (project.getProject()) == "4":
-        database = "cimatec"
+        database = "simcc_"
 
     if (project.getProject()) == "5":
         database = "proforte"
