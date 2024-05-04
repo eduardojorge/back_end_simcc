@@ -4,39 +4,6 @@ from numpy import NaN
 import project as project
 from Dao import sgbdSQL
 
-project.project_env = "4"
-
-weights = {
-    "A1": 1,
-    "A2": 0.875,
-    "A3": 0.75,
-    "A4": 0.625,
-    "B1": 0.5,
-    "B2": 0.375,
-    "B3": 0.25,
-    "B4": 0.125,
-    "BOOK": 1,
-    "BOOK_CHAPTER": 0.25,
-    "PATENT": 1,
-    "SOFTWARE": 0.25,
-}
-
-year = list(range(2008, 2025))
-
-
-script_sql = """
-    SELECT 
-        id, 
-        name 
-    FROM 
-        researcher
-    """
-
-
-registry = sgbdSQL.consultar_db(script_sql)
-
-df_researchers = pd.DataFrame(registry, columns=["id", "name"])
-
 
 def article_prod(Data):
 
@@ -142,22 +109,52 @@ def patent_prod(Data):
     script_sql = f"""
         SELECT
             development_year,
+            'PATENT_GRANTED' as granted,
             COUNT(*) as count_patent
         FROM 
-            patent
+            patent p
         WHERE
-            researcher_id = '{Data['id']}'
+            p.researcher_id = '{Data['id']}'
+            AND grant_date IS NOT NULL
         GROUP BY 
-            researcher_id, development_year
+            development_year
+
+        UNION
+
+        SELECT
+            development_year,
+            'PATENT_NOT_GRANTED',
+            COUNT(*) as count_patent
+        FROM 
+            patent p
+        WHERE
+            p.researcher_id = '{Data['id']}'
+            AND grant_date IS NULL
+        GROUP BY 
+            development_year
         """
     registry = sgbdSQL.consultar_db(script_sql)
 
-    df_ind_prod_base_patent = pd.DataFrame(registry, columns=["year", "count_patent"])
+    df_ind_prod_base_patent = pd.DataFrame(
+        registry, columns=["year", "granted", "count_patent"]
+    )
 
     df_ind_prod_base_patent["ind_prod_patent"] = (
-        df_ind_prod_base_patent["count_patent"] * weights["PATENT"]
+        df_ind_prod_base_patent["granted"].map(weights)
+        * df_ind_prod_base_patent["count_patent"]
     )
+    df_ind_prod_base_patent = df_ind_prod_base_patent.pivot(
+        index="year", columns="granted", values="ind_prod_patent"
+    )
+    df_ind_prod_base_patent = df_ind_prod_base_patent.rename(
+        columns={
+            "PATENT_GRANTED": "ind_prod_granted_patent",
+            "PATENT_NOT_GRANTED": "ind_prod_not_granted_patent",
+        }
+    )
+    df_ind_prod_base_patent = df_ind_prod_base_patent.reset_index()
     df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
+
     return df_ind_prod_base_patent
 
 
@@ -189,6 +186,40 @@ def software_prod(Data):
 
 if __name__ == "__main__":
 
+    project.project_env = "4"
+
+    weights = {
+        "A1": 1,
+        "A2": 0.875,
+        "A3": 0.75,
+        "A4": 0.625,
+        "B1": 0.5,
+        "B2": 0.375,
+        "B3": 0.25,
+        "B4": 0.125,
+        "C": 0,
+        "SQ": 0,
+        "BOOK": 1,
+        "BOOK_CHAPTER": 0.25,
+        "SOFTWARE": 0.25,
+        "PATENT_GRANTED": 1,
+        "PATENT_NOT_GRANTED": 0.25,
+    }
+
+    year = list(range(2008, 2025))
+
+    script_sql = """
+        SELECT 
+            id, 
+            name 
+        FROM 
+            researcher
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    df_researchers = pd.DataFrame(registry, columns=["id", "name"])
+
     for Index, Data in df_researchers.iterrows():
 
         data_frame = pd.DataFrame(year, columns=["year"])
@@ -217,11 +248,12 @@ if __name__ == "__main__":
             data_frame["ind_prod_book_chapter"] = NaN
 
         df = patent_prod(Data=Data)
-
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")
-        else:
-            data_frame["ind_prod_patent"] = NaN
+        if "ind_prod_granted_patent" not in df.columns:
+            data_frame["ind_prod_granted_patent"] = NaN
+        if "ind_prod_not_granted_patent" not in df.columns:
+            data_frame["ind_prod_not_granted_patent"] = NaN
 
         df = software_prod(Data=Data)
 
@@ -232,8 +264,8 @@ if __name__ == "__main__":
 
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
             script_sql = f"""
-            INSERT INTO public.ind_prod(
-            researcher_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_patent, ind_prod_software)
-            VALUES ('{Data['id']}', {Intern_Data['year']}, {Intern_Data['ind_prod_article']}, {Intern_Data['ind_prod_book']}, {Intern_Data['ind_prod_book_chapter']}, {Intern_Data['ind_prod_patent']}, {Intern_Data['ind_prod_software']});
+            INSERT INTO public.researcher_ind_prod(
+            researcher_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_software, ind_prod_granted_patent, ind_prod_not_granted_patent)
+            VALUES ('{Data['id']}', {Intern_Data['year']}, {Intern_Data['ind_prod_article']}, {Intern_Data['ind_prod_book']}, {Intern_Data['ind_prod_book_chapter']}, {Intern_Data['ind_prod_software']}, {Intern_Data['ind_prod_granted_patent']}, {Intern_Data['ind_prod_not_granted_patent']});
             """
             sgbdSQL.execScript_db(script_sql)

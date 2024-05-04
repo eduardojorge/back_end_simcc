@@ -278,7 +278,6 @@ if __name__ == "__main__":
             data_frame["ind_prod_software"] = NaN
 
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
-            print(Intern_Data)
             script_sql = f"""
             INSERT INTO public.graduate_program_ind_prod(
             graduate_program_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_software, ind_prod_granted_patent, ind_prod_not_granted_patent)
