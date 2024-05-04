@@ -201,6 +201,35 @@ def software_prod(Data):
     return df_ind_prod_base_software
 
 
+def report_prod(Data):
+    script_sql = f"""
+        SELECT
+            rr.year,
+            COUNT(*) as count_report
+        FROM 
+            research_report rr
+        JOIN graduate_program_researcher gp ON
+            gp.researcher_id = rr.researcher_id 
+        WHERE 
+            gp.graduate_program_id = '{Data['graduate_program_id']}'
+        GROUP BY
+            rr.year
+        ORDER BY 
+            rr.year
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=["year", "count_report"],
+    )
+
+    data_frame["ind_prod_report"] = data_frame["count_report"] * weights["REPORT"]
+
+    return data_frame
+
+
 if __name__ == "__main__":
     project.project_env = "4"
 
@@ -220,6 +249,7 @@ if __name__ == "__main__":
         "SOFTWARE": 0.25,
         "PATENT_GRANTED": 1,
         "PATENT_NOT_GRANTED": 0.25,
+        "REPORT": 0.25,
     }
 
     year = list(range(2008, 2025))
@@ -277,10 +307,17 @@ if __name__ == "__main__":
         else:
             data_frame["ind_prod_software"] = NaN
 
+        df = report_prod(Data=Data)
+
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_report"] = NaN
+
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
             script_sql = f"""
             INSERT INTO public.graduate_program_ind_prod(
-            graduate_program_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_software, ind_prod_granted_patent, ind_prod_not_granted_patent)
-            VALUES ('{Data['graduate_program_id']}', {Intern_Data['year']}, {Intern_Data['ind_prod_article']}, {Intern_Data['ind_prod_book']}, {Intern_Data['ind_prod_book_chapter']}, {Intern_Data['ind_prod_software']}, {Intern_Data['ind_prod_granted_patent']}, {Intern_Data['ind_prod_not_granted_patent']});
+            graduate_program_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_software, ind_prod_granted_patent, ind_prod_not_granted_patent, ind_prod_report)
+            VALUES ('{Data['graduate_program_id']}', {Intern_Data['year']}, {Intern_Data['ind_prod_article']}, {Intern_Data['ind_prod_book']}, {Intern_Data['ind_prod_book_chapter']}, {Intern_Data['ind_prod_software']}, {Intern_Data['ind_prod_granted_patent']}, {Intern_Data['ind_prod_not_granted_patent']}, {Intern_Data['ind_prod_report']});
             """
             sgbdSQL.execScript_db(script_sql)
