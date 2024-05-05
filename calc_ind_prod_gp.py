@@ -21,9 +21,10 @@ def article_prod(Data):
             bp.id = bpa.bibliographic_production_id
         JOIN
             public.graduate_program_researcher gpr ON
-            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            gpr.researcher_id = bp.researcher_id
         WHERE
             type = 'ARTICLE'
+            AND gpr.graduate_program_id = '{Data['graduate_program_id']}'
         GROUP BY
             bp.year, qualis
         ORDER BY
@@ -34,7 +35,6 @@ def article_prod(Data):
     df_ind_prod_base_article = pd.DataFrame(
         registry, columns=["year", "qualis", "count_article"]
     )
-
     df_ind_prod_base_article["ind_prod_article"] = (
         df_ind_prod_base_article["qualis"].map(weights)
         * df_ind_prod_base_article["count_article"]
@@ -121,7 +121,7 @@ def patent_prod(Data):
         SELECT
             development_year,
             'PATENT_GRANTED' as granted,
-            COUNT(*) as count_patent
+            COUNT(DISTINCT title) as count_patent
         FROM 
             patent p
         JOIN public.graduate_program_researcher gpr ON
@@ -137,7 +137,7 @@ def patent_prod(Data):
         SELECT
             development_year,
             'PATENT_NOT_GRANTED',
-            COUNT(*) as count_patent
+            COUNT(DISTINCT title) as count_patent
         FROM 
             patent p
         JOIN public.graduate_program_researcher gpr ON
@@ -177,7 +177,7 @@ def software_prod(Data):
     script_sql = f"""
         SELECT
             sw.year,
-            COUNT(*) as count_software
+            COUNT(DISTINCT title) as count_software
         FROM 
             public.software sw
         JOIN public.graduate_program_researcher gpr ON
@@ -205,7 +205,7 @@ def report_prod(Data):
     script_sql = f"""
         SELECT
             rr.year,
-            COUNT(*) as count_report
+            COUNT(DISTINCT title) as count_report
         FROM 
             research_report rr
         JOIN graduate_program_researcher gp ON
@@ -317,7 +317,24 @@ if __name__ == "__main__":
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
             script_sql = f"""
             INSERT INTO public.graduate_program_ind_prod(
-            graduate_program_id, year, ind_prod_article, ind_prod_book, ind_prod_book_chapter, ind_prod_software, ind_prod_granted_patent, ind_prod_not_granted_patent, ind_prod_report)
-            VALUES ('{Data['graduate_program_id']}', {Intern_Data['year']}, {Intern_Data['ind_prod_article']}, {Intern_Data['ind_prod_book']}, {Intern_Data['ind_prod_book_chapter']}, {Intern_Data['ind_prod_software']}, {Intern_Data['ind_prod_granted_patent']}, {Intern_Data['ind_prod_not_granted_patent']}, {Intern_Data['ind_prod_report']});
+                graduate_program_id,
+                year,
+                ind_prod_article,
+                ind_prod_book,
+                ind_prod_book_chapter,
+                ind_prod_software,
+                ind_prod_granted_patent,
+                ind_prod_not_granted_patent,
+                ind_prod_report)
+            VALUES (
+                '{Data['graduate_program_id']}',
+                {Intern_Data['year']},
+                {Intern_Data['ind_prod_article']},
+                {Intern_Data['ind_prod_book']},
+                {Intern_Data['ind_prod_book_chapter']},
+                {Intern_Data['ind_prod_software']},
+                {Intern_Data['ind_prod_granted_patent']},
+                {Intern_Data['ind_prod_not_granted_patent']},
+                {Intern_Data['ind_prod_report']});
             """
             sgbdSQL.execScript_db(script_sql)
