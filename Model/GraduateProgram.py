@@ -12,6 +12,7 @@ class GraduateProgram(object):
     url_image = ""
     region = ""
     sigla = ""
+    visible = ""
 
     def __init__(self):
         self.id = ""
@@ -30,6 +31,7 @@ class GraduateProgram(object):
             "instituicao": str(self.instituicao),
             "url_image": self.url_image,
             "region": self.region,
-            "sigla": str(self.sigla)
+            "sigla": str(self.sigla),
+            "visible": str(self.visible),
         }
         return graduate_program

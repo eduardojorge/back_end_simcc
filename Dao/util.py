@@ -63,36 +63,33 @@ def filterSQLRank(text, split, attribute_2):
     return filter
 
 
+import unidecode
+
+
 def filterSQLRank2(text, split, attribute_2):
-    if (len(text.split(split))) == 3:
+    if len(text.split(split)) == 3:
         text = clean_stopwords(text)
 
-    filter = " "
-    if text != "":
-        t = []
-        t = text.split(split)
-        filter = ""
-        i = 0
+    filter_query = ""
 
-        if (len(t)) == 1:
-            # filter = """ (translate(unaccent(LOWER(%s)),\':\',\'\') ::tsvector@@ '%s'::tsquery)=true   """ % (attribute,text)
-            filter = (
-                """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """
+    if text != "":
+        t = text.split(split)
+
+        if len(t) == 1:
+            filter_query = (
+                """ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s"""
                 % (attribute_2, unidecode.unidecode(text), 0.02)
             )
-            x = len(filter)
-            filter = filter[0 : x - 3]
-            filter = " AND (" + filter + ")"
+            filter_query = " AND (" + filter_query + ")"
             text = text.strip().replace(" ", "&")
-            filter = (
-                filter
-                + """ AND  (translate(unaccent(LOWER(%s)),'\.:;''','') ::tsvector@@ unaccent(LOWER( '%s'))::tsquery)=TRUE """
+            filter_query += (
+                """ AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
                 % (attribute_2, unidecode.unidecode(text))
             )
             print("Rank2" + text)
         else:
-            filter = (
-                """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s<->%s')) > %s    """
+            filter_query = (
+                """ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s<->%s')) > %s"""
                 % (
                     attribute_2,
                     unidecode.unidecode(t[0]),
@@ -100,17 +97,14 @@ def filterSQLRank2(text, split, attribute_2):
                     0.02,
                 )
             )
-            x = len(filter)
-            filter = filter[0 : x - 3]
-            filter = " AND (" + filter + ")"
+            filter_query = " AND (" + filter_query + ")"
             t[1] = t[1].strip().replace(" ", "&")
-            filter = (
-                filter
-                + """ AND  (translate(unaccent(LOWER(%s)),'\.:;''','') ::tsvector@@ unaccent(LOWER( '%s'))::tsquery)=TRUE """
+            filter_query += (
+                """ AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
                 % (attribute_2, unidecode.unidecode(t[1]))
             )
 
-    return filter
+    return filter_query
 
 
 # Função para consultar a lista de pesquisadores por palavras existentes na sua frequência

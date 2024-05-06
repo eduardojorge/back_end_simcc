@@ -1,5 +1,6 @@
-from flask import jsonify, request, Blueprint
+from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
+
 import Dao.graduate_programSQL as graduate_programSQL
 from Model.GraduateProgram import GraduateProgram
 
@@ -69,7 +70,7 @@ def graduate_program_profnit():
         graduateProgram.url_image = str(infos.url_image)
         graduateProgram.region = str(infos.region)
         graduateProgram.sigla = infos.sigla
-
+        graduateProgram.visible = infos.visible
         list_gradute_program.append(graduateProgram.getJson())
 
     return jsonify(list_gradute_program), 200

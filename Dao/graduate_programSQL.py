@@ -1,5 +1,6 @@
-import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
+
+import Dao.sgbdSQL as sgbdSQL
 import Model.GraduateProgram_Production as GraduateProgram_Production
 
 
@@ -50,11 +51,13 @@ def graduate_program_profnit_db(graduate_program_id):
             gp.instituicao,
             gp.url_image,
             gp.region,
-            gp.sigla
+            gp.sigla,
+            gp.visible
         FROM 
             graduate_program gp
         {filter_graduate_program}
       """
+    print(script_sql)
 
     reg = sgbdSQL.consultar_db(script_sql)
 
@@ -73,7 +76,8 @@ def graduate_program_profnit_db(graduate_program_id):
             "instituicao",
             "url_image",
             "region",
-            "sigla"
+            "sigla",
+            "visible",
         ],
     )
 
@@ -262,7 +266,6 @@ def production_general_db(graduate_program_id, year):
 
         graduateProgram_Production_.researcher = str(infos.qtd)
 
-    list_graduateProgram_Production.append(
-        graduateProgram_Production_.getJson())
+    list_graduateProgram_Production.append(graduateProgram_Production_.getJson())
 
     return list_graduateProgram_Production

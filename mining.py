@@ -12,7 +12,7 @@ project.project_env = "4"
 url = "https://api.openalex.org/works/https://doi.org/"
 
 doi = sgbdSQL.consultar_db(
-    "SELECT doi, id FROM public.bibliographic_production WHERE doi IS NOT NULL OFFSET 100"
+    "SELECT doi, id FROM public.bibliographic_production WHERE doi IS NOT NULL"
 )
 downloaded_productions = os.listdir("Files/json_doi/")
 
