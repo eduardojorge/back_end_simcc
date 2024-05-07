@@ -16,10 +16,11 @@ if __name__ == "__main__":
             with open(f"Files/json_doi/{json_path}", "r") as f:
                 try:
                     data = json.load(f)
-                    pprint(data)
-                    # sgbdSQL.consultar_db(
-                    #     f"SELECT researcher_id FROM public.bibliographic_production WHERE id = '{json_path[:-5]}'"
-                    # )
+                    for item in data["authorships"]:
+                        pprint(item)
+                    # for item in data["authorships"].items():
+                    #     print(item)
+
                     break
                 except:
                     print(json_path)

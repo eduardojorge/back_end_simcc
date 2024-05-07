@@ -1,5 +1,6 @@
-import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
+
+import Dao.sgbdSQL as sgbdSQL
 
 
 def verficar_qualis_db(issn: str, extrato: str) -> None:

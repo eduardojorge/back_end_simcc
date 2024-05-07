@@ -1,13 +1,14 @@
-import Dao.sgbdSQL as sgbdSQL
-import Dao.graduate_programSQL as graduate_programSQL
-import pandas as pd
-import logging
 import json
-from datetime import datetime
+import logging
 import sys
-import project
+from datetime import datetime
+from os.path import abspath, dirname
 
-from os.path import dirname, abspath
+import pandas as pd
+
+import Dao.graduate_programSQL as graduate_programSQL
+import Dao.sgbdSQL as sgbdSQL
+import project
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -26,8 +27,7 @@ def researcher_production_tecnical_year_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(
-        reg, columns=["researcher_id", "title", "year", "type"])
+    df_bd = pd.DataFrame(reg, columns=["researcher_id", "title", "year", "type"])
 
     print(df_bd)
     logger.debug(sql)
@@ -144,8 +144,7 @@ def article_qualis_csv_distinct_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "qualis", "jcr", "year",
-                 "institution", "city", "jcr_link"],
+        columns=["title", "qualis", "jcr", "year", "institution", "city", "jcr_link"],
     )
     df_bd.to_csv(dir + "article_qualis_year_institution.csv")
 
@@ -407,8 +406,7 @@ def production_tecnical_year_novo_csv_db():
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "type",
-                      "graduate_program_id", "year_pos"]
+        reg, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
     )
 
     df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
@@ -473,12 +471,91 @@ def graduate_program_csv_db():
     df_bd.to_csv(dir + "cimatec_graduate_program.csv")
 
 
+def ind_prod_researcher_csv_db():
+    script_sql = """
+        SELECT researcher_id,year, 
+        replace( ind_prod_article::text, '.', ',') as  ind_prod_article,
+        replace( ind_prod_book::text, '.', ',') as  ind_prod_book,
+        replace( ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
+        replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
+        replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
+        replace(ind_prod_software::text, '.', ',') as ind_prod_software,
+        replace(ind_prod_report::text, '.', ',') as ind_prod_report
+        FROM researcher_ind_prod;
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame_db = pd.DataFrame(
+        registry,
+        columns=[
+            "researcher_id",
+            "year",
+            "ind_prod_article",
+            "ind_prod_book",
+            "ind_prod_book_chapter",
+            "ind_prod_granted_patent",
+            "ind_prod_not_granted_patent",
+            "ind_prod_software",
+            "ind_prod_report",
+        ],
+    )
+
+    print(data_frame_db)
+
+    data_frame_db.to_csv(
+        dir + "fat_researcher_ind_prod.csv",
+        decimal=",",
+        sep=";",
+        index=False,
+        encoding="UTF8",
+        float_format=None,
+    )
+
+
+def graduate_program_ind_prod_csv_db():
+    script_sql = """
+        SELECT graduate_program_id,year, 
+        replace( ind_prod_article::text, '.', ',') as  ind_prod_article,
+        replace( ind_prod_book::text, '.', ',') as  ind_prod_book,
+        replace( ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
+        replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
+        replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
+        replace(ind_prod_software::text, '.', ',') as ind_prod_software,
+        replace(ind_prod_report::text, '.', ',') as ind_prod_report
+        FROM graduate_program_ind_prod;
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+    data_frame_db = pd.DataFrame(
+        registry,
+        columns=[
+            "graduate_program_id",
+            "year",
+            "ind_prod_article",
+            "ind_prod_book",
+            "ind_prod_book_chapter",
+            "ind_prod_granted_patent",
+            "ind_prod_not_granted_patent",
+            "ind_prod_software",
+            "ind_prod_report",
+        ],
+    )
+    data_frame_db.to_csv(
+        dir + "graduate_program_ind_prod.csv",
+        decimal=",",
+        sep=";",
+        index=False,
+        encoding="UTF8",
+        float_format=None,
+    )
+
+
 if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     dir = "Files/indicadores_simcc/"
 
@@ -529,12 +606,20 @@ if __name__ == "__main__":
     researcher_production_tecnical_year_csv_db()
     print("Fim: researcher_production_tecnical_year_csv_db")
 
+    print("Inicio: ind_prod_researcher_csv_db")
+    ind_prod_researcher_csv_db()
+    print("Fim: ind_prod_researcher_csv_db")
+
     if project.project_env == "2":
         profnit_graduate_program_csv_db()
 
     print("Inicio: researcher_csv_db")
     researcher_csv_db()
     print("Fim: researcher_csv_db")
+
+    print("Inicio: graduate_program_ind_prod_csv_db")
+    graduate_program_ind_prod_csv_db()
+    print("Fim: graduate_program_ind_prod_csv_db")
 
     print("Inicio: production_coauthors_csv_db")
     production_coauthors_csv_db()
