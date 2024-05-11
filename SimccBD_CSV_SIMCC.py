@@ -10,6 +10,7 @@ import Dao.sgbdSQL as sgbdSQL
 import project
 
 
+
 def fat_simcc_bibliographic_production():
 
     sql = """

@@ -606,10 +606,6 @@ if __name__ == "__main__":
     researcher_production_tecnical_year_csv_db()
     print("Fim: researcher_production_tecnical_year_csv_db")
 
-    print("Inicio: ind_prod_researcher_csv_db")
-    ind_prod_researcher_csv_db()
-    print("Fim: ind_prod_researcher_csv_db")
-
     if project.project_env == "2":
         profnit_graduate_program_csv_db()
 
@@ -620,6 +616,10 @@ if __name__ == "__main__":
     print("Inicio: graduate_program_ind_prod_csv_db")
     graduate_program_ind_prod_csv_db()
     print("Fim: graduate_program_ind_prod_csv_db")
+
+    print("Inicio: ind_prod_researcher_csv_db")
+    ind_prod_researcher_csv_db()
+    print("Fim: ind_prod_researcher_csv_db")
 
     print("Inicio: production_coauthors_csv_db")
     production_coauthors_csv_db()
