@@ -30,57 +30,59 @@ def graduate_program_db(institution_id):
 
 
 def graduate_program_profnit_db(graduate_program_id):
-
-    filter_graduate_program = str()
+    graduate_program_filter = str()
     if graduate_program_id:
-        filter_graduate_program = (
-            f"WHERE gp.graduate_program_id = '{graduate_program_id}';"
-        )
-
-    script_sql = f"""
+        graduate_program_filter = f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
+    sql = f"""
         SELECT 
-            gp.graduate_program_id,
-            gp.code,
-            gp.name AS program,
-            gp.area,
-            gp.modality,
-            gp.type,
-            gp.rating,
-            gp.state,
-            gp.city,
-            gp.instituicao,
+            gp.graduate_program_id, 
+            gp.code, 
+            gp.name, 
+            gp.area, 
+            gp.modality, 
+            gp.type, 
+            gp.rating, 
+            gp.institution_id,
+            gp.description, 
             gp.url_image,
-            gp.region,
-            gp.sigla,
-            gp.visible
+            gp.city, 
+            gp.visible, 
+            gp.created_at, 
+            gp.updated_at,
+            COUNT(CASE WHEN gr.type_ = 'PERMANENTE' THEN 1 END) as qtd_permanente,
+            COUNT(CASE WHEN gr.type_ = 'DISCENTE' THEN 1 END) as qtd_discente,
+            COUNT(CASE WHEN gr.type_ = 'COLABORADOR' THEN 1 END) as qtd_colaborador
         FROM 
             graduate_program gp
-        {filter_graduate_program}
-      """
-    print(script_sql)
-
-    reg = sgbdSQL.consultar_db(script_sql)
-
+        LEFT JOIN
+            graduate_program_researcher gr ON gp.graduate_program_id = gr.graduate_program_id
+        {graduate_program_filter}
+        GROUP BY
+            gp.graduate_program_id
+        """
+    
     data_frame = pd.DataFrame(
-        reg,
+        sgbdSQL.consultar_db(sql),
         columns=[
             "graduate_program_id",
             "code",
-            "program",
+            "name",
             "area",
             "modality",
             "type",
             "rating",
-            "state",
-            "city",
-            "instituicao",
+            "institution_id",
+            "description",
             "url_image",
-            "region",
-            "sigla",
+            "city",
             "visible",
+            "created_at",
+            "updated_at",
+            "qtd_permanente",
+            "qtd_discente",
+            "qtd_colaborador"
         ],
     )
-
     return data_frame
 
 

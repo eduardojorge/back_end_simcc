@@ -46,7 +46,6 @@ def graduate_program():
     return jsonify(list_gradute_program), 200
 
 
-# print(list_originals_words_initials_term_db("rob"))
 @graduateProgramRest.route("/graduate_program_profnit", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def graduate_program_profnit():
@@ -71,10 +70,9 @@ def graduate_program_profnit():
         graduateProgram.region = str(infos.region)
         graduateProgram.sigla = infos.sigla
         graduateProgram.visible = infos.visible
+        graduateProgram.qtd_colaborador = infos.qtd_colaborador
+        graduateProgram.qtd_discente = infos.qtd_discente
+        graduateProgram.qtd_permanente = infos.qtd_permanente
         list_gradute_program.append(graduateProgram.getJson())
-
+    
     return jsonify(list_gradute_program), 200
-
-
-# if __name__ == "__main__":
-# cimatecRest.run(debug=True, port=5001, host="0.0.0.0")

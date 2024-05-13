@@ -13,6 +13,9 @@ class GraduateProgram(object):
     region = ""
     sigla = ""
     visible = ""
+    qtd_colaborador = 0
+    qtd_discente = 0
+    qtd_permanente = 0
 
     def __init__(self):
         self.id = ""
@@ -33,5 +36,8 @@ class GraduateProgram(object):
             "region": self.region,
             "sigla": str(self.sigla),
             "visible": str(self.visible),
+            "qtd_colaborador": self.qtd_colaborador,
+            "qtd_discente": self.qtd_discente,
+            "qtd_permanente": self.qtd_permanente,
         }
         return graduate_program
