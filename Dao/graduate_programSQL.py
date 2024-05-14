@@ -83,6 +83,8 @@ def graduate_program_profnit_db(graduate_program_id):
             "qtd_colaborador"
         ],
     )
+    data_frame['visible'] = data_frame['visible'].astype("str")
+
     return data_frame.to_dict(orient='records')
 
 
