@@ -83,7 +83,7 @@ def graduate_program_profnit_db(graduate_program_id):
             "qtd_colaborador"
         ],
     )
-    return data_frame
+    return data_frame.to_dict(orient='records')
 
 
 def production_general_db(graduate_program_id, year):
