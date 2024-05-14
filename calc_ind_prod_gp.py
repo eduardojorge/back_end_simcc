@@ -229,6 +229,39 @@ def report_prod(Data):
 
     return data_frame
 
+def guidance_prod(Data):
+    script_sql = f"""
+        SELECT 
+            g.year,
+            g.nature || ' ' || g.status AS nature_status,
+            COUNT(*) as count_nature
+        FROM
+            guidance g
+        JOIN graduate_program_researcher gpr ON
+            gpr.researcher_id = g.researcher_id
+        WHERE 
+            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+        GROUP BY
+            g.year, nature_status
+        ORDER BY
+            nature_status, g.year;
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame_guidance = pd.DataFrame(
+        registry,
+        columns=["year", 'nature',"count_nature"],
+    )
+
+    data_frame_guidance["ind_prod_guidance"] = (
+        data_frame_guidance["nature"].map(weights)
+        * data_frame_guidance["count_nature"]
+    )
+    data_frame_guidance = data_frame_guidance.groupby("year", as_index=False)[
+        "ind_prod_guidance"
+    ].sum()
+    return data_frame_guidance
 
 if __name__ == "__main__":
     project.project_env = "4"
@@ -250,6 +283,12 @@ if __name__ == "__main__":
         "PATENT_GRANTED": 1,
         "PATENT_NOT_GRANTED": 0.25,
         "REPORT": 0.25,
+        'Tese De Doutorado Concluída': 0.5,
+        "Tese De Doutorado Em andamento": 0.25,
+        "Dissertação De Mestrado Concluída": 0.25,
+        "Dissertação De Mestrado Concluída Em andamento": 0.125,
+        "Iniciação Científica Concluída": 0.125,
+        "Iniciação Científica Concluída Em andamento": 0.1
     }
 
     year = list(range(2008, 2025))
@@ -300,7 +339,7 @@ if __name__ == "__main__":
             data_frame["ind_prod_granted_patent"] = NaN
         if "ind_prod_not_granted_patent" not in df.columns:
             data_frame["ind_prod_not_granted_patent"] = NaN
-
+        
         df = software_prod(Data=Data)
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")
@@ -314,6 +353,12 @@ if __name__ == "__main__":
         else:
             data_frame["ind_prod_report"] = NaN
 
+        df = guidance_prod(Data=Data)
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_guidance"] = NaN
+
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
             script_sql = f"""
             INSERT INTO public.graduate_program_ind_prod(
@@ -325,7 +370,8 @@ if __name__ == "__main__":
                 ind_prod_software,
                 ind_prod_granted_patent,
                 ind_prod_not_granted_patent,
-                ind_prod_report)
+                ind_prod_report,
+                ind_prod_guidance)
             VALUES (
                 '{Data['graduate_program_id']}',
                 {Intern_Data['year']},
@@ -335,6 +381,7 @@ if __name__ == "__main__":
                 {Intern_Data['ind_prod_software']},
                 {Intern_Data['ind_prod_granted_patent']},
                 {Intern_Data['ind_prod_not_granted_patent']},
-                {Intern_Data['ind_prod_report']});
+                {Intern_Data['ind_prod_report']},
+                {Intern_Data['ind_prod_guidance']});
             """
             sgbdSQL.execScript_db(script_sql)
