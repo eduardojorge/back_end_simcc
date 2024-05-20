@@ -41,6 +41,7 @@ def consultar_db(sql):
 def conecta_db():
     password = "root"
     host = "localhost"
+    database = "simcc_"
 
     if (project.getProject()) == "1":
         database = "cimatec_v7"
