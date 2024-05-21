@@ -434,7 +434,8 @@ def lists_bibliographic_production_article_db(
                 r.lattes_10_id AS lattes_10_id,
                 r.lattes_id AS lattes_id,
                 a.jcr,
-                a.jcr_link
+                a.jcr_link,
+                b.created_at
             FROM institution i,
                 public.bibliographic_production b,
                 bibliographic_production_article a,
@@ -465,6 +466,7 @@ def lists_bibliographic_production_article_db(
                 "lattes_id",
                 "jcr",
                 "jcr_link",
+                "created_at",
             ],
         )
         return data_frame
