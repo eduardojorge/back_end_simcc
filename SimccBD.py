@@ -366,7 +366,6 @@ def recently_updated(year, filter_institution):
 def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
 ):
-
     filter_term = util.filterSQLRank(term, ";", "title")
 
     filter_institution = util.filterSQL(institution, ";", "or", "i.name")
@@ -435,7 +434,7 @@ def lists_bibliographic_production_article_db(
                 r.lattes_10_id AS lattes_10_id,
                 r.lattes_id AS lattes_id,
                 a.jcr,
-                a.jcr_link,
+                a.jcr_link
             FROM institution i,
                 public.bibliographic_production b,
                 bibliographic_production_article a,

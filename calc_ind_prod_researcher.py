@@ -210,6 +210,7 @@ def report_prod(Data):
 
     return data_frame
 
+
 def guidance_prod(Data):
     script_sql = f"""
         SELECT 
@@ -230,17 +231,17 @@ def guidance_prod(Data):
 
     data_frame_guidance = pd.DataFrame(
         registry,
-        columns=["year", 'nature',"count_nature"],
+        columns=["year", "nature", "count_nature"],
     )
 
     data_frame_guidance["ind_prod_guidance"] = (
-        data_frame_guidance["nature"].map(weights)
-        * data_frame_guidance["count_nature"]
+        data_frame_guidance["nature"].map(weights) * data_frame_guidance["count_nature"]
     )
     data_frame_guidance = data_frame_guidance.groupby("year", as_index=False)[
         "ind_prod_guidance"
     ].sum()
     return data_frame_guidance
+
 
 if __name__ == "__main__":
 
@@ -263,12 +264,12 @@ if __name__ == "__main__":
         "PATENT_GRANTED": 1,
         "PATENT_NOT_GRANTED": 0.25,
         "REPORT": 0.25,
-        'Tese De Doutorado Concluída': 0.5,
+        "Tese De Doutorado Concluída": 0.5,
         "Tese De Doutorado Em andamento": 0.25,
         "Dissertação De Mestrado Concluída": 0.25,
         "Dissertação De Mestrado Concluída Em andamento": 0.125,
         "Iniciação Científica Concluída": 0.125,
-        "Iniciação Científica Concluída Em andamento": 0.1
+        "Iniciação Científica Concluída Em andamento": 0.1,
     }
 
     year = list(range(2008, 2025))
@@ -333,7 +334,7 @@ if __name__ == "__main__":
             data_frame = pd.merge(data_frame, df, on="year", how="left")
         else:
             data_frame["ind_prod_report"] = NaN
-        
+
         df = guidance_prod(Data=Data)
 
         if not df.empty:
@@ -345,7 +346,7 @@ if __name__ == "__main__":
             script_sql = f"""
             INSERT INTO 
                 public.researcher_ind_prod(
-                    researcher_id, 
+                    researcher_id,
                     year, 
                     ind_prod_article, 
                     ind_prod_book, 
@@ -368,5 +369,4 @@ if __name__ == "__main__":
                 {Intern_Data['ind_prod_report']},
                 {Intern_Data['ind_prod_guidance']});
             """
-            print(script_sql)
             sgbdSQL.execScript_db(script_sql)
