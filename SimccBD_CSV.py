@@ -481,6 +481,7 @@ def ind_prod_researcher_csv_db():
         replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
         replace(ind_prod_software::text, '.', ',') as ind_prod_software,
         replace(ind_prod_report::text, '.', ',') as ind_prod_report
+        replace(ind_prod_guidance::text, '.', ',') as ind_prod_guidance
         FROM researcher_ind_prod;
         """
 
