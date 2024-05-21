@@ -70,11 +70,9 @@ def list_researcher_to_update():
 # Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
-    filter = str(
-        f"SELECT id FROM researcher WHERE lattes_id IN ({list_researcher_to_update()})"
-    )
+    filter = str(f"SELECT id FROM researcher")
 
-    script_sql = f"DELETE FROM researcher_production WHERE researcher_id IN ({filter})"
+    script_sql = f"DELETE FROM researcher_production"
 
     sgbdSQL.execScript_db(script_sql)
 
@@ -182,8 +180,7 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
@@ -195,5 +192,4 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    # create_researcher_production_db(0)
-    print(list_researcher_to_update())
+    create_researcher_production_db(0)
