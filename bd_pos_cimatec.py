@@ -81,17 +81,17 @@ def graduate_program_researcher_csv_db():
 
 def graduate_program_student_researcher_csv_db():
     script_sql = """
-        SELECT lattes_id, graduate_program_id, year, type_
-        FROM graduate_program_student;
+        SELECT researcher_id, graduate_program_id, year
+        FROM graduate_program_student
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame_db = pd.DataFrame(
-        registry, columns=["lattes_id", "graduate_program_id", "year", "type_"]
+        registry, columns=["researcher_id", "graduate_program_id", "year"]
     )
 
-    data_frame_db.to_csv("Files/cimatec_graduate_program_student.csv")
+    data_frame_db.to_csv("Files/indicadores_simcc/cimatec_graduate_program_student.csv")
 
 
 def cimatec_researcher_production_year_distinct_csv_db():

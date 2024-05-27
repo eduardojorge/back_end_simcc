@@ -480,7 +480,7 @@ def ind_prod_researcher_csv_db():
         replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
         replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
         replace(ind_prod_software::text, '.', ',') as ind_prod_software,
-        replace(ind_prod_report::text, '.', ',') as ind_prod_report
+        replace(ind_prod_report::text, '.', ',') as ind_prod_report,
         replace(ind_prod_guidance::text, '.', ',') as ind_prod_guidance
         FROM researcher_ind_prod;
         """
@@ -499,6 +499,7 @@ def ind_prod_researcher_csv_db():
             "ind_prod_not_granted_patent",
             "ind_prod_software",
             "ind_prod_report",
+            "ind_prod_guidance",
         ],
     )
 
@@ -523,7 +524,8 @@ def graduate_program_ind_prod_csv_db():
         replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
         replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
         replace(ind_prod_software::text, '.', ',') as ind_prod_software,
-        replace(ind_prod_report::text, '.', ',') as ind_prod_report
+        replace(ind_prod_report::text, '.', ',') as ind_prod_report,
+        replace(ind_prod_guidance::text, '.', ',') as ind_prod_guidance
         FROM graduate_program_ind_prod;
         """
 
@@ -540,6 +542,7 @@ def graduate_program_ind_prod_csv_db():
             "ind_prod_not_granted_patent",
             "ind_prod_software",
             "ind_prod_report",
+            "ind_prod_guidance",
         ],
     )
     data_frame_db.to_csv(
