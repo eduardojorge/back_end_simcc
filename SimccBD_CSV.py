@@ -545,6 +545,7 @@ def graduate_program_ind_prod_csv_db():
             "ind_prod_guidance",
         ],
     )
+
     data_frame_db.to_csv(
         dir + "graduate_program_ind_prod.csv",
         decimal=",",

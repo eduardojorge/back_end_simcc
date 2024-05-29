@@ -79,6 +79,9 @@ def set_year(year: Year_Barema):
     year_input = str(input("Procurar produções(artigos) a partir do ano: "))
 
     year.article = year_input
+    year.book = year_input
+    year.chapter_book = year_input
+    year.patent = year_input
 
     year_input = str(
         input(
@@ -88,9 +91,6 @@ def set_year(year: Year_Barema):
 
     year.software = year_input
     year.work_event = year_input
-    year.book = year_input
-    year.chapter_book = year_input
-    year.patent = year_input
     year.brand = year_input
     year.resource_progress = year_input
     year.resource_completed = year_input
@@ -139,12 +139,9 @@ if __name__ == "__main__":
 
     data_frame_dados = data_frame_dados.drop(
         columns=[
-            "book_chapter",
-            "work_in_event",
             "researcher",
             "lattes_10_id",
             "event_organization",
-            "participation_event",
         ]
     )
 

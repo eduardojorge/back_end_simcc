@@ -130,5 +130,4 @@ if __name__ == "__main__":
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(
-        f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
