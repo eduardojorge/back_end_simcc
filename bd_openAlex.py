@@ -43,8 +43,11 @@ def extract_article_tmp(id, data):
         issn = str(", ").join(data["primary_location"]["source"]["issn"])
     except:
         issn = str()
-    article_institution = str()
-    article_institution = data["primary_location"]["source"]["display_name"]
+
+    try:
+        article_institution = data["primary_location"]["source"]["display_name"]
+    except:
+        article_institution = str()
 
     op_abstract = data["abstract_inverted_index"]
 
