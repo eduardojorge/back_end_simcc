@@ -64,7 +64,7 @@ def extract_article_tmp(id, data):
     authors = data["authorships"]
     authors_list = list()
     for author in authors:
-        authors_list.append(author["author"]["display_name"])
+        authors_list.append(author["author"]["display_name"].replace("'", " "))
     authors_list = str("; ").join(authors_list)
 
     institutions_list = list()
