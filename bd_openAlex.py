@@ -46,12 +46,16 @@ def extract_article_tmp(id, data):
     article_institution = data["primary_location"]["source"]["display_name"]
 
     op_abstract = data["abstract_inverted_index"]
-    lenght = max(op_abstract.values())[0]
-    abstract = list(range(lenght + 1))
-    for item in op_abstract.items():
-        for word in item[1]:
-            abstract[word] = item[0]
-    abstract = str(" ").join(abstract)
+
+    try:
+        lenght = max(op_abstract.values())[0]
+        abstract = list(range(lenght + 1))
+        for item in op_abstract.items():
+            for word in item[1]:
+                abstract[word] = item[0]
+        abstract = str(" ").join(abstract)
+    except:
+        abstract = str()
 
     authors = data["authorships"]
     authors_list = list()
@@ -105,10 +109,10 @@ def extract_researcher_tmp(id, data):
     works_count = data["works_count"]
     cited_by_count = data["cited_by_count"]
 
-    script_sql = f""""
+    script_sql = f"""
         INSERT INTO public.openalex_researcher(
         researcher_id, h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex)
-        VALUES ('{id}', '{h_index}', '', '{works_count}', '{cited_by_count}', '{i10_index}', '', '{orcid}', '{open_alex}');
+        VALUES ('{id}', '{h_index}', 0, '{works_count}', '{cited_by_count}', '{i10_index}', '', '{orcid}', '{open_alex}');
         """
     sgbdSQL.execScript_db(script_sql)
 
