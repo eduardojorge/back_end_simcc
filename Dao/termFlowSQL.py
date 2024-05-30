@@ -840,7 +840,6 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
             ORDER BY qtd DESC;
             """
 
-        print(sql)
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
