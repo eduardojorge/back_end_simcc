@@ -39,9 +39,10 @@ def extract_institutions(data):
 
 
 def extract_article_tmp(id, data):
-    issn = str(",")
-    issn = issn.join(data["primary_location"]["source"]["issn"])
-
+    try:
+        issn = str(", ").join(data["primary_location"]["source"]["issn"])
+    except:
+        issn = str()
     article_institution = str()
     article_institution = data["primary_location"]["source"]["display_name"]
 
@@ -52,7 +53,7 @@ def extract_article_tmp(id, data):
         abstract = list(range(lenght + 1))
         for item in op_abstract.items():
             for word in item[1]:
-                abstract[word] = item[0]
+                abstract[word] = item[0].replace("'", " ")
         abstract = str(" ").join(abstract)
     except:
         abstract = str()
