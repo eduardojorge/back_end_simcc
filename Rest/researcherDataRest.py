@@ -1,5 +1,4 @@
-from os.path import abspath, dirname
-
+from http import HTTPStatus
 import pandas as pd
 from flask import Blueprint, jsonify, request, send_file
 from flask_cors import cross_origin
@@ -37,12 +36,13 @@ def image():
 @researcherDataRest.route("/ResearcherData/ByCity", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def byCity():
-    city_id = researcherSQL.city_search(request.args.get("city"))
+    city_name = request.args.get("city")
+    city_id = researcherSQL.city_search(city_name)
     researchers = researcherSQL.researcher_search_city(city_id)
 
-    JsonResearchers = list()
-    for Index, researcher in researchers.iterrows():
-        if city_id == None:
+    researcher_list = list()
+    if city_id == None:
+        for Index, researcher in researchers.iterrows():
             area = str(";").join(
                 [
                     great_area.strip().replace("_", " ")
@@ -57,32 +57,9 @@ def byCity():
                 "city": researcher["city"],
                 "area": area,
             }
-            JsonResearchers.append(dict_researcher)
-        else:
-            researcher_inst = Researcher()
-
-            researcher_inst.id = researcher["id"]
-            researcher_inst.name = researcher["researcher_name"]
-            researcher_inst.university = researcher["institution"]
-            researcher_inst.articles = researcher["articles"]
-            researcher_inst.book_chapters = researcher["book_chapters"]
-            researcher_inst.book = researcher["book"]
-            researcher_inst.lattes_id = researcher["lattes"]
-            researcher_inst.lattes_10_id = researcher["lattes_10_id"]
-            researcher_inst.abstract = researcher["abstract"]
-            researcher_inst.area = researcher["area"].replace("_", " ")
-            researcher_inst.city = researcher["city"]
-            researcher_inst.image_university = researcher["image"]
-            researcher_inst.orcid = researcher["orcid"]
-            researcher_inst.graduation = researcher["graduation"]
-            researcher_inst.patent = researcher["patent"]
-            researcher_inst.software = researcher["software"]
-            researcher_inst.brand = researcher["brand"]
-            researcher_inst.lattes_update = researcher["lattes_update"]
-
-            JsonResearchers.append(researcher_inst.getJson())
-
-    return jsonify(JsonResearchers), 200
+            researcher_list.append(dict_researcher)
+        return jsonify(researcher_list), HTTPStatus.OK
+    return jsonify(researchers), HTTPStatus.OK
 
 
 # Trocar essa chamada de lugar assim que possivel

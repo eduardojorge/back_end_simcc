@@ -720,30 +720,55 @@ def lista_institution_production_db(text, institution, type_):
 
 def lista_researcher_id_db(researcher_id):
 
-    sql = (
-        """
-     SELECT distinct r.id as id,
-     r.name as researcher_name,i.name as institution,rp.articles as articles,
-     rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,
-     r.abstract as abstract,rp.great_area as area,rp.city as city, i.image as image,r.orcid as orcid,
-     r.graduation as graduation,rp.patent as patent,rp.software as software,rp.brand as brand,
-      TO_CHAR(r.last_update,'dd/mm/yyyy') as lattes_update 
-     FROM  researcher r , city c,  institution i, researcher_production rp WHERE 
-                          
-       c.id=r.city_id
-                                       
-     AND r.institution_id = i.id 
-     AND rp.researcher_id = r.id 
-     AND r.id='%s' 
+    script_sql = f"""
+        SELECT 
+            DISTINCT r.id AS id,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            r.name AS researcher_name,
+            i.name AS institution,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters,
+            rp.book AS book,
+            r.lattes_id AS lattes,
+            r.lattes_10_id AS lattes_10_id,
+            r.abstract AS abstract,
+            rp.great_area AS area,
+            rp.city AS city,
+            i.image AS image,
+            r.orcid AS orcid,
+            r.graduation AS graduation,
+            rp.patent AS patent,
+            rp.software AS software,
+            rp.brand AS brand,
+            TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update
+        FROM
+            researcher r
+            LEFT JOIN city c ON c.id = r.city_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+            LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+        WHERE
+            r.id = '{researcher_id}'
      """
-        % researcher_id
-    )
-    reg = sgbdSQL.consultar_db(sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "id",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "researcher_name",
             "institution",
             "articles",
@@ -764,27 +789,32 @@ def lista_researcher_id_db(researcher_id):
         ],
     )
 
-    return df_bd
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def list_researchers_originals_words_db2(terms, institution, type, graduate_program_id):
-    filter = util.web_search_filter(terms, "title")
+    filter_term = util.web_search_filter(terms, "title")
 
-    filter_institution = ""
-    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
+    filter_institution = str()
+    if institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = (
-            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
-        )
+    filter_graduate_program = str()
+    if graduate_program_id:
+        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
 
     if type == "ARTICLE":
-
         filter_type = " AND b.type='ARTICLE' "
-
         sql = f"""
-            SELECT r.id AS id,
+            SELECT 
+                r.id AS id,
+                opr.h_index,
+                opr.relevance_score,
+                opr.works_count,
+                opr.cited_by_count,
+                opr.i10_index,
+                opr.scopus,
+                opr.openalex,
                 COUNT(DISTINCT b.id) AS qtd,
                 r.name AS researcher_name,
                 i.name AS institution,
@@ -804,50 +834,63 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 rp.brand AS brand,
                 TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update,
                 '{terms}' AS terms
-            FROM researcher r
-            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
-                institution i,
-                researcher_production rp,
-                city c,
-                bibliographic_production b
-            WHERE c.id = r.city_id
-            AND
-                {filter}
+            FROM 
+                researcher r
+                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+                LEFT JOIN institution i ON r.institution_id = i.id
+                LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+                LEFT JOIN city c ON c.id = r.city_id
+                LEFT JOIN bibliographic_production b ON b.researcher_id = r.id
+                LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id 
+            WHERE 
+                {filter_term}
                 {filter_institution} 
-                {filtergraduate_program} 
+                {filter_graduate_program} 
                 {filter_type}
-                AND r.institution_id = i.id
-                AND rp.researcher_id = r.id
-                AND b.researcher_id = r.id
-            GROUP BY r.id,
-                    r.name,
-                    i.name,
-                    articles,
-                    book_chapters,
-                    book,
-                    r.lattes_id,
-                    lattes_10_id,
-                    abstract,
-                    rp.great_area,
-                    rp.city,
-                    r.orcid,
-                    i.image,
-                    r.graduation,
-                    rp.patent,
-                    rp.software,
-                    rp.brand,
-                    TO_CHAR(r.last_update, 'dd/mm/yyyy')
+            GROUP BY 
+                r.id,
+                opr.h_index,
+                opr.relevance_score,
+                opr.works_count,
+                opr.cited_by_count,
+                opr.i10_index,
+                opr.scopus,
+                opr.openalex,
+                r.name,
+                i.name,
+                articles,
+                book_chapters,
+                book,
+                r.lattes_id,
+                lattes_10_id,
+                abstract,
+                rp.great_area,
+                rp.city,
+                r.orcid,
+                i.image,
+                r.graduation,
+                rp.patent,
+                rp.software,
+                rp.brand,
+                TO_CHAR(r.last_update, 'dd/mm/yyyy')
             ORDER BY qtd DESC;
             """
 
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
-        filter = util.filterSQLRank2(terms, ";", "abstract")
+        filter_term = util.filterSQLRank2(terms, ";", "abstract")
 
         sql = f"""
             SELECT 
                 DISTINCT r.id AS id,
+                opr.h_index,
+                opr.relevance_score,
+                opr.works_count,
+                opr.cited_by_count,
+                opr.i10_index,
+                opr.scopus,
+                opr.openalex,
                 0 AS qtd,
                 r.name AS researcher_name,
                 i.name AS institution,
@@ -869,25 +912,30 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 '{terms}' AS terms
             FROM 
                 researcher r
-            LEFT JOIN graduate_program_researcher gpr 
-            ON r.id = gpr.researcher_id,
-                institution i,
-                researcher_production rp,
-                city c
-            WHERE c.id = r.city_id
-                {filter} 
+                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+                LEFT JOIN institution i ON r.institution_id = i.id
+                LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+                LEFT JOIN city c ON c.id = r.city_id
+                LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+            WHERE 
+                {filter_term} 
                 {filter_institution} 
-                {filtergraduate_program}
-                AND r.institution_id = i.id
-                AND rp.researcher_id = r.id
+                {filter_graduate_program}
             ORDER BY qtd DESC;
             """
         reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "id",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "qtd",
             "researcher_name",
             "institution",
@@ -910,4 +958,4 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
         ],
     )
 
-    return df_bd
+    return data_frame.fillna(0).to_dict(orient="records")

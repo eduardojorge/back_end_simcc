@@ -2,6 +2,7 @@
 import unidecode
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
+from http import HTTPStatus
 
 import Dao.resarcher_baremaSQL as resarcher_baremaSQL
 import Dao.termFlowSQL as termFlowSQL
@@ -74,48 +75,22 @@ def originals_words():
 @researcherTermRest.route("/researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def research():
-    list_researcher = list()
-    university = str()
 
-    if not (terms := unidecode.unidecode(request.args.get("terms"))):
-        return jsonify("No Content"), 204
+    terms = unidecode.unidecode(request.args.get("terms"))
+    if not terms:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
+
     if graduate_program_id := request.args.get("graduate_program_id"):
         graduate_program_id = str()
 
     university = request.args.get("university")
     production_type = request.args.get("type")
 
-    data_frame = termFlowSQL.list_researchers_originals_words_db2(
+    list_researcher = termFlowSQL.list_researchers_originals_words_db2(
         terms, university, production_type, graduate_program_id
     )
-    for Index, Data in data_frame.iterrows():
 
-        r = Researcher()
-        r.id = str(Data.id)
-        r.name = str(Data.researcher_name)
-        r.among = str(Data.qtd)
-        r.articles = str(Data.articles)
-        r.book_chapters = str(Data.book_chapters)
-        r.book = str(Data.book)
-        r.patent = str(Data.patent)
-        r.software = str(Data.software)
-        r.brand = str(Data.brand)
-        r.university = str(Data.institution)
-        r.lattes_id = str(Data.lattes)
-        r.lattes_10_id = str(Data.lattes_10_id)
-        r.abstract = str(Data.abstract)
-        r.area = str(Data.area.replace("_", " "))
-        r.city = str(Data.city)
-        r.orcid = str(Data.orcid)
-        r.image_university = str(Data.image)
-        r.graduation = str(Data.graduation)
-        r.lattes_update = str(Data.lattes_update)
-
-        researcher = r.getJson()
-
-        list_researcher.append(researcher)
-
-    return jsonify(list_researcher), 200
+    return (jsonify(list_researcher),)
 
 
 @researcherTermRest.route("/guidance_researcher", methods=["GET"])
@@ -443,55 +418,13 @@ def institutionFrequenci():
     return jsonify(list_institutionFrequenci), 200
 
 
-# print(list_researchers_originals_words_db("robótica | robô | robotics"))
 @researcherTermRest.route("/researcherID", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherID():
-    list_researcher = []
     researcher_id = request.args.get("researcher_id")
-
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
-    df_bd = termFlowSQL.lista_researcher_id_db(researcher_id)
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        # area = Dao.areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str("0")
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        # print(r.getJson())
-
-        researcher = r.getJson()
-
-        # print(researcher)
-        list_researcher.append(researcher)
+    list_researcher = termFlowSQL.lista_researcher_id_db(researcher_id)
     return jsonify(list_researcher), 200
 
 
-##############################################################################
-
 if __name__ == "__main__":
-    # run app in debug mode on port 5000
     researcherTermRest.run(debug=True, port=5001, host="0.0.0.0")

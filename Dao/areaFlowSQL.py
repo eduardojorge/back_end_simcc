@@ -311,48 +311,74 @@ def lista_institution_area_expertise_db(great_area, area_specialty, institution)
     return df_bd
 
 
-def lista_researcher_area_speciality_db(text, institution, graduate_program_id):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    print(text)
-    text = text.replace("&", " ")
-    text = unidecode.unidecode(text.lower())
+def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
 
-    filter = util.filterSQLLike(text, ";", "or", "rp.area_specialty")
-    # filter= util.filterSQL(text,";","or","gae.name")
+    filter_term = util.web_search_filter(term, "rp.area_specialty")
 
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-    print("XXXXXXXXXXXXXXXXXXXXX" + text)
-    print(filterinstitution)
+    filter_institution = str()
+    if institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+    filtergraduate_program = str()
+    if graduate_program_id:
+        filtergraduate_program = "AND gpr.graduate_program_id = 'graduate_program_id'"
 
-    reg = sgbdSQL.consultar_db(
-        "SELECT distinct rp.great_area as area,rp.area_specialty as area_specialty,r.id as id,"
-        + "r.name as researcher_name,i.name as institution,rp.articles as articles,"
-        + " rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,"
-        + "r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation "
-        + " FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id "
-        ", institution i, researcher_production rp,researcher_area_expertise re, great_area_expertise gae, city c "
-        + " WHERE "
-        + "  re.researcher_id =r.id"
-        " And r.city_id=c.id"
-        " AND gae.id = re.great_area_expertise_id"
-        " AND r.institution_id = i.id " + " AND rp.researcher_id = r.id " +
-        # ' AND (translate(unaccent(LOWER(rp.area_specialty)),\':\',\'\')::tsvector@@ \''+text.lower()+'\'::tsquery)=true '
-        #  " AND unaccent(LOWER(rp.area_specialty)) LIKE '%"+text+"%' "+
-        "%s" % filter + "%s" % filterinstitution + "%s" % filtergraduate_program +
-        #' AND term = \''+term+"\'"
-        #' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-        " ORDER BY researcher_name"
-    )
+    script_sql = f"""
+        SELECT 
+            DISTINCT rp.great_area AS area,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.area_specialty AS area_specialty,
+            r.id AS id,
+            r.name AS researcher_name,
+            i.name AS institution,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters,
+            rp.book AS book,
+            r.lattes_id AS lattes,
+            r.lattes_10_id AS lattes_10_id,
+            r.abstract AS abstract,
+            r.orcid AS orcid,
+            rp.city AS city,
+            i.image AS image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation 
+        FROM researcher r 
+        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+        LEFT JOIN institution i ON r.institution_id = i.id
+        LEFT JOIN researcher_production rp ON rp.researcher_id = r.id 
+        LEFT JOIN researcher_area_expertise re ON re.researcher_id = r.id 
+        LEFT JOIN great_area_expertise gae ON gae.id = re.great_area_expertise_id 
+        LEFT JOIN city c ON r.city_id = c.id
+        LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id 
+        WHERE 
+            {filter_term} 
+            {filter_institution} 
+            {filtergraduate_program}
+        ORDER BY researcher_name
+        """
 
-    df_bd = pd.DataFrame(
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "area",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "area_specialty",
             "id",
             "researcher_name",
@@ -373,7 +399,7 @@ def lista_researcher_area_speciality_db(text, institution, graduate_program_id):
             "graduation",
         ],
     )
-    return df_bd
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def lista_researcher_participation_event_db(term, institution, graduate_program_id):
@@ -495,7 +521,7 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
             "graduation",
         ],
     )
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def lista_researcher_patent_db(term, institution, graduate_program_id):
@@ -616,7 +642,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
             "graduation",
         ],
     )
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def lista_researcher_event_db(term, institution, graduate_program_id):
@@ -713,7 +739,7 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
             "graduation",
         ],
     )
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
@@ -839,4 +865,4 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             "graduation",
         ],
     )
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna(0).to_dict(orient="records")

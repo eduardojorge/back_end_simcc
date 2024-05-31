@@ -148,62 +148,17 @@ def researcherArea_specialty():
     list_researcher_area_expertise = []
 
     area = request.args.get("area_specialty")
-    if area == "":
-        return
+    if not area:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
 
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
+    university = request.args.get("university")
 
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    df_bd = areaFlowSQL.lista_researcher_area_speciality_db(
-        area.lower(), university, graduate_program_id
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_area_speciality_db(
+        area, university, graduate_program_id
     )
-    for i, infos in df_bd.iterrows():
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
 
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.last_update)
-        """
-        researcher  = {
-        'id': str(infos.id),
-        'name': str(infos.researcher_name),
-        'articles':str(infos.articles),
-        'book_chapters':str(infos.book_chapters),
-        'book':str(infos.book),
-        'university':str(infos.institution),
-        'lattes_id':str(infos.lattes),
-        'lattes_10_id':str(infos.lattes_10_id),
-        'area':str(infos.area.replace("_"," ")),
-        'abstract':str(infos.abstract),   
-        'city':str(infos.city),
-        'orcid':str(infos.orcid),
-        'image':str(infos.image),
-        'area_specialty':str(infos.area_specialty)
-
-        }
-        #print(researcher)
-        """
-        list_researcher_area_expertise.append(r.getJson())
-    return jsonify(list_researcher_area_expertise), 200
+    return jsonify(list_researcher_area_expertise), HTTPStatus.OK
 
 
 @areaRest.route("/bibliographic_production_article_area", methods=["GET"])

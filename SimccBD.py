@@ -296,7 +296,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
         ],
     )
 
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna(0).to_dict(orient="records")
 
 
 def lists_researcher_initials_term_db(initials, graduate_program_id):
