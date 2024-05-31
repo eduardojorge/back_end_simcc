@@ -275,7 +275,7 @@ def lists_software_production_researcher_db(researcher_id, year):
 
 
 def list_researchers_originals_words_db(terms, institution, type, graduate_program_id):
-    filter = util.filterSQLRank(terms, ";", "title")
+    filter = util.web_search_filter(terms, "title")
 
     filter_institution = ""
     filter_institution = util.filterSQL(institution, ";", "or", "i.name")
@@ -301,7 +301,7 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
                 r.lattes_id AS lattes,
                 r.lattes_10_id AS lattes_10_id,
                 abstract,
-                rp.great_area AS area,
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
                 rp.city AS city,
                 r.orcid AS orcid,
                 i.image AS image,
@@ -349,7 +349,7 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
         reg = sgbdSQL.consultar_db(sql)
 
     if type == "ABSTRACT":
-        filter = util.filterSQLRank2(terms, ";", "abstract")
+        filter = util.web_search_filter(terms, "abstract")
 
         sql = f"""
             SELECT 
@@ -363,7 +363,7 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
                 r.lattes_id AS lattes,
                 r.lattes_10_id AS lattes_10_id,
                 abstract,
-                rp.great_area AS area,
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
                 rp.city AS city,
                 r.orcid AS orcid,
                 i.image AS image,
@@ -380,10 +380,11 @@ def list_researchers_originals_words_db(terms, institution, type, graduate_progr
                 institution i,
                 researcher_production rp,
                 city c
-            WHERE c.id = r.city_id
+            WHERE 
                 {filter} 
                 {filter_institution} 
                 {filtergraduate_program}
+                AND c.id = r.city_id
                 AND r.institution_id = i.id
                 AND rp.researcher_id = r.id
             ORDER BY qtd DESC;
@@ -738,7 +739,7 @@ def lista_researcher_id_db(researcher_id):
             r.lattes_id AS lattes,
             r.lattes_10_id AS lattes_10_id,
             r.abstract AS abstract,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.city AS city,
             i.image AS image,
             r.orcid AS orcid,
@@ -824,7 +825,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 r.lattes_id AS lattes,
                 r.lattes_10_id AS lattes_10_id,
                 abstract,
-                rp.great_area AS area,
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
                 rp.city AS city,
                 r.orcid AS orcid,
                 i.image AS image,
@@ -900,7 +901,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 r.lattes_id AS lattes,
                 r.lattes_10_id AS lattes_10_id,
                 abstract,
-                rp.great_area AS area,
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
                 rp.city AS city,
                 r.orcid AS orcid,
                 i.image AS image,
