@@ -3,6 +3,8 @@ from flask import jsonify, request, Blueprint
 from Model.Researcher import Researcher
 import Dao.areaFlowSQL as areaFlowSQL
 from flask_cors import cross_origin
+from http import HTTPStatus
+
 
 areaRest = Blueprint("areaRest", __name__)
 
@@ -13,219 +15,76 @@ def researcherEvent():
     list_researcher_area_expertise = []
 
     term = request.args.get("term")
-    if term == "":
-        return
+    if not term:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
 
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
+    university = request.args.get("university")
 
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    df_bd = areaFlowSQL.lista_researcher_event_db(
-        term.lower(), university, graduate_program_id
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_event_db(
+        term, university, graduate_program_id
     )
-    for i, infos in df_bd.iterrows():
 
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        list_researcher_area_expertise.append(r.getJson())
-    return jsonify(list_researcher_area_expertise), 200
+    return jsonify(list_researcher_area_expertise), HTTPStatus.OK
 
 
 @areaRest.route("/researcherPatent", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherPatent():
-    list_researcher_area_expertise = []
-
     term = request.args.get("term")
-    if term == "":
-        return
+    if not term:
+        return jsonify([]), HTTPStatus.OK
 
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
+    university = request.args.get("university")
 
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    df_bd = areaFlowSQL.lista_researcher_patent_db(
-        term.lower(), university, graduate_program_id
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_patent_db(
+        term, university, graduate_program_id
     )
-    for i, infos in df_bd.iterrows():
 
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str(infos.qtd)
-
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        list_researcher_area_expertise.append(r.getJson())
-    return jsonify(list_researcher_area_expertise), 200
+    return jsonify(list_researcher_area_expertise), HTTPStatus.OK
 
 
 @areaRest.route("/researcherParticipationEvent", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherParticipationEvent():
-    list_researcher = []
-
     term = request.args.get("term")
-    if term == "":
-        return
-
+    if not term:
+        return jsonify([]), HTTPStatus.OK
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
+    university = request.args.get("university")
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
-    df_bd = areaFlowSQL.lista_researcher_participation_event_db(
-        term.lower(), university, graduate_program_id
+    list_researcher = areaFlowSQL.lista_researcher_participation_event_db(
+        term, university, graduate_program_id
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
-
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str(infos.qtd)
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        # print(researcher)
-        list_researcher.append(r.getJson())
     return jsonify(list_researcher), 200
 
 
 @areaRest.route("/researcherBook", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherBook():
-    list_researcher = []
-
     term = request.args.get("term")
-    if term == "":
-        return
-    # stemmer = nltk.RSLPStemmer()
+    if not term:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
 
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
+    university = request.args.get("university")
+    book_type = request.args.get("type")
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    type = str(request.args.get("type")) + ""
-
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
-    df_bd = areaFlowSQL.lista_researcher_book_db(
-        term.lower(), university, graduate_program_id, type
+    list_researcher = areaFlowSQL.lista_researcher_book_db(
+        term, university, graduate_program_id, book_type
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
 
-        r = Researcher()
-        r.id = str(infos.id)
-        r.among = str(infos.qtd)
-        r.name = str(infos.researcher_name)
-
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        # print(researcher)
-        list_researcher.append(r.getJson())
-    return jsonify(list_researcher), 200
+    return jsonify(list_researcher), HTTPStatus.OK
 
 
-# Fluxo Area
-
-
-# print(list_originals_words_initials_term_db("rob"))
 @areaRest.route("/area_expertiseInitials", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def area_expertiseInitials():
     list_area_expertise = []
     initials = request.args.get("initials")
 
-    df_bd = areaFlowSQL.lists_great_area_expertise_term_initials_db(
-        initials.lower())
+    df_bd = areaFlowSQL.lists_great_area_expertise_term_initials_db(initials.lower())
 
     for i, infos in df_bd.iterrows():
         print(infos.nome)
@@ -272,66 +131,14 @@ def area_specialitInitials():
 @areaRest.route("/researcherArea_expertise", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_expertise():
-    list_researcher_area_expertise = []
+
     area = request.args.get("area")
-    # stemmer = nltk.RSLPStemmer()
+    university = request.args.get("university")
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_area_expertise_db(
+        area, university
+    )
 
-    university = ""
-    university = str(request.args.get("university")) + ""
-
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
-    df_bd = areaFlowSQL.lista_researcher_area_expertise_db(
-        area.lower(), university)
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
-
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.patent = str(infos.patent)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.image_university = str(infos.image)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.last_update)
-
-        """
-        researcher  = {
-        'id': str(infos.id),
-        'name': str(infos.researcher_name),
-        'articles':str(infos.articles),
-        'book_chapters':str(infos.book_chapters),
-        'book':str(infos.book),
-        'university':str(infos.institution),
-        'lattes_id':str(infos.lattes),
-        'lattes_10_id':str(infos.lattes_10_id),
-        'area':str(infos.area_.replace("_"," ")),
-        'abstract':str(infos.abstract),   
-        'city':str(infos.city),
-        'orcid':str(infos.orcid),
-        'image':str(infos.image)
-
-        }
-        #print(researcher)
-        """
-        list_researcher_area_expertise.append(r.getJason())
     return jsonify(list_researcher_area_expertise), 200
 
 
@@ -343,27 +150,18 @@ def researcherArea_specialty():
     area = request.args.get("area_specialty")
     if area == "":
         return
-    # stemmer = nltk.RSLPStemmer()
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
-    # termNovo=unidecode.unidecode(name.replace(";","&"))
-
     university = ""
     university = str(request.args.get("university")) + ""
 
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
-    # df_bd =SimccBD.lista_researcher_name_db(name.lower())
     df_bd = areaFlowSQL.lista_researcher_area_speciality_db(
         area.lower(), university, graduate_program_id
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
-        # area_ = areaFlowSQL.lists_great_area_expertise_researcher_db(infos.id)
-        # area_=" "
         r = Researcher()
         r.id = str(infos.id)
         r.name = str(infos.researcher_name)
@@ -445,8 +243,7 @@ def bibliographic_production_article_area():
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
         }
-        list_bibliographic_production_article.append(
-            bibliographic_production_article_)
+        list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 

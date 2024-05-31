@@ -2,68 +2,44 @@ import nltk
 import unidecode
 from nltk.tokenize import RegexpTokenizer
 
-
-# Função para consultar a lista de pesquisadores por palavras existentes na sua frequência
+# fmt: off
 def filterSQLRank(text, split, attribute_2):
-
     text = text.replace("-", " ")
-    if (len(text.split(split))) == 3:
+    
+    if len(text.split(split)) == 3:
         text = clean_stopwords(text)
-    if (len(text.split("|"))) == 2:
-        t = []
+    
+    if len(text.split("|")) == 2:
         t = text.split("|")
-        filter = ""
-        filter = (
-            """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """
-            % (attribute_2, unidecode.unidecode(t[0]), 0.04)
-        )
-        filter = (
-            "AND ("
-            + filter
-            + " OR ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    "
-            "" % (attribute_2, unidecode.unidecode(t[1]), 0.04) + ")"
-        )
+        filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s""" % (attribute_2, unidecode.unidecode(t[0]), 0.04)
+        filter = "AND (" + filter + " OR ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s" % (
+            attribute_2, unidecode.unidecode(t[1]), 0.04) + ")"
         return filter
 
     filter = " "
+    
     if text != "":
-        t = []
         t = text.split(split)
         filter = ""
 
-        if (len(t)) == 1:
-            filter = (
-                """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery( '%s')) > %s    """
-                % (attribute_2, unidecode.unidecode(text), 0.04)
-            )
+        if len(t) == 1:
+            filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s""" % (attribute_2, unidecode.unidecode(text), 0.04)
             print("Rank" + text)
             x = len(filter)
             filter = filter[0 : x - 3]
             filter = " AND (" + filter + ")"
             text = text.strip().replace(" ", "&")
-            filter = (
-                filter
-                + """ AND  (translate(unaccent(LOWER(%s)),'-\.:;''',' ') ::tsvector@@ unaccent(LOWER( '%s'))::tsquery)=TRUE """
-                % (attribute_2, unidecode.unidecode(text))
-            )
-
+            filter = filter + """ AND (translate(unaccent(LOWER(%s)),'-\\.:;''',' ')::tsvector@@unaccent(LOWER('%s'))::tsquery)=TRUE """ % (
+                attribute_2, unidecode.unidecode(text))
         else:
-            filter = (
-                """ ts_rank(to_tsvector(translate(unaccent(LOWER(%s)),'-\.:;''',' ')), websearch_to_tsquery( '%s<->%s')) > %s    """
-                % (
-                    attribute_2,
-                    unidecode.unidecode(t[0]),
-                    unidecode.unidecode(t[1]),
-                    0.04,
-                )
-            )
+            filter = """ ts_rank(to_tsvector(translate(unaccent(LOWER(%s)),'-\\.:;''',' ')), websearch_to_tsquery('%s<->%s')) > %s""" % (
+                attribute_2, unidecode.unidecode(t[0]), unidecode.unidecode(t[1]), 0.04)
             x = len(filter)
             filter = filter[0 : x - 3]
             filter = " AND (" + filter + ")"
+    
     return filter
-
-
-import unidecode
+# fmt: on
 
 
 def filterSQLRank2(text, split, attribute_2):
@@ -77,19 +53,18 @@ def filterSQLRank2(text, split, attribute_2):
 
         if len(t) == 1:
             filter_query = (
-                """ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s"""
+                r"""ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s"""
                 % (attribute_2, unidecode.unidecode(text), 0.02)
             )
             filter_query = " AND (" + filter_query + ")"
             text = text.strip().replace(" ", "&")
             filter_query += (
-                """ AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
+                r""" AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
                 % (attribute_2, unidecode.unidecode(text))
             )
-            print("Rank2" + text)
         else:
             filter_query = (
-                """ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s<->%s')) > %s"""
+                r"""ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s<->%s')) > %s"""
                 % (
                     attribute_2,
                     unidecode.unidecode(t[0]),
@@ -100,7 +75,7 @@ def filterSQLRank2(text, split, attribute_2):
             filter_query = " AND (" + filter_query + ")"
             t[1] = t[1].strip().replace(" ", "&")
             filter_query += (
-                """ AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
+                r""" AND (translate(unaccent(LOWER(%s)), '\.:;''', '')::tsvector @@ unaccent(LOWER('%s'))::tsquery) = TRUE"""
                 % (attribute_2, unidecode.unidecode(t[1]))
             )
 
@@ -182,24 +157,35 @@ def clean_stopwords(text):
     return text_new[0 : len(text_new) - 1]
 
 
-def web_search_filter(string_of_terms, table):
+def web_search_filter(string_of_terms, column):
 
     position_to_skip = 0
     term = str()
-    web_search_filter = str()
+    filter_terms = str()
 
     def __add_parse(term):
-        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nAND\n """
+        return rf"""
+            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
+            AND 
+            """
 
     def __or_parse(term):
-        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nOR\n """
+        return rf"""
+            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
+            OR
+            """
 
     def __not_parse(term):
-        return f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 \nAND NOT\n """
+        return rf"""
+            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
+            AND NOT 
+            """
 
     def __priority(term):
         end_of_priority = string_of_terms.find(")", position)
-        return web_search_filter(string_of_terms[position + 1 : end_of_priority], table)
+        return web_search_filter(
+            string_of_terms[position + 1 : end_of_priority], column
+        )
 
     sintax_simbols = [",", ".", ";", "("]
 
@@ -207,7 +193,7 @@ def web_search_filter(string_of_terms, table):
 
     for position, char in enumerate(string_of_terms):
         if char in sintax_simbols:
-            web_search_filter += grammatic[char](term)
+            filter_terms += grammatic[char](unidecode.unidecode(term.lower()))
             term = str()
             if char == str("("):
                 position_to_skip = string_of_terms.find(")", position)
@@ -217,6 +203,10 @@ def web_search_filter(string_of_terms, table):
         else:
             term += char
     if term:
-        web_search_filter += f"""ts_rank(to_tsvector(translate(unaccent(LOWER({table})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
+        filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
         term = str()
-    return f"""({web_search_filter})"""
+    return f"""({filter_terms})"""
+
+
+if __name__ == "__main__":
+    print(web_search_filter("(robótica)", "patente"))

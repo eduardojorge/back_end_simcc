@@ -1,11 +1,10 @@
 import sys
-
 import nltk
 import unidecode
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from nltk.tokenize import RegexpTokenizer
-
+from http import HTTPStatus
 import Dao.areaFlowSQL
 import Dao.generalSQL
 import project
@@ -14,7 +13,6 @@ from Model.Magazine import Magazine
 from Model.Researcher import Researcher
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
-from Rest.mariaRest import mariaRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
 
@@ -39,7 +37,6 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
-app.register_blueprint(mariaRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 
@@ -147,44 +144,15 @@ def researcher_image():
 @app.route("/researcherName", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherName():
-    list_researcher = []
+
     name = request.args.get("name")
-    if name == "null":
-        return jsonify(list_researcher), 200
-
+    if not name:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
 
-    df_bd = SimccBD.lista_researcher_full_name_db_(name.lower(), graduate_program_id)
-    for i, infos in df_bd.iterrows():
+    list_researcher = SimccBD.lista_researcher_full_name_db_(name, graduate_program_id)
 
-        r = Researcher()
-        r.id = str(infos.id)
-        r.name = str(infos.researcher_name)
-        r.among = str("0")
-        r.articles = str(infos.articles)
-        r.book_chapters = str(infos.book_chapters)
-        r.book = str(infos.book)
-        r.university = str(infos.institution)
-        r.lattes_id = str(infos.lattes)
-        r.lattes_10_id = str(infos.lattes_10_id)
-        r.abstract = str(infos.abstract)
-        r.area = str(infos.area.replace("_", " "))
-        r.city = str(infos.city)
-        r.orcid = str(infos.orcid)
-        r.patent = str(infos.patent)
-        r.image_university = str(infos.image)
-        r.software = str(infos.software)
-        r.brand = str(infos.brand)
-        r.university = str(infos.institution)
-        r.graduation = str(infos.graduation)
-        r.lattes_update = str(infos.lattes_update)
-
-        researcher = r.getJson()
-
-        list_researcher.append(researcher)
-    return jsonify(list_researcher), 200
+    return jsonify(list_researcher), HTTPStatus.OK
 
 
 @app.route("/total", methods=["GET"])

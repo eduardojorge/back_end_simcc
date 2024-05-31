@@ -113,8 +113,6 @@ def lists_area_speciality_term_initials_db(initials, area, graduate_program_id):
 
 
 def lista_researcher_area_expertise_db(text, institution):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
     text = text.replace(" ", "_")
     filter = util.filterSQL(text, ";", "or", "gae.name")
 
@@ -375,151 +373,107 @@ def lista_researcher_area_speciality_db(text, institution, graduate_program_id):
             "graduation",
         ],
     )
-    print(df_bd)
     return df_bd
 
 
-def lista_researcher_participation_event_db(text, institution, graduate_program_id):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    print(text)
-    text = text.replace("&", " ")
-    text = unidecode.unidecode(text.lower())
+def lista_researcher_participation_event_db(term, institution, graduate_program_id):
+    term_filter = util.web_search_filter(term, "p.title")
 
-    filter = util.filterSQLRank2(text, ";", "p.title")
-    # filter= util.filterSQL(text,";","or","gae.name")
+    institution_filter = str()
+    if institution:
+        institution_filter = util.filterSQL(institution, ";", "or", "i.name")
 
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-    print("XXXXXXXXXXXXXXXXXXXXX" + text)
-    print(filterinstitution)
-
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
-
-    # AND rpf.researcher_id = r.id
-    #  #researcher_patent_frequency rpf,
-    sql = """
-    
-     SELECT DISTINCT COUNT(distinct p.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
-               r.name as researcher_name,i.name as institution,rp.articles as articles,
-                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-                         , institution i, researcher_production rp,
-                                   participation_events p,  city c 
-                           WHERE 
-                           type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista') 
-                       
-                           AND r.city_id=c.id
-                 
-                           AND r.institution_id = i.id 
-                           AND rp.researcher_id = r.id 
-                           AND p.researcher_id = r.id
-                          
-
-                           %s %s %s
-                            Group by rp.great_area ,rp.area_specialty , r.id ,
-                           r.name ,i.name ,rp.articles ,
-                         rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
-                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                        order by qtd desc
-
-                         
-                      
-     
-     """ % (
-        filter,
-        filterinstitution,
-        filtergraduate_program,
-    )
-
-    print(sql)
-
-    reg = sgbdSQL.consultar_db(sql)
-
-    df_bd = pd.DataFrame(
-        reg,
-        columns=[
-            "qtd",
-            "area",
-            "area_specialty",
-            "id",
-            "researcher_name",
-            "institution",
-            "articles",
-            "book_chapters",
-            "book",
-            "lattes",
-            "lattes_10_id",
-            "abstract",
-            "orcid",
-            "city",
-            "image",
-            "patent",
-            "software",
-            "brand",
-            "lattes_update",
-            "graduation",
-        ],
-    )
-    print(df_bd)
-    return df_bd
-
-
-def lista_researcher_patent_db(text, institution, graduate_program_id):
-    text = text.replace("&", " ")
-    text = unidecode.unidecode(text.lower())
-
-    filter = util.filterSQLRank2(text, ";", "p.title")
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-
-    filtergraduate_program = ""
-    if graduate_program_id != "0" and graduate_program_id != "":
+    filtergraduate_program = str()
+    if graduate_program_id:
         filtergraduate_program = (
             f"AND gpr.graduate_program_id = '{graduate_program_id}'"
         )
 
-    sql = """
-    
-     SELECT DISTINCT COUNT(distinct p.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
-               r.name as researcher_name,i.name as institution,rp.articles as articles,
-                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-                         , institution i, researcher_production rp,patent p,  city c 
-                           WHERE 
-                         
-                       
-                           r.city_id=c.id
-                 
-                           AND r.institution_id = i.id 
-                           AND rp.researcher_id = r.id 
-                           AND p.researcher_id = r.id
-                          
+    script_slq = f"""
+        SELECT 
+            COUNT(DISTINCT p.id) AS qtd,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.great_area AS area,
+            rp.area_specialty AS area_specialty, 
+            r.id AS id,
+            r.name AS researcher_name,
+            i.name AS institution,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters, 
+            rp.book AS book, 
+            r.lattes_id AS lattes,
+            r.lattes_10_id AS lattes_10_id,
+            r.abstract AS abstract,
+            r.orcid AS orcid,
+            rp.city AS city, 
+            i.image AS image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        FROM 
+            researcher r 
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+            LEFT JOIN participation_events p ON p.researcher_id = r.id
+            LEFT JOIN city c ON r.city_id = c.id
+            LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+        WHERE 
+            {term_filter}
+            {institution_filter}
+            {filtergraduate_program}
+            AND type_participation IN ('Apresentação Oral', 'Conferencista', 'Moderador', 'Simposista') 
+        GROUP BY 
+            rp.great_area,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.area_specialty, 
+            r.id,
+            r.name, 
+            i.name,
+            rp.articles,
+            rp.book_chapters, 
+            rp.book,
+            r.lattes_id,
+            r.lattes_10_id,
+            r.abstract,
+            r.orcid,
+            rp.city,
+            i.image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        ORDER BY 
+            qtd DESC;
+        """
+    reg = sgbdSQL.consultar_db(script_slq)
 
-                           %s %s %s
-                            Group by rp.great_area ,rp.area_specialty , r.id ,
-                           r.name ,i.name ,rp.articles ,
-                         rp.book_chapters , rp.book , r.lattes_id  ,r.lattes_10_id ,r.abstract ,
-                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                        order by  qtd desc
-
-                         
-                      
-     
-     """ % (
-        filter,
-        filterinstitution,
-        filtergraduate_program,
-    )
-
-    reg = sgbdSQL.consultar_db(sql)
-
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "qtd",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "area",
             "area_specialty",
             "id",
@@ -541,68 +495,203 @@ def lista_researcher_patent_db(text, institution, graduate_program_id):
             "graduation",
         ],
     )
-    return df_bd
+    return data_frame.to_dict(orient="records")
 
 
-def lista_researcher_event_db(text, institution, graduate_program_id):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    print(text)
-    text = text.replace("&", " ")
-    text = unidecode.unidecode(text.lower())
+def lista_researcher_patent_db(term, institution, graduate_program_id):
+    term_filter = util.web_search_filter(term, "p.title")
 
-    filter = util.filterSQLRank2(text, ";", "p.title")
-    # filter= util.filterSQL(text,";","or","gae.name")
+    filter_institution = str()
+    if institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-    print("XXXXXXXXXXXXXXXXXXXXX" + text)
-    print(filterinstitution)
+    filter_graduate_program = str()
+    if graduate_program_id and graduate_program_id != "0":
+        filter_graduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
 
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+    script_sql = f"""
+        SELECT
+            COUNT(DISTINCT p.id) AS qtd,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.great_area as area,
+            rp.area_specialty as area_specialty,
+            r.id as id,
+            r.name as researcher_name,
+            i.name as institution,
+            rp.articles as articles,
+            rp.book_chapters as book_chapters,
+            rp.book as book,
+            r.lattes_id as lattes,
+            r.lattes_10_id as lattes_10_id,
+            r.abstract as abstract,
+            r.orcid as orcid,
+            rp.city as city,
+            i.image as image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        FROM
+            researcher r
+        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+        LEFT JOIN institution i ON r.institution_id = i.id
+        LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+        LEFT JOIN patent p ON p.researcher_id = r.id
+        LEFT JOIN city c ON r.city_id = c.id
+        LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+        WHERE
+            {term_filter}
+            {filter_institution}
+            {filter_graduate_program}
+        GROUP BY
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.great_area,
+            rp.area_specialty,
+            r.id,
+            r.name,
+            i.name,
+            rp.articles,
+            rp.book_chapters,
+            rp.book,
+            r.lattes_id,
+            r.lattes_10_id,
+            r.abstract,
+            r.orcid,
+            rp.city,
+            i.image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        ORDER BY
+            qtd DESC;
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
 
-    # AND rpf.researcher_id = r.id
-    #  #researcher_patent_frequency rpf,
-    sql = """
-    
-     SELECT DISTINCT rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
-               r.name as researcher_name,i.name as institution,rp.articles as articles,
-                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,'%s' as terms,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-                         , institution i, researcher_production rp,participation_events p,  city c 
-                           WHERE 
-                         
-                       
-                           r.city_id=c.id
-                 
-                           AND r.institution_id = i.id 
-                           AND rp.researcher_id = r.id 
-                           AND p.researcher_id = r.id
-                           AND type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')  
-                          
-
-                           %s %s %s
-
-                         
-                      
-     
-     """ % (
-        text,
-        filter,
-        filterinstitution,
-        filtergraduate_program,
-    )
-
-    print(sql)
-
-    reg = sgbdSQL.consultar_db(sql)
-
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
+            "qtd",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "area",
+            "area_specialty",
+            "id",
+            "researcher_name",
+            "institution",
+            "articles",
+            "book_chapters",
+            "book",
+            "lattes",
+            "lattes_10_id",
+            "abstract",
+            "orcid",
+            "city",
+            "image",
+            "patent",
+            "software",
+            "brand",
+            "lattes_update",
+            "graduation",
+        ],
+    )
+    return data_frame.to_dict(orient="records")
+
+
+def lista_researcher_event_db(term, institution, graduate_program_id):
+    term_filter = util.web_search_filter(term, "p.title")
+
+    institution_filter = str()
+    if institution:
+        institution_filter = util.filterSQL(institution, ";", "or", "i.name")
+
+    filtergraduate_program = str()
+    if graduate_program_id:
+        filtergraduate_program = "AND gpr.graduate_program_id = '{graduate_program_id}'"
+
+    script_sql = f"""
+        SELECT 
+            DISTINCT rp.great_area as area, 
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.area_specialty as area_specialty, 
+            r.id as id,
+            r.name as researcher_name,
+            i.name as institution,
+            rp.articles as articles,
+            rp.book_chapters as book_chapters, 
+            rp.book as book, 
+            r.lattes_id as lattes,
+            r.lattes_10_id as lattes_10_id,
+            r.abstract as abstract,
+            r.orcid as orcid,
+            rp.city  as city, 
+            i.image as image,
+            '{term}' as terms,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        FROM researcher r 
+        LEFT JOIN graduate_program_researcher gpr ON
+            r.id = gpr.researcher_id, 
+            institution i, 
+            researcher_production rp,
+            participation_events p,  
+            city c,
+            openalex_researcher opr
+        WHERE 
+            {term_filter} 
+            {institution_filter} 
+            {filtergraduate_program}
+            AND r.city_id = c.id
+            AND r.institution_id = i.id 
+            AND rp.researcher_id = r.id 
+            AND p.researcher_id = r.id
+            AND r.id = opr.researcher_id
+            AND type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')  
+            """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "area",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "area_specialty",
             "id",
             "researcher_name",
@@ -620,82 +709,115 @@ def lista_researcher_event_db(text, institution, graduate_program_id):
             "patent",
             "software",
             "brand",
-            "lattes_update",
+            "last_update",
             "graduation",
         ],
     )
-    print(df_bd)
-    return df_bd
+    return data_frame.to_dict(orient="records")
 
 
-def lista_researcher_book_db(text, institution, graduate_program_id, type):
-    # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
-    #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
-    print(text)
-    text = text.replace("&", " ")
-    text = unidecode.unidecode(text.lower())
+def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
+    filter_term = util.web_search_filter(text, "b.title")
 
-    filter = util.filterSQLRank2(text, ";", "b.title")
-    # filter= util.filterSQL(text,";","or","gae.name")
+    filter_institution = str()
+    if institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
-    print("XXXXXXXXXXXXXXXXXXXXX" + text)
-    print(filterinstitution)
+    filter_graduate_program = str()
+    if graduate_program_id:
+        filter_graduate_program = (
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
+        )
 
-    filtergraduate_program = ""
-    if graduate_program_id != "":
-        filtergraduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+    filter_type = str()
+    if book_type:
+        filter_type = f"AND (b.type='{book_type}' OR  b.type='BOOK_CHAPTER') "
 
-    # AND rpf.researcher_id = r.id
-    #  #researcher_patent_frequency rpf,
+    script_sql = f"""
+        SELECT 
+            COUNT(DISTINCT b.id) AS qtd,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.great_area AS area,
+            rp.area_specialty AS area_specialty,
+            r.id AS id,
+            r.name AS researcher_name,
+            i.name AS institution,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters,
+            rp.book AS book,
+            r.lattes_id AS lattes,
+            r.lattes_10_id AS lattes_10_id,
+            r.abstract AS abstract,
+            r.orcid AS orcid,
+            rp.city AS city,
+            i.image AS image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        FROM 
+            researcher r 
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+            LEFT JOIN bibliographic_production b ON b.researcher_id = r.id
+            LEFT JOIN city c ON r.city_id = c.id
+            LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+        WHERE 
+            {filter_term}
+            {filter_institution} 
+            {filter_graduate_program} 
+            {filter_type} 
+        GROUP BY 
+            rp.great_area,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
+            rp.area_specialty,
+            r.id,
+            r.name,
+            i.name,
+            rp.articles,
+            rp.book_chapters,
+            rp.book,
+            r.lattes_id,
+            r.lattes_10_id,
+            r.abstract,
+            r.orcid,
+            rp.city,
+            i.image,
+            rp.patent,
+            rp.software,
+            rp.brand,
+            r.last_update,
+            r.graduation
+        ORDER BY 
+            qtd DESC;
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
 
-    filterType = " AND (b.type='" + type + "' OR  b.type='BOOK_CHAPTER') "
-    sql = """
-    
-     SELECT DISTINCT COUNT(distinct b.id) AS qtd,rp.great_area as area,rp.area_specialty as area_specialty, r.id as id,
-               r.name as researcher_name,i.name as institution,rp.articles as articles,
-                         rp.book_chapters as book_chapters, rp.book as book, r.lattes_id as lattes,r.lattes_10_id as lattes_10_id,r.abstract as abstract,
-                        r.orcid as orcid,rp.city  as city, i.image as image,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                          FROM  researcher r  LEFT JOIN graduate_program_researcher gpr ON  r.id =gpr.researcher_id 
-                         , institution i, researcher_production rp,bibliographic_production b,  city c 
-                           WHERE 
-                         
-                       
-                           r.city_id=c.id
-                 
-                           AND r.institution_id = i.id 
-                           AND rp.researcher_id = r.id 
-                           AND b.researcher_id = r.id
-                          
-
-                           %s %s %s %s
-                            GROUP BY rp.great_area ,rp.area_specialty , r.id ,
-                              r.name ,i.name ,rp.articles ,
-                         rp.book_chapters , rp.book , r.lattes_id ,r.lattes_10_id ,r.abstract ,
-                        r.orcid ,rp.city  , i.image ,rp.patent,rp.software,rp.brand,r.last_update,r.graduation
-                           ORDER BY qtd desc
-
-
-
-
-                         
-                      
-     
-     """ % (
-        filterinstitution,
-        filtergraduate_program,
-        filterType,
-        filter,
-    )
-
-    print(sql)
-
-    reg = sgbdSQL.consultar_db(sql)
-
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "qtd",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "area",
             "area_specialty",
             "id",
@@ -717,8 +839,4 @@ def lista_researcher_book_db(text, institution, graduate_program_id, type):
             "graduation",
         ],
     )
-    print(df_bd)
-    return df_bd
-
-
-# lists_area_speciality_term_initials_db("Mo","ciencias_exatas_e_da_terra")
+    return data_frame.to_dict(orient="records")

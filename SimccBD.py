@@ -220,18 +220,22 @@ def lista_researcher_name_db(text):
 
 
 def lista_researcher_full_name_db_(name, graduate_program_id):
+    filter_name = f"AND to_tsvector('portuguese', unaccent(r.name)) @@ to_tsquery('portuguese', unaccent('{name.lower().replace(';', '&')}'))"
 
     filter_graduate_program = str()
-    if graduate_program_id != "":
-        filter_graduate_program = (
-            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
-        )
-    filter_name = str()
-    if name != "":
-        filter_name = f"AND to_tsvector('portuguese', unaccent(r.name)) @@ to_tsquery('portuguese', unaccent('{name.replace(';', '&')}'))"
+    if graduate_program_id:
+        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
 
-    script_sql = f"""SELECT 
-            DISTINCT r.id AS id,
+    script_sql = f"""
+        SELECT
+            r.id AS id,
+            opr.h_index,
+            opr.relevance_score,
+            opr.works_count,
+            opr.cited_by_count,
+            opr.i10_index,
+            opr.scopus,
+            opr.openalex,
             r.name AS researcher_name,
             i.name AS institution,
             rp.articles AS articles,
@@ -239,7 +243,6 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             rp.book AS book,
             r.lattes_id AS lattes,
             r.lattes_10_id AS lattes_10_id,
-            r.abstract AS abstract,
             rp.great_area AS area,
             rp.city AS city,
             i.image AS image,
@@ -249,23 +252,31 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             rp.software AS software,
             rp.brand AS brand,
             to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
-        FROM 
+        FROM
             researcher r
         LEFT JOIN graduate_program_researcher gpr
-        ON r.id = gpr.researcher_id, city c, institution i, researcher_production rp
-        WHERE 
+        ON r.id = gpr.researcher_id, city c, institution i, researcher_production rp, openalex_researcher opr
+        WHERE
             c.id = r.city_id
             AND r.institution_id = i.id
-            AND rp.researcher_id = r.id 
+            AND r.id = rp.researcher_id
+            AND r.id = opr.researcher_id
             {filter_name} 
             {filter_graduate_program}"""
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(
+    data_frame = pd.DataFrame(
         reg,
         columns=[
             "id",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
             "researcher_name",
             "institution",
             "articles",
@@ -273,7 +284,6 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             "book",
             "lattes",
             "lattes_10_id",
-            "abstract",
             "area",
             "city",
             "image",
@@ -286,7 +296,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
         ],
     )
 
-    return df_bd
+    return data_frame.to_dict(orient="records")
 
 
 def lists_researcher_initials_term_db(initials, graduate_program_id):
