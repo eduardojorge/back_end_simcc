@@ -836,7 +836,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 '{terms}' AS terms
             FROM 
                 researcher r
-                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
                 LEFT JOIN institution i ON r.institution_id = i.id
                 LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
                 LEFT JOIN city c ON c.id = r.city_id
