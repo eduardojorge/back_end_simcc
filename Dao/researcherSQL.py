@@ -24,7 +24,7 @@ def researcher_search_city(city_id: str = None):
                 i.name AS institution,
                 i.image AS image,
                 c.name AS city,
-                rp.great_area AS area
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             FROM
                 researcher r
             LEFT JOIN
@@ -70,7 +70,7 @@ def researcher_search_city(city_id: str = None):
                 r.lattes_id AS lattes,
                 r.lattes_10_id AS lattes_10_id,
                 r.abstract AS abstract,
-                rp.great_area AS area,
+                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
                 c.name AS city,
                 i.image AS image,
                 r.orcid AS orcid,

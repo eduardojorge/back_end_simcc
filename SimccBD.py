@@ -246,7 +246,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             r.lattes_id AS lattes,
             r.lattes_10_id AS lattes_10_id,
             r.abstract AS abstract,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.city AS city,
             i.image AS image,
             r.orcid AS orcid,
@@ -257,7 +257,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
         FROM
             researcher r
-        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
         LEFT JOIN city c ON c.id = r.city_id
         LEFT JOIN institution i ON r.institution_id = i.id
         LEFT JOIN researcher_production rp ON r.id = rp.researcher_id

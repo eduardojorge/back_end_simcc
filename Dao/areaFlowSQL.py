@@ -214,7 +214,7 @@ def lista_production_article_area_expertise_db(
             r.name AS researcher,
             r.lattes_id AS lattes_id,
             lattes_10_id,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             bp.year AS year,
             periodical_magazine_name AS magazine,
             doi,
@@ -325,7 +325,7 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
 
     script_sql = f"""
         SELECT 
-            DISTINCT rp.great_area AS area,
+            DISTINCT INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             opr.h_index,
             opr.relevance_score,
             opr.works_count,
@@ -425,7 +425,7 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
             opr.i10_index,
             opr.scopus,
             opr.openalex,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.area_specialty AS area_specialty, 
             r.id AS id,
             r.name AS researcher_name,
@@ -547,7 +547,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
             opr.i10_index,
             opr.scopus,
             opr.openalex,
-            rp.great_area as area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.area_specialty as area_specialty,
             r.id as id,
             r.name as researcher_name,
@@ -658,7 +658,7 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
 
     script_sql = f"""
         SELECT 
-            DISTINCT rp.great_area as area, 
+            DISTINCT INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area, 
             opr.h_index,
             opr.relevance_score,
             opr.works_count,
@@ -769,7 +769,7 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             opr.i10_index,
             opr.scopus,
             opr.openalex,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.area_specialty AS area_specialty,
             r.id AS id,
             r.name AS researcher_name,
