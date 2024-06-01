@@ -220,7 +220,9 @@ def lista_researcher_name_db(text):
 
 
 def lista_researcher_full_name_db_(name, graduate_program_id):
-    filter_name = f"AND to_tsvector('portuguese', unaccent(r.name)) @@ to_tsquery('portuguese', unaccent('{name.lower().replace(';', '&')}'))"
+    filter_name = (
+        f"to_tsvector('portuguese', r.name) @@ to_tsquery('portuguese', '{name}')"
+    )
 
     filter_graduate_program = str()
     if graduate_program_id:
@@ -255,13 +257,12 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
         FROM
             researcher r
-        LEFT JOIN graduate_program_researcher gpr
-        ON r.id = gpr.researcher_id, city c, institution i, researcher_production rp, openalex_researcher opr
+        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id,
+        LEFT JOIN city c ON c.id = r.city_id
+        LEFT JOIN institution i ON r.institution_id = i.id
+        LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+        LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
         WHERE
-            c.id = r.city_id
-            AND r.institution_id = i.id
-            AND r.id = rp.researcher_id
-            AND r.id = opr.researcher_id
             {filter_name} 
             {filter_graduate_program}"""
 

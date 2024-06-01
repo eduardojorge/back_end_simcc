@@ -938,7 +938,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
             "scopus",
             "openalex",
             "among",
-            "researcher_name",
+            "name",
             "university",
             "articles",
             "book_chapters",
