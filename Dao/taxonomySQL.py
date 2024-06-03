@@ -20,7 +20,7 @@ def search_term(term: list):
             r.lattes_id AS lattes,
             r.lattes_10_id AS lattes_10_id,
             abstract,
-            rp.great_area AS area,
+            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.city AS city,
             r.orcid AS orcid,
             i.image AS image,

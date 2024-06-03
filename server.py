@@ -204,20 +204,17 @@ def recently_updated():
 @app.route("/bibliographic_production_article", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
-
     list_bibliographic_production_article = []
-    if term := request.args.get("terms"):
-        term = unidecode.unidecode(term.lower())
+    term = request.args.get("terms")
+    if not term:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
+    term = unidecode.unidecode(term.lower())
+
     year = request.args.get("year")
     qualis = request.args.get("qualis")
-
-    university = ""
-    university = str(request.args.get("university"))
-    distinct = str(request.args.get("distinct"))
-
+    university = request.args.get("university")
+    distinct = request.args.get("distinct")
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
 
     data_frame = SimccBD.lists_bibliographic_production_article_db(
         term, year, qualis, university, distinct, graduate_program_id
@@ -227,6 +224,16 @@ def bibliographic_production_article():
         if distinct == "0":
             bibliographic_production_article_ = {
                 "researcher_id": str(infos.researcher_id),
+                "article_institution": infos.article_institution,
+                "issn": infos.issn,
+                "authors_institution": infos.authors_institution,
+                "abstract": infos.abstract,
+                "authors": infos.authors,
+                "language": infos.language,
+                "citations_count": infos.citations_count,
+                "pdf": infos.pdf,
+                "landing_page_url": infos.landing_page_url,
+                "keywords": infos.keywords,
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),
@@ -242,6 +249,16 @@ def bibliographic_production_article():
         if distinct == "1":
             bibliographic_production_article_ = {
                 "researcher_id": str(infos.researcher_id),
+                "article_institution": infos.article_institution,
+                "issn": infos.issn,
+                "authors_institution": infos.authors_institution,
+                "abstract": infos.abstract,
+                "authors": infos.authors,
+                "language": infos.language,
+                "citations_count": infos.citations_count,
+                "pdf": infos.pdf,
+                "landing_page_url": infos.landing_page_url,
+                "keywords": infos.keywords,
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),

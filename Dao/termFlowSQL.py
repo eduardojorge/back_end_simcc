@@ -865,7 +865,7 @@ def list_researchers_originals_words_db2(terms, institution, type, graduate_prog
                 r.lattes_id,
                 lattes_10_id,
                 abstract,
-                INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,,
+                rp.great_area,
                 rp.city,
                 r.orcid,
                 i.image,
