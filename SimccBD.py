@@ -246,7 +246,7 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             r.lattes_id AS lattes,
             r.lattes_10_id AS lattes_10_id,
             r.abstract AS abstract,
-            INITCAP(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
+            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.city AS city,
             i.image AS image,
             r.orcid AS orcid,
