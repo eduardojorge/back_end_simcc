@@ -186,6 +186,16 @@ def bibliographic_production_article_area():
     for i, infos in df_bd.iterrows():
         bibliographic_production_article_ = {
             "id": str(infos.id),
+            "article_institution": infos.article_institution,
+            "issn": infos.issn,
+            "authors_institution": infos.authors_institution,
+            "abstract": infos.abstract,
+            "authors": infos.authors,
+            "language": infos.language,
+            "citations_count": infos.citations_count,
+            "pdf": infos.pdf,
+            "landing_page_url": infos.landing_page_url,
+            "keywords": infos.keywords,
             "title": str(infos.title),
             "researcher": str(infos.researcher),
             "lattes_id": str(infos.lattes_id),

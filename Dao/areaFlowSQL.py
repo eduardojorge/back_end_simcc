@@ -210,6 +210,16 @@ def lista_production_article_area_expertise_db(
     script_sql = f"""
         SELECT DISTINCT
             bp.id AS id,
+            op.article_institution as article_institution, 
+            string_to_array(op.issn, ',') AS issn, 
+            op.authors_institution as authors_institution, 
+            op.abstract as abstract, 
+            op.authors as authors, 
+            op.language as language, 
+            op.citations_count as citations_count, 
+            op.pdf as pdf, 
+            op.landing_page_url as landing_page_url, 
+            op.keywords as keywords,
             bp.title AS title,
             r.name AS researcher,
             r.lattes_id AS lattes_id,
@@ -224,9 +234,10 @@ def lista_production_article_area_expertise_db(
         FROM
             researcher r
             LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
-            JOIN researcher_production rp ON r.id = rp.researcher_id
-            JOIN bibliographic_production bp ON bp.researcher_id = r.id
-            JOIN bibliographic_production_article bar ON bp.id = bar.bibliographic_production_id
+            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+            LEFT JOIN bibliographic_production bp ON bp.researcher_id = r.id
+            LEFT JOIN bibliographic_production_article bar ON bp.id = bar.bibliographic_production_id
+            LEFT JOIN openalex_article op ON op.article_id = b.id
         WHERE
             bp.year >= {year}
             {filter}
@@ -235,6 +246,16 @@ def lista_production_article_area_expertise_db(
             {filtergraduate_program}
         GROUP BY
             bp.id,
+            op.article_institution, 
+            op.issn, 
+            op.authors_institution, 
+            op.abstract, 
+            op.authors, 
+            op.language, 
+            op.citations_count, 
+            op.pdf, 
+            op.landing_page_url, 
+            op.keywords,
             bp.title,
             r.name,
             r.lattes_id,
@@ -254,6 +275,16 @@ def lista_production_article_area_expertise_db(
         reg,
         columns=[
             "id",
+            "article_institution",
+            "issn",
+            "authors_institution",
+            "abstract",
+            "authors",
+            "language",
+            "citations_count",
+            "pdf",
+            "landing_page_url",
+            "keywords",
             "title",
             "researcher",
             "lattes_id",
@@ -267,7 +298,6 @@ def lista_production_article_area_expertise_db(
             "jcr_link",
         ],
     )
-    print(df_bd)
     return df_bd
 
 

@@ -322,16 +322,29 @@ def lists_researcher_initials_term_db(initials, graduate_program_id):
     return df_bd
 
 
-def recently_updated(year, filter_institution):
+def recently_updated_db(year, institution):
 
-    filter_institution = util.filterSQL(filter_institution, ";", "or", "i.name")
+    filter_institution = str()
+    if not institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
     script_sql = f"""
-        SELECT DISTINCT title,
+        SELECT 
+            DISTINCT title,
+            op.article_institution as article_institution, 
+            string_to_array(op.issn, ',') AS issn, 
+            op.authors_institution as authors_institution, 
+            op.abstract as abstract, 
+            op.authors as authors, 
+            op.language as language, 
+            op.citations_count as citations_count, 
+            op.pdf as pdf, 
+            op.landing_page_url as landing_page_url, 
+            op.keywords as keywords,
             r.id AS researcher_id,
             year_,
             doi,
-            a.qualis as qualis,
+            a.qualis AS qualis,
             periodical_magazine_name AS magazine,
             r.name AS researcher,
             r.lattes_10_id AS lattes_10_id,
@@ -339,28 +352,39 @@ def recently_updated(year, filter_institution):
             a.jcr,
             a.jcr_link,
             b.created_at
-        FROM institution i,
-            public.bibliographic_production b,
-            bibliographic_production_article a,
-            researcher r
-        LEFT JOIN graduate_program_researcher gpr
-        ON r.id = gpr.researcher_id
-        WHERE r.id = b.researcher_id
-        AND a.bibliographic_production_id = b.id
-        AND i.id = r.institution_id 
-        {filter_institution}
-        AND year_ >= {year}
-        AND b.type = 'ARTICLE'
-        ORDER BY year_ DESC, created_at DESC;
+        FROM 
+            public.bibliographic_production b
+            LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
+            LEFT JOIN researcher r ON r.id = b.researcher_id
+            LEFT JOIN institution i ON i.id = r.institution_id
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            LEFT JOIN openalex_article op ON op.article_id = b.id
+        WHERE 
+            year_ >= {year}
+            AND b.type = 'ARTICLE'
+            {filter_institution}
+        ORDER BY 
+            year_ DESC, 
+            created_at DESC
+        LIMIT 100;
     """
 
-    print(script_sql)
     registry = sgbdSQL.consultar_db(script_sql)
 
     return pd.DataFrame(
         registry,
         columns=[
             "title",
+            "article_institution",
+            "issn",
+            "authors_institution",
+            "abstract",
+            "authors",
+            "language",
+            "citations_count",
+            "pdf",
+            "landing_page_url",
+            "keywords",
             "researcher_id",
             "year",
             "doi",

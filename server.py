@@ -181,20 +181,30 @@ def recently_updated():
     year = request.args.get("year")
     university = str(request.args.get("university"))
 
-    data_frame = SimccBD.recently_updated(year, university)
+    data_frame = SimccBD.recently_updated_db(year, university)
 
-    for Index, Data in data_frame.iterrows():
+    for Index, infos in data_frame.iterrows():
         bibliographic_production_article_ = {
-            "researcher_id": str(Data.researcher_id),
-            "title": str(Data.title),
-            "year": str(Data.year),
-            "doi": str(Data.doi),
-            "qualis": str(Data.qualis),
-            "name_periodical": str(Data.magazine),
-            "researcher": str(Data.researcher),
-            "lattes_id": str(Data.lattes_id),
-            "jif": str(Data.jcr),
-            "jcr_link": str(Data.jcr_link),
+            "researcher_id": str(infos.researcher_id),
+            "article_institution": infos.article_institution,
+            "issn": infos.issn,
+            "authors_institution": infos.authors_institution,
+            "abstract": infos.abstract,
+            "authors": infos.authors,
+            "language": infos.language,
+            "citations_count": infos.citations_count,
+            "pdf": infos.pdf,
+            "landing_page_url": infos.landing_page_url,
+            "keywords": infos.keywords,
+            "title": str(infos.title),
+            "year": str(infos.year),
+            "doi": str(infos.doi),
+            "qualis": str(infos.qualis),
+            "name_periodical": str(infos.magazine),
+            "researcher": str(infos.researcher),
+            "lattes_id": str(infos.lattes_id),
+            "jif": str(infos.jcr),
+            "jcr_link": str(infos.jcr_link),
         }
         list_bibliographic_production_article.append(bibliographic_production_article_)
 
