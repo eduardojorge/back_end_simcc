@@ -229,6 +229,7 @@ def report_prod(Data):
 
     return data_frame
 
+
 def guidance_prod(Data):
     script_sql = f"""
         SELECT 
@@ -251,20 +252,22 @@ def guidance_prod(Data):
 
     data_frame_guidance = pd.DataFrame(
         registry,
-        columns=["year", 'nature',"count_nature"],
+        columns=["year", "nature", "count_nature"],
     )
 
     data_frame_guidance["ind_prod_guidance"] = (
-        data_frame_guidance["nature"].map(weights)
-        * data_frame_guidance["count_nature"]
+        data_frame_guidance["nature"].map(weights) * data_frame_guidance["count_nature"]
     )
     data_frame_guidance = data_frame_guidance.groupby("year", as_index=False)[
         "ind_prod_guidance"
     ].sum()
     return data_frame_guidance
 
+
 if __name__ == "__main__":
     project.project_env = "4"
+
+    sgbdSQL.execScript_db("DELETE FROM graduate_program_ind_prod;")
 
     weights = {
         "A1": 1,
@@ -283,12 +286,12 @@ if __name__ == "__main__":
         "PATENT_GRANTED": 1,
         "PATENT_NOT_GRANTED": 0.25,
         "REPORT": 0.25,
-        'Tese De Doutorado Concluída': 0.5,
+        "Tese De Doutorado Concluída": 0.5,
         "Tese De Doutorado Em andamento": 0.25,
         "Dissertação De Mestrado Concluída": 0.25,
         "Dissertação De Mestrado Concluída Em andamento": 0.125,
         "Iniciação Científica Concluída": 0.125,
-        "Iniciação Científica Concluída Em andamento": 0.1
+        "Iniciação Científica Concluída Em andamento": 0.1,
     }
 
     year = list(range(2008, 2025))
@@ -308,7 +311,7 @@ if __name__ == "__main__":
     )
 
     for Index, Data in df_graduate_program.iterrows():
-
+        print(Index, end=" ")
         data_frame = pd.DataFrame(year, columns=["year"])
 
         df = article_prod(Data=Data)
@@ -339,7 +342,7 @@ if __name__ == "__main__":
             data_frame["ind_prod_granted_patent"] = NaN
         if "ind_prod_not_granted_patent" not in df.columns:
             data_frame["ind_prod_not_granted_patent"] = NaN
-        
+
         df = software_prod(Data=Data)
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")

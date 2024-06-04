@@ -247,6 +247,8 @@ if __name__ == "__main__":
 
     project.project_env = "4"
 
+    sgbdSQL.execScript_db("DELETE FROM researcher_ind_prod;")
+
     weights = {
         "A1": 1,
         "A2": 0.875,
@@ -287,7 +289,7 @@ if __name__ == "__main__":
     df_researchers = pd.DataFrame(registry, columns=["id", "name"])
 
     for Index, Data in df_researchers.iterrows():
-
+        print(Index, end=" ")
         data_frame = pd.DataFrame(year, columns=["year"])
 
         df = article_prod(Data=Data)
