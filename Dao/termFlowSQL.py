@@ -90,25 +90,29 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
 
 def lists_book_production_researcher_db(researcher_id, year, term):
 
-    filter = util.filterSQLRank(term, ";", "title")
+    filter_term = f'AND {util.web_search_filter(term, "title")}'
 
-    sql = """SELECT b.id as id, b.title as title, 
-            b.year as year,bb.isbn,bb.publishing_company
-                        
-            FROM   bibliographic_production b,bibliographic_production_book bb
-                           where 
-                           bb.bibliographic_production_id = b.id AND
-                           researcher_id='%s'
-                           AND b.year_>=%s
-                           AND b.type='%s'
-                           %s
-                           ORDER BY year_ desc""" % (
+    sql = """SELECT 
+                b.id as id, 
+                b.title as title, 
+                b.year as year,
+                bb.isbn,
+                bb.publishing_company
+            FROM   
+                bibliographic_production b,
+                bibliographic_production_book bb
+            where 
+                bb.bibliographic_production_id = b.id AND
+                researcher_id = '%s'
+                AND b.year_>=%s
+                AND b.type='%s'
+                %s
+                ORDER BY year_ desc""" % (
         researcher_id,
         year,
         "BOOK",
-        filter,
+        filter_term,
     )
-    print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -120,25 +124,28 @@ def lists_book_production_researcher_db(researcher_id, year, term):
 
 
 def lists_book_chapter_production_researcher_db(researcher_id, year, term):
-    filter = util.filterSQLRank(term, ";", "title")
+    filter = f'AND {util.web_search_filter(term, "title")}'
 
-    sql = """SELECT b.id as id, b.title as title, 
-            b.year as year,bc.isbn,bc.publishing_company
-                        
-            FROM   bibliographic_production b, bibliographic_production_book_chapter bc
-                           where 
-                           bc.bibliographic_production_id = b.id AND
-                           researcher_id='%s'
-                           AND b.year_>=%s
-                           AND b.type='%s'
-                           %s
-                           ORDER BY year_ desc""" % (
+    sql = """SELECT 
+                b.id as id, 
+                b.title as title, 
+                b.year as year,
+                bc.isbn,
+                bc.publishing_company
+            FROM   
+                bibliographic_production b, bibliographic_production_book_chapter bc
+            where 
+                bc.bibliographic_production_id = b.id AND
+                researcher_id='%s'
+                AND b.year_>=%s
+                AND b.type='%s'
+                %s
+            ORDER BY year_ desc""" % (
         researcher_id,
         year,
         "BOOK_CHAPTER",
         filter,
     )
-    # print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 

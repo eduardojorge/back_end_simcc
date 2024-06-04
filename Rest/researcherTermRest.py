@@ -149,7 +149,6 @@ def brand_production_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_production_researcher():
     list_book_production_researcher = []
-    # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
     term = request.args.get("term")
@@ -176,7 +175,7 @@ def book_production_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_chapter_production_researcher():
     list_book_chapter_production_researcher = []
-    # terms = request.args.get('terms')
+
     researcher_id = request.args.get("researcher_id")
     term = request.args.get("term")
     year = request.args.get("year")
@@ -185,7 +184,6 @@ def book_chapter_production_researcher():
         researcher_id, year, term
     )
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         b = Book_Chapter_Researcher()
         b.id = str(infos.id)
@@ -194,7 +192,6 @@ def book_chapter_production_researcher():
         b.isbn = str(infos.isbn)
         b.publishing_company = str(infos.publishing_company)
 
-        # print(researcher)
         list_book_chapter_production_researcher.append(b.getJson())
 
     return jsonify(list_book_chapter_production_researcher), 200
