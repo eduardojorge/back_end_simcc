@@ -12,6 +12,16 @@ class Bibliographic_Production_Researcher(object):
     jif = ""
     jcr_link = ""
     researcher_id = ""
+    article_institution = ""
+    issn = ""
+    authors_institution = ""
+    abstract = ""
+    authors = ""
+    language = ""
+    citations_count = ""
+    pdf = ""
+    landing_page_url = ""
+    keywords = ""
 
     def __init__(self):
         self.id = ""
@@ -31,5 +41,15 @@ class Bibliographic_Production_Researcher(object):
             "jif": self.jif,
             "jcr_link": self.jcr_link,
             "researcher_id": self.researcher_id,
+            "article_institution": self.article_institution,
+            "issn": self.issn,
+            "authors_institution": self.authors_institution,
+            "abstract": self.abstract,
+            "authors": self.authors,
+            "language": self.language,
+            "citations_count": self.citations_count,
+            "pdf": self.pdf,
+            "landing_page_url": self.landing_page_url,
+            "keywords": self.keywords,
         }
         return Bibliographic_Production_Researcher

@@ -346,6 +346,16 @@ def bibliographic_production_researcher():
         b.jif = str(infos.jif)
         b.jcr_link = str(infos.jcr_link)
         b.researcher_id = str(infos.researcher_id)
+        b.article_institution = infos.article_institution
+        b.issn = infos.issn
+        b.authors_institution = infos.authors_institution
+        b.abstract = infos.abstract
+        b.authors = infos.authors
+        b.language = infos.language
+        b.citations_count = infos.citations_count
+        b.pdf = infos.pdf
+        b.landing_page_url = infos.landing_page_url
+        b.keywords = infos.keywords
 
         list_bibliographic_production_researcher.append(b.getJson())
 
