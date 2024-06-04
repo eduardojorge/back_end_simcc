@@ -64,22 +64,24 @@ def list_research_dictionary_db(initials, type):
 
 
 def lists_patent_production_researcher_db(researcher_id, year, term):
-    filter = util.filterSQLRank(term, ";", "title")
+    filter = f'AND {util.web_search_filter(term, "title")}'
 
-    sql = """SELECT p.id as id, p.title as title, 
-            p.development_year as year, p.grant_date as grant_date
-                        
-            FROM  patent p
-                           where 
-                           researcher_id='%s'
-                           AND p.development_year::integer>=%s
-                           %s
-                           ORDER BY development_year desc""" % (
+    sql = """SELECT 
+                p.id as id, 
+                p.title as title, 
+                p.development_year as year, 
+                p.grant_date as grant_date
+            FROM  
+                patent p
+            where 
+                researcher_id='%s'
+                AND p.development_year::integer >= %s
+                %s
+                ORDER BY development_year desc""" % (
         researcher_id,
         year,
         filter,
     )
-    # print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 

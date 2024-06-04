@@ -187,9 +187,9 @@ def web_search_filter(string_of_terms, column):
             string_of_terms[position + 1 : end_of_priority], column
         )
 
-    sintax_simbols = [",", ".", ";", "("]
+    sintax_simbols = [";", ".", "|", "("]
 
-    grammatic = {",": __add_parse, ".": __not_parse, ";": __or_parse, "(": __priority}
+    grammatic = {";": __add_parse, ".": __not_parse, "|": __or_parse, "(": __priority}
 
     for position, char in enumerate(string_of_terms):
         if char in sintax_simbols:

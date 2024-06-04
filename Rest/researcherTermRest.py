@@ -285,7 +285,6 @@ def pevent_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
     list_patent_production_researcher = []
-    # terms = request.args.get('terms')
     term = request.args.get("term")
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
