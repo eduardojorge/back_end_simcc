@@ -97,13 +97,10 @@ def research():
 @cross_origin(origin="*", headers=["Content-Type"])
 def guidance_researcher():
     list_guidance_researcher = []
-    # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    df_bd = termFlowSQL.lists_guidance_researcher_db(researcher_id, year)
 
-    df_bd = termFlowSQL.lists_guidance_researcher_db(researcher_id, 1000)
-
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         g = Guidance_Researcher()
         g.id = str(infos.id)
@@ -114,7 +111,6 @@ def guidance_researcher():
         g.status = str(infos.status)
         g.year = str(infos.year)
 
-        # print(researcher)
         list_guidance_researcher.append(g.getJson())
 
     return jsonify(list_guidance_researcher), 200
@@ -280,10 +276,10 @@ def pevent_researcher():
     return jsonify(list_pevent_researcher), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/patent_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
+
     list_patent_production_researcher = []
     term = request.args.get("term")
     researcher_id = request.args.get("researcher_id")
@@ -291,7 +287,6 @@ def patent_production_researcher():
 
     df_bd = termFlowSQL.lists_patent_production_researcher_db(researcher_id, year, term)
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         p = Patent_Researcher()
         p.id = str(infos.id)
@@ -299,7 +294,6 @@ def patent_production_researcher():
         p.year = str(infos.year)
         p.grant_date = str(infos.grant_date)
 
-        # print(researcher)
         list_patent_production_researcher.append(p.getJson())
 
     return jsonify(list_patent_production_researcher), 200

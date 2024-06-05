@@ -64,29 +64,37 @@ def list_research_dictionary_db(initials, type):
 
 
 def lists_patent_production_researcher_db(researcher_id, year, term):
-    filter = f'AND {util.web_search_filter(term, "title")}'
+    filter_term = util.web_search_filter(term, "title")
 
-    sql = """SELECT 
-                p.id as id, 
-                p.title as title, 
-                p.development_year as year, 
-                p.grant_date as grant_date
-            FROM  
-                patent p
-            where 
-                researcher_id='%s'
-                AND p.development_year::integer >= %s
-                %s
-                ORDER BY development_year desc""" % (
-        researcher_id,
-        year,
-        filter,
-    )
+    filter_year = str()
+    if year:
+        filter_year = f"AND p.development_year::integer >= {year}"
 
-    reg = sgbdSQL.consultar_db(sql)
+    filter_researcher = str()
+    if researcher_id:
+        filter_researcher = f"AND researcher_id = '{researcher_id}'"
+
+    script_sql = f"""
+        SELECT 
+            p.id as id, 
+            p.title as title, 
+            p.development_year as year, 
+            p.grant_date as grant_date
+        FROM  
+            patent p
+        where 
+            {filter_term}
+            {filter_year}
+            {filter_researcher}
+        ORDER BY development_year desc
+        """
+
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["id", "title", "year", "grant_date"])
+    df_bd["grant_date"] = df_bd["grant_date"].astype("str").replace("NaT", "")
 
+    print(df_bd)
     return df_bd
 
 
@@ -192,7 +200,6 @@ def lists_Researcher_Report_db(researcher_id, year):
         researcher_id,
         year,
     )
-    # print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -204,24 +211,26 @@ def lists_Researcher_Report_db(researcher_id, year):
 
 
 def lists_guidance_researcher_db(researcher_id, year):
-    sql = """SELECT g.id as id, g.title as title, 
-                nature,
-                oriented,
-                type,
-                status,
-                g.year as year
-                        
-            FROM  guidance g
-                           where 
-                           researcher_id='%s'
-                           AND g.year>=%s
-                           ORDER BY year desc""" % (
+    script_sql = """
+        SELECT 
+            g.id as id,
+            g.title as title, 
+            nature,
+            oriented,
+            type,
+            status,
+            g.year as year            
+        FROM 
+            guidance g
+        WHERE 
+            researcher_id = '%s'
+            AND g.year >= %s
+            ORDER BY year desc""" % (
         researcher_id,
         year,
     )
-    # print(sql)
 
-    reg = sgbdSQL.consultar_db(sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
         reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
