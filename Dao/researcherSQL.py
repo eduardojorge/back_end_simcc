@@ -134,11 +134,13 @@ def researcher_data_geral(year_):
     script_sql = f"""
         SELECT 
             g.year,
-            COUNT(*) as count_guidance
+            COUNT(*) as count_guidance,
+            COUNT(CASE WHEN g.status = 'Concluída' THEN 1 ELSE NULL END) as count_concluido,
+            COUNT(CASE WHEN g.status = 'Em andamento' THEN 1 ELSE NULL END) as count_andamento
         FROM
             guidance g
         WHERE
-            g.year > {year_}
+            g.year >= {year_}
         GROUP BY
             g.year
         ORDER BY
@@ -147,12 +149,22 @@ def researcher_data_geral(year_):
 
     registre = db.consultar_db(script_sql)
 
-    df = pd.DataFrame(registre, columns=["year", "count_guidance"])
+    df = pd.DataFrame(
+        registre,
+        columns=[
+            "year",
+            "count_guidance",
+            "count_guidance_complete",
+            "count_guidance_in_progress",
+        ],
+    )
 
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
         data_frame["count_guidance"] = NaN
+        data_frame["count_guidance_complete"] = NaN
+        data_frame["count_guidance_in_progress"] = NaN
 
     script_sql = f"""
         SELECT
@@ -162,7 +174,7 @@ def researcher_data_geral(year_):
             public.bibliographic_production bp
         WHERE
             type = 'BOOK'
-            AND bp.year::smallint > {year_}
+            AND bp.year::smallint >= {year_}
         GROUP BY
             bp.year
         ORDER BY
@@ -187,7 +199,7 @@ def researcher_data_geral(year_):
             public.bibliographic_production bp
         WHERE
             type = 'BOOK_CHAPTER'
-            AND bp.year::smallint > {year_}
+            AND bp.year::smallint >= {year_}
         GROUP BY
             bp.year
         ORDER BY
@@ -204,20 +216,32 @@ def researcher_data_geral(year_):
         data_frame["count_book_chapter"] = NaN
 
     script_sql = f"""
-        SELECT
-            development_year,
-            COUNT(DISTINCT title) as count_patent
+        SELECT 
+            p.development_year,
+            COUNT(CASE WHEN p.grant_date IS NULL THEN 1 ELSE NULL END) count_not_granted_patent,
+            COUNT(CASE WHEN p.grant_date IS NOT NULL THEN 1 ELSE NULL END) as count_granted_patent,
+            COUNT(*) as count_total
         FROM
             patent p
         WHERE
-            development_year::smallint > {year_}
+            p.development_year::smallint >= {year_}
         GROUP BY
-            development_year
+            p.development_year
+        ORDER BY
+            p.development_year;
         """
 
     registre = db.consultar_db(script_sql)
 
-    df = pd.DataFrame(registre, columns=["year", "count_patent"])
+    df = pd.DataFrame(
+        registre,
+        columns=[
+            "year",
+            "count_patent",
+            "count_patent_granted",
+            "count_patent_not_granted",
+        ],
+    )
 
     df["year"] = df["year"].astype("int64")
     if not df.empty:
@@ -232,7 +256,7 @@ def researcher_data_geral(year_):
         FROM
             public.software sw
         WHERE
-            sw.year::smallint > {year_}
+            sw.year::smallint >= {year_}
         GROUP BY
             sw.year
         """
@@ -254,7 +278,7 @@ def researcher_data_geral(year_):
         FROM
             research_report rr
         WHERE 
-            rr.year::smallint > {year_}
+            rr.year::smallint >= {year_}
         GROUP BY
             rr.year
         ORDER BY
@@ -279,7 +303,7 @@ def researcher_data_geral(year_):
             public.bibliographic_production bp
         WHERE
             type = 'ARTICLE'
-            AND bp.year::smallint > {year_}
+            AND bp.year::smallint >= {year_}
         GROUP BY
             bp.year
         ORDER BY
