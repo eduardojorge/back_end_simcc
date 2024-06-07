@@ -2,13 +2,12 @@ import json
 import logging
 import sys
 from datetime import datetime
-from os.path import abspath, dirname
+
 
 import pandas as pd
 
 import Dao.sgbdSQL as sgbdSQL
 import project
-
 
 
 def fat_simcc_bibliographic_production():

@@ -104,3 +104,11 @@ def city():
 
         JsonCity.append(city.getJson())
     return jsonify(JsonCity)
+
+
+@researcherDataRest.route("/ResearcherData/DadosGerais", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def DadosGerais():
+    year = request.args.get("year")
+    lista = researcherSQL.researcher_data_geral(year)
+    return jsonify(lista)

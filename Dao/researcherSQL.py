@@ -2,6 +2,7 @@ import Dao.sgbdSQL as db
 import pandas as pd
 
 from Model.Researcher import Researcher
+from numpy import NaN
 
 
 def city_search(city_name: str = None) -> str:
@@ -123,3 +124,175 @@ def researcher_search_city(city_id: str = None):
         )
 
         return data_frame.fillna(0).to_dict(orient="records")
+
+
+def researcher_data_geral(year_):
+    year = list(range(int(year_), 2025))
+
+    data_frame = pd.DataFrame(year, columns=["year"])
+
+    script_sql = f"""
+        SELECT 
+            g.year,
+            COUNT(*) as count_guidance
+        FROM
+            guidance g
+        WHERE
+            g.year > {year_}
+        GROUP BY
+            g.year
+        ORDER BY
+            g.year;
+        """
+
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_guidance"])
+
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_guidance"] = NaN
+
+    script_sql = f"""
+        SELECT
+            bp.year,
+            COUNT(DISTINCT title) AS count_book
+        FROM
+            public.bibliographic_production bp
+        WHERE
+            type = 'BOOK'
+            AND bp.year::smallint > {year_}
+        GROUP BY
+            bp.year
+        ORDER BY
+            bp.year;
+        """
+
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_book"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_book"] = NaN
+
+    script_sql = f"""
+        SELECT
+            bp.year,
+            COUNT(DISTINCT title) AS count_book_chapter
+        FROM
+            public.bibliographic_production bp
+        WHERE
+            type = 'BOOK_CHAPTER'
+            AND bp.year::smallint > {year_}
+        GROUP BY
+            bp.year
+        ORDER BY
+            bp.year;
+        """
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_book_chapter"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_book_chapter"] = NaN
+
+    script_sql = f"""
+        SELECT
+            development_year,
+            COUNT(DISTINCT title) as count_patent
+        FROM
+            patent p
+        WHERE
+            development_year::smallint > {year_}
+        GROUP BY
+            development_year
+        """
+
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_patent"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_patent"] = NaN
+
+    script_sql = f"""
+        SELECT
+            sw.year,
+            COUNT(DISTINCT title) as count_software
+        FROM
+            public.software sw
+        WHERE
+            sw.year::smallint > {year_}
+        GROUP BY
+            sw.year
+        """
+
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_software"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_software"] = NaN
+
+    script_sql = f"""
+        SELECT
+            rr.year,
+            COUNT(DISTINCT title) as count_report
+        FROM
+            research_report rr
+        WHERE 
+            rr.year::smallint > {year_}
+        GROUP BY
+            rr.year
+        ORDER BY
+            rr.year
+        """
+
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_report"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_report"] = NaN
+
+    script_sql = f"""
+        SELECT
+            bp.year,
+            COUNT(DISTINCT title) AS count_article
+        FROM
+            public.bibliographic_production bp
+        WHERE
+            type = 'ARTICLE'
+            AND bp.year::smallint > {year_}
+        GROUP BY
+            bp.year
+        ORDER BY
+            bp.year;
+    """
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_article"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_article"] = NaN
+
+    return data_frame.fillna(0).to_dict(orient="records")
