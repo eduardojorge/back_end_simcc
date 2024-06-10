@@ -32,7 +32,9 @@ def graduate_program_db(institution_id):
 def graduate_program_profnit_db(graduate_program_id):
     graduate_program_filter = str()
     if graduate_program_id:
-        graduate_program_filter = f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
+        graduate_program_filter = (
+            f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
+        )
     sql = f"""
         SELECT 
             gp.graduate_program_id, 
@@ -50,19 +52,18 @@ def graduate_program_profnit_db(graduate_program_id):
             gp.created_at, 
             gp.updated_at,
             COUNT(CASE WHEN gr.type_ = 'PERMANENTE' THEN 1 END) as qtd_permanente,
-            COUNT(CASE WHEN gr.type_ = 'DISCENTE' THEN 1 END) as qtd_discente,
             COUNT(CASE WHEN gr.type_ = 'COLABORADOR' THEN 1 END) as qtd_colaborador
         FROM 
             graduate_program gp
-        LEFT JOIN
-            graduate_program_researcher gr ON gp.graduate_program_id = gr.graduate_program_id
+            LEFT JOIN graduate_program_researcher gr ON gp.graduate_program_id = gr.graduate_program_id
+            LEFT JOIN graduate_program_student gps ON gps.graduate_program_id = gp.graduate_program_id
         {graduate_program_filter}
         GROUP BY
             gp.graduate_program_id
         """
-    
+    registry = sgbdSQL.consultar_db(sql)
     data_frame = pd.DataFrame(
-        sgbdSQL.consultar_db(sql),
+        registry,
         columns=[
             "graduate_program_id",
             "code",
@@ -79,13 +80,30 @@ def graduate_program_profnit_db(graduate_program_id):
             "created_at",
             "updated_at",
             "qtd_permanente",
-            "qtd_discente",
-            "qtd_colaborador"
+            "qtd_colaborador",
         ],
     )
-    data_frame['visible'] = data_frame['visible'].astype("str")
 
-    return data_frame.to_dict(orient='records')
+    script_sql = """
+        SELECT 
+            gp.graduate_program_id,
+            COUNT(gps.researcher_id)
+        FROM 
+            graduate_program gp
+            LEFT JOIN graduate_program_student gps ON gp.graduate_program_id = gps.graduate_program_id
+        GROUP BY
+            gp.graduate_program_id
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(registry, columns=["graduate_program_id", "qtd_student"])
+
+    data_frame = pd.merge(data_frame, df, on="graduate_program_id", how="left")
+
+    data_frame["visible"] = data_frame["visible"].astype("str")
+
+    return data_frame.to_dict(orient="records")
 
 
 def production_general_db(graduate_program_id, year):
