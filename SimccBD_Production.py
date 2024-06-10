@@ -67,23 +67,18 @@ def list_researcher_to_update():
     return list_researcher[:-2]
 
 
-# Função para listar todos os pesquisadores e criar a sua produção
 def create_researcher_production_db(test: bool = False):
 
-    filter = str(f"SELECT id FROM researcher")
-
     script_sql = f"DELETE FROM researcher_production"
-
     sgbdSQL.execScript_db(script_sql)
 
-    script_sql = filter
-
+    script_sql = f"SELECT id FROM researcher"
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["id"])
 
     for Index, infos in df_bd.iterrows():
-        logger.debug("total=" + str(Index))
+        logger.debug("[ Total ] = " + str(Index))
         new_researcher_production_db(infos.id)
 
 
@@ -96,7 +91,7 @@ def new_researcher_production_db(researcher_id):
         FROM 
             bibliographic_production AS b 
         WHERE 
-            researcher_id='{researcher_id}'
+            researcher_id = '{researcher_id}'
         GROUP BY 
             tipo 
         ORDER BY 
@@ -130,8 +125,6 @@ def new_researcher_production_db(researcher_id):
     qtd_brand = researcher_brand_db(researcher_id)
 
     df_bd = termFlowSQL.get_researcher_address_db(researcher_id)
-
-    print(df_bd)
 
     city = ""
     organ = ""
@@ -181,6 +174,7 @@ if __name__ == "__main__":
         project.project_env = sys.argv[1]
     except:
         project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
+
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
@@ -192,4 +186,4 @@ if __name__ == "__main__":
 
     logger = logging.getLogger()
 
-    create_researcher_production_db(0)
+    create_researcher_production_db(test=False)

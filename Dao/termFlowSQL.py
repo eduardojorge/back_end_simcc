@@ -495,11 +495,11 @@ def lists_bibliographic_production_article_researcher_db(
                 year_ >= {year}  
                 {filter_term}
                 {filter_qualis}
-                AND r.id = '{researcher_id}' 
+                AND r.id = '{researcher_id}'
+                AND b.type = 'ARTICLE'
             ORDER BY 
                 year DESC
             """
-        print(script_sql)
 
     if type == "ABSTRACT":
         script_sql = f"""
@@ -528,17 +528,15 @@ def lists_bibliographic_production_article_researcher_db(
             jcr_link
         FROM 
             bibliographic_production b
-            LEFT JOIN bibliographic_production_article ba 
-                ON b.id = ba.bibliographic_production_id
-            LEFT JOIN researcher r 
-                ON r.id = b.researcher_id
-            LEFT JOIN openalex_article op 
-                ON op.article_id = b.id
-        WHERE  
+            LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
+            LEFT JOIN researcher r ON r.id = b.researcher_id
+            LEFT JOIN openalex_article op ON op.article_id = b.id
+        WHERE
             {filter_term} 
             {filter_qualis}
             AND year_ >= {year} 
             AND r.id = '{researcher_id}'
+            AND b.type = 'ARTICLE'
         ORDER BY
             year DESC
         """
@@ -573,8 +571,6 @@ def lists_bibliographic_production_article_researcher_db(
             "researcher_id",
         ],
     )
-
-    print(data_frame)
 
     return data_frame
 

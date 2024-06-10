@@ -164,19 +164,19 @@ def web_search_filter(string_of_terms, column):
     filter_terms = str()
 
     def __add_parse(term):
-        return rf"""
+        return f"""
             ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
             AND 
             """
 
     def __or_parse(term):
-        return rf"""
+        return f"""
             ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
             OR
             """
 
     def __not_parse(term):
-        return rf"""
+        return f"""
             ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
             AND NOT 
             """
@@ -192,6 +192,7 @@ def web_search_filter(string_of_terms, column):
     grammatic = {";": __add_parse, ".": __not_parse, "|": __or_parse, "(": __priority}
 
     for position, char in enumerate(string_of_terms):
+        print(char)
         if char in sintax_simbols:
             filter_terms += grammatic[char](unidecode.unidecode(term.lower()))
             term = str()
@@ -203,10 +204,10 @@ def web_search_filter(string_of_terms, column):
         else:
             term += char
     if term:
-        filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
+        filter_terms += f"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
         term = str()
     return f"""({filter_terms})"""
 
 
 if __name__ == "__main__":
-    print(web_search_filter("(robótica)", "patente"))
+    print(web_search_filter("(atlantic);(atlantica);(atlas)", "patente"))

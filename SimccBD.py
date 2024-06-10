@@ -436,7 +436,7 @@ def lists_bibliographic_production_article_db(
                 r.id AS researcher_id,
                 year_,
                 doi,
-                qualis,
+                a.qualis,
                 periodical_magazine_name AS magazine,
                 a.jcr,
                 a.jcr_link,
