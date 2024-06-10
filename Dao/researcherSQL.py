@@ -319,4 +319,23 @@ def researcher_data_geral(year_):
     else:
         data_frame["count_article"] = NaN
 
+    script_sql = f"""
+        SELECT
+            br.year,
+            COUNT(DISTINCT br.title) AS count_brand
+        FROM brand br
+            WHERE br.year::smallint >= {year_}
+        GROUP BY
+            br.year
+    """
+    registre = db.consultar_db(script_sql)
+
+    df = pd.DataFrame(registre, columns=["year", "count_brand"])
+
+    df["year"] = df["year"].astype("int64")
+    if not df.empty:
+        data_frame = pd.merge(data_frame, df, on="year", how="left")
+    else:
+        data_frame["count_brand"] = NaN
+
     return data_frame.fillna(0).to_dict(orient="records")

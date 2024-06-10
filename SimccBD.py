@@ -257,11 +257,11 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
         FROM
             researcher r
-        LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
-        LEFT JOIN city c ON c.id = r.city_id
-        LEFT JOIN institution i ON r.institution_id = i.id
-        LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-        LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
+            LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+            LEFT JOIN city c ON c.id = r.city_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+            LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
         WHERE
             {filter_name} 
             {filter_graduate_program}"""
@@ -332,7 +332,7 @@ def recently_updated_db(year, institution):
         SELECT 
             DISTINCT title,
             op.article_institution as article_institution, 
-            string_to_array(op.issn, ',') AS issn, 
+            array_cat(string_to_array(op.issn, ','), string_to_array(a.issn, ',')) AS issn, 
             op.authors_institution as authors_institution, 
             op.abstract as abstract, 
             op.authors as authors, 
@@ -424,7 +424,7 @@ def lists_bibliographic_production_article_db(
             SELECT 
                 DISTINCT title,
                 op.article_institution as article_institution, 
-                string_to_array(op.issn, ',') AS issn, 
+                array_cat(string_to_array(op.issn, ','), string_to_array(a.issn, ',')) AS issn, 
                 op.authors_institution as authors_institution, 
                 op.abstract as abstract, 
                 op.authors as authors, 
@@ -455,7 +455,6 @@ def lists_bibliographic_production_article_db(
                 {filter_qualis}
                 AND year_ >= {year}
                 AND b.type = 'ARTICLE'
-                AND op.issn IS NOT NULL
             ORDER BY year_ DESC
            """
         reg = sgbdSQL.consultar_db(script_sql)
@@ -491,7 +490,7 @@ def lists_bibliographic_production_article_db(
             SELECT 
                 DISTINCT title,
                 op.article_institution as article_institution, 
-                string_to_array(op.issn, ',') AS issn, 
+                array_cat(string_to_array(op.issn, ','), string_to_array(a.issn, ',')) AS issn, 
                 op.authors_institution as authors_institution, 
                 op.abstract as abstract, 
                 op.authors as authors, 
@@ -558,7 +557,7 @@ def lists_bibliographic_production_article_db(
                 "created_at",
             ],
         )
-        return data_frame
+        return data_frame.fillna("")
 
 
 def lists_bibliographic_production_article_name_researcher_db(name, year, qualis):

@@ -460,7 +460,7 @@ def lists_bibliographic_production_article_researcher_db(
             SELECT DISTINCT 
                 b.id AS id,
                 op.article_institution as article_institution, 
-                string_to_array(op.issn, ',') AS issn, 
+                array_cat(string_to_array(op.issn, ','), string_to_array(ba.issn, ',')) AS issn, 
                 op.authors_institution as authors_institution, 
                 op.abstract as abstract, 
                 op.authors as authors, 
@@ -506,7 +506,7 @@ def lists_bibliographic_production_article_researcher_db(
         SELECT DISTINCT 
             b.id AS id,
             op.article_institution as article_institution, 
-            string_to_array(op.issn, ',') AS issn, 
+            array_cat(string_to_array(op.issn, ','), string_to_array(ba.issn, ',')) AS issn, 
             op.authors_institution as authors_institution, 
             op.abstract as abstract, 
             op.authors as authors, 
