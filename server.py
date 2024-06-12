@@ -150,7 +150,9 @@ def researcherName():
     if not name:
         return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
-    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db_(name, graduate_program_id)
+    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db_(
+        name, graduate_program_id
+    )
     return jsonify(list_researcher), HTTPStatus.OK
 
 
@@ -217,7 +219,6 @@ def bibliographic_production_article():
     term = request.args.get("terms")
     if not term:
         return jsonify([]), HTTPStatus.BAD_REQUEST
-    term = unidecode.unidecode(term.lower())
 
     year = request.args.get("year")
     qualis = request.args.get("qualis")
@@ -225,24 +226,14 @@ def bibliographic_production_article():
     distinct = request.args.get("distinct")
     graduate_program_id = request.args.get("graduate_program_id")
 
-    data_frame = SimccBD.lists_bibliographic_production_article_db(
+    df_bd = SimccBD.lists_bibliographic_production_article_db(
         term, year, qualis, university, distinct, graduate_program_id
     )
 
-    for i, infos in data_frame.iterrows():
+    for i, infos in df_bd.iterrows():
         if distinct == "0":
             bibliographic_production_article_ = {
                 "researcher_id": str(infos.researcher_id),
-                "article_institution": infos.article_institution,
-                "issn": infos.issn,
-                "authors_institution": infos.authors_institution,
-                "abstract": infos.abstract,
-                "authors": infos.authors,
-                "language": infos.language,
-                "citations_count": infos.citations_count,
-                "pdf": infos.pdf,
-                "landing_page_url": infos.landing_page_url,
-                "keywords": infos.keywords,
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),
@@ -252,22 +243,11 @@ def bibliographic_production_article():
                 "lattes_id": str(infos.lattes_id),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
-                "created_at": str(infos.created_at),
             }
 
         if distinct == "1":
             bibliographic_production_article_ = {
                 "researcher_id": str(infos.researcher_id),
-                "article_institution": infos.article_institution,
-                "issn": infos.issn,
-                "authors_institution": infos.authors_institution,
-                "abstract": infos.abstract,
-                "authors": infos.authors,
-                "language": infos.language,
-                "citations_count": infos.citations_count,
-                "pdf": infos.pdf,
-                "landing_page_url": infos.landing_page_url,
-                "keywords": infos.keywords,
                 "title": str(infos.title),
                 "year": str(infos.year),
                 "doi": str(infos.doi),

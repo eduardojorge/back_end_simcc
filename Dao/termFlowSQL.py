@@ -94,7 +94,6 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
     df_bd = pd.DataFrame(reg, columns=["id", "title", "year", "grant_date"])
     df_bd["grant_date"] = df_bd["grant_date"].astype("str").replace("NaT", "")
 
-    print(df_bd)
     return df_bd
 
 

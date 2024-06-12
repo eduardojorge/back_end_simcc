@@ -19,7 +19,12 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
 
     filter_graduate_program = str()
     if graduate_program_id:
-        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
+        filter_graduate_program = f"""
+            AND r.id IN (
+                SELECT DISTINCT gpr.researcher_id 
+                FROM graduate_program_researcher gpr
+                WHERE gpr.graduate_program_id = '{graduate_program_id}')
+            """
 
     script_sql = f"""
         SELECT
@@ -47,8 +52,10 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             LEFT JOIN institution i ON r.institution_id = i.id
             LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
         WHERE
-            {filter_name};
+            {filter_name}
+            {filter_graduate_program};
             """
+    print(script_sql)
     registry = db.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
@@ -425,7 +432,7 @@ def researcher_graduate_program_db():
 
     data_frame = pd.DataFrame(registry, columns=["id", "graduate_programs"])
 
-    return data_frame
+    return data_frame.fillna("")
 
 
 def researcher_research_group_db():
@@ -445,7 +452,7 @@ def researcher_research_group_db():
 
     data_frame = pd.DataFrame(registry, columns=["id", "research_groups"])
 
-    return data_frame
+    return data_frame.fillna("")
 
 
 def researcher_openAlex_db():
@@ -479,4 +486,4 @@ def researcher_openAlex_db():
         ],
     )
 
-    return data_frame
+    return data_frame.fillna("")

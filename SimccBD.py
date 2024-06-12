@@ -338,41 +338,30 @@ def lists_bibliographic_production_article_db(
 
     if distinct == "1":
         script_sql = f"""
-            SELECT 
-                DISTINCT title,
-                op.article_institution as article_institution, 
-                array_cat(string_to_array(op.issn, ','), string_to_array(a.issn, ',')) AS issn, 
-                op.authors_institution as authors_institution, 
-                op.abstract as abstract, 
-                op.authors as authors, 
-                op.language as language, 
-                op.citations_count as citations_count, 
-                op.pdf as pdf, 
-                op.landing_page_url as landing_page_url, 
-                op.keywords as keywords,
-                r.id AS researcher_id,
-                year_,
-                doi,
-                a.qualis,
-                periodical_magazine_name AS magazine,
-                a.jcr,
-                a.jcr_link,
-                b.created_at
-            FROM
-                bibliographic_production b
-                LEFT JOIN researcher r ON r.id = b.researcher_id
-                LEFT JOIN institution i ON i.id = r.institution_id
-                LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
-                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
-                LEFT JOIN openalex_article op ON op.article_id = b.id
-            WHERE 
-                {filter_term} 
-                {filter_institution} 
-                {filter_graduate_program} 
-                {filter_qualis}
-                AND year_ >= {year}
-                AND b.type = 'ARTICLE'
-            ORDER BY year_ DESC
+            SELECT DISTINCT title,
+                 r.id AS researcher_id,
+                 year_,
+                 doi,
+                 qualis,
+                 periodical_magazine_name AS magazine,
+                 a.jcr,
+                 a.jcr_link
+            FROM institution i,
+                 public.bibliographic_production b,
+                 bibliographic_production_article a,
+                 researcher r
+            LEFT JOIN graduate_program_researcher gpr
+              ON r.id = gpr.researcher_id
+           WHERE r.id = b.researcher_id
+             AND a.bibliographic_production_id = b.id
+             AND i.id = r.institution_id 
+             {filter_term} 
+             {filter_institution} 
+             {filter_graduate_program} 
+             {filter_qualis}
+             AND year_ >= {year}
+             AND b.type = 'ARTICLE'
+           ORDER BY year_ DESC
            """
         reg = sgbdSQL.consultar_db(script_sql)
 
@@ -380,16 +369,6 @@ def lists_bibliographic_production_article_db(
             reg,
             columns=[
                 "title",
-                "article_institution",
-                "issn",
-                "authors_institution",
-                "abstract",
-                "authors",
-                "language",
-                "citations_count",
-                "pdf",
-                "landing_page_url",
-                "keywords",
                 "researcher_id",
                 "year",
                 "doi",
@@ -397,52 +376,39 @@ def lists_bibliographic_production_article_db(
                 "magazine",
                 "jcr",
                 "jcr_link",
-                "created_at",
             ],
         )
         return data_frame
 
     if distinct == "0":
         script_sql = f"""
-            SELECT 
-                DISTINCT title,
-                op.article_institution as article_institution, 
-                array_cat(string_to_array(op.issn, ','), string_to_array(a.issn, ',')) AS issn, 
-                op.authors_institution as authors_institution, 
-                op.abstract as abstract, 
-                op.authors as authors, 
-                op.language as language, 
-                op.citations_count as citations_count, 
-                op.pdf as pdf, 
-                op.landing_page_url as landing_page_url, 
-                op.keywords as keywords,
+            SELECT DISTINCT title,
                 r.id AS researcher_id,
                 year_,
                 doi,
-                a.qualis AS qualis,
+                a.qualis as qualis,
                 periodical_magazine_name AS magazine,
                 r.name AS researcher,
                 r.lattes_10_id AS lattes_10_id,
                 r.lattes_id AS lattes_id,
                 a.jcr,
-                a.jcr_link,
-                b.created_at
-            FROM
-                public.bibliographic_production b
-                LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
-                LEFT JOIN researcher r ON r.id = b.researcher_id
-                LEFT JOIN institution i ON i.id = r.institution_id
-                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
-                LEFT JOIN openalex_article op ON op.article_id = b.id
-            WHERE 
-                {filter_term}
-                {filter_institution}
-                {filter_graduate_program}
-                {filter_qualis}
-                AND year_ >= {year}
-                AND b.type = 'ARTICLE'
-            ORDER BY 
-                year_ DESC;
+                a.jcr_link
+            FROM institution i,
+                public.bibliographic_production b,
+                bibliographic_production_article a,
+                researcher r
+            LEFT JOIN graduate_program_researcher gpr
+            ON r.id = gpr.researcher_id
+            WHERE r.id = b.researcher_id
+            AND a.bibliographic_production_id = b.id
+            AND i.id = r.institution_id 
+            {filter_term} 
+            {filter_institution} 
+            {filter_graduate_program} 
+            {filter_qualis}
+            AND year_ >= {year}
+            AND b.type = 'ARTICLE'
+            ORDER BY year_ DESC
             """
 
         reg = sgbdSQL.consultar_db(script_sql)
@@ -451,16 +417,6 @@ def lists_bibliographic_production_article_db(
             reg,
             columns=[
                 "title",
-                "article_institution",
-                "issn",
-                "authors_institution",
-                "abstract",
-                "authors",
-                "language",
-                "citations_count",
-                "pdf",
-                "landing_page_url",
-                "keywords",
                 "researcher_id",
                 "year",
                 "doi",
@@ -471,10 +427,9 @@ def lists_bibliographic_production_article_db(
                 "lattes_id",
                 "jcr",
                 "jcr_link",
-                "created_at",
             ],
         )
-        return data_frame.fillna("")
+        return data_frame
 
 
 def lists_bibliographic_production_article_name_researcher_db(name, year, qualis):
