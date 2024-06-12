@@ -7,6 +7,7 @@ from nltk.tokenize import RegexpTokenizer
 from http import HTTPStatus
 import Dao.areaFlowSQL
 import Dao.generalSQL
+import Dao.researcherSQL
 import project
 import SimccBD as SimccBD
 from Model.Magazine import Magazine
@@ -149,9 +150,7 @@ def researcherName():
     if not name:
         return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
-
-    list_researcher = SimccBD.lista_researcher_full_name_db_(name, graduate_program_id)
-
+    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db_(name, graduate_program_id)
     return jsonify(list_researcher), HTTPStatus.OK
 
 

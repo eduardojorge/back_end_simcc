@@ -189,7 +189,3 @@ def web_search_filter(string_of_terms, column):
     if term:
         filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
     return f"""({filter_terms})"""
-
-
-if __name__ == "__main__":
-    print(web_search_filter("(atlantic)|(atlantica;rebeliao)|(atlas)", "patente"))

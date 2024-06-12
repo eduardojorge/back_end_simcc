@@ -1,24 +1,26 @@
-from typing import Optional
-from pydantic import BaseModel, UUID4
+from dataclasses import dataclass, asdict
 
 
-class Researcher(BaseModel):
-    id: UUID4
-    name: Optional[str]
-    among: Optional[str]
-    articles: Optional[str]
-    book_chapters: Optional[str]
-    book: Optional[str]
-    patent: Optional[str]
-    software: Optional[str]
-    brand: Optional[str]
-    university: Optional[str]
-    lattes_id: Optional[str]
-    lattes_10_id: Optional[str]
-    abstract: Optional[str]
-    area: Optional[str]
-    city: Optional[str]
-    orcid: Optional[str]
-    image: Optional[str]
-    graduation: Optional[str]
-    lattes_update: Optional[str]
+@dataclass
+class Researcher:
+    id: str = str()
+    name: str = str()
+    lattes_id: str = str()
+    among: str = str()
+    articles: str = str()
+    book_chapters: str = str()
+    book: str = str()
+    patent: str = str()
+    software: str = str()
+    brand: str = str()
+    university: str = str()
+    abstract: str = str()
+    area: str = str()
+    city: str = str()
+    orcid: str = str()
+    image_university: str = str()
+    graduation: str = str()
+    lattes_update: str = str()
+
+    def getJson(self):
+        return asdict(self)

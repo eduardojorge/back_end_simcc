@@ -1,7 +1,5 @@
 import Dao.sgbdSQL as db
 import pandas as pd
-
-from Model.Researcher import Researcher
 from numpy import NaN
 
 
@@ -14,6 +12,74 @@ def city_search(city_name: str = None) -> str:
         filter=city_name
     )
     return pd.DataFrame(db.consultar_db(sql=sql), columns=["id"])["id"][0]
+
+
+def lista_researcher_full_name_db_(name, graduate_program_id):
+    filter_name = f"""r.name ILIKE '{name}%'"""  # fmt: skip
+
+    filter_graduate_program = str()
+    if graduate_program_id:
+        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
+
+    script_sql = f"""
+        SELECT
+            r.id AS id,
+            r.name AS researcher_name,
+            r.lattes_id AS lattes,
+            0 as among,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters,
+            rp.book AS book,
+            rp.patent AS patent,
+            rp.software AS software,
+            rp.brand AS brand,
+            i.name AS university,
+            r.abstract AS abstract,
+            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
+            rp.city AS city,
+            r.orcid AS orcid,
+            i.image AS image_university,
+            r.graduation AS graduation,
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+        FROM
+            researcher r
+            LEFT JOIN city c ON c.id = r.city_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+        WHERE
+            {filter_name};
+            """
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "id",
+            "name",
+            "university",
+            "articles",
+            "book_chapters",
+            "book",
+            "lattes_id",
+            "lattes_10_id",
+            "abstract",
+            "area",
+            "city",
+            "image_university",
+            "orcid",
+            "graduation",
+            "patent",
+            "software",
+            "brand",
+            "lattes_update",
+        ],
+    )
+
+    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+
+    return data_frame.to_dict(orient="records")
 
 
 def researcher_search_city(city_id: str = None):
@@ -339,3 +405,78 @@ def researcher_data_geral(year_):
         data_frame["count_brand"] = NaN
 
     return data_frame.fillna(0).to_dict(orient="records")
+
+
+def researcher_graduate_program_db():
+    script_sql = """
+        SELECT
+            gpr.researcher_id as id,
+            jsonb_agg(jsonb_build_object(
+            'graduate_program_id', gp.graduate_program_id,
+            'name', gp.name
+            )) as graduate_programs
+        FROM
+            graduate_program_researcher gpr
+            LEFT JOIN graduate_program gp ON gpr.graduate_program_id = gp.graduate_program_id
+        GROUP BY 
+            gpr.researcher_id
+        """
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(registry, columns=["id", "graduate_programs"])
+
+    return data_frame
+
+
+def researcher_research_group_db():
+    script_sql = """
+        SELECT 
+            rg.researcher_id as id,
+            jsonb_agg(jsonb_build_object(
+            'research_group_id', rg.research_group_id,
+            'name', rg.research_group_name
+            )) as research_groups
+        FROM 
+            research_group rg
+        GROUP BY
+            rg.researcher_id
+        """
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(registry, columns=["id", "research_groups"])
+
+    return data_frame
+
+
+def researcher_openAlex_db():
+    script_sql = """
+        SELECT 
+            researcher_id as id, 
+            h_index, 
+            relevance_score, 
+            works_count, 
+            cited_by_count, 
+            i10_index, 
+            scopus, 
+            openalex
+        FROM 
+            public.openalex_researcher;
+        """
+
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "id",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "openalex",
+        ],
+    )
+
+    return data_frame
