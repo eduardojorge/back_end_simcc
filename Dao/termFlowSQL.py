@@ -99,9 +99,11 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
 
 def lists_book_production_researcher_db(researcher_id, year, term):
 
-    filter_term = f'AND {util.web_search_filter(term, "title")}'
+    filter_term = str()
+    if term:
+        filter_term = f'AND {util.web_search_filter(term, "title")}'
 
-    sql = """SELECT 
+    script_sql = """SELECT 
                 b.id as id, 
                 b.title as title, 
                 b.year as year,
@@ -122,8 +124,8 @@ def lists_book_production_researcher_db(researcher_id, year, term):
         "BOOK",
         filter_term,
     )
-
-    reg = sgbdSQL.consultar_db(sql)
+    print(script_sql)
+    reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
         reg, columns=["id", "title", "year", "isbn", "publishing_company"]
@@ -446,9 +448,9 @@ def lists_bibliographic_production_article_researcher_db(
     qualis: str = None,
 ):
 
-    filter_term = str()
+    filter = str()
     if term:
-        filter_term = f'AND {util.web_search_filter(term, "title")}'
+        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
 
     filter_qualis = str()
     if qualis:
@@ -458,16 +460,6 @@ def lists_bibliographic_production_article_researcher_db(
         script_sql = f""" 
             SELECT DISTINCT 
                 b.id AS id,
-                op.article_institution as article_institution, 
-                array_cat(string_to_array(op.issn, ','), string_to_array(ba.issn, ',')) AS issn, 
-                op.authors_institution as authors_institution, 
-                op.abstract as abstract, 
-                op.authors as authors, 
-                op.language as language, 
-                op.citations_count as citations_count, 
-                op.pdf as pdf, 
-                op.landing_page_url as landing_page_url, 
-                op.keywords as keywords,
                 title,
                 b.year AS year,
                 type,
@@ -481,21 +473,18 @@ def lists_bibliographic_production_article_researcher_db(
                 jcr_link,
                 r.id as researcher_id
             FROM 
-                bibliographic_production b
-                LEFT JOIN bibliographic_production_article ba 
-                    ON b.id = ba.bibliographic_production_id 
-                LEFT JOIN researcher r 
-                    ON r.id = b.researcher_id
-                LEFT JOIN institution i 
-                    ON r.institution_id = i.id
-                LEFT JOIN openalex_article op 
-                    ON op.article_id = b.id
+                bibliographic_production b, 
+                bibliographic_production_article ba,
+                institution i, 
+                researcher r 
             WHERE 
-                year_ >= {year}  
-                {filter_term}
+                r.id = b.researcher_id
+                AND b.id = ba.bibliographic_production_id 
+                AND r.institution_id = i.id
+                AND year_ >= {year}  
+                {filter} 
                 {filter_qualis}
-                AND r.id = '{researcher_id}'
-                AND b.type = 'ARTICLE'
+                AND r.id = '{researcher_id}' 
             ORDER BY 
                 year DESC
             """
@@ -504,16 +493,6 @@ def lists_bibliographic_production_article_researcher_db(
         script_sql = f"""
         SELECT DISTINCT 
             b.id AS id,
-            op.article_institution as article_institution, 
-            array_cat(string_to_array(op.issn, ','), string_to_array(ba.issn, ',')) AS issn, 
-            op.authors_institution as authors_institution, 
-            op.abstract as abstract, 
-            op.authors as authors, 
-            op.language as language, 
-            op.citations_count as citations_count, 
-            op.pdf as pdf, 
-            op.landing_page_url as landing_page_url, 
-            op.keywords as keywords,
             title,
             year,
             type,
@@ -526,19 +505,23 @@ def lists_bibliographic_production_article_researcher_db(
             jcr AS jif,
             jcr_link
         FROM 
-            bibliographic_production b
-            LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
-            LEFT JOIN researcher r ON r.id = b.researcher_id
-            LEFT JOIN openalex_article op ON op.article_id = b.id
-        WHERE
-            {filter_term} 
-            {filter_qualis}
+            bibliographic_production b,
+            bibliographic_production_article ba, 
+            researcher r 
+        WHERE  
+            r.id = b.researcher_id
+            AND rf.researcher_id = r.id 
+            AND pm.id = ba.periodical_magazine_id 
+            AND b.id = ba.bibliographic_production_id 
             AND year_ >= {year} 
+            {filter} 
+            {filter_qualis}
             AND r.id = '{researcher_id}'
-            AND b.type = 'ARTICLE'
         ORDER BY
             year DESC
         """
+
+    print(script_sql)
 
     reg = sgbdSQL.consultar_db(script_sql)
 
@@ -546,16 +529,6 @@ def lists_bibliographic_production_article_researcher_db(
         reg,
         columns=[
             "id",
-            "article_institution",
-            "issn",
-            "authors_institution",
-            "abstract",
-            "authors",
-            "language",
-            "citations_count",
-            "pdf",
-            "landing_page_url",
-            "keywords",
             "title",
             "year",
             "type",
