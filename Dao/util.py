@@ -159,55 +159,37 @@ def clean_stopwords(text):
 
 def web_search_filter(string_of_terms, column):
 
-    position_to_skip = 0
+    skip = 0
     term = str()
     filter_terms = str()
-
-    def __add_parse(term):
-        return f"""
-            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
-            AND 
-            """
-
-    def __or_parse(term):
-        return f"""
-            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
-            OR
-            """
-
-    def __not_parse(term):
-        return f"""
-            ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04 
-            AND NOT 
-            """
-
-    def __priority(term):
-        end_of_priority = string_of_terms.find(")", position)
-        return web_search_filter(
-            string_of_terms[position + 1 : end_of_priority], column
-        )
-
     sintax_simbols = [";", ".", "|", "("]
-
-    grammatic = {";": __add_parse, ".": __not_parse, "|": __or_parse, "(": __priority}
+    grammatic = {";": " AND \n\n", ".": " AND NOT \n\n", "|": " OR \n\n"}
 
     for position, char in enumerate(string_of_terms):
-        print(char)
+
+        if skip:
+            skip -= 1
+            continue
+
         if char in sintax_simbols:
-            filter_terms += grammatic[char](unidecode.unidecode(term.lower()))
+            if char == "(":
+                start = position + 1
+                end = string_of_terms.find(")", start)
+                part = string_of_terms[start:end]
+                skip = len(part) + 1
+                filter_terms += web_search_filter(part, column)
+                continue
+            elif term:
+                term = unidecode.unidecode(term.lower())
+                filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
+            filter_terms += grammatic[char]
             term = str()
-            if char == str("("):
-                position_to_skip = string_of_terms.find(")", position)
-            if position_to_skip:
-                position_to_skip -= 1
-                break
         else:
             term += char
     if term:
-        filter_terms += f"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('{term}')) > 0.04"""
-        term = str()
+        filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
     return f"""({filter_terms})"""
 
 
 if __name__ == "__main__":
-    print(web_search_filter("(atlantic);(atlantica);(atlas)", "patente"))
+    print(web_search_filter("(atlantic)|(atlantica;rebeliao)|(atlas)", "patente"))
