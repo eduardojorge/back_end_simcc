@@ -355,7 +355,7 @@ def lists_bibliographic_production_article_db(
            WHERE r.id = b.researcher_id
              AND a.bibliographic_production_id = b.id
              AND i.id = r.institution_id 
-             {filter_term} 
+             AND {filter_term} 
              {filter_institution} 
              {filter_graduate_program} 
              {filter_qualis}
@@ -402,7 +402,7 @@ def lists_bibliographic_production_article_db(
             WHERE r.id = b.researcher_id
             AND a.bibliographic_production_id = b.id
             AND i.id = r.institution_id 
-            {filter_term} 
+            AND {filter_term} 
             {filter_institution} 
             {filter_graduate_program} 
             {filter_qualis}
@@ -411,6 +411,7 @@ def lists_bibliographic_production_article_db(
             ORDER BY year_ DESC
             """
 
+        print(script_sql)
         reg = sgbdSQL.consultar_db(script_sql)
 
         data_frame = pd.DataFrame(
