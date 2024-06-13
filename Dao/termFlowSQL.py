@@ -57,7 +57,9 @@ def list_research_dictionary_db(initials, type):
 
 
 def lists_patent_production_researcher_db(researcher_id, year, term):
-    filter_term = util.web_search_filter(term, "title")
+    filter_term = str()
+    if term:
+        filter_term = util.web_search_filter(term, "title")
 
     filter_year = str()
     if year:
@@ -91,7 +93,6 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
 
 
 def lists_book_production_researcher_db(researcher_id, year, term):
-
     filter_term = str()
     if term:
         filter_term = f'AND {util.web_search_filter(term, "title")}'
@@ -128,7 +129,9 @@ def lists_book_production_researcher_db(researcher_id, year, term):
 
 
 def lists_book_chapter_production_researcher_db(researcher_id, year, term):
-    filter = f'AND {util.web_search_filter(term, "title")}'
+    filter = str()
+    if term:
+        filter = f'AND {util.web_search_filter(term, "title")}'
 
     sql = """SELECT 
                 b.id as id, 

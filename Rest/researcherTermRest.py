@@ -15,7 +15,6 @@ from Model.Brand_Researcher import Brand_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.Patent_Researcher import Patent_Researcher
 from Model.PEvent_Researcher import PEvent_Researcher
-from Model.Researcher import Researcher
 from Model.Researcher_Report import Researcher_Report
 from Model.Software_Researcher import Software_Researcher
 from Model.Year_Barema import Year_Barema
