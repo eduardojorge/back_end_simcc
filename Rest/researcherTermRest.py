@@ -302,17 +302,11 @@ def bibliographic_production_researcher():
 
     list_bibliographic_production_researcher = list()
 
-    boolean_condition = request.args.get("boolean_condition")
     researcher_id = request.args.get("researcher_id")
     qualis = request.args.get("qualis")
     terms = request.args.get("terms")
     year = request.args.get("year")
     type = request.args.get("type")
-
-    if boolean_condition is None:
-        boolean_condition = "or"
-
-    terms = unidecode.unidecode(terms.lower())
 
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
         term=terms, researcher_id=researcher_id, year=year, type=type, qualis=qualis

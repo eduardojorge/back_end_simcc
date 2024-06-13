@@ -294,13 +294,12 @@ def lists_bibliographic_production_article_researcher_db(
     researcher_id: str = None,
     year: int = None,
     type: str = None,
-    boolean_condition: str = None,
     qualis: str = None,
 ):
 
     filter = str()
     if term:
-        filter = util.filterSQLRank(unidecode.unidecode(term.lower()), ";", "title")
+        filter = util.web_search_filter(term, "title")
 
     filter_qualis = str()
     if qualis:
@@ -332,7 +331,7 @@ def lists_bibliographic_production_article_researcher_db(
                 AND b.id = ba.bibliographic_production_id 
                 AND r.institution_id = i.id
                 AND year_ >= {year}  
-                {filter} 
+                AND {filter} 
                 {filter_qualis}
                 AND r.id = '{researcher_id}' 
             ORDER BY 
@@ -364,7 +363,7 @@ def lists_bibliographic_production_article_researcher_db(
             AND pm.id = ba.periodical_magazine_id 
             AND b.id = ba.bibliographic_production_id 
             AND year_ >= {year} 
-            {filter} 
+            AND {filter} 
             {filter_qualis}
             AND r.id = '{researcher_id}'
         ORDER BY
