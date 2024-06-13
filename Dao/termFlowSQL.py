@@ -708,7 +708,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             LEFT JOIN city c ON c.id = r.city_id
             LEFT JOIN institution i ON r.institution_id = i.id
             LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-            LEFT JOIN bibliographic_production b ON b.researcher_id = r.id
+            RIGHT JOIN bibliographic_production b ON b.researcher_id = r.id
         WHERE
             {term_filter}
             {institution_filter}
