@@ -375,7 +375,6 @@ def lists_bibliographic_production_article_db(
                 "jcr_link",
             ],
         )
-        return data_frame
 
     if distinct == "0":
         script_sql = f"""
@@ -422,7 +421,8 @@ def lists_bibliographic_production_article_db(
                 "jcr_link",
             ],
         )
-        return data_frame
+    print(script_sql)
+    return data_frame
 
 
 def lists_bibliographic_production_article_name_researcher_db(name, year, qualis):
