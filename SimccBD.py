@@ -320,21 +320,17 @@ def recently_updated_db(year, institution):
 def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
 ):
-    filter_term = util.web_search_filter(term, "title")
 
-    filter_institution = str()
-    if institution:
-        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
+    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filter_qualis = str()
-    if qualis:
-        filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
+    term = unidecode.unidecode(term.lower())
+    filter_term = util.filterSQLRank(term, ";", "title")
 
-    filter_graduate_program = str()
-    if graduate_program_id and graduate_program_id != "0":
-        filter_graduate_program = (
-            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
-        )
+    filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
+
+    filter_graduate_program = ""
+    if not graduate_program_id or graduate_program_id == 0:
+        filter_graduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
 
     if distinct == "1":
         script_sql = f"""
@@ -355,7 +351,7 @@ def lists_bibliographic_production_article_db(
            WHERE r.id = b.researcher_id
              AND a.bibliographic_production_id = b.id
              AND i.id = r.institution_id 
-             AND {filter_term} 
+             {filter_term} 
              {filter_institution} 
              {filter_graduate_program} 
              {filter_qualis}
@@ -363,6 +359,7 @@ def lists_bibliographic_production_article_db(
              AND b.type = 'ARTICLE'
            ORDER BY year_ DESC
            """
+        print(script_sql)
         reg = sgbdSQL.consultar_db(script_sql)
 
         data_frame = pd.DataFrame(
@@ -401,17 +398,12 @@ def lists_bibliographic_production_article_db(
             ON r.id = gpr.researcher_id
             WHERE r.id = b.researcher_id
             AND a.bibliographic_production_id = b.id
-            AND i.id = r.institution_id 
-            AND {filter_term} 
-            {filter_institution} 
-            {filter_graduate_program} 
-            {filter_qualis}
+            AND i.id = r.institution_id {filter_term} {filter_institution} {filter_graduate_program} {filter_qualis}
             AND year_ >= {year}
             AND b.type = 'ARTICLE'
             ORDER BY year_ DESC
             """
 
-        print(script_sql)
         reg = sgbdSQL.consultar_db(script_sql)
 
         data_frame = pd.DataFrame(

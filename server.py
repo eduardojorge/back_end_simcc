@@ -217,18 +217,20 @@ def recently_updated():
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
     list_bibliographic_production_article = []
-    term = request.args.get("terms")
-    if not term:
-        return jsonify([]), HTTPStatus.BAD_REQUEST
-
+    terms = request.args.get("terms")
     year = request.args.get("year")
     qualis = request.args.get("qualis")
-    university = request.args.get("university")
-    distinct = request.args.get("distinct")
-    graduate_program_id = request.args.get("graduate_program_id")
+    university = ""
+    university = str(request.args.get("university")) + ""
+    distinct = str(request.args.get("distinct")) + ""
 
+    graduate_program_id = request.args.get("graduate_program_id")
+    if graduate_program_id is None:
+        graduate_program_id = ""
+
+    termNovo = unidecode.unidecode(terms.lower())
     df_bd = SimccBD.lists_bibliographic_production_article_db(
-        term, year, qualis, university, distinct, graduate_program_id
+        termNovo, year, qualis, university, distinct, graduate_program_id
     )
 
     for i, infos in df_bd.iterrows():

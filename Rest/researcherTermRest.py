@@ -88,7 +88,7 @@ def research():
         terms, university, production_type, graduate_program_id
     )
 
-    return jsonify(list_researcher)
+    return jsonify(list_researcher), HTTPStatus.OK
 
 
 @researcherTermRest.route("/guidance_researcher", methods=["GET"])
