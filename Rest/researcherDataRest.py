@@ -7,7 +7,6 @@ import Dao.generalSQL as generalSQL
 import Dao.researcherSQL as researcherSQL
 from Dao import sgbdSQL
 from Model.City import City
-from Model.Researcher import Researcher
 from rest_imageResearcher import download_image
 
 researcherDataRest = Blueprint("researcherDataRest", __name__)
@@ -43,12 +42,7 @@ def byCity():
     researcher_list = list()
     if city_id == None:
         for Index, researcher in researchers.iterrows():
-            area = str(";").join(
-                [
-                    great_area.strip().replace("_", " ")
-                    for great_area in researcher["area"].split(";")
-                ]
-            )
+            area = str(";").join([great_area.strip().replace("_", " ") for great_area in researcher["area"].split(";")])  # fmt: skip
             dict_researcher = {
                 "id": researcher["id"],
                 "researcher_name": researcher["researcher_name"],

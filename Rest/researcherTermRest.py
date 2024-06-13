@@ -80,13 +80,11 @@ def research():
     if not terms:
         return jsonify([]), HTTPStatus.BAD_REQUEST
 
-    if graduate_program_id := request.args.get("graduate_program_id"):
-        graduate_program_id = str()
-
+    graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
     production_type = request.args.get("type")
 
-    list_researcher = termFlowSQL.list_researchers_originals_words_db2(
+    list_researcher = termFlowSQL.list_researchers_originals_words_db(
         terms, university, production_type, graduate_program_id
     )
 

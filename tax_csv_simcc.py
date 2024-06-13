@@ -157,24 +157,12 @@ for i, infos in df.iterrows():
             df1_article = list_researchers_article_abstract_tax_db(
                 str(infos[CODIGO]), term, word, "ARTICLE"
             )
-            # df1_abstract =  list_researchers_article_abstract_tax_db(str(infos[TAX]),str(infos[TERMOS_P]),str(infos[TERMOS_I]),str(infos[TERMOS]),"ABSTRACT",str(infos[TAX_ID]))
 
             if x != 0:
-                # df_patent = pd.concat([df_patent, df1_patent], axis=0, join='inner')
                 df_article = pd.concat([df_article, df1_article], axis=0, join="inner")
-                #  df_abstract = pd.concat([df_abstract, df1_abstract], axis=0, join='inner')
             else:
-                # df_patent=df1_patent
                 df_article = df1_article
-                # df_abstract=df1_abstract
 
             x = x + 1
-# print(df)
 print("Fim " + str(x))
-# df_patent.to_csv('c:\\simccv3\\patent_tax.csv')
 df_article.to_csv("c:\\simccv3\\article_tax.csv")
-# df_abstract.to_csv('c:\\simccv3\\abstract_tax.csv')
-
-
-# print(termFlowSQL.list_researchers_originals_words_db("biomassa","","ABSTRACT","or",""))
-# print(areaFlowSQL.lista_researcher_patent_db("biomassa","",""))

@@ -7,7 +7,7 @@ import pandas as pd
 
 import logging
 from datetime import datetime
-import Dao.sgbdSQL as sgbdsql
+import Dao.sgbdSQL as sgbdSQL
 import project as project
 
 
@@ -23,7 +23,7 @@ def last_update(id: str):
 
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
 
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     if registry:
         return registry[0][0]
@@ -76,7 +76,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 

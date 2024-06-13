@@ -1,260 +1,6 @@
-import Dao.sgbdSQL as sgbdsql
+import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 from numpy import NaN
-from Dao import util
-
-
-def lista_researcher_patent_db(term, institution, graduate_program_id):
-    term_filter = util.web_search_filter(term, "p.title")
-
-    institution_filter = str()
-    if institution:
-        institution_filter = util.filterSQL(institution, ";", "or", "i.name")
-
-    filter_graduate_program = str()
-    if graduate_program_id:
-        filter_graduate_program = f"""
-            AND r.id IN (
-                SELECT DISTINCT gpr.researcher_id 
-                FROM graduate_program_researcher gpr
-                WHERE gpr.graduate_program_id = '{graduate_program_id}')
-            """
-
-    script_sql = f"""
-        SELECT
-            r.id AS id,
-            r.name AS researcher_name,
-            r.lattes_id AS lattes,
-            COUNT(DISTINCT p.id) as among,
-            rp.articles AS articles,
-            rp.book_chapters AS book_chapters,
-            rp.book AS book,
-            rp.patent AS patent,
-            rp.software AS software,
-            rp.brand AS brand,
-            i.name AS university,
-            r.abstract AS abstract,
-            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
-            rp.city AS city,
-            r.orcid AS orcid,
-            i.image AS image_university,
-            r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
-        FROM
-            researcher r
-            LEFT JOIN city c ON c.id = r.city_id
-            LEFT JOIN institution i ON r.institution_id = i.id
-            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-            RIGHT JOIN patent p ON p.researcher_id = r.id
-        WHERE
-            {term_filter}
-            {institution_filter}
-            {filter_graduate_program}
-        GROUP BY
-            r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
-            rp.book, rp.software, rp.brand, i.name, r.abstract,
-            rp.great_area, rp.city, r.orcid, i.image, r.graduation,
-            r.last_update, rp.patent;
-            """
-    registry = sgbdsql.consultar_db(script_sql)
-
-    data_frame = pd.DataFrame(
-        registry,
-        columns=[
-            "id",
-            "name",
-            "lattes_id",
-            "among",
-            "articles",
-            "book_chapters",
-            "book",
-            "patent",
-            "software",
-            "brand",
-            "university",
-            "abstract",
-            "area",
-            "city",
-            "orcid",
-            "image_university",
-            "graduation",
-            "lattes_update",
-        ],
-    )
-
-    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-
-    return data_frame.fillna("").to_dict(orient="records")
-
-
-def lista_researcher_event_db(term, institution, graduate_program_id):
-    term_filter = util.web_search_filter(term, "p.title")
-
-    institution_filter = str()
-    if institution:
-        institution_filter = util.filterSQL(institution, ";", "or", "i.name")
-
-    filter_graduate_program = str()
-    if graduate_program_id:
-        filter_graduate_program = f"""
-            AND r.id IN (
-                SELECT DISTINCT gpr.researcher_id 
-                FROM graduate_program_researcher gpr
-                WHERE gpr.graduate_program_id = '{graduate_program_id}')
-            """
-
-    script_sql = f"""
-        SELECT
-            r.id AS id,
-            r.name AS researcher_name,
-            r.lattes_id AS lattes,
-            0 as among,
-            rp.articles AS articles,
-            rp.book_chapters AS book_chapters,
-            rp.book AS book,
-            rp.patent AS patent,
-            rp.software AS software,
-            rp.brand AS brand,
-            i.name AS university,
-            r.abstract AS abstract,
-            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
-            rp.city AS city,
-            r.orcid AS orcid,
-            i.image AS image_university,
-            r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
-        FROM
-            researcher r
-            LEFT JOIN city c ON c.id = r.city_id
-            LEFT JOIN institution i ON r.institution_id = i.id
-            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-            LEFT JOIN participation_events p ON p.researcher_id = r.id
-        WHERE
-            {term_filter}
-            {institution_filter}
-            {filter_graduate_program};
-            """
-    registry = sgbdsql.consultar_db(script_sql)
-
-    data_frame = pd.DataFrame(
-        registry,
-        columns=[
-            "id",
-            "name",
-            "lattes_id",
-            "among",
-            "articles",
-            "book_chapters",
-            "book",
-            "patent",
-            "software",
-            "brand",
-            "university",
-            "abstract",
-            "area",
-            "city",
-            "orcid",
-            "image_university",
-            "graduation",
-            "lattes_update",
-        ],
-    )
-
-    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-
-    return data_frame.fillna("").to_dict(orient="records")
-
-
-def city_search(city_name: str = None) -> str:
-    if city_name == None:
-        return None
-    sql = """
-        SELECT id FROM city WHERE LOWER(unaccent(name)) = LOWER(unaccent('{filter}'));
-        """.format(
-        filter=city_name
-    )
-    return pd.DataFrame(sgbdsql.consultar_db(sql=sql), columns=["id"])["id"][0]
-
-
-def lista_researcher_full_name_db(name, graduate_program_id):
-    filter_name = f"r.name ILIKE '{name}%'"
-
-    filter_graduate_program = str()
-    if graduate_program_id:
-        filter_graduate_program = f"""
-            AND r.id IN (
-                SELECT DISTINCT gpr.researcher_id 
-                FROM graduate_program_researcher gpr
-                WHERE gpr.graduate_program_id = '{graduate_program_id}')
-            """
-
-    script_sql = f"""
-        SELECT
-            r.id AS id,
-            r.name AS researcher_name,
-            r.lattes_id AS lattes,
-            0 as among,
-            rp.articles AS articles,
-            rp.book_chapters AS book_chapters,
-            rp.book AS book,
-            rp.patent AS patent,
-            rp.software AS software,
-            rp.brand AS brand,
-            i.name AS university,
-            r.abstract AS abstract,
-            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
-            rp.city AS city,
-            r.orcid AS orcid,
-            i.image AS image_university,
-            r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
-        FROM
-            researcher r
-            LEFT JOIN city c ON c.id = r.city_id
-            LEFT JOIN institution i ON r.institution_id = i.id
-            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-        WHERE
-            {filter_name}
-            {filter_graduate_program};
-            """
-    registry = sgbdsql.consultar_db(script_sql)
-
-    data_frame = pd.DataFrame(
-        registry,
-        columns=[
-            "id",
-            "name",
-            "lattes_id",
-            "among",
-            "articles",
-            "book_chapters",
-            "book",
-            "patent",
-            "software",
-            "brand",
-            "university",
-            "abstract",
-            "area",
-            "city",
-            "orcid",
-            "image_university",
-            "graduation",
-            "lattes_update",
-        ],
-    )
-
-    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-
-    return data_frame.fillna("").to_dict(orient="records")
 
 
 def researcher_search_city(city_id: str = None):
@@ -279,7 +25,7 @@ def researcher_search_city(city_id: str = None):
                 researcher_production rp ON rp.researcher_id = r.id
             """
 
-        registry = sgbdsql.consultar_db(sql=script_sql)
+        registry = sgbdSQL.consultar_db(sql=script_sql)
         data_frame = pd.DataFrame(
             registry,
             columns=[
@@ -295,76 +41,72 @@ def researcher_search_city(city_id: str = None):
 
     else:
         script_sql = f"""
-            SELECT 
-                DISTINCT r.id AS id,
-                opr.h_index,
-                opr.relevance_score,
-                opr.works_count,
-                opr.cited_by_count,
-                opr.i10_index,
-                opr.scopus,
-                opr.openalex,
-                r.name AS name,
-                i.name AS institution,
+        SELECT
+                r.id AS id,
+                r.name AS researcher_name,
+                r.lattes_id AS lattes,
+                0 as among,
                 rp.articles AS articles,
                 rp.book_chapters AS book_chapters,
                 rp.book AS book,
-                r.lattes_id AS lattes,
-                r.lattes_10_id AS lattes_10_id,
-                r.abstract AS abstract,
-                UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
-                c.name AS city,
-                i.image AS image,
-                r.orcid AS orcid,
-                r.graduation AS graduation,
                 rp.patent AS patent,
                 rp.software AS software,
                 rp.brand AS brand,
-                TO_CHAR(r.last_update, 'dd/mm/yyyy') AS lattes_update
+                i.name AS university,
+                r.abstract AS abstract,
+                UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
+                rp.city AS city,
+                r.orcid AS orcid,
+                i.image AS image_university,
+                r.graduation AS graduation,
+                to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
             FROM
                 researcher r
-                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
                 LEFT JOIN city c ON c.id = r.city_id
                 LEFT JOIN institution i ON r.institution_id = i.id
-                LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
-                LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
-            WHERE
-                r.city_id = '{city_id}';
-            """
-        registry = sgbdsql.consultar_db(script_sql)
+                LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+            GROUP BY
+                r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
+                rp.book, rp.software, rp.brand, i.name, r.abstract,
+                rp.great_area, rp.city, r.orcid, i.image, r.graduation,
+                r.last_update, rp.patent;
+                """
+        registry = sgbdSQL.consultar_db(script_sql)
 
         data_frame = pd.DataFrame(
             registry,
             columns=[
                 "id",
-                "h_index",
-                "relevance_score",
-                "works_count",
-                "cited_by_count",
-                "i10_index",
-                "scopus",
-                "openalex",
                 "name",
-                "university",
+                "lattes_id",
+                "among",
                 "articles",
                 "book_chapters",
                 "book",
-                "lattes_id",
-                "lattes_10_id",
-                "abstract",
-                "area",
-                "city",
-                "image_university",
-                "orcid",
-                "graduation",
                 "patent",
                 "software",
                 "brand",
+                "university",
+                "abstract",
+                "area",
+                "city",
+                "orcid",
+                "image_university",
+                "graduation",
                 "lattes_update",
             ],
         )
 
-        return data_frame.fillna(0).to_dict(orient="records")
+        data_frame = data_frame.merge(
+            researcher_graduate_program_db(), on="id", how="left"
+        )
+        data_frame = data_frame.merge(
+            researcher_research_group_db(), on="id", how="left"
+        )
+        data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+        data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+
+        return data_frame.fillna("").to_dict(orient="records")
 
 
 def researcher_data_geral(year_):
@@ -388,7 +130,7 @@ def researcher_data_geral(year_):
             g.year;
         """
 
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(
         registre,
@@ -422,7 +164,7 @@ def researcher_data_geral(year_):
             bp.year;
         """
 
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_book"])
 
@@ -446,7 +188,7 @@ def researcher_data_geral(year_):
         ORDER BY
             bp.year;
         """
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_book_chapter"])
 
@@ -472,7 +214,7 @@ def researcher_data_geral(year_):
             p.development_year;
         """
 
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(
         registre,
@@ -502,7 +244,7 @@ def researcher_data_geral(year_):
             sw.year
         """
 
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_software"])
 
@@ -526,7 +268,7 @@ def researcher_data_geral(year_):
             rr.year
         """
 
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_report"])
 
@@ -550,7 +292,7 @@ def researcher_data_geral(year_):
         ORDER BY
             bp.year;
     """
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_article"])
 
@@ -569,7 +311,7 @@ def researcher_data_geral(year_):
         GROUP BY
             br.year
     """
-    registre = sgbdsql.consultar_db(script_sql)
+    registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["year", "count_brand"])
 
@@ -596,7 +338,7 @@ def researcher_graduate_program_db():
         GROUP BY 
             gpr.researcher_id
         """
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(registry, columns=["id", "graduate_programs"])
 
@@ -616,7 +358,7 @@ def researcher_research_group_db():
         GROUP BY
             rg.researcher_id
         """
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(registry, columns=["id", "research_groups"])
 
@@ -637,7 +379,7 @@ def researcher_openAlex_db():
         FROM 
             public.openalex_researcher;
         """
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
         registry,
@@ -676,7 +418,7 @@ def researcher_subsidy_db():
         GROUP BY
             s.researcher_id
         """
-    registry = sgbdsql.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(registry, columns=["id", "subsidy"])
 

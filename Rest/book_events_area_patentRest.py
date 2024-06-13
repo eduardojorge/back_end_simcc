@@ -4,7 +4,7 @@ from Model.Researcher import Researcher
 import Dao.areaFlowSQL as areaFlowSQL
 from flask_cors import cross_origin
 from http import HTTPStatus
-from Dao import researcherSQL
+
 
 areaRest = Blueprint("areaRest", __name__)
 
@@ -20,7 +20,7 @@ def researcherEvent():
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
 
-    list_researcher_area_expertise = researcherSQL.lista_researcher_event_db(
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_event_db(
         term, university, graduate_program_id
     )
 
@@ -37,7 +37,7 @@ def researcherPatent():
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
     print("alow")
-    list_researcher_area_expertise = researcherSQL.lista_researcher_patent_db(
+    list_researcher_area_expertise = areaFlowSQL.lista_researcher_patent_db(
         term, university, graduate_program_id
     )
 
@@ -49,14 +49,14 @@ def researcherPatent():
 def researcherParticipationEvent():
     term = request.args.get("term")
     if not term:
-        return jsonify([]), HTTPStatus.OK
+        return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
 
     list_researcher = areaFlowSQL.lista_researcher_participation_event_db(
         term, university, graduate_program_id
     )
-    return jsonify(list_researcher), 200
+    return jsonify(list_researcher), HTTPStatus.OK
 
 
 @areaRest.route("/researcherBook", methods=["GET"])
@@ -132,6 +132,8 @@ def area_specialitInitials():
 def researcherArea_expertise():
 
     area = request.args.get("area")
+    if not area:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
     university = request.args.get("university")
 
     list_researcher_area_expertise = areaFlowSQL.lista_researcher_area_expertise_db(
@@ -144,7 +146,6 @@ def researcherArea_expertise():
 @areaRest.route("/researcherArea_specialty", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_specialty():
-    list_researcher_area_expertise = []
 
     area = request.args.get("area_specialty")
     if not area:
