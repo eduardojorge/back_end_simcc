@@ -664,7 +664,6 @@ def lista_researcher_id_db(researcher_id):
 
 def list_researchers_originals_words_db(terms, institution, type_, graduate_program_id):
     filter_type = str()
-
     if type_ == "ARTICLE":
         term_filter = util.web_search_filter(terms, "title")
         filter_type = " AND b.type='ARTICLE' "
@@ -709,7 +708,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             LEFT JOIN city c ON c.id = r.city_id
             LEFT JOIN institution i ON r.institution_id = i.id
             LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
-            LEFT JOIN bibliographic_production b ON rp.researcher_id = r.id
+            LEFT JOIN bibliographic_production b ON b.researcher_id = r.id
         WHERE
             {term_filter}
             {institution_filter}
