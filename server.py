@@ -151,7 +151,7 @@ def researcherName():
         return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
 
-    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db_(
+    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db(
         name, graduate_program_id
     )
     return jsonify(list_researcher), HTTPStatus.OK

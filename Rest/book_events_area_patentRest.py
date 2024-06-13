@@ -4,7 +4,7 @@ from Model.Researcher import Researcher
 import Dao.areaFlowSQL as areaFlowSQL
 from flask_cors import cross_origin
 from http import HTTPStatus
-
+from Dao import researcherSQL
 
 areaRest = Blueprint("areaRest", __name__)
 
@@ -12,7 +12,6 @@ areaRest = Blueprint("areaRest", __name__)
 @areaRest.route("/researcherEvent", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherEvent():
-    list_researcher_area_expertise = []
 
     term = request.args.get("term")
     if not term:
@@ -21,7 +20,7 @@ def researcherEvent():
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
 
-    list_researcher_area_expertise = areaFlowSQL.lista_researcher_event_db(
+    list_researcher_area_expertise = researcherSQL.lista_researcher_event_db(
         term, university, graduate_program_id
     )
 
@@ -37,8 +36,8 @@ def researcherPatent():
 
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
-
-    list_researcher_area_expertise = areaFlowSQL.lista_researcher_patent_db(
+    print("alow")
+    list_researcher_area_expertise = researcherSQL.lista_researcher_patent_db(
         term, university, graduate_program_id
     )
 
