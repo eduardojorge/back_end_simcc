@@ -15,7 +15,7 @@ def city_search(city_name: str = None) -> str:
 
 
 def lista_researcher_full_name_db_(name, graduate_program_id):
-    filter_name = f"""r.name ILIKE '{name}%'"""  # fmt: skip
+    filter_name = f"r.name ILIKE '{name}%'"
 
     filter_graduate_program = str()
     if graduate_program_id:
@@ -55,7 +55,6 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
             {filter_name}
             {filter_graduate_program};
             """
-    print(script_sql)
     registry = db.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
@@ -63,21 +62,21 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
         columns=[
             "id",
             "name",
-            "university",
+            "lattes_id",
+            "among",
             "articles",
             "book_chapters",
             "book",
-            "lattes_id",
-            "lattes_10_id",
-            "abstract",
-            "area",
-            "city",
-            "image_university",
-            "orcid",
-            "graduation",
             "patent",
             "software",
             "brand",
+            "university",
+            "abstract",
+            "area",
+            "city",
+            "orcid",
+            "image_university",
+            "graduation",
             "lattes_update",
         ],
     )
@@ -85,8 +84,9 @@ def lista_researcher_full_name_db_(name, graduate_program_id):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
 
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna("").to_dict(orient="records")
 
 
 def researcher_search_city(city_id: str = None):
@@ -469,7 +469,6 @@ def researcher_openAlex_db():
         FROM 
             public.openalex_researcher;
         """
-
     registry = db.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
@@ -485,5 +484,32 @@ def researcher_openAlex_db():
             "openalex",
         ],
     )
+
+    return data_frame.fillna("")
+
+
+def researcher_subsidy_db():
+    script_sql = """
+        SELECT 
+            s.researcher_id as id,
+            jsonb_agg(jsonb_build_object(
+            'id', s.id,
+            'modality_code', s.modality_code, 
+            'modality_name', s.modality_name, 
+            'call_title', s.call_title,
+            'category_level_code', s.category_level_code, 
+            'funding_program_name', s.funding_program_name, 
+            'institute_name', s.institute_name, 
+            'aid_quantity', s.aid_quantity, 
+            'scholarship_quantity', s.scholarship_quantity
+            )) as subsidy
+        FROM
+            subsidy s
+        GROUP BY
+            s.researcher_id
+        """
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(registry, columns=["id", "subsidy"])
 
     return data_frame.fillna("")
