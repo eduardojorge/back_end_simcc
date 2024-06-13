@@ -8,6 +8,7 @@ from http import HTTPStatus
 import Dao.areaFlowSQL
 import Dao.generalSQL
 import Dao.researcherSQL
+import Dao.termFlowSQL
 import project
 import SimccBD as SimccBD
 from Model.Magazine import Magazine
@@ -151,7 +152,7 @@ def researcherName():
         return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
 
-    list_researcher = Dao.researcherSQL.lista_researcher_full_name_db(
+    list_researcher = Dao.areaFlowSQL.lista_researcher_full_name_db(
         name, graduate_program_id
     )
     return jsonify(list_researcher), HTTPStatus.OK
