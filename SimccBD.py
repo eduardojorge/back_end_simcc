@@ -320,88 +320,55 @@ def recently_updated_db(year, institution):
 def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
 ):
+    filter_institution = str()
+    if institution:
+        filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filter_institution = util.filterSQL(institution, ";", "or", "i.name")
-
-    term = unidecode.unidecode(term.lower())
-    filter_term = util.filterSQLRank(term, ";", "title")
+    filter_term = util.web_search_filter(term, "title")
 
     filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
-    filter_graduate_program = ""
+    filter_graduate_program = str()
     if not graduate_program_id or graduate_program_id == 0:
-        filter_graduate_program = "AND gpr.graduate_program_id=" + graduate_program_id
+        filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
 
     if distinct == "1":
-        script_sql = f"""
-            SELECT DISTINCT title,
-                 r.id AS researcher_id,
-                 year_,
-                 doi,
-                 qualis,
-                 periodical_magazine_name AS magazine,
-                 a.jcr,
-                 a.jcr_link
-            FROM institution i,
-                 public.bibliographic_production b,
-                 bibliographic_production_article a,
-                 researcher r
-            LEFT JOIN graduate_program_researcher gpr
-              ON r.id = gpr.researcher_id
-           WHERE r.id = b.researcher_id
-             AND a.bibliographic_production_id = b.id
-             AND i.id = r.institution_id 
-             {filter_term} 
-             {filter_institution} 
-             {filter_graduate_program} 
-             {filter_qualis}
-             AND year_ >= {year}
-             AND b.type = 'ARTICLE'
-           ORDER BY year_ DESC
-           """
-        print(script_sql)
-        reg = sgbdSQL.consultar_db(script_sql)
-
-        data_frame = pd.DataFrame(
-            reg,
-            columns=[
-                "title",
-                "researcher_id",
-                "year",
-                "doi",
-                "qualis",
-                "magazine",
-                "jcr",
-                "jcr_link",
-            ],
-        )
-
-    if distinct == "0":
         script_sql = f"""
             SELECT DISTINCT title,
                 r.id AS researcher_id,
                 year_,
                 doi,
-                a.qualis as qualis,
+                qualis,
                 periodical_magazine_name AS magazine,
-                r.name AS researcher,
-                r.lattes_10_id AS lattes_10_id,
-                r.lattes_id AS lattes_id,
                 a.jcr,
-                a.jcr_link
-            FROM institution i,
-                public.bibliographic_production b,
-                bibliographic_production_article a,
-                researcher r
-            LEFT JOIN graduate_program_researcher gpr
-            ON r.id = gpr.researcher_id
-            WHERE r.id = b.researcher_id
-            AND a.bibliographic_production_id = b.id
-            AND i.id = r.institution_id {filter_term} {filter_institution} {filter_graduate_program} {filter_qualis}
-            AND year_ >= {year}
-            AND b.type = 'ARTICLE'
-            ORDER BY year_ DESC
-            """
+                a.jcr_link,
+                op.article_institution, 
+                op.issn, 
+                op.authors_institution, 
+                op.abstract, 
+                op.authors, 
+                op.language, 
+                op.citations_count, 
+                op.pdf, 
+                op.landing_page_url, 
+                op.keywords
+            FROM 
+                public.bibliographic_production b
+                LEFT JOIN researcher r ON r.id = b.researcher_id
+                LEFT JOIN institution i ON i.id = r.institution_id
+                LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
+                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+                LEFT JOIN openalex_article op ON op.article_id = b.id 
+            WHERE 
+                year_ >= {year}
+                AND b.type = 'ARTICLE'
+                AND {filter_term} 
+                {filter_institution} 
+                {filter_graduate_program} 
+                {filter_qualis}
+            ORDER BY 
+                year_ DESC
+                """
 
         reg = sgbdSQL.consultar_db(script_sql)
 
@@ -414,14 +381,87 @@ def lists_bibliographic_production_article_db(
                 "doi",
                 "qualis",
                 "magazine",
-                "researcher",
-                "lattes_10_id",
-                "lattes_id",
                 "jcr",
                 "jcr_link",
+                "article_institution",
+                "issn",
+                "authors_institution",
+                "abstract",
+                "authors",
+                "language",
+                "citations_count",
+                "pdf",
+                "landing_page_url",
+                "keywords",
             ],
         )
-    print(script_sql)
+    elif distinct == "0":
+        script_sql = f"""
+            SELECT 
+                DISTINCT title,
+                r.id,
+                year_,
+                doi,
+                qualis,
+                periodical_magazine_name AS magazine,
+                r.lattes_10_id AS lattes_10_id,
+                r.lattes_id AS lattes_id,
+                a.jcr,
+                a.jcr_link,
+                op.article_institution, 
+                op.issn, 
+                op.authors_institution, 
+                op.abstract, 
+                op.authors, 
+                op.language, 
+                op.citations_count, 
+                op.pdf, 
+                op.landing_page_url, 
+                op.keywords
+            FROM 
+                public.bibliographic_production b
+                LEFT JOIN researcher r ON r.id = b.researcher_id
+                LEFT JOIN institution i ON i.id = r.institution_id
+                LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
+                LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
+                LEFT JOIN openalex_article op ON op.article_id = b.id 
+            WHERE 
+                year_ >= {year}
+                AND {filter_term} 
+                {filter_institution} 
+                {filter_graduate_program} 
+                {filter_qualis}
+                AND b.type = 'ARTICLE'
+            ORDER BY 
+                year_ DESC;
+            """
+
+        reg = sgbdSQL.consultar_db(script_sql)
+        data_frame = pd.DataFrame(
+            reg,
+            columns=[
+                "title",
+                "researcher_id",
+                "year",
+                "doi",
+                "qualis",
+                "name_periodical",
+                "researcher",
+                "lattes_id",
+                "jif",
+                "jcr_link",
+                "article_institution",
+                "issn",
+                "authors_institution",
+                "abstract",
+                "authors",
+                "language",
+                "citations_count",
+                "pdf",
+                "landing_page_url",
+                "keywords",
+            ],
+        )
     return data_frame
 
 

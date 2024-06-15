@@ -17,6 +17,7 @@ from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
+from dotenv import load_dotenv
 
 try:
     project.project_env = sys.argv[1]
@@ -218,20 +219,19 @@ def recently_updated():
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
     list_bibliographic_production_article = []
+
     terms = request.args.get("terms")
+    if not terms:
+        return jsonify([]), HTTPStatus.BAD_REQUEST
+
     year = request.args.get("year")
     qualis = request.args.get("qualis")
-    university = ""
-    university = str(request.args.get("university")) + ""
-    distinct = str(request.args.get("distinct")) + ""
-
+    university = request.args.get("university")
+    distinct = request.args.get("distinct")
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
 
-    termNovo = unidecode.unidecode(terms.lower())
     df_bd = SimccBD.lists_bibliographic_production_article_db(
-        termNovo, year, qualis, university, distinct, graduate_program_id
+        terms, year, qualis, university, distinct, graduate_program_id
     )
 
     for i, infos in df_bd.iterrows():
@@ -247,6 +247,16 @@ def bibliographic_production_article():
                 "lattes_id": str(infos.lattes_id),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
+                "article_institution": infos.article_institution,
+                "issn": infos.issn,
+                "authors_institution": infos.authors_institution,
+                "abstract": infos.abstract,
+                "authors": infos.authors,
+                "language": infos.language,
+                "citations_count": infos.citations_count,
+                "pdf": infos.pdf,
+                "landing_page_url": infos.landing_page_url,
+                "keywords": infos.keywords,
             }
 
         if distinct == "1":
@@ -259,6 +269,16 @@ def bibliographic_production_article():
                 "name_periodical": str(infos.magazine),
                 "jif": str(infos.jcr),
                 "jcr_link": str(infos.jcr_link),
+                "article_institution": infos.article_institution,
+                "issn": infos.issn,
+                "authors_institution": infos.authors_institution,
+                "abstract": infos.abstract,
+                "authors": infos.authors,
+                "language": infos.language,
+                "citations_count": infos.citations_count,
+                "pdf": infos.pdf,
+                "landing_page_url": infos.landing_page_url,
+                "keywords": infos.keywords,
             }
 
         list_bibliographic_production_article.append(bibliographic_production_article_)
@@ -267,6 +287,7 @@ def bibliographic_production_article():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     app.run(
         debug=True,
         port=port,
