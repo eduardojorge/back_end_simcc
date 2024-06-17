@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import os
 import zipfile
 import pandas as pd
-
 import logging
 from datetime import datetime
 import Dao.sgbdSQL as sgbdSQL
@@ -19,11 +18,9 @@ def get_data_att(id: str) -> datetime:
 
 
 def last_update(id: str):
-    project.project_env = "4"
-
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
 
-    registry = sgbdSQL.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql, database=os.environ["ADM_DATABASE"])
 
     if registry:
         return registry[0][0]

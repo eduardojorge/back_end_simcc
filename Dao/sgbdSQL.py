@@ -18,7 +18,7 @@ def execScript_db(sql):
     cur.close()
 
 
-def consultar_db(sql, database="simcc_"):
+def consultar_db(sql, database=None):
     try:
         con = conecta_db(database=database)
         cur = con.cursor()
