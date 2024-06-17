@@ -39,11 +39,19 @@ def consultar_db(sql, database=None):
 
 
 def conecta_db(
-    password=os.getenv("DATABASE_PASSWORD") or "root",
-    host=os.getenv("DATABASE_HOST") or "localhost",
-    database=os.getenv("DATABASE_NAME") or "simcc_",
-    user=os.getenv("DATABASE_USER") or "postgres",
+    password=None,
+    host=None,
+    database=None,
+    user=None,
 ):
+    if not password:
+        password = os.getenv("DATABASE_PASSWORD") or "root"
+    if not host:
+        host = os.getenv("DATABASE_HOST") or "localhost"
+    if not database:
+        database = os.getenv("DATABASE_NAME") or "simcc_"
+    if not user:
+        user = os.getenv("DATABASE_USER") or "postgres"
     print(
         password,
         host,
