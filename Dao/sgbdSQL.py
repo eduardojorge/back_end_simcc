@@ -52,12 +52,7 @@ def conecta_db(
         database = os.getenv("DATABASE_NAME") or "simcc_"
     if not user:
         user = os.getenv("DATABASE_USER") or "postgres"
-    print(
-        password,
-        host,
-        database,
-        user,
-    )
+
     con = psycopg2.connect(
         host=host,
         database=database,

@@ -47,12 +47,11 @@ def get_doc(lattes_id: str) -> str:
 
 def get_researchers():
     script_sql = """
-    SELECT name, lattes_id FROM researcher;
+    SELECT id, name, lattes_id FROM researcher;
     """
-
     registry = sgbdSQL.consultar_db(script_sql)
 
-    return pd.DataFrame(registry, columns=["name", "lattes_id"])
+    return pd.DataFrame(registry, columns=["id", "name", "lattes_id"])
 
 
 def get_institution(lattes_id: str) -> str:
@@ -97,11 +96,6 @@ def set_year(year: Year_Barema):
 
 if __name__ == "__main__":
 
-    try:
-        project.project_env = sys.argv[1]
-    except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
-
     year_setup = Year_Barema()
     set_year(year_setup)
 
@@ -111,26 +105,21 @@ if __name__ == "__main__":
 
     lista = list()
     for Index, Data in data_frame_researchers.iterrows():
-
-        json_barema = researcher_production_db(
-            "",
-            Data["lattes_id"],
-            year_setup,
-        )[0]
-
+        print(Index, end=" ")
+        json_barema = researcher_production_db("", Data["lattes_id"], year_setup)[0]  # fmt: skip
+        json_barema["id"] = Data["id"]
         json_barema["name"] = Data["name"]
 
         json_barema["first_doc"] = get_doc(Data["lattes_id"])
 
         json_barema["institution"] = get_institution(Data["lattes_id"])
-
         ind_prod = 0
-
         for key, value in qualis_barema.items():
             if json_barema[key]:
                 ind_prod += qualis_barema[key] * json_barema[key]
 
         json_barema["ind_prod"] = ind_prod
+
         lista.append(json_barema)
 
     data_frame_dados = pd.DataFrame(lista)
@@ -142,5 +131,42 @@ if __name__ == "__main__":
             "event_organization",
         ]
     )
+    script_sql = """
+        SELECT
+            bp.researcher_id as id,
+            MIN(CASE WHEN bp.type = 'BOOK' THEN bp.year END) AS min_book_year,
+            MIN(CASE WHEN bp.type = 'BOOK_CHAPTER' THEN bp.year END) AS min_book_chapter_year,
+            MIN(CASE WHEN bp.type = 'ARTICLE' THEN bp.year END) AS min_article_year,
+            MIN(CASE WHEN bp.type = 'WORK_IN_EVENT' THEN bp.year END) AS min_work_in_event_year,
+            MIN(CASE WHEN bp.type = 'TEXT_IN_NEWSPAPER_MAGAZINE' THEN bp.year END) AS min_text_in_newspaper_magazine_year,
+            MIN(p.development_year) as min_patent,
+            MIN(g.year) as min_guidance,
+            MIN(s.year) as min_software
+        FROM 
+            bibliographic_production bp
+            LEFT JOIN researcher r ON r.id = bp.researcher_id
+            LEFT JOIN patent p ON r.id = p.researcher_id
+            LEFT JOIN guidance g ON r.id = g.researcher_id
+            LEFT JOIN software s ON r.id = s.researcher_id
+            LEFT JOIN brand b ON r.id = b.researcher_id
+        GROUP BY 
+            bp.researcher_id
+        """
+    registry = sgbdSQL.consultar_db(script_sql)
 
+    df = pd.DataFrame(
+        registry,
+        columns=[
+            "id",
+            "min_book_year",
+            "min_book_chapter_year",
+            "min_article_year",
+            "min_work_in_event_year",
+            "min_text_in_newspaper_magazine_year",
+            "min_patent_year",
+            "min_guidance_year",
+            "min_software",
+        ],
+    )
+    data_frame_dados = pd.merge(data_frame_dados, df, on="id", how="left")
     data_frame_dados.to_csv("Files/researcher_group.csv")
