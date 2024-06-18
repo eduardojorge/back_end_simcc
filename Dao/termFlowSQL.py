@@ -256,7 +256,6 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
         filterNature,
         filter,
     )
-    # print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
     print(sql)
@@ -299,7 +298,7 @@ def lists_bibliographic_production_article_researcher_db(
 
     filter = str()
     if term:
-        filter = util.web_search_filter(term, "title")
+        filter = f'AND {util.web_search_filter(term, "title")}'
 
     filter_qualis = str()
     if qualis:
@@ -331,7 +330,7 @@ def lists_bibliographic_production_article_researcher_db(
                 AND b.id = ba.bibliographic_production_id 
                 AND r.institution_id = i.id
                 AND year_ >= {year}  
-                AND {filter} 
+                {filter} 
                 {filter_qualis}
                 AND r.id = '{researcher_id}' 
             ORDER BY 
