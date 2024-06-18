@@ -1,7 +1,5 @@
 import sys
-
 import pandas as pd
-
 import project
 from Dao import sgbdSQL
 from Dao.resarcher_baremaSQL import researcher_production_db
