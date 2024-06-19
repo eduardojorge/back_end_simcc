@@ -245,7 +245,6 @@ def software_production_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def pevent_researcher():
     list_pevent_researcher = []
-    # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 

@@ -187,5 +187,6 @@ def web_search_filter(string_of_terms, column):
         else:
             term += char
     if term:
+        term = unidecode.unidecode(term.lower())
         filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
     return f"""({filter_terms})"""

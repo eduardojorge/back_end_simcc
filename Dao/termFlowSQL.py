@@ -59,7 +59,7 @@ def list_research_dictionary_db(initials, type):
 def lists_patent_production_researcher_db(researcher_id, year, term):
     filter_term = str()
     if term:
-        filter_term = util.web_search_filter(term, "title")
+        filter_term = f'AND {util.web_search_filter(term, "title")}'
 
     filter_year = str()
     if year:
@@ -78,6 +78,7 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
         FROM  
             patent p
         where 
+            1 = 1
             {filter_term}
             {filter_year}
             {filter_researcher}
