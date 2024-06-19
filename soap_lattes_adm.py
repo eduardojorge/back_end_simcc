@@ -1,6 +1,5 @@
 from zeep import Client
 from datetime import datetime
-import xml.etree.ElementTree as ET
 import os
 import zipfile
 import pandas as pd
@@ -20,7 +19,7 @@ def get_data_att(id: str) -> datetime:
 def last_update(id: str):
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
 
-    registry = sgbdSQL.consultar_db(script_sql, database=os.environ["ADM_DATABASE"])
+    registry = sgbdSQL.consultar_db(script_sql)
 
     if registry:
         return registry[0][0]
@@ -64,7 +63,6 @@ def save_cv(id, dir):
 
 
 def get_researcher_adm_simcc():
-    project.project_env = "8"
 
     script_sql = """
         SELECT 
@@ -73,7 +71,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdSQL.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql, database=os.environ["ADM_DATABASE"])
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
@@ -109,21 +107,11 @@ if __name__ == "__main__":
 
     for Index, Data in df.iterrows():
 
-        print(
-            f"Curriculo número: {quant_curriculos}\nID do pesquisador: {Data['lattes_id']}"
-        )
+        print(f"Curriculo número: {quant_curriculos}\n")
+        print(f"ID do pesquisador: {Data['lattes_id']}\n")
 
-        lattes_id = str(Data["lattes_id"])
-
-        if len(str(Data["lattes_id"])) == 14:
-            lattes_id = "00" + str(Data["lattes_id"])
-        elif len(str(Data["lattes_id"])) == 15:
-            lattes_id = "0" + str(Data["lattes_id"])
-
-        save_cv(
-            lattes_id,
-            dir,
-        )
+        lattes_id = str(Data["lattes_id"]).zfill(16)
+        save_cv(lattes_id, dir)
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
