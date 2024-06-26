@@ -370,8 +370,6 @@ def lists_bibliographic_production_article_researcher_db(
             year DESC
         """
 
-    print(script_sql)
-
     reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(

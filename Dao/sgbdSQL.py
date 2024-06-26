@@ -49,7 +49,7 @@ def conecta_db(
     if not host:
         host = os.getenv("DATABASE_HOST") or "localhost"
     if not database:
-        database = os.getenv("DATABASE_NAME") or "simcc_"
+        database = os.getenv("DATABASE_NAME") or "simcc_tupi"
     if not user:
         user = os.getenv("DATABASE_USER") or "postgres"
 

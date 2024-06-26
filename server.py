@@ -1,7 +1,7 @@
 import sys
 import nltk
 import unidecode
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS, cross_origin
 from nltk.tokenize import RegexpTokenizer
 from http import HTTPStatus
@@ -34,8 +34,10 @@ def create_app():
     return app
 
 
-app = create_app()
+from zeep import Client
 
+client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
+app = create_app()
 app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
@@ -284,6 +286,14 @@ def bibliographic_production_article():
         list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
+
+
+@app.route("/get_xml", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def get_xml():
+    lattes_id = request.args.get("lattes_id")
+    resultado = client.service.getCurriculoCompactado(lattes_id)
+    return send_file(resultado)
 
 
 if __name__ == "__main__":
