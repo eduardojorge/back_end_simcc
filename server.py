@@ -293,10 +293,7 @@ def bibliographic_production_article():
 def get_xml():
     lattes_id = request.args.get("lattes_id")
     resultado = client.service.getCurriculoCompactado(lattes_id)
-    arquivo = open(f"Files/xmls/{lattes_id}.zip", "wb")
-    arquivo.write(resultado)
-    arquivo.close()
-    return send_file(f"Files/xmls/{lattes_id}.zip")
+    return send_file(resultado, mimetype="application/zip")
 
 
 if __name__ == "__main__":
