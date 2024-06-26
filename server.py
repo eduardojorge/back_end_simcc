@@ -292,8 +292,14 @@ def bibliographic_production_article():
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_xml():
     lattes_id = request.args.get("lattes_id")
-    resultado = client.service.getCurriculoCompactado(lattes_id)
-    return send_file(resultado, mimetype="application/zip")
+    try:
+        resultado = client.service.getCurriculoCompactado(lattes_id)
+        arquivo = open(f"Files/xmls/{lattes_id}.zip", "wb")
+        arquivo.write(resultado)
+        arquivo.close()
+        return send_file(f"Files/xmls/{lattes_id}.zip", mimetype="application/zip")
+    except:
+        return jsonify("Curriculo não encontrado")
 
 
 if __name__ == "__main__":
