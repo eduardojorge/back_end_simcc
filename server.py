@@ -288,9 +288,9 @@ def bibliographic_production_article():
     return jsonify(list_bibliographic_production_article), 200
 
 
-@app.route("/get_xml", methods=["GET"])
+@app.route("/getCurriculoCompactado", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-def get_xml():
+def getCurriculoCompactado():
     lattes_id = request.args.get("lattes_id")
     try:
         resultado = client.service.getCurriculoCompactado(lattes_id)
@@ -300,6 +300,14 @@ def get_xml():
         return send_file(f"Files/xmls/{lattes_id}.zip", mimetype="application/zip")
     except:
         return jsonify("Curriculo não encontrado")
+
+
+@app.route("/getDataAtualizacaoCV", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def getDataAtualizacaoCV():
+    lattes_id = request.args.get("lattes_id")
+    resultado = client.service.getDataAtualizacaoCV(lattes_id)
+    return jsonify(resultado)
 
 
 if __name__ == "__main__":
