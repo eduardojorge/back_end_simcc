@@ -7,6 +7,7 @@ from datetime import datetime
 import Dao.sgbdSQL as sgbdSQL
 import project as project
 import requests
+from dotenv import load_dotenv
 
 
 def get_data_att(id: str, cnpq_service: bool = True) -> datetime:
@@ -83,6 +84,7 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
+    load_dotenv()
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 

@@ -20,7 +20,10 @@ def execScript_db(sql):
 
 def consultar_db(sql, database=None):
     try:
-        con = conecta_db(database=database)
+        if database:
+            con = conecta_db(database=database)
+        else:
+            con = conecta_db()
         cur = con.cursor()
         cur.execute(sql)
         recset = cur.fetchall()
@@ -39,19 +42,11 @@ def consultar_db(sql, database=None):
 
 
 def conecta_db(
-    password=None,
-    host=None,
-    database=None,
-    user=None,
+    password=os.getenv("DATABASE_PASSWORD"),
+    host=os.getenv("DATABASE_HOST"),
+    database=os.getenv("DATABASE_NAME"),
+    user=os.getenv("DATABASE_USER"),
 ):
-    if not password:
-        password = os.getenv("DATABASE_PASSWORD") or "root"
-    if not host:
-        host = os.getenv("DATABASE_HOST") or "localhost"
-    if not database:
-        database = os.getenv("DATABASE_NAME") or "simcc_tupi"
-    if not user:
-        user = os.getenv("DATABASE_USER") or "postgres"
 
     con = psycopg2.connect(
         host=host,
