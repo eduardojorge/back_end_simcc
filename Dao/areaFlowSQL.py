@@ -524,7 +524,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
         institution_filter = util.filterSQL(institution, ";", "or", "i.name")
 
     filter_graduate_program = str()
-    if graduate_program_id:
+    if graduate_program_id and graduate_program_id != '0':
         filter_graduate_program = f"""
             AND r.id IN (
                 SELECT DISTINCT gpr.researcher_id 
