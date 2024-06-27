@@ -8,6 +8,7 @@ import Dao.sgbdSQL as sgbdSQL
 import project as project
 import requests
 from dotenv import load_dotenv
+import project
 
 
 def get_data_att(id: str, cnpq_service: bool = True) -> datetime:
@@ -68,7 +69,7 @@ def save_cv(id, dir, cnpq_service: bool = True):
 
 
 def get_researcher_adm_simcc():
-
+    project.project_env = "8"
     script_sql = """
         SELECT 
             name,
@@ -76,7 +77,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdSQL.consultar_db(script_sql, database=os.environ["ADM_DATABASE"])
+    registry = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
