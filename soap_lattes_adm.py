@@ -65,6 +65,7 @@ def save_cv(id, dir, cnpq_service: bool = True):
         arquivo = open(f"{dir}/zip/{id}.zip", "wb")
         arquivo.write(resultado)
         arquivo.close()
+
         with zipfile.ZipFile(f"{dir}/zip/{id}.zip", "r") as zip_ref:
             zip_ref.extractall(dir)
             zip_ref.extractall(f"{dir}/atual")
@@ -75,7 +76,6 @@ def save_cv(id, dir, cnpq_service: bool = True):
 
 
 def get_researcher_adm_simcc():
-    project.project_env = "8"
     script_sql = """
         SELECT 
             name,
@@ -83,7 +83,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdSQL.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql, os.environ["ADM_DATABASE"])
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
@@ -91,7 +91,7 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
-    load_dotenv()
+    load_dotenv(override=True)
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 

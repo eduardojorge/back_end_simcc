@@ -1,7 +1,6 @@
 # import requests
 import psycopg2
 import os
-import project as project
 
 
 def execScript_db(sql):
@@ -18,15 +17,15 @@ def execScript_db(sql):
     cur.close()
 
 
-def consultar_db(sql):
+def consultar_db(sql, database=None):
     try:
-        con = conecta_db()
+        if database:
+            con = conecta_db(database=database)
+        else:
+            con = conecta_db()
         cur = con.cursor()
         cur.execute(sql)
-        recset = cur.fetchall()
-        registros = []
-        for rec in recset:
-            registros.append(rec)
+        registros = cur.fetchall()
         con.close()
         cur.close()
 
@@ -38,41 +37,17 @@ def consultar_db(sql):
     return registros
 
 
-def conecta_db():
-    password = os.getenv("DATABASE_PASSWORD")
-    host = os.getenv("DATABASE_HOST")
-    database = os.getenv("DATABASE_NAME")
-
-    if (project.getProject()) == "1":
-        database = "cimatec_v7"
-        host = "172.25.0.84"
-        password = 'wn6H4!16NBcb}4%hy6"h'
-
-    if (project.getProject()) == "2":
-        database = "simcc_profnit_v1"
-
-    if (project.getProject()) == "3":
-        database = "simcc_ifba"
-
-    if (project.getProject()) == "4":
-        database = "simcc_"
-
-    if (project.getProject()) == "5":
-        database = "proforte"
-
-    if (project.getProject()) == "6":
-        database = "old_simcc_"
-
-    if (project.getProject()) == "7":
-        database = "inovacao"
-
-    if (project.getProject()) == "8":
-        database = "adm_simcc"
+def conecta_db(
+    password=os.getenv("DATABASE_PASSWORD"),
+    host=os.getenv("DATABASE_HOST"),
+    database=os.getenv("DATABASE_NAME"),
+    user=os.getenv("DATABASE_USER"),
+):
 
     con = psycopg2.connect(
         host=host,
         database=database,
-        user="postgres",
+        user=user,
         password=password,
     )
     return con
