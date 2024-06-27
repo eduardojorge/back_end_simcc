@@ -685,7 +685,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             r.id AS id,
             r.name AS researcher_name,
             r.lattes_id AS lattes,
-            COUNT(DISTINCT b.id),
+            COUNT(DISTINCT b.id) as among,
             rp.articles AS articles,
             rp.book_chapters AS book_chapters,
             rp.book AS book,
@@ -715,7 +715,9 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
             rp.book, rp.software, rp.brand, i.name, r.abstract,
             rp.great_area, rp.city, r.orcid, i.image, r.graduation,
-            r.last_update, rp.patent;
+            r.last_update, rp.patent
+        ORDER BY
+            among DESC;
             """
     registry = sgbdSQL.consultar_db(script_sql)
 

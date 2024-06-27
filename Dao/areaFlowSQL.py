@@ -478,7 +478,9 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
             r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
             rp.book, rp.software, rp.brand, i.name, r.abstract,
             rp.great_area, rp.city, r.orcid, i.image, r.graduation,
-            r.last_update, rp.patent;
+            r.last_update, rp.patent
+        ORDER BY
+            among;
             """
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -564,7 +566,9 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
             r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
             rp.book, rp.software, rp.brand, i.name, r.abstract,
             rp.great_area, rp.city, r.orcid, i.image, r.graduation,
-            r.last_update, rp.patent;
+            r.last_update, rp.patent
+        ORDER BY
+            among;
             """
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -693,7 +697,7 @@ def city_search(city_name: str = None) -> str:
 
 
 def lista_researcher_full_name_db(name, graduate_program_id):
-    name = name.replace(';', ' ')
+    name = name.replace(";", " ")
     filter_name = f"r.name ILIKE '{name}%'"
 
     filter_graduate_program = str()
