@@ -9,6 +9,7 @@ import project as project
 import requests
 from dotenv import load_dotenv
 import project
+import zipfile
 
 
 def get_data_att(id: str, cnpq_service: bool = True) -> datetime:
@@ -64,6 +65,11 @@ def save_cv(id, dir, cnpq_service: bool = True):
         arquivo = open(f"{dir}/zip/{id}.zip", "wb")
         arquivo.write(resultado)
         arquivo.close()
+        with zipfile.ZipFile(f"{dir}/zip/{id}.zip", "r") as zip_ref:
+            zip_ref.extractall(dir)
+            zip_ref.extractall(f"{dir}/atual")
+            if os.path.exists(f"{id}.zip"):
+                os.remove(f"{id}.zip")
     except:
         logger.error("\nErro: Currículo não  existe")
 
