@@ -328,7 +328,8 @@ def lists_bibliographic_production_article_researcher_db(
                 year_ >= {year}  
                 {filter} 
                 {filter_qualis}
-                AND r.id = '{researcher_id}' 
+                AND r.id = '{researcher_id}'
+                AND b.type = 'ARTICLE'
             ORDER BY 
                 year DESC
             """
@@ -568,7 +569,6 @@ def lista_institution_production_db(text, institution, type_):
             filter,
             filterinstitution,
         )
-    print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=["qtd", "id", "institution", "image"])
