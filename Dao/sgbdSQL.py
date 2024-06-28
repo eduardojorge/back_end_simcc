@@ -1,4 +1,3 @@
-# import requests
 import psycopg2
 import os
 
@@ -17,12 +16,10 @@ def execScript_db(sql):
     cur.close()
 
 
-def consultar_db(sql, database=None):
+def consultar_db(sql):
     try:
-        if database:
-            con = conecta_db(database=database)
-        else:
-            con = conecta_db()
+
+        con = conecta_db()
         cur = con.cursor()
         cur.execute(sql)
         registros = cur.fetchall()
@@ -43,10 +40,7 @@ def conecta_db(
     database=os.getenv("DATABASE_NAME"),
     user=os.getenv("DATABASE_USER"),
 ):
-    password = "root"
-    host = "localhost"
-    database = "simcc_"
-    user = "postgres"
+
     con = psycopg2.connect(
         host=host,
         database=database,

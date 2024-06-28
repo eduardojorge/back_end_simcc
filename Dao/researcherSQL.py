@@ -1,6 +1,6 @@
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
-from numpy import NaN
+
 
 
 def researcher_search_city(city_id: str = None):
@@ -145,9 +145,9 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_guidance"] = NaN
-        data_frame["count_guidance_complete"] = NaN
-        data_frame["count_guidance_in_progress"] = NaN
+        data_frame["count_guidance"] = None
+        data_frame["count_guidance_complete"] = None
+        data_frame["count_guidance_in_progress"] = None
 
     script_sql = f"""
         SELECT
@@ -172,7 +172,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_book"] = NaN
+        data_frame["count_book"] = None
 
     script_sql = f"""
         SELECT
@@ -196,7 +196,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_book_chapter"] = NaN
+        data_frame["count_book_chapter"] = None
 
     script_sql = f"""
         SELECT 
@@ -230,7 +230,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_patent"] = NaN
+        data_frame["count_patent"] = None
 
     script_sql = f"""
         SELECT
@@ -252,7 +252,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_software"] = NaN
+        data_frame["count_software"] = None
 
     script_sql = f"""
         SELECT
@@ -276,7 +276,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_report"] = NaN
+        data_frame["count_report"] = None
 
     script_sql = f"""
         SELECT
@@ -300,7 +300,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_article"] = NaN
+        data_frame["count_article"] = None
 
     script_sql = f"""
         SELECT
@@ -319,7 +319,7 @@ def researcher_data_geral(year_):
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
-        data_frame["count_brand"] = NaN
+        data_frame["count_brand"] = None
 
     return data_frame.fillna(0).to_dict(orient="records")
 

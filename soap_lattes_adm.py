@@ -83,7 +83,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdSQL.consultar_db(script_sql, os.environ["ADM_DATABASE"])
+    registry = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
