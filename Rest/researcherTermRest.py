@@ -212,7 +212,6 @@ def researcher_report():
         rr.financing = str(infos.financing_institutionc)
         rr.project_name = str(infos.project_name)
 
-        # print(researcher)
         list_researcher_report.append(rr.getJson())
 
     return jsonify(list_researcher_report), 200
@@ -222,20 +221,17 @@ def researcher_report():
 @cross_origin(origin="*", headers=["Content-Type"])
 def software_production_researcher():
     list_software_production_researcher = []
-    # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
     df_bd = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         s = Software_Researcher()
         s.id = str(infos.id)
         s.title = str(infos.title)
         s.year = str(infos.year)
 
-        # print(researcher)
         list_software_production_researcher.append(s.getJson())
 
     return jsonify(list_software_production_researcher), 200

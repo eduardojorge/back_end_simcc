@@ -43,7 +43,10 @@ def conecta_db(
     database=os.getenv("DATABASE_NAME"),
     user=os.getenv("DATABASE_USER"),
 ):
-
+    password = "root"
+    host = "localhost"
+    database = "simcc_"
+    user = "postgres"
     con = psycopg2.connect(
         host=host,
         database=database,

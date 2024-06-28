@@ -259,7 +259,6 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     )
 
     reg = sgbdSQL.consultar_db(sql)
-    print(sql)
 
     df_bd = pd.DataFrame(
         reg, columns=["id", "event_name", "nature", "form_participation", "year"]
@@ -280,7 +279,6 @@ def lists_software_production_researcher_db(researcher_id, year):
         researcher_id,
         year,
     )
-    # print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -322,15 +320,12 @@ def lists_bibliographic_production_article_researcher_db(
                 jcr_link,
                 r.id as researcher_id
             FROM 
-                bibliographic_production b, 
-                bibliographic_production_article ba,
-                institution i, 
-                researcher r 
-            WHERE 
-                r.id = b.researcher_id
-                AND b.id = ba.bibliographic_production_id 
-                AND r.institution_id = i.id
-                AND year_ >= {year}  
+                bibliographic_production b
+                LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
+                LEFT JOIN researcher r ON r.id = b.researcher_id
+                LEFT JOIN institution i ON r.institution_id = i.id
+            WHERE
+                year_ >= {year}  
                 {filter} 
                 {filter_qualis}
                 AND r.id = '{researcher_id}' 
@@ -354,15 +349,12 @@ def lists_bibliographic_production_article_researcher_db(
             jcr AS jif,
             jcr_link
         FROM 
-            bibliographic_production b,
-            bibliographic_production_article ba, 
-            researcher r 
-        WHERE  
-            r.id = b.researcher_id
-            AND rf.researcher_id = r.id 
-            AND pm.id = ba.periodical_magazine_id 
-            AND b.id = ba.bibliographic_production_id 
-            AND year_ >= {year} 
+            bibliographic_production b
+            LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
+            LEFT JOIN researcher r ON r.id = b.researcher_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+        WHERE
+            year_ >= {year}
             AND {filter} 
             {filter_qualis}
             AND r.id = '{researcher_id}'
@@ -390,7 +382,6 @@ def lists_bibliographic_production_article_researcher_db(
             "researcher_id",
         ],
     )
-
     return data_frame
 
 
