@@ -1,6 +1,4 @@
 import pandas as pd
-from numpy import NaN
-
 import project as project
 from Dao import sgbdSQL
 
@@ -296,47 +294,47 @@ if __name__ == "__main__":
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")
         else:
-            data_frame["ind_prod_article"] = NaN
+            data_frame["ind_prod_article"] = None
 
         # df = book_prod(Data=Data)
 
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # else:
-        #     data_frame["ind_prod_book"] = NaN
+        #     data_frame["ind_prod_book"] = None
 
         # df = book_chapter_prod(Data=Data)
 
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # else:
-        #     data_frame["ind_prod_book_chapter"] = NaN
+        #     data_frame["ind_prod_book_chapter"] = None
 
         # df = patent_prod(Data=Data)
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # if "ind_prod_granted_patent" not in df.columns:
-        #     data_frame["ind_prod_granted_patent"] = NaN
+        #     data_frame["ind_prod_granted_patent"] = None
         # if "ind_prod_not_granted_patent" not in df.columns:
-        #     data_frame["ind_prod_not_granted_patent"] = NaN
+        #     data_frame["ind_prod_not_granted_patent"] = None
 
         # df = software_prod(Data=Data)
 
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # else:
-        #     data_frame["ind_prod_software"] = NaN
+        #     data_frame["ind_prod_software"] = None
 
         # df = report_prod(Data=Data)
 
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # else:
-        #     data_frame["ind_prod_report"] = NaN
+        #     data_frame["ind_prod_report"] = None
 
         # df = guidance_prod(Data=Data)
 
         # if not df.empty:
         #     data_frame = pd.merge(data_frame, df, on="year", how="left")
         # else:
-        #     data_frame["ind_prod_guidance"] = NaN
+        #     data_frame["ind_prod_guidance"] = None
