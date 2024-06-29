@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 from zeep import Client
 from datetime import datetime
 import os
@@ -7,7 +11,6 @@ from datetime import datetime
 import Dao.sgbdSQL as sgbdSQL
 import project as project
 import requests
-from dotenv import load_dotenv
 import project
 import zipfile
 
@@ -83,7 +86,7 @@ def get_researcher_adm_simcc():
         FROM
             researcher;
         """
-    registry = sgbdSQL.consultar_db(script_sql)
+    registry = sgbdSQL.consultar_db(script_sql, os.environ["ADM_DATABASE"])
 
     df = pd.DataFrame(registry, columns=["name", "lattes_id"])
 
@@ -91,9 +94,6 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    load_dotenv(override=True)
-
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         print(f"ID do pesquisador: {Data['lattes_id']}\n")
 
         lattes_id = str(Data["lattes_id"]).zfill(16)
-        save_cv(lattes_id, dir)
+        save_cv(lattes_id, dir, os.getenv("CNPQ_SERVICE"))
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
