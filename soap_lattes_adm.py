@@ -46,7 +46,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
         return resultado
 
 
-def save_cv(id, dir, cnpq_service: bool = True):
+def save_cv(id: str, dir: str, cnpq_service: bool):
 
     if get_data_att(id=id, cnpq_service=cnpq_service) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
@@ -94,8 +94,10 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
-    client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
+    if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
+        print("baixando curriculos pelo Tupi")
 
+    client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
         filename="logfile_soap_lattes_adm.log",
@@ -106,7 +108,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.debug("Inicio")
 
-    dir = "/home/ejorge/hop/config/projects/Jade-Extrator-Hop/metadata/dataset/xml"
+    dir = "Files"
 
     for Files in os.listdir(dir):
         try:
@@ -125,7 +127,7 @@ if __name__ == "__main__":
         print(f"ID do pesquisador: {Data['lattes_id']}\n")
 
         lattes_id = str(Data["lattes_id"]).zfill(16)
-        save_cv(lattes_id, dir, os.getenv("CNPQ_SERVICE"))
+        save_cv(lattes_id, dir, os.getenv("ALTERNATIVE_CNPQ_SERVICE", False))
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
