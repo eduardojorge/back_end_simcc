@@ -98,18 +98,18 @@ if __name__ == "__main__":
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
+    dir = os.environ["JADE_EXTRATOR_FOLTER"]
+
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename="logfile_soap_lattes_adm.log",
+        filename="Log/soap_lattes_adm.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
     )
     logger = logging.getLogger()
     logger.debug("Inicio")
-
-    dir = "Files"
 
     for Files in os.listdir(dir):
         try:
@@ -124,8 +124,8 @@ if __name__ == "__main__":
 
     for Index, Data in df.iterrows():
 
-        print(f"Curriculo número: {quant_curriculos}\n")
-        print(f"ID do pesquisador: {Data['lattes_id']}\n")
+        print(f"Curriculo número: {quant_curriculos}")
+        print(f"ID do pesquisador: {Data['lattes_id']}")
 
         lattes_id = str(Data["lattes_id"]).zfill(16)
         save_cv(lattes_id, dir, os.getenv("ALTERNATIVE_CNPQ_SERVICE", False))

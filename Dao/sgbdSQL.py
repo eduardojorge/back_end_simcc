@@ -43,12 +43,6 @@ def conecta_db(
     user=os.getenv("DATABASE_USER"),
 ):
 
-    print(
-        password,
-        host,
-        database,
-        user,
-    )
     con = psycopg2.connect(
         host=host,
         database=database,
