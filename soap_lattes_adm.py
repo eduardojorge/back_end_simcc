@@ -15,13 +15,13 @@ import project
 import zipfile
 
 
-def get_data_att(id: str, cnpq_service: bool = True) -> datetime:
-    if cnpq_service:
-        resultado = client.service.getDataAtualizacaoCV(id)
+def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
+    if alternative_cnpq_service:
+        url = f"simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
+        resultado = requests.get(url)
     else:
-        resultado = requests.get(
-            f"simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
-        )
+        resultado = client.service.getDataAtualizacaoCV(id)
+
     if resultado == None:
         resultado = "01/01/0001 00:00:00"
     return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
@@ -46,9 +46,11 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
         return resultado
 
 
-def save_cv(id: str, dir: str, cnpq_service: bool):
+def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
-    if get_data_att(id=id, cnpq_service=cnpq_service) <= last_update(id):
+    if get_data_att(
+        id=id, alternative_cnpq_service=alternative_cnpq_service
+    ) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
@@ -59,12 +61,11 @@ def save_cv(id: str, dir: str, cnpq_service: bool):
     logger.debug(msg)
 
     try:
-        if cnpq_service:
-            resultado = client.service.getCurriculoCompactado(id)
+        if alternative_cnpq_service:
+            url = f"simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
+            resultado = requests.get(url)
         else:
-            resultado = requests.get(
-                f"simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
-            )
+            resultado = client.service.getCurriculoCompactado(id)
         arquivo = open(f"{dir}/zip/{id}.zip", "wb")
         arquivo.write(resultado)
         arquivo.close()
