@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 import psycopg2
 import os
 
