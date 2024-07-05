@@ -1,23 +1,23 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-    ports:
-      - "5432:5432"
+  back_database:
+    image: pgvector/pgvector:pg16
     volumes:
-      - data:/var/lib/postgresql/data
-
-  pg-admin:
-    image: dpage/pgadmin4
+      - backData:/var/lib/postgresql/data
+      - ./back_conectee/scripts/database.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      - PGADMIN_DEFAULT_EMAIL=geu_costa@outlook.com
-      - PGADMIN_DEFAULT_PASSWORD=987456
-      - PGADMIN_LISTEN_PORT=5050
-
+      POSTGRES_USER: postgres
+      POSTGRES_DB: conectee
+      POSTGRES_PASSWORD: root
     ports:
-      - "5050:5050"
-
+      - "5432:5434"
+  conectee_app:
+    image: back_conectee
+    build: back_conectee
+    ports:
+      - "8080:8080"
+    depends_on:
+      - back_database
+    env_file:
+      - back_database/.env
 volumes:
-  data:
+  backData:
