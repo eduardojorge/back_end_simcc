@@ -1,8 +1,10 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 import json
 import logging
 import sys
 from datetime import datetime
-from os.path import abspath, dirname
 
 import pandas as pd
 

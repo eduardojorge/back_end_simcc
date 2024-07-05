@@ -1,7 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 import pandas as pd
-
-
-import project as project
 from Dao import sgbdSQL
 
 
@@ -244,9 +244,6 @@ def guidance_prod(Data):
 
 
 if __name__ == "__main__":
-
-    project.project_env = "4"
-
     sgbdSQL.execScript_db("DELETE FROM researcher_ind_prod;")
 
     weights = {

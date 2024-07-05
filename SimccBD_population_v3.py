@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 from nltk.tokenize import RegexpTokenizer
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
@@ -61,8 +64,7 @@ def create_researcher_dictionary_db(
         for i, infos in data_frame.iterrows():
             if (i % 100) == 0:
                 print("Total Pesquisador Participacao Evento: " + str(i))
-                logger.debug(
-                    "Total Pesquisador Participacao Evento: " + str(i))
+                logger.debug("Total Pesquisador Participacao Evento: " + str(i))
 
             create_researcher_participation_events_dictionary_db(infos.id)
 
@@ -190,8 +192,7 @@ if __name__ == "__main__":
     try:
         project.project_env = sys.argv[1]
     except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
+        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 

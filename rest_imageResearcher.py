@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 import pandas as pd
 import requests
 
