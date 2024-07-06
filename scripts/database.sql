@@ -544,4 +544,3 @@ CREATE INDEX IDX_ABSTRACT_EN_GIN ON researcher USING gin (abstract_en gin_trgm_o
 CREATE INDEX IDX_GREAT_AREA_EXPERTISE_GIN ON great_area_expertise USING gin (name gin_trgm_ops);
 CREATE INDEX IDX_AREA_EXPERTISE_GIN ON area_expertise USING gin (name gin_trgm_ops);
 CREATE INDEX IDX_PERIODICAL_MAGAZINE_GIN ON periodical_magazine USING gin (name gin_trgm_ops);
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
