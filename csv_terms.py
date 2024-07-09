@@ -51,11 +51,11 @@ registry = sgbdSQL.consultar_db(script_sql)
 termos_busca = pd.DataFrame(
     registry,
     columns=[
-        "frequency",
-        "great_area",
         "term",
-        "coletivos",
+        "frequency",
         "type_",
+        "great_area",
+        "term_normalize",
     ],
 )
 # Lista de documentos a serem adicionados
@@ -64,6 +64,6 @@ termos_busca = pd.DataFrame(
 termos_busca_ref = db.collection("termos_busca")
 
 
-termos_busca_ref.add(termos_busca.to_dict(orient="records"))
+termos_busca_ref.add(termos_busca.to_di)
 
 print("Documentos adicionados com sucesso.")
