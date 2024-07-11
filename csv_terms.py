@@ -1,14 +1,17 @@
+from dotenv import load_dotenv
+
+load_dotenv()
 import firebase_admin
 from firebase_admin import credentials, firestore
+
 from Dao import sgbdSQL
 import pandas as pd
 
-# Caminho para o arquivo JSON com as credenciais
-cred = credentials.Certificate("path/to/your/credentials.json")
-firebase_admin.initialize_app(cred)
+cred = credentials.Certificate("cert.json")
 
-# Conectando ao Firestore
+firebase_admin.initialize_app(cred)
 db = firestore.client()
+
 script_sql = """
     SELECT term, frequency, type_, '0' as great_area, unaccent(LOWER(term)) AS term_normalize
     FROM public.research_dictionary d
@@ -46,6 +49,7 @@ script_sql = """
         FROM public.researcher_production
         ORDER BY area)
     """
+
 registry = sgbdSQL.consultar_db(script_sql)
 
 termos_busca = pd.DataFrame(
@@ -64,6 +68,6 @@ termos_busca = pd.DataFrame(
 termos_busca_ref = db.collection("termos_busca")
 
 
-termos_busca_ref.add(termos_busca.to_di)
+termos_busca_ref.add(termos_busca.to_dict(orient="records"))
 
 print("Documentos adicionados com sucesso.")
