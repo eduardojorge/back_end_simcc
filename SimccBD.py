@@ -6,6 +6,46 @@ import Dao.sgbdSQL as sgbdSQL
 import Dao.util as util
 
 
+def lists_research_groups():
+    script_sql = """
+    SELECT 
+            rg.research_group_id,
+            rg.research_group_name,
+            rg.area,
+            rg.last_date_sent,
+            rg.situation,
+            r.researcher_id,
+            r.name AS leader_name,
+            r.lattes_id,
+            i.institution_id,
+            i.name AS institution_name,
+            i.acronym
+        FROM research_group AS rg
+        LEFT JOIN researcher AS r
+        ON r.researcher_id = rg.researcher_id
+        LEFT JOIN institution AS i
+        ON rg.institution_id = i.institution_id
+    """
+    registry = sgbdSQL.consultar_db(script_sql)
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "research_group_id",
+            "research_group_name",
+            "area",
+            "last_date_sent",
+            "situation",
+            "researcher_id",
+            "leader_name",
+            "lattes_id",
+            "institution_id",
+            "institution_name",
+            "acronym",
+        ],
+    )
+
+    return data_frame.to_dict(orient="records")
+
 def researcher_text_db():
     script_sql = "SELECT id FROM researcher WHERE id='35e6c140-7fbb-4298-b301-c5348725c467' OR id='c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf'"
     reg = sgbdSQL.consultar_db(script_sql)

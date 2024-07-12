@@ -310,6 +310,13 @@ def getDataAtualizacaoCV():
     return jsonify(resultado)
 
 
+@app.route("/researchGroup", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def get_research_group():
+    r_groups = SimccBD.lists_research_groups()
+    return r_groups
+
+
 if __name__ == "__main__":
     load_dotenv()
     app.run(
