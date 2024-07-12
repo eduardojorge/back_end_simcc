@@ -21,7 +21,7 @@ def list_productivity_research():
             s.scholarship_quantity
         FROM 
             subsidy s
-            LEFT JOIN researcher r ON s.researcher_id = r.researcher_id
+            LEFT JOIN researcher r ON s.researcher_id = r.id
     """
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
@@ -51,17 +51,17 @@ def lists_research_groups():
             rg.area,
             rg.last_date_sent,
             rg.situation,
-            r.researcher_id,
+            r.id,
             r.name AS leader_name,
             r.lattes_id,
-            i.institution_id,
+            i.id,
             i.name AS institution_name,
             i.acronym
         FROM research_group AS rg
         LEFT JOIN researcher AS r
-        ON r.researcher_id = rg.researcher_id
+        ON r.id = rg.researcher_id
         LEFT JOIN institution AS i
-        ON rg.institution_id = i.institution_id
+        ON rg.institution_id = i.id
     """
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
