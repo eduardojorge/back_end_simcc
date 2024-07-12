@@ -317,6 +317,13 @@ def get_research_group():
     return r_groups
 
 
+@app.route("/productivityResearch", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def get_research_group():
+    productivity_research = SimccBD.list_productivity_research()
+    return productivity_research
+
+
 if __name__ == "__main__":
     load_dotenv()
     app.run(

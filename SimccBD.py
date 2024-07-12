@@ -6,6 +6,43 @@ import Dao.sgbdSQL as sgbdSQL
 import Dao.util as util
 
 
+def list_productivity_research():
+    script_sql = """
+        SELECT 
+            s.researcher_id,
+            r.name,
+            s.modality_code, 
+            s.modality_name, 
+            s.call_title, 
+            s.category_level_code, 
+            s.funding_program_name, 
+            s.institute_name, 
+            s.aid_quantity, 
+            s.scholarship_quantity
+        FROM 
+            subsidy s
+            LEFT JOIN researcher r ON s.researcher_id = r.researcher_id
+    """
+    registry = sgbdSQL.consultar_db(script_sql)
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "researcher_id",
+            "name",
+            "modality_code",
+            "modality_name",
+            "call_title",
+            "category_level_code",
+            "funding_program_name",
+            "institute_name",
+            "aid_quantity",
+            "scholarship_quantity",
+        ],
+    )
+
+    return data_frame.to_dict(orient="records")
+
+
 def lists_research_groups():
     script_sql = """
     SELECT 
@@ -45,6 +82,7 @@ def lists_research_groups():
     )
 
     return data_frame.to_dict(orient="records")
+
 
 def researcher_text_db():
     script_sql = "SELECT id FROM researcher WHERE id='35e6c140-7fbb-4298-b301-c5348725c467' OR id='c0ae713e-57b9-4dc3-b4f0-65e0b2b72ecf'"
