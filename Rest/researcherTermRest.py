@@ -333,7 +333,7 @@ def bibliographic_production_researcher():
 def qualis_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
-    lists_qualis = []
+    lista_qualis = []
 
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
@@ -343,13 +343,14 @@ def qualis_researcher():
     )
 
     for i, infos in df_bd.iterrows():
-        qualis = {
-            "among": str(infos.qtd),
-            "qualis": str(infos.qualis),
-        }
-        lists_qualis.append(qualis)
+        lista_qualis.append(
+            {
+                "among": str(infos.qtd),
+                "qualis": str(infos.qualis),
+            }
+        )
 
-    return jsonify(lists_qualis), 200
+    return jsonify(lista_qualis), 200
 
 
 @researcherTermRest.route("/lists_word_researcher", methods=["GET"])

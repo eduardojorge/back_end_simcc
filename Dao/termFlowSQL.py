@@ -26,31 +26,32 @@ def get_researcher_address_db(researcher_id):
 
 # Função para listar a palavras do dicionário passando as iniciais
 def list_research_dictionary_db(initials, type):
-
     initials = unidecode.unidecode(initials.lower())
 
-    filter = " AND   LOWER(unaccent(term)) LIKE '" + initials + "%' "
-    fetch = "  fetch FIRST 50 rows only"
-    filterType = ""
-    if type == "BOOK":
-        filterType = " (type_='BOOK' or type_='BOOK_CHAPTER') "
-    else:
-        filterType = " type_='" + type + "'"
-
     sql = """
-           SELECT  distinct unaccent(term) as term,count(frequency) as frequency ,type_  
-                                from research_dictionary r 
-                                 WHERE 
-                                  %s
-                                 %s 
-                                 GROUP BY unaccent(term),type_  ORDER BY frequency desc %s
-      """ % (
-        filterType,
-        filter,
-        fetch,
-    )
-    reg = sgbdSQL.consultar_db(sql)
+      SELECT distinct unaccent(term) as term, count(frequency) as frequency, type_
+      FROM research_dictionary r
+      WHERE 
+          {filter_type}
+          AND LOWER(unaccent(term)) LIKE '{initials}%'
+      GROUP BY unaccent(term), type_
+      ORDER BY frequency desc
+      {fetch_limit}
+  """
 
+    filter_type = ""
+    if type == "BOOK":
+        filter_type = " (type_='BOOK' or type_='BOOK_CHAPTER') "
+    else:
+        filter_type = " type_='{type}' ".format(type=type)
+
+    sql = sql.format(
+        filter_type=filter_type,
+        initials=initials,
+        fetch_limit=" FETCH FIRST 200 ROWS ONLY",
+    )
+
+    reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
 
     return df_bd
@@ -390,26 +391,31 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
     researcher_id, year, graduate_program_id
 ):
 
-    filter = ""
+    filter_researcher = ""
     if researcher_id != "":
-        filter = f"AND b.researcher_id='{researcher_id}'"
+        filter_researcher = f"AND b.researcher_id='{researcher_id}'"
+
     filter_graduate_program = ""
-    if graduate_program_id != "":
+    if graduate_program_id:
         filter_graduate_program = (
             f"AND gpr.graduate_program_id = '{graduate_program_id}'"
         )
 
     sql = f"""
-        SELECT COUNT(*) AS qtd, bar.qualis
-        FROM PUBLIC.bibliographic_production b
-        LEFT JOIN graduate_program_researcher gpr ON b.researcher_id = gpr.researcher_id,
-        bibliographic_production_article bar,
-        periodical_magazine pm
-        WHERE pm.id = bar.periodical_magazine_id
-        AND b.id = bar.bibliographic_production_id
-        AND year_ >= {year}
-        {filter}
-        {filter_graduate_program}
+        SELECT 
+            COUNT(*) AS qtd, 
+            bar.qualis
+        FROM 
+            PUBLIC.bibliographic_production b
+            LEFT JOIN graduate_program_researcher gpr ON b.researcher_id = gpr.researcher_id,
+            bibliographic_production_article bar,
+            periodical_magazine pm
+        WHERE 
+            pm.id = bar.periodical_magazine_id
+            AND b.id = bar.bibliographic_production_id
+            AND year_ >= {year}
+            {filter_researcher}
+            {filter_graduate_program}
         GROUP BY bar.qualis
         ORDER BY qualis ASC
         """

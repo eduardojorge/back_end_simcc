@@ -43,9 +43,26 @@ def list_productivity_research():
     return data_frame.to_dict(orient="records")
 
 
-def lists_research_groups():
+def list_count_researcher_groups():
     script_sql = """
-    SELECT 
+        SELECT 
+            area, 
+            COUNT(*) 
+        FROM 
+            public.research_group 
+        GROUP BY area;
+        """
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(registry, columns=["area", "count"])
+
+    return data_frame.to_dict(orient="records")
+
+
+def lists_research_groups():
+
+    script_sql = """
+        SELECT 
             rg.research_group_id,
             rg.research_group_name,
             rg.area,
@@ -57,12 +74,12 @@ def lists_research_groups():
             i.id,
             i.name AS institution_name,
             i.acronym
-        FROM research_group AS rg
-        LEFT JOIN researcher AS r
-        ON r.id = rg.researcher_id
-        LEFT JOIN institution AS i
-        ON rg.institution_id = i.id
-    """
+        FROM 
+            research_group AS rg 
+            LEFT JOIN researcher AS r ON r.id = rg.researcher_id
+            LEFT JOIN institution AS i ON rg.institution_id = i.id;
+        """
+
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         registry,
@@ -523,10 +540,10 @@ def lists_bibliographic_production_article_db(
                 "year",
                 "doi",
                 "qualis",
-                "name_periodical",
+                "magazine",
                 "researcher",
                 "lattes_id",
-                "jif",
+                "jcr",
                 "jcr_link",
                 "article_institution",
                 "issn",
@@ -540,6 +557,7 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
+
     return data_frame
 
 

@@ -62,6 +62,7 @@ def graduate_program_profnit_db(graduate_program_id):
             gp.graduate_program_id
         """
     registry = sgbdSQL.consultar_db(sql)
+
     data_frame = pd.DataFrame(
         registry,
         columns=[
@@ -83,7 +84,7 @@ def graduate_program_profnit_db(graduate_program_id):
             "qtd_colaborador",
         ],
     )
-
+    print(data_frame)
     script_sql = """
         SELECT 
             gp.graduate_program_id,

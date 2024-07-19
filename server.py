@@ -310,16 +310,23 @@ def getDataAtualizacaoCV():
     return jsonify(resultado)
 
 
-@app.route("/researchGroup", methods=["GET"])
+@app.route("/research_group", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group():
-    r_groups = SimccBD.lists_research_groups()
-    return r_groups
+    research_group = SimccBD.lists_research_groups()
+    return research_group
 
 
-@app.route("/productivityResearch", methods=["GET"])
+@app.route("/research_group/count", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group():
+    research_group = SimccBD.list_count_researcher_groups()
+    return research_group
+
+
+@app.route("/productivity_research", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def get_productivityResearch():
     productivity_research = SimccBD.list_productivity_research()
     return productivity_research
 
