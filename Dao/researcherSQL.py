@@ -2,7 +2,6 @@ import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 
 
-
 def researcher_search_city(city_id: str = None):
     if city_id == None:
         script_sql = """
@@ -280,21 +279,25 @@ def researcher_data_geral(year_):
 
     script_sql = f"""
         SELECT
+            bpa.qualis,
             bp.year,
             COUNT(DISTINCT title) AS count_article
         FROM
             public.bibliographic_production bp
+            RIGHT JOIN bibliographic_production_article bpa ON bpa.bibliographic_production_id = bp.id
         WHERE
             type = 'ARTICLE'
-            AND bp.year::smallint >= {year_}
+            AND bp.year::SMALLINT >= {year_}
         GROUP BY
+            bpa.qualis,
             bp.year
         ORDER BY
+            bpa.qualis,
             bp.year;
-    """
+        """
     registre = sgbdSQL.consultar_db(script_sql)
 
-    df = pd.DataFrame(registre, columns=["year", "count_article"])
+    df = pd.DataFrame(registre, columns=["qualis", "year", "count_article"])
 
     df["year"] = df["year"].astype("int64")
     if not df.empty:
