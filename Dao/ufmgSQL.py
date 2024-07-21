@@ -5,20 +5,14 @@ import Dao.sgbdSQL as sgbdSQL
 
 def get_rt_list():
     script_sql = """
-    SELECT matric, rt FROM ufmg_teacher
-    """
+        SELECT COUNT(*), u.rt
+        FROM (
+        SELECT rt FROM ufmg_teacher
+        UNION
+        SELECT rt FROM ufmg_technician) u
+        GROUP BY u.rt
+        """
     registry = sgbdSQL.consultar_db(script_sql)
 
-    data_frame_teacher = pd.DataFrame(registry, columns=["matric", "rt"])
-
-    script_sql = """
-    SELECT matric, rt FROM ufmg_technician
-    """
-    registry = sgbdSQL.consultar_db(script_sql)
-
-    data_frame_technician = pd.DataFrame(registry, columns=["matric", "rt"])
-
-    return {
-        "rt_teacher": data_frame_teacher.to_dict(orient="records"),
-        "rt_technician": data_frame_technician.to_dict(orient="records"),
-    }
+    data_frame = pd.DataFrame(registry, columns=["count", "rt"])
+    return data_frame.to_dict(orient="records")
