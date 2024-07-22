@@ -301,6 +301,7 @@ def researcher_data_geral(year_):
     df = df.pivot_table(
         index="year", columns="qualis", values="count_article", fill_value=0
     )
+    df["count_article"] = df.sum(axis=1)
     df.reset_index(inplace=True)
 
     df["year"] = df["year"].astype("int64")

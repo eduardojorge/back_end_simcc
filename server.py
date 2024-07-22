@@ -48,8 +48,7 @@ app.register_blueprint(researcherDataRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 
-app.route("/")
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 
 @app.route("/secondWord", methods=["GET"])
