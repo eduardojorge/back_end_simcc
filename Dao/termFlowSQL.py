@@ -38,7 +38,7 @@ def list_research_dictionary_db(initials, type):
                 researcher;
         """
         reg = sgbdSQL.consultar_db(script_sql)
-        df_bd = pd.DataFrame(reg, columns=["name", "frequency", "type"])
+        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     else:
         sql = """
             SELECT distinct unaccent(term) as term, count(frequency) as frequency, type_
@@ -63,7 +63,7 @@ def list_research_dictionary_db(initials, type):
         sql = sql.format(
             filter_type=filter_type,
             initials=initials,
-            fetch_limit="FETCH FIRST 200 ROWS ONLY",
+            fetch_limit="FETCH FIRST 300 ROWS ONLY",
         )
 
         reg = sgbdSQL.consultar_db(sql)
