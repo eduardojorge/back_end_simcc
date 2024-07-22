@@ -298,6 +298,10 @@ def researcher_data_geral(year_):
     registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["qualis", "year", "count_article"])
+    df = df.pivot_table(
+        index="year", columns="qualis", values="count_article", fill_value=0
+    )
+    df.reset_index(inplace=True)
 
     df["year"] = df["year"].astype("int64")
     if not df.empty:

@@ -698,7 +698,7 @@ def city_search(city_name: str = None) -> str:
 
 def lista_researcher_full_name_db(name, graduate_program_id):
     name = name.replace(";", " ")
-    filter_name = f"r.name ILIKE '{name}%'"
+    filter_name = f"unaccent(r.name) ILIKE unaccent('{name}%')"
 
     filter_graduate_program = str()
     if graduate_program_id:

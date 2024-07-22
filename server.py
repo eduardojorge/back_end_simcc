@@ -17,6 +17,7 @@ from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
+from Rest.ufmgRest import ufmgRest
 from dotenv import load_dotenv
 
 try:
@@ -38,6 +39,8 @@ from zeep import Client
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 app = create_app()
+
+app.register_blueprint(ufmgRest)
 app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
@@ -185,9 +188,10 @@ def total():
 def recently_updated():
     list_bibliographic_production_article = list()
     year = request.args.get("year")
-    university = str(request.args.get("university"))
+    university = request.args.get("university")
+    departament = request.args.get("departament")
 
-    data_frame = SimccBD.recently_updated_db(year, university)
+    data_frame = SimccBD.recently_updated_db(year, university, departament)
 
     for Index, infos in data_frame.iterrows():
         bibliographic_production_article_ = {
@@ -319,7 +323,7 @@ def get_research_group():
 
 @app.route("/research_group/count", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
-def get_research_group():
+def get_research_group_count():
     research_group = SimccBD.list_count_researcher_groups()
     return research_group
 

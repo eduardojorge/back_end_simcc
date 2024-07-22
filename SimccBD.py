@@ -334,7 +334,7 @@ def lists_researcher_initials_term_db(initials, graduate_program_id):
     return df_bd
 
 
-def recently_updated_db(year, institution):
+def recently_updated_db(year, institution, departament):
 
     filter_institution = str()
     if not institution:
@@ -382,8 +382,7 @@ def recently_updated_db(year, institution):
     """
 
     registry = sgbdSQL.consultar_db(script_sql)
-
-    return pd.DataFrame(
+    data_frame = pd.DataFrame(
         registry,
         columns=[
             "title",
@@ -411,6 +410,23 @@ def recently_updated_db(year, institution):
         ],
     )
 
+    if departament:
+        script_sql = f"""
+            SELECT 
+                researcher_id 
+            FROM 
+                public.departament_researcher 
+            WHERE dep_id = '{departament}'
+            """
+        registry = sgbdSQL.consultar_db(script_sql)
+
+        data_frame_researchers = pd.DataFrame(registry, columns=["researcher_id"])
+
+        data_frame = pd.merge(
+            data_frame, data_frame_researchers, on="researcher_id", how="right"
+        )
+    return data_frame
+
 
 def lists_bibliographic_production_article_db(
     term, year, qualis, institution, distinct, graduate_program_id
@@ -424,7 +440,7 @@ def lists_bibliographic_production_article_db(
     filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
     filter_graduate_program = str()
-    if graduate_program_id or graduate_program_id != 0:
+    if graduate_program_id:
         filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
 
     if distinct == "1":
