@@ -28,32 +28,46 @@ def get_researcher_address_db(researcher_id):
 def list_research_dictionary_db(initials, type):
     initials = unidecode.unidecode(initials.lower())
 
-    sql = """
-      SELECT distinct unaccent(term) as term, count(frequency) as frequency, type_
-      FROM research_dictionary r
-      WHERE 
-          {filter_type}
-          AND LOWER(unaccent(term)) LIKE '{initials}%'
-      GROUP BY unaccent(term), type_
-      ORDER BY frequency desc
-      {fetch_limit}
-  """
-
-    filter_type = ""
-    if type == "BOOK":
-        filter_type = " (type_='BOOK' or type_='BOOK_CHAPTER') "
+    if type.lower() == "name":
+        script_sql = """
+            SELECT 
+                name,
+                0 as None,
+                0 as None
+            FROM 
+                researcher;
+        """
+        reg = sgbdSQL.consultar_db(script_sql)
+        df_bd = pd.DataFrame(reg, columns=["name", "frequency", "type"])
     else:
-        filter_type = " type_='{type}' ".format(type=type)
+        sql = """
+            SELECT distinct unaccent(term) as term, count(frequency) as frequency, type_
+            FROM research_dictionary r
+            WHERE 
+                {filter_type}
+                AND LOWER(unaccent(term)) LIKE '{initials}%'
+                AND term ~ '^[^0-9]+$'
+            GROUP BY 
+                unaccent(term), type_
+            ORDER BY 
+                frequency desc
+        {fetch_limit}
+        """
 
-    sql = sql.format(
-        filter_type=filter_type,
-        initials=initials,
-        fetch_limit=" FETCH FIRST 200 ROWS ONLY",
-    )
+        filter_type = ""
+        if type == "BOOK":
+            filter_type = " (type_='BOOK' or type_='BOOK_CHAPTER') "
+        else:
+            filter_type = " type_='{type}' ".format(type=type)
 
-    reg = sgbdSQL.consultar_db(sql)
-    df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
+        sql = sql.format(
+            filter_type=filter_type,
+            initials=initials,
+            fetch_limit="FETCH FIRST 200 ROWS ONLY",
+        )
 
+        reg = sgbdSQL.consultar_db(sql)
+        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     return df_bd
 
 
