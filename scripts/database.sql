@@ -519,6 +519,15 @@ CREATE TABLE IF NOT EXISTS public.researcher_ind_prod (
     CONSTRAINT "PKRIndProd" PRIMARY KEY (researcher_id, year),
     CONSTRAINT "FKRIndProd" FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+CREATE TABLE IF NOT EXISTS research_group_dgp(
+    name character varying(200),
+    institution character varying(200),
+    leader_one character varying(200),
+    leader_one_id uuid,
+    leader_two character varying(200),
+    leader_two_id uuid,
+    area character varying(200)
+);
 CREATE TABLE IF NOT EXISTS ufmg_teacher (
     matric INT,
     inscUFMG INT,

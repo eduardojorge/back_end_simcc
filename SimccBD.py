@@ -46,8 +46,8 @@ def list_productivity_research():
 def list_count_researcher_groups():
     script_sql = """
         SELECT 
-            area, 
-            COUNT(*) 
+            area,
+            COUNT(*)
         FROM 
             public.research_group 
         GROUP BY area;
@@ -63,38 +63,32 @@ def lists_research_groups():
 
     script_sql = """
         SELECT 
-            rg.research_group_id,
-            rg.research_group_name,
-            rg.area,
-            rg.last_date_sent,
-            rg.situation,
-            r.id,
-            r.name AS leader_name,
-            r.lattes_id,
-            i.id,
-            i.name AS institution_name,
-            i.acronym
-        FROM 
-            research_group AS rg 
-            LEFT JOIN researcher AS r ON r.id = rg.researcher_id
-            LEFT JOIN institution AS i ON rg.institution_id = i.id;
+            name, 
+            institution, 
+            leader_one, 
+            leader_one_id, 
+            leader_two, 
+            leader_two_id, 
+            area
+	    FROM 
+            public.research_group_dgp
+            WHERE 
+                leader_one_id IS NOT NULL
+                OR
+                leader_two IS NOT NULL; 
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         registry,
         columns=[
-            "research_group_id",
-            "research_group_name",
+            "name",
+            "institution",
+            "leader_one",
+            "leader_one_id",
+            "leader_two",
+            "leader_two_id",
             "area",
-            "last_date_sent",
-            "situation",
-            "researcher_id",
-            "leader_name",
-            "lattes_id",
-            "institution_id",
-            "institution_name",
-            "acronym",
         ],
     )
 
