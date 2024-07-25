@@ -434,7 +434,7 @@ def lists_bibliographic_production_article_db(
     filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
     filter_graduate_program = str()
-    if graduate_program_id:
+    if graduate_program_id and graduate_program_id != "0":
         filter_graduate_program = f"AND gpr.graduate_program_id = '{graduate_program_id}'"  # fmt: skip
 
     if distinct == "1":
