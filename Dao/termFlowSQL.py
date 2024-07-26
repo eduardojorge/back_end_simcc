@@ -476,7 +476,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
                 ts_stat($${script_sql}$$)
             WHERE 
                 CHAR_LENGTH(word)>3 
-                AND word NOT IN {tuple(stopwords)}
+                AND word NOT IN {tuple(s.replace("'", ' ') for s in stopwords)}
         	ORDER BY
                 ndoc DESC 
             FETCH FIRST 20 ROWS ONLY;
