@@ -522,10 +522,10 @@ CREATE TABLE IF NOT EXISTS public.researcher_ind_prod (
 CREATE TABLE IF NOT EXISTS research_group_dgp(
     name character varying(200),
     institution character varying(200),
-    leader_one character varying(200),
-    leader_one_id uuid,
-    leader_two character varying(200),
-    leader_two_id uuid,
+    first_leader character varying(200),
+    first_leader_id uuid,
+    second_leader character varying(200),
+    second_leader_id uuid,
     area character varying(200)
 );
 CREATE TABLE IF NOT EXISTS ufmg_teacher (

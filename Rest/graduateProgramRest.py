@@ -12,9 +12,7 @@ graduateProgramRest = Blueprint("graduateProgramRest", __name__)
 @cross_origin(origin="*", headers=["Content-Type"])
 def graduate_program_production():
     graduate_program_id = request.args.get("graduate_program_id")
-
     year = request.args.get("year")
-
     return (
         jsonify(graduate_programSQL.production_general_db(graduate_program_id, year)),
         200,
@@ -51,5 +49,7 @@ def graduate_program():
 def graduate_program_profnit():
 
     graduate_program_id = request.args.get("id")
-    json_graduate_program = graduate_programSQL.graduate_program_profnit_db(graduate_program_id)
+    json_graduate_program = graduate_programSQL.graduate_program_profnit_db(
+        graduate_program_id
+    )
     return jsonify(json_graduate_program), 200

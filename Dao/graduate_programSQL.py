@@ -120,7 +120,8 @@ def production_general_db(graduate_program_id, year):
                    'PATENT' AS type, 
                    graduate_program_id AS graduate_program_id, 
                    gpr.year AS year_pos 
-            FROM patent p, graduate_program_researcher gpr
+            FROM 
+            patent p, graduate_program_researcher gpr
             WHERE gpr.researcher_id = p.researcher_id {filter} AND p.development_year::int >= {year}
             GROUP BY type, graduate_program_id, gpr.year 
 
