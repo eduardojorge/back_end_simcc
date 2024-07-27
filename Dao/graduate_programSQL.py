@@ -180,10 +180,22 @@ def production_general_db(graduate_program_id, year):
             SELECT COUNT(graduate_program_id) AS qtd, 
                    'WORK_IN_EVENT' AS type, 
                    gpr.graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+                   gpr.year AS year_pos
             FROM PUBLIC.bibliographic_production b, graduate_program_researcher gpr
             WHERE b.researcher_id = gpr.researcher_id AND TYPE = 'WORK_IN_EVENT' {filter} AND year_ >= {year}
             GROUP BY TYPE, graduate_program_id, gpr.year
+
+            UNION
+
+            SELECT 
+                COUNT(*) as qtd, 
+                UPPER(r.graduation) as type,
+                gpr.graduate_program_id,
+            FROM 
+                researcher r 
+                LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
+                WHERE year_ >= {year} {filter}
+            GROUP BY graduation
             """
     else:
         sql = f"""
@@ -233,6 +245,11 @@ def production_general_db(graduate_program_id, year):
             FROM PUBLIC.bibliographic_production b, researcher r
             WHERE b.researcher_id = r.id AND TYPE = 'WORK_IN_EVENT' AND year_ >= {year}
             GROUP BY TYPE
+
+            UNION
+
+            SELECT COUNT(*) as qtd, UPPER(graduation) 
+            FROM researcher GROUP BY graduation
             """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -250,20 +267,12 @@ def production_general_db(graduate_program_id, year):
     )
     graduateProgram_Production_.id = graduate_program_id
     for i, infos in df_bd.iterrows():
-
-        # print(infos.tipo)
-        # print(infos.qtd)
-
         if infos.tipo == "BOOK":
-
             graduateProgram_Production_.book = infos.qtd
-
         if infos.tipo == "WORK_IN_EVENT":
             graduateProgram_Production_.work_in_event = infos.qtd
-
         if infos.tipo == "ARTICLE":
             graduateProgram_Production_.article = infos.qtd
-
         if infos.tipo == "BOOK_CHAPTER":
             graduateProgram_Production_.book_chapter = infos.qtd
         if infos.tipo == "PATENT":
@@ -272,7 +281,6 @@ def production_general_db(graduate_program_id, year):
             graduateProgram_Production_.software = infos.qtd
         if infos.tipo == "BRAND":
             graduateProgram_Production_.brand = infos.qtd
-
     if filter != "":
         sql = f"""
             SELECT COUNT(*) AS qtd 
@@ -281,7 +289,7 @@ def production_general_db(graduate_program_id, year):
             """
     else:
         sql = """
-            SELECT COUNT(*) AS qtd 
+            SELECT COUNT(*) AS qtd
             FROM researcher r"""
 
     reg = sgbdSQL.consultar_db(sql)
