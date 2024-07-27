@@ -153,8 +153,6 @@ def researcher_image():
 def researcherName():
 
     name = request.args.get("name")
-    if not name:
-        return jsonify([]), HTTPStatus.BAD_REQUEST
     graduate_program_id = request.args.get("graduate_program_id")
 
     list_researcher = Dao.areaFlowSQL.lista_researcher_full_name_db(

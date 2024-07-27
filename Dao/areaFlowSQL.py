@@ -524,7 +524,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
         institution_filter = util.filterSQL(institution, ";", "or", "i.name")
 
     filter_graduate_program = str()
-    if graduate_program_id and graduate_program_id != '0':
+    if graduate_program_id and graduate_program_id != "0":
         filter_graduate_program = f"""
             AND r.id IN (
                 SELECT DISTINCT gpr.researcher_id 
@@ -697,8 +697,10 @@ def city_search(city_name: str = None) -> str:
 
 
 def lista_researcher_full_name_db(name, graduate_program_id):
-    name = name.replace(";", " ")
-    filter_name = f"unaccent(r.name) ILIKE unaccent('{name}%')"
+    filter_name = str()
+    if name:
+        name = name.replace(";", " ")
+        filter_name = f"AND unaccent(r.name) ILIKE unaccent('{name}%')"
 
     filter_graduate_program = str()
     if graduate_program_id:
@@ -735,6 +737,7 @@ def lista_researcher_full_name_db(name, graduate_program_id):
             LEFT JOIN institution i ON r.institution_id = i.id
             LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
         WHERE
+            1 = 1
             {filter_name}
             {filter_graduate_program};
             """
