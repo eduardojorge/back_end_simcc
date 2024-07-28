@@ -13,10 +13,9 @@ graduateProgramRest = Blueprint("graduateProgramRest", __name__)
 def graduate_program_production():
     graduate_program_id = request.args.get("graduate_program_id")
     year = request.args.get("year")
-    return (
-        jsonify(graduate_programSQL.production_general_db(graduate_program_id, year)),
-        200,
-    )
+    list_production = graduate_programSQL.production_general_db(graduate_program_id, year)
+    return jsonify(list_production), 200,
+    
 
 
 # print(list_originals_words_initials_term_db("rob"))

@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS public.patent (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     title character varying(400),
-    category character varying(100),
+    category character varying(200),
     development_year character varying(10),
     details character varying(2500),
     researcher_id uuid,

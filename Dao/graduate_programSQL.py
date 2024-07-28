@@ -265,6 +265,7 @@ def production_general_db(graduate_program_id, year):
     graduateProgram_Production_ = (
         GraduateProgram_Production.GraduateProgram_Production()
     )
+
     graduateProgram_Production_.id = graduate_program_id
     for i, infos in df_bd.iterrows():
         if infos.tipo == "BOOK":
@@ -281,6 +282,17 @@ def production_general_db(graduate_program_id, year):
             graduateProgram_Production_.software = infos.qtd
         if infos.tipo == "BRAND":
             graduateProgram_Production_.brand = infos.qtd
+        if infos.tipo == "DOUTORADO":
+            graduateProgram_Production_.doctors = infos.qtd
+        if infos.tipo == "MESTRADO":
+            graduateProgram_Production_.masters = infos.qtd
+        if infos.tipo == "GRADUAÇÃO":
+            graduateProgram_Production_.graduate = infos.qtd
+        if infos.tipo == "ESPECIALIZAÇÃO":
+            graduateProgram_Production_.pos_doctors = infos.qtd
+        if infos.tipo == "PÓS-DOUTORADO":
+            graduateProgram_Production_.specialization = infos.qtd
+
     if filter != "":
         sql = f"""
             SELECT COUNT(*) AS qtd 

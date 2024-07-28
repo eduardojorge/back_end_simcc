@@ -1,8 +1,6 @@
 class GraduateProgram_Production(object):
     id = ""
-
     year = ""
-
     patent = ""
     software = ""
     brand = ""
@@ -11,6 +9,12 @@ class GraduateProgram_Production(object):
     book_chapter = ""
     work_in_event = ""
     researcher = ""
+
+    doctors = ""
+    masters = ""
+    graduate = ""
+    pos_doctors = ""
+    specialization = ""
 
     def __init__(self):
         self.id = ""
@@ -26,5 +30,10 @@ class GraduateProgram_Production(object):
             "book_chapter": self.book_chapter,
             "work_in_event": self.work_in_event,
             "researcher": self.researcher,
+            "doctors": self.doctors,
+            "masters": self.masters,
+            "graduate": self.graduate,
+            "pos_doctors": self.pos_doctors,
+            "specialization": self.specialization,
         }
         return graduateProgram_Production
