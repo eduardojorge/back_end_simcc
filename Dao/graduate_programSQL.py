@@ -289,9 +289,9 @@ def production_general_db(graduate_program_id, year):
         if infos.tipo == "GRADUAÇÃO":
             graduateProgram_Production_.graduate = infos.qtd
         if infos.tipo == "ESPECIALIZAÇÃO":
-            graduateProgram_Production_.pos_doctors = infos.qtd
-        if infos.tipo == "PÓS-DOUTORADO":
             graduateProgram_Production_.specialization = infos.qtd
+        if infos.tipo == "PÓS-DOUTORADO":
+            graduateProgram_Production_.pos_doctors = infos.qtd
 
     if filter != "":
         sql = f"""
