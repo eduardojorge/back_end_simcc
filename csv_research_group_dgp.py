@@ -8,7 +8,8 @@ import os
 
 # Configuração do driver do Selenium
 options = webdriver.ChromeOptions()
-options.headless = True  # Rodar o navegador em modo headless (sem interface gráfica)
+# Rodar o navegador em modo headless (sem interface gráfica)
+options.headless = True
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options
 )
@@ -18,13 +19,16 @@ driver.get("https://dgp.cnpq.br/dgp/faces/consulta/consulta_parametrizada.jsf")
 time.sleep(20)  # Esperar a página carregar (ajuste conforme necessário)
 
 # Preencher o campo "Termo de Busca" com *
-termo_busca = driver.find_element(By.ID, "idFormConsultaParametrizada:idTextoFiltro")
+termo_busca = driver.find_element(
+    By.ID, "idFormConsultaParametrizada:idTextoFiltro")
 termo_busca.send_keys("*")
 
 # Clicar no botão "Pesquisar"
-botao_pesquisar = driver.find_element(By.ID, "idFormConsultaParametrizada:idPesquisar")
+botao_pesquisar = driver.find_element(
+    By.ID, "idFormConsultaParametrizada:idPesquisar")
 botao_pesquisar.click()
-time.sleep(30)  # Esperar a página carregar os resultados (ajuste conforme necessário)
+# Esperar a página carregar os resultados (ajuste conforme necessário)
+time.sleep(30)
 
 # Nome do arquivo CSV
 csv_file = "grupos_pesquisa.csv"
@@ -76,7 +80,8 @@ def extrair_dados():
 # Inicializar CSV
 if not os.path.exists(csv_file):
     df = pd.DataFrame(
-        columns=["Grupo de Pesquisa", "Instituição", "Líder 1", "Líder 2", "Área"]
+        columns=["Grupo de Pesquisa", "Instituição",
+                 "Líder 1", "Líder 2", "Área"]
     )
     df.to_csv(csv_file, index=False, encoding="utf-8-sig")
 
@@ -101,9 +106,11 @@ while True:
         dados_pagina = extrair_dados()
         df = pd.DataFrame(
             dados_pagina,
-            columns=["Grupo de Pesquisa", "Instituição", "Líder 1", "Líder 2", "Área"],
+            columns=["Grupo de Pesquisa", "Instituição",
+                     "Líder 1", "Líder 2", "Área"],
         )
-        df.to_csv(csv_file, mode="a", header=False, index=False, encoding="utf-8-sig")
+        df.to_csv(csv_file, mode="a", header=False,
+                  index=False, encoding="utf-8-sig")
 
         # Salvar estado da última página processada
         with open("ultima_pagina.txt", "w") as f:
@@ -114,7 +121,8 @@ while True:
         if "ui-state-disabled" in next_button.get_attribute("class"):
             break
         next_button.click()
-        time.sleep(30)  # Esperar a página carregar (ajuste conforme necessário)
+        # Esperar a página carregar (ajuste conforme necessário)
+        time.sleep(30)
         pagina_atual += 1
     except Exception as e:
         print(f"Erro: {e}")

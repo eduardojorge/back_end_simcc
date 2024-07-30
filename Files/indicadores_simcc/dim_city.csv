@@ -1,0 +1,114 @@
+,city_id,name
+0,b75fd813-9c32-45c5-a9ac-7bcc727fb2b6,Belo Horizonte
+1,4ab43217-2d63-4b37-9875-ccb6b3f81cd2,Contagem
+2,0d9f8fb1-d356-4756-90b2-d4224d6e291b,Maringá
+3,8de9a12a-1315-49c0-be1d-d6e38b9772cc,Barbacena
+4,70d7421d-c282-4150-81a0-e388b7cb94ac,São Paulo
+5,6f8c7355-6ea0-4a83-91ff-333a52e2a653,Rio De Janeiro
+6,6e01915d-9048-4c87-82d3-c1b4e69905ef,Uberlândia
+7,ac8a967a-6bb7-488c-b257-51741b295164,Carandai
+8,ff28e010-b49f-4ea3-9454-390327df2f9a,Diamantina
+9,fc5cefc9-4041-408b-8e76-c787f9e19a1e,Caratinga
+10,18971406-a507-4ed9-8914-46e3ae348156,Nepomuceno
+11,48fa92af-660b-4ff7-b800-f43bf07715aa,São José Dos Campos
+12,aba158a5-04cd-4930-acb0-addaea3cadf2,São Carlos
+13,5fb205c6-28df-4c25-abb8-22d3e9bc5092,Sao Luis
+14,3b441625-630f-4063-9167-91c935d5779a,Mogi - Guaçu
+15,c4989643-1e5b-4784-be92-ff5d7743464b,Santo Antônio Do Monte
+16,9a3f4979-7183-4626-90eb-34ae76ae21e3,Viçosa
+17,0981d3da-07d8-4b97-a80e-c3207927d4d5,Ilhéus
+18,2a11bcab-7727-4ac6-b0ef-35a002521647,Teófilo Otoni
+19,69337252-4122-4917-8f0b-def620979b1e,Anápolis
+20,d6ac1230-a334-4fb9-97e8-bf3017d28366,Maceió
+21,e7822ba1-30c6-4c33-8fea-739165942862,Raul Soares
+22,ede5381a-eff7-44c2-9df4-3713be091765,Fortaleza
+23,3d634b1a-816f-44ab-8d15-f0d9f2c26df1,Ipatinga
+24,40164a28-d90c-4c05-8760-2b86f89549a3,Sao Paulo
+25,3e7486f8-3210-45b1-89a2-51526617e006,Porto Alegre
+26,b4c36703-a03c-44d3-8e8e-b919d8a3ee91,Divinópolis
+27,c883cdc7-a4ef-44b3-8ce2-a4a8268864b2,Campinas
+28,8677df4d-e8d8-4e39-8145-0ac906638b38,Franca
+29,74ef435d-401a-4e56-929e-5b0774067215,Passos
+30,c12f2a05-7b45-4865-b618-8875a76d4a17,Itabira
+31,5eed9e2b-75ef-48a5-ae39-8688fe5050f6,Turmalina
+32,91a90e5c-9603-4fc1-9f90-7672b5b136c0,Piumhi
+33,bed8caa3-6763-46c3-9938-13600223ab70,Silvianópolis
+34,a0c2eb64-7830-4a19-99dd-c8e9d58a2fe0,Santa Bárbara
+35,e2a472af-c4f1-4136-9c19-f42ad3dbd5a4,Ubá
+36,ab6dd156-c8cf-4679-9ddf-951b3a9f9190,Itaúna
+37,ecd65f60-a709-477e-b6cb-3e64620e4891,Cachoeiro De Itapemirim
+38,f3cd7178-8440-40e8-b061-3ebe6e88ef01,Mogi Das Cruzes
+39,1f14735f-fa5c-4188-a07d-b77df901ac44,Governador Valadares
+40,d421a67b-eb43-4107-af28-803883f58cc1,Cuiabá
+41,9da3af20-ae37-4a25-8603-4f5587a24de8,Juiz De Fora
+42,9a4ec172-b58a-4b0b-a474-5fecbb2f6ce2,Quibdó
+43,f56ce9c1-fa85-4f87-8dfd-1c7b46b47db4,Vitória Da Conquista
+44,f7a1470e-b9d4-4be2-adfc-2cfc0a4ce979,Corumbá
+45,f6c2b326-863e-4711-b2c5-e0e62d4a3edb,Itumbiara
+46,ec9dbfba-f50c-4a9b-a77c-86a1c99cf9d2,Campo Belo
+47,3dc5fa7f-b57f-423a-8e50-97ebd911b316,Varginha
+48,d9990376-7e3e-4aeb-b6dd-614e148e21c5,Carmo Do Paranaíba
+49,c147bf47-1b1c-4e7d-b8c2-8146e4e0d62e,Vitória
+50,f2a00827-ef92-4918-acda-3cd29e329cea,Montes Claros
+51,6032edf1-6a2e-4310-b333-51c2a81f6848,Jaboticabal
+52,98025e70-e6cf-4bd1-9ef7-ba0c09141af9,Belem
+53,692d6ee2-ba39-4183-99fc-4168bcd9a31c,Nanuque
+54,aaa6783e-b982-4adf-a2ea-d7c5a50f75f3,Conselheiro Lafaiete
+55,2cf5a97c-63bc-4c2b-98bf-85a9de497ea1,Coronel Fabriciano
+56,fc2327ae-c8bf-49b3-be05-4b92c3252b9f,Montevidéu
+57,4c4b8eb2-cc18-4690-9fbd-42d7bb436a9c,Capelinha
+58,02c599f5-a700-4a6f-bc6d-a92cded08e23,Ituiutaba
+59,24b17395-1fbf-45f1-9637-5c150719fff8,Cusco
+60,2fdf3355-4c18-4fff-a54a-65c7b4ba631f,Santos Dumont
+61,204fe471-6ff5-49bc-8d47-04b5a19c211e,Pitangui
+62,a9c2bf38-1c72-4c44-b61f-bc551ce805e2,Salto Grande
+63,e9220acb-9677-4093-b778-dc5d5f2e6bf0,Pirapora
+64,59d3ad70-aacd-47a8-8e5d-a139e20fb68d,São João Del Rei
+65,446b1acb-9a26-4a6d-9468-b24e12721e73,Presidente Olegário
+66,8416c9f5-7d9c-4586-b4ce-a80b1d6804d0,Aracaju
+67,6e6d711a-1bdd-43e3-a050-3c52c5f79a4d,Boa Esperança
+68,1b7c50ea-f9e6-4f22-8904-b7b6de44e65a,Visconde Do Rio Branco
+69,6c05d42d-2d61-4715-824b-0f1146562725,Ponte Nova
+70,886d8da9-0ffc-40e2-98de-cc77ddbe81e9,Nova Lima
+71,59eb0189-7966-4f5f-b05b-8db520735331,Toledo
+72,c0a72c1c-5570-4903-90d3-361eb7a5ddd5,Poços De Caldas
+73,804042da-805e-468b-9d43-3afccd876ef3,Lima
+74,aca10420-f400-4c3a-aea0-012e0bb2d59b,Dracena
+75,a5ac3909-d472-488f-83e3-9ab7a7d4463f,Salvador
+76,6b919cf1-37b3-4f51-80d6-2d6fbe0a0e64,São José Do Rio Preto
+77,39395b00-0922-4939-a155-d9b9be079801,Niterói
+78,19fbe841-6d37-468a-8811-dd505980f3db,Ourinhos
+79,56e77893-492c-42f4-aa12-85eaafac88d1,San Miguel De Tucumán
+80,604b8420-ae7e-4035-b672-5afc31a232a7,Itaú De Minas
+81,2a178d02-17fa-433c-b5d1-05f6057f0eb0,Miradouro
+82,2f51c237-eace-455b-a27b-b9e2f7d5176e,Brasília
+83,6f151bd0-50f3-49c7-aa3f-e3de015c3365,Araraquara
+84,04592d33-74bb-480e-949d-1133bec30750,São Bernardo Do Campo
+85,de036d8f-0fe6-478b-aacf-afc0ff630762,Erechim
+86,bda88c02-91b6-4700-be2c-ce9f1e523d4d,Jena
+87,dbee6910-e882-4e29-8cf9-84d92c799d90,Brasilia
+88,1f4a45d1-e55c-4d66-9ec6-9ee83fcdc636,Rubelita
+89,7d436268-aab2-4a1a-97ad-bc4f54e36725,Patos De Minas
+90,08eddc1e-76c4-4bc0-9444-b0589c7531f4,Betim
+91,07ce5d2a-5518-46e9-99b4-99afc3603860,Palmeira Das Missões
+92,3f7101f6-d78e-4002-8016-03fbbb476087,Coronel Vivida
+93,d15420e0-ec17-4d25-96d5-02417b168b6f,Lavras
+94,6b7ff444-216f-4414-8a9d-d6d05abcc805,Congonhas
+95,2ba3f3ae-47b7-41f7-9297-84b132999a40,Caieiras
+96,dc801945-28a0-4b09-922a-472202c43da8,Monte Carmelo
+97,7e53189c-9de3-4eea-9d65-f1365a87f539,Rio Doce
+98,4b1a386e-df5d-4caf-9a7f-39d3f054b9f1,Pouso Alegre
+99,f36e6fec-81db-4b12-84aa-77f0e1f68f84,Florianópolis
+100,c1992dcb-2c34-440a-904b-0a8e7da5d779,Santander De Quilichao
+101,9a66f225-d4ef-4bc1-a54c-0e444ae2816f,San Antonio
+102,6e2d7f59-df1b-4f2f-8b10-e9a2b54a2a9d,Cúcuta
+103,fce96cec-add3-4fc1-a8b3-138d8db6a7d2,Caeté
+104,464df75b-5cc1-49ec-985a-878efd7708bd,Colatina
+105,70492b20-6b4a-4af5-a224-6ca6e60617a8,Barão De Cocais
+106,7a677b44-c485-4e0f-9dab-0cac28bf6bb5,Imperatriz
+107,9737a803-431c-42cf-b287-52e8be74d266,Ibiá
+108,5d928ebc-d87f-4584-8da4-329cc283c8da,Pinar Del Río
+109,ec0dc47c-8567-4b94-81a8-36a2bcf38ba0,Volta Redonda
+110,52363cf4-4efc-4d09-87aa-800f4ccba123,Santa Clara
+111,6de937a9-8711-44d0-8899-79e6d36f9ca7,Goiânia
+112,d86d7222-3605-4f4b-8f80-e3661ae8f1c0,Pôrto Alegre

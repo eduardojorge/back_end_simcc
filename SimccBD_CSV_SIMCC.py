@@ -196,17 +196,97 @@ def fat_production_tecnical_year_novo_csv_db():
     df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
 
 
+def fat_foment():
+    script_sql = """
+        SELECT 
+            r.id,
+            r.institution_id,
+            modality_code, 
+            modality_name, 
+            category_level_code, 
+            funding_program_name,
+            aid_quantity,
+            scholarship_quantity
+        FROM 
+            public.subsidy s
+            LEFT JOIN researcher r ON r.id = s.researcher_id;
+        """
+
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=[
+        'researcher_id',
+        'institution_id',
+        'modality_code',
+        'modality_name',
+        'category_level_code',
+        'funding_program_name',
+        'aid_quantity',
+        'scholarship_quantity',
+    ])
+
+    df.to_csv(dir + 'fat_foment.csv')
+
+
+def dim_category_level_code():
+    script_sql = """
+    SELECT DISTINCT category_level_code FROM subsidy
+    """
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=['category_level_code'])
+
+    df.to_csv(dir + 'dim_category_level_code.csv')
+
+
+def dim_research_group():
+    script_sql = '''
+        SELECT
+            rg.id,
+            TRANSLATE(rg.name, '"', ''), 
+            rg.area,
+            i.id as institution_id
+        FROM
+            public.research_group_dgp rg
+            LEFT JOIN institution i ON i.acronym = rg.institution
+            WHERE rg.institution = 'UFMG'
+        '''
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=[
+        'group_id', 
+        'group_name', 
+        'area', 
+        'institution_id'])
+
+    df.to_csv(dir + 'dim_research_group.csv')
+
+
+def fat_group_leaders():
+    script_sql = """
+        SELECT 
+            id,
+            first_leader_id, 
+            second_leader_id
+        FROM
+            public.research_group_dgp
+        WHERE 
+            first_leader_id IS NOT NULL
+            OR second_leader_id IS NOT NULL
+            """
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=[
+        'group_id',
+        'first_leader_id', 
+        'second_leader_id'])
+
+    df.to_csv(dir + 'fat_group_leaders')
+
+
 if __name__ == "__main__":
 
-    try:
-        project.project_env = sys.argv[1]
-    except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
-
-    try:
-        dir = sys.argv[2]
-    except:
-        dir = "Files/indicadores_simcc/"
+    dir = "Files/indicadores_simcc/"
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
@@ -250,3 +330,22 @@ if __name__ == "__main__":
     print("Inicio:fat_production_tecnical_year_novo_csv_db()")
     fat_production_tecnical_year_novo_csv_db()
     print("Fim: fat_production_tecnical_year_novo_csv_db()")
+
+    print('Inicio: fat_foment()')
+    fat_foment()
+    print('Fim: fat_foment()')
+
+    print('Inicio: dim_category_level_code()')
+    dim_category_level_code()
+    print('Fim: dim_category_level_code()')
+    
+
+    print('Inicio: dim_research_group()')
+    dim_research_group()
+    print('Fim: dim_research_group()')
+    
+
+    print('Inicio: fat_group_leaders()')
+    fat_group_leaders()
+    print('Fim: fat_group_leaders()')
+    
