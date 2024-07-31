@@ -42,8 +42,8 @@ def create_researcher_dictionary_db(
         script_sql = "DELETE FROM research_dictionary where type_='ABSTRACT'"
         sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
+            print("Total Pesquisador Abstract: " + str(i))
             if (i % 100) == 0:
-                print("Total Pesquisador Abstract: " + str(i))
                 logger.debug("Total Pesquisador abstract: " + str(i))
 
             create_researcher_abstract_dictionary_db(infos.id)
@@ -136,7 +136,7 @@ def create_researcher_patent_dictionary_db(researcher_id):
 
 def create_researcher_participation_events_dictionary_db(researcher_id):
 
-    sql = """SELECT  distinct event_name,year  as  year  from participation_events AS p
+    sql = """SELECT distinct event_name,year  as  year  from participation_events AS p
           WHERE  type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')   and  p.researcher_id='%s' """ % (
         researcher_id
     )
@@ -188,11 +188,6 @@ def insert_research_dictionary_db(tokens, type):
 
 
 if __name__ == "__main__":
-
-    try:
-        project.project_env = sys.argv[1]
-    except:
-        project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
@@ -294,4 +289,9 @@ if __name__ == "__main__":
     sgbdSQL.execScript_db(script_sql)
     logger.debug(script_sql)
 
-    create_researcher_dictionary_db()
+    create_researcher_dictionary_db(
+        article = True,
+        abstract = True,
+        patent = False,
+        event = True,
+    )

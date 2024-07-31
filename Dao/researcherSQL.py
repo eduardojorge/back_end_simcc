@@ -102,19 +102,34 @@ def researcher_search_city(city_id: str = None):
         data_frame = data_frame.merge(
             researcher_research_group_db(), on="id", how="left"
         )
-        data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-        data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+        data_frame = data_frame.merge(
+            researcher_openAlex_db(), on="id", how="left")
+        data_frame = data_frame.merge(
+            researcher_subsidy_db(), on="id", how="left")
 
         return data_frame.fillna("").to_dict(orient="records")
 
 
-def researcher_data_geral(year_):
+def researcher_data_geral(year_, graduate_program_id, dep_id):
+    if graduate_program_id:
+        filter_graduate_program = f"""
+            AND researcher_id IN (SELECT researcher_id FROM graduate_program_researcher WHERE graduate_program_id = '{graduate_program_id}')
+            """
+    else:
+        filter_graduate_program = str()
+    if dep_id:
+        filter_departament = f"""
+            AND researcher_id IN (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            """
+    else:
+        filter_departament = str()
+
     year = list(range(int(year_), 2025))
 
     data_frame = pd.DataFrame(year, columns=["year"])
 
     script_sql = f"""
-        SELECT 
+        SELECT
             g.year,
             COUNT(*) as count_guidance,
             COUNT(CASE WHEN g.status = 'Concluída' THEN 1 ELSE NULL END) as count_concluido,
@@ -123,6 +138,8 @@ def researcher_data_geral(year_):
             guidance g
         WHERE
             g.year >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             g.year
         ORDER BY
@@ -157,6 +174,8 @@ def researcher_data_geral(year_):
         WHERE
             type = 'BOOK'
             AND bp.year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             bp.year
         ORDER BY
@@ -182,6 +201,8 @@ def researcher_data_geral(year_):
         WHERE
             type = 'BOOK_CHAPTER'
             AND bp.year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             bp.year
         ORDER BY
@@ -198,7 +219,7 @@ def researcher_data_geral(year_):
         data_frame["count_book_chapter"] = None
 
     script_sql = f"""
-        SELECT 
+        SELECT
             p.development_year,
             COUNT(CASE WHEN p.grant_date IS NULL THEN 1 ELSE NULL END) count_not_granted_patent,
             COUNT(CASE WHEN p.grant_date IS NOT NULL THEN 1 ELSE NULL END) as count_granted_patent,
@@ -207,6 +228,8 @@ def researcher_data_geral(year_):
             patent p
         WHERE
             p.development_year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             p.development_year
         ORDER BY
@@ -239,6 +262,8 @@ def researcher_data_geral(year_):
             public.software sw
         WHERE
             sw.year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             sw.year
         """
@@ -259,8 +284,10 @@ def researcher_data_geral(year_):
             COUNT(DISTINCT title) as count_report
         FROM
             research_report rr
-        WHERE 
+        WHERE
             rr.year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             rr.year
         ORDER BY
@@ -288,6 +315,8 @@ def researcher_data_geral(year_):
         WHERE
             type = 'ARTICLE'
             AND bp.year::SMALLINT >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             bpa.qualis,
             bp.year
@@ -316,6 +345,8 @@ def researcher_data_geral(year_):
             COUNT(DISTINCT br.title) AS count_brand
         FROM brand br
             WHERE br.year::smallint >= {year_}
+            {filter_graduate_program}
+            {filter_departament}
         GROUP BY
             br.year
     """

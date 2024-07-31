@@ -42,7 +42,9 @@ def byCity():
     researcher_list = list()
     if city_id == None:
         for Index, researcher in researchers.iterrows():
-            area = str(";").join([great_area.strip().replace("_", " ") for great_area in researcher["area"].split(";")])  # fmt: skip
+            area = str(";").join([great_area.strip().replace(
+                # fmt: skip
+                "_", " ") for great_area in researcher["area"].split(";")])
             dict_researcher = {
                 "id": researcher["id"],
                 "researcher_name": researcher["researcher_name"],
@@ -62,7 +64,8 @@ def byCity():
 @researcherDataRest.route("/ResearcherData/TaxonomyCSV", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def getCSV():
-    csv_taxonomy = pd.read_csv("/home/ejorge/simcc/back_end_simcc/article_tax.csv")
+    csv_taxonomy = pd.read_csv(
+        "/home/ejorge/simcc/back_end_simcc/article_tax.csv")
 
     JsonTax = list()
     for Index, Taxonomy in csv_taxonomy.iterrows():
@@ -104,5 +107,8 @@ def city():
 @cross_origin(origin="*", headers=["Content-Type"])
 def DadosGerais():
     year = request.args.get("year")
-    lista = researcherSQL.researcher_data_geral(year)
+    graduate_program_id = request.args.get('graduate_program_id')
+    dep_id = request.args.get('dep_id')
+    lista = researcherSQL.researcher_data_geral(
+        year, graduate_program_id, dep_id)
     return jsonify(lista)

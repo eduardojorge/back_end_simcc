@@ -29,13 +29,15 @@ def list_research_dictionary_db(initials, type):
     initials = unidecode.unidecode(initials.lower())
 
     if type.lower() == "name":
-        script_sql = """
-            SELECT 
+        script_sql = f"""
+            SELECT
                 name,
                 0 as None,
                 0 as None
-            FROM 
-                researcher;
+            FROM
+                researcher
+            WHERE
+                name ILIKE '{initials}%';
         """
         reg = sgbdSQL.consultar_db(script_sql)
         df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
@@ -67,6 +69,36 @@ def list_research_dictionary_db(initials, type):
         )
 
         reg = sgbdSQL.consultar_db(sql)
+        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
+    if type.lower() == 'area':
+        script_sql = f'''
+            SELECT name, 
+                count(*) AS count, 
+                'AREA_SPECIALTY' AS type_ 
+            FROM public.area_specialty 
+            WHERE name ILIKE '{initials}%'
+            GROUP BY name
+
+            UNION
+
+            SELECT name, 
+                count(*) AS count, 
+                'AREA_EXPERTISE' AS type_ 
+            FROM public.area_expertise 
+            WHERE name ILIKE '{initials}%'
+            GROUP BY name
+
+            UNION
+
+            SELECT name, 
+                count(*) AS count, 
+                'SUB_AREA_EXPERTISE' AS type_ 
+            FROM public.sub_area_expertise 
+            WHERE name ILIKE '{initials}%'
+
+            GROUP BY name;
+            '''
+        reg = sgbdSQL.consultar_db(script_sql)
         df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     return df_bd
 

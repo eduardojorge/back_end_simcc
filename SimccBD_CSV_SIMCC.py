@@ -338,14 +338,11 @@ if __name__ == "__main__":
     print('Inicio: dim_category_level_code()')
     dim_category_level_code()
     print('Fim: dim_category_level_code()')
-    
 
     print('Inicio: dim_research_group()')
     dim_research_group()
     print('Fim: dim_research_group()')
-    
 
     print('Inicio: fat_group_leaders()')
     fat_group_leaders()
     print('Fim: fat_group_leaders()')
-    

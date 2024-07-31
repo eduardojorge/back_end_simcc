@@ -47,14 +47,12 @@ def lists_magazine_db(initials, issn):
             filter,
             filteIssn,
         )
-    print(sql)
 
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
         reg, columns=["id", "magazine", "issn", "jcr", "jcr_link", "qualis"]
     )
-    print(df_bd)
 
     return df_bd
 
