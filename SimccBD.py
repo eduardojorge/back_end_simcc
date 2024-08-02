@@ -467,7 +467,7 @@ def lists_bibliographic_production_article_db(
             WHERE 
                 year_ >= {year}
                 AND b.type = 'ARTICLE'
-                AND {filter_term} 
+                {filter_term} 
                 {filter_institution} 
                 {filter_graduate_program} 
                 {filter_qualis}
