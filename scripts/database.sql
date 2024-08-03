@@ -523,14 +523,14 @@ CREATE TABLE public.graduate_program_ind_prod (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     graduate_program_id uuid NOT NULL,
     year integer NOT NULL,
-    ind_prod_article numeric(10,3),
-    ind_prod_book numeric(10,3),
-    ind_prod_book_chapter numeric(10,3),
-    ind_prod_software numeric(10,3),
-    ind_prod_report numeric(10,3),
-    ind_prod_granted_patent numeric(10,3),
-    ind_prod_not_granted_patent numeric(10,3),
-    ind_prod_guidance numeric(10,3)
+    ind_prod_article numeric(10, 3),
+    ind_prod_book numeric(10, 3),
+    ind_prod_book_chapter numeric(10, 3),
+    ind_prod_software numeric(10, 3),
+    ind_prod_report numeric(10, 3),
+    ind_prod_granted_patent numeric(10, 3),
+    ind_prod_not_granted_patent numeric(10, 3),
+    ind_prod_guidance numeric(10, 3)
 );
 CREATE TABLE IF NOT EXISTS research_group_dgp(
     name character varying(200),
@@ -542,16 +542,17 @@ CREATE TABLE IF NOT EXISTS research_group_dgp(
     area character varying(200)
 );
 CREATE TABLE IF NOT EXISTS ufmg_teacher (
-    matric INT,
-    inscUFMG INT,
+    researcher_id uuid,
+    matric character varying(40),
+    inscUFMG character varying(40),
     nome character varying(200),
     genero character varying(40),
     situacao character varying(40),
     rt character varying(40),
-    clas INT,
+    clas character varying(40),
     cargo character varying(40),
     classe character varying(40),
-    ref INT,
+    ref character varying(40),
     titulacao character varying(40),
     entradaNaUFMG DATE,
     progressao DATE,

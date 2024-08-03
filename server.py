@@ -1,3 +1,4 @@
+from zeep import Client
 import sys
 import nltk
 import unidecode
@@ -34,8 +35,6 @@ def create_app():
     app = Flask(__name__)
     return app
 
-
-from zeep import Client
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 app = create_app()
@@ -213,7 +212,8 @@ def recently_updated():
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
         }
-        list_bibliographic_production_article.append(bibliographic_production_article_)
+        list_bibliographic_production_article.append(
+            bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
@@ -284,7 +284,8 @@ def bibliographic_production_article():
                 "keywords": infos.keywords,
             }
 
-        list_bibliographic_production_article.append(bibliographic_production_article_)
+        list_bibliographic_production_article.append(
+            bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
