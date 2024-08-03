@@ -220,8 +220,16 @@ def list_originals_words_initials_term_db(initials):
 def list_sub_area_expertise_initials_term_db(initials):
     initials = unidecode.unidecode(initials)
 
-    scrip_sql = f"SELECT  name as word FROM sub_area_expertise sub  WHERE LOWER(unaccent(name)) LIKE '{initials.lower(
-    )}%' AND char_length(unaccent(LOWER(name)))>3 AND to_tsvector('portuguese', unaccent(LOWER(name)))!='' and  unaccent(LOWER(name))!='sobre' "
+    scrip_sql = f"""
+        SELECT
+            name as word
+        FROM
+            sub_area_expertise sub
+        WHERE 
+            LOWER(unaccent(name)) LIKE '{initials.lower()}%' 
+            AND char_length(unaccent(LOWER(name))) > 3 
+            AND to_tsvector('portuguese', unaccent(LOWER(name)))!='' 
+            AND  unaccent(LOWER(name))!='sobre'"""
     reg = sgbdSQL.consultar_db(scrip_sql)
     df_bd = pd.DataFrame(reg, columns=["word"])
 
