@@ -225,10 +225,10 @@ def list_sub_area_expertise_initials_term_db(initials):
             name as word
         FROM
             sub_area_expertise sub
-        WHERE 
-            LOWER(unaccent(name)) LIKE '{initials.lower()}%' 
-            AND char_length(unaccent(LOWER(name))) > 3 
-            AND to_tsvector('portuguese', unaccent(LOWER(name)))!='' 
+        WHERE
+            LOWER(unaccent(name)) LIKE '{initials.lower()}%'
+            AND char_length(unaccent(LOWER(name))) > 3
+            AND to_tsvector('portuguese', unaccent(LOWER(name)))!=''
             AND  unaccent(LOWER(name))!='sobre'"""
     reg = sgbdSQL.consultar_db(scrip_sql)
     df_bd = pd.DataFrame(reg, columns=["word"])
@@ -454,8 +454,9 @@ def lists_bibliographic_production_article_db(
 
     filter_graduate_program = str()
     if graduate_program_id and graduate_program_id != "0":
-        filter_graduate_program = f"AND gpr.graduate_program_id = '{
-            graduate_program_id}'"  # fmt: skip
+        filter_graduate_program = f"""
+            AND gpr.graduate_program_id = '{graduate_program_id}'
+            """
 
     if distinct == "1":
         script_sql = f"""
