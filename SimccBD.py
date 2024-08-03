@@ -59,23 +59,24 @@ def list_count_researcher_groups():
     return data_frame.to_dict(orient="records")
 
 
+
 def lists_research_groups():
 
     script_sql = """
         SELECT 
             name, 
             institution, 
-            leader_one, 
-            leader_one_id, 
-            leader_two, 
-            leader_two_id, 
+            first_leader, 
+            first_leader_id, 
+            second_leader, 
+            second_leader_id, 
             area
-	    FROM 
+        FROM 
             public.research_group_dgp
-            WHERE 
-                leader_one_id IS NOT NULL
-                OR
-                leader_two IS NOT NULL; 
+        WHERE 
+            first_leader_id IS NOT NULL
+            OR
+            second_leader_id IS NOT NULL; 
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -84,10 +85,10 @@ def lists_research_groups():
         columns=[
             "name",
             "institution",
-            "leader_one",
-            "leader_one_id",
-            "leader_two",
-            "leader_two_id",
+            "first_leader",
+            "first_leader_id",
+            "second_leader",
+            "second_leader_id",
             "area",
         ],
     )

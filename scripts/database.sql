@@ -519,6 +519,19 @@ CREATE TABLE IF NOT EXISTS public.researcher_ind_prod (
     CONSTRAINT "PKRIndProd" PRIMARY KEY (researcher_id, year),
     CONSTRAINT "FKRIndProd" FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+CREATE TABLE public.graduate_program_ind_prod (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    graduate_program_id uuid NOT NULL,
+    year integer NOT NULL,
+    ind_prod_article numeric(10,3),
+    ind_prod_book numeric(10,3),
+    ind_prod_book_chapter numeric(10,3),
+    ind_prod_software numeric(10,3),
+    ind_prod_report numeric(10,3),
+    ind_prod_granted_patent numeric(10,3),
+    ind_prod_not_granted_patent numeric(10,3),
+    ind_prod_guidance numeric(10,3)
+);
 CREATE TABLE IF NOT EXISTS research_group_dgp(
     name character varying(200),
     institution character varying(200),

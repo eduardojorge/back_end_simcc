@@ -17,8 +17,8 @@ import zipfile
 
 def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
     if alternative_cnpq_service:
-        url = f"simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
-        resultado = requests.get(url)
+        url = f"https://simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
+        resultado = requests.get(url, verify=False).json()
     else:
         resultado = client.service.getDataAtualizacaoCV(id)
 
@@ -42,7 +42,7 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
     resultado = client.service.getIdentificadorCNPq(
         nomeCompleto=name, dataNascimento=date, cpf=CPF
     )
-    if resultado != None:
+    if resultado:
         return resultado
 
 
@@ -62,8 +62,8 @@ def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
     try:
         if alternative_cnpq_service:
-            url = f"simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
-            resultado = requests.get(url)
+            url = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
+            resultado = requests.get(url, verify=False).content
         else:
             resultado = client.service.getCurriculoCompactado(id)
         arquivo = open(f"{dir}/zip/{id}.zip", "wb")
@@ -75,7 +75,8 @@ def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
             zip_ref.extractall(f"{dir}/atual")
             if os.path.exists(f"{id}.zip"):
                 os.remove(f"{id}.zip")
-    except:
+    except Exception as E:
+        print(E)
         logger.error("\nErro: Currículo não  existe")
 
 

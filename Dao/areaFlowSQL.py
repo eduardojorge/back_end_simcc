@@ -2,6 +2,7 @@ import Dao.sgbdSQL as sgbdSQL
 import unidecode
 import pandas as pd
 import Dao.util as util
+import base64
 
 # Função para listar a palavras do dicionário passando as iniciais
 
@@ -185,6 +186,7 @@ def lista_researcher_area_expertise_db(term, institution):
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -423,6 +425,8 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
+
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -512,6 +516,7 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -600,6 +605,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -681,6 +687,7 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -706,7 +713,7 @@ def lista_researcher_full_name_db(name, graduate_program_id):
     if graduate_program_id:
         filter_graduate_program = f"""
             AND r.id IN (
-                SELECT DISTINCT gpr.researcher_id 
+                SELECT DISTINCT gpr.researcher_id
                 FROM graduate_program_researcher gpr
                 WHERE gpr.graduate_program_id = '{graduate_program_id}')
             """
@@ -771,6 +778,7 @@ def lista_researcher_full_name_db(name, graduate_program_id):
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on='id', how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -912,7 +920,7 @@ def researcher_graduate_program_db():
         FROM
             graduate_program_researcher gpr
             LEFT JOIN graduate_program gp ON gpr.graduate_program_id = gp.graduate_program_id
-        GROUP BY 
+        GROUP BY
             gpr.researcher_id
         """
     registry = sgbdSQL.consultar_db(script_sql)
@@ -1000,3 +1008,41 @@ def researcher_subsidy_db():
     data_frame = pd.DataFrame(registry, columns=["id", "subsidy"])
 
     return data_frame.fillna("")
+
+
+def researcher_departament():
+    script_sql = """
+        SELECT 
+            dpr.researcher_id as id,
+            jsonb_agg(jsonb_build_object(
+                'dep_id', dp.dep_id,
+                'org_cod', dp.org_cod,
+                'dep_nom', dp.dep_nom,
+                'dep_des', dp.dep_des,
+                'dep_email', dp.dep_email,
+                'dep_site', dp.dep_site,
+                'dep_sigla', dp.dep_sigla,
+                'dep_tel', dp.dep_tel,
+                'img_data', dp.img_data
+            )) as departments
+        FROM
+            public.departament_researcher dpr
+            LEFT JOIN public.ufmg_departament dp ON dpr.dep_id = dp.dep_id
+        GROUP BY
+            dpr.researcher_id;
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=['id', 'departments'])
+
+    def encode_img_data(department_list):
+        for dept in department_list:
+            if dept['img_data']:
+                if isinstance(dept['img_data'], str):
+                    dept['img_data'] = dept['img_data'].encode('utf-8')
+                dept['img_data'] = base64.b64encode(dept['img_data']).decode('utf-8')
+        return department_list
+
+    df['departments'] = df['departments'].apply(encode_img_data)
+
+    return df
