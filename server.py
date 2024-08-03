@@ -315,7 +315,8 @@ def getDataAtualizacaoCV():
 @app.route("/research_group", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group():
-    research_group = SimccBD.lists_research_groups()
+    group_id = request.args.get('group_id')
+    research_group = SimccBD.lists_research_groups(group_id)
     return research_group
 
 
