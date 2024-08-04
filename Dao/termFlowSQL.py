@@ -1,7 +1,7 @@
 import nltk
 import pandas as pd
 import unidecode
-
+import base64
 import Dao.sgbdSQL as sgbdSQL
 import Dao.util as util
 
@@ -9,12 +9,12 @@ import Dao.util as util
 def get_researcher_address_db(researcher_id):
 
     script_sql = f"""
-        SELECT 
-            distinct city, 
-            organ 
-        FROM 
-            researcher_address ra 
-        WHERE 
+        SELECT
+            distinct city,
+            organ
+        FROM
+            researcher_address ra
+        WHERE
             ra.researcher_id = '{researcher_id}'"""
 
     reg = sgbdSQL.consultar_db(script_sql)
@@ -72,28 +72,28 @@ def list_research_dictionary_db(initials, type):
         df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     if type.lower() == 'area':
         script_sql = f'''
-            SELECT name, 
-                count(*) AS count, 
-                'AREA_SPECIALTY' AS type_ 
-            FROM public.area_specialty 
+            SELECT name,
+                count(*) AS count,
+                'AREA_SPECIALTY' AS type_
+            FROM public.area_specialty
             WHERE name ILIKE '{initials}%'
             GROUP BY name
 
             UNION
 
-            SELECT name, 
-                count(*) AS count, 
-                'AREA_EXPERTISE' AS type_ 
-            FROM public.area_expertise 
+            SELECT name,
+                count(*) AS count,
+                'AREA_EXPERTISE' AS type_
+            FROM public.area_expertise
             WHERE name ILIKE '{initials}%'
             GROUP BY name
 
             UNION
 
-            SELECT name, 
-                count(*) AS count, 
-                'SUB_AREA_EXPERTISE' AS type_ 
-            FROM public.sub_area_expertise 
+            SELECT name,
+                count(*) AS count,
+                'SUB_AREA_EXPERTISE' AS type_
+            FROM public.sub_area_expertise
             WHERE name ILIKE '{initials}%'
 
             GROUP BY name;
@@ -117,14 +117,14 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
         filter_researcher = f"AND researcher_id = '{researcher_id}'"
 
     script_sql = f"""
-        SELECT 
-            p.id as id, 
-            p.title as title, 
-            p.development_year as year, 
+        SELECT
+            p.id as id,
+            p.title as title,
+            p.development_year as year,
             p.grant_date as grant_date
-        FROM  
+        FROM
             patent p
-        where 
+        where
             1 = 1
             {filter_term}
             {filter_year}
@@ -249,7 +249,8 @@ def lists_Researcher_Report_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
+        reg, columns=["id", "title", "year",
+                      "project_name", "financing_institutionc"]
     )
 
     return df_bd
@@ -278,7 +279,8 @@ def lists_guidance_researcher_db(researcher_id, year):
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
+        reg, columns=["id", "title", "nature",
+                      "oriented", "type", "status", "year"]
     )
 
     return df_bd
@@ -308,7 +310,8 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name", "nature", "form_participation", "year"]
+        reg, columns=["id", "event_name",
+                      "nature", "form_participation", "year"]
     )
 
     return df_bd
@@ -351,8 +354,8 @@ def lists_bibliographic_production_article_researcher_db(
         filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
     if type == "ARTICLE":
-        script_sql = f""" 
-            SELECT DISTINCT 
+        script_sql = f"""
+            SELECT DISTINCT
                 b.id AS id,
                 title,
                 b.year AS year,
@@ -366,24 +369,24 @@ def lists_bibliographic_production_article_researcher_db(
                 jcr AS jif,
                 jcr_link,
                 r.id as researcher_id
-            FROM 
+            FROM
                 bibliographic_production b
                 LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
                 LEFT JOIN researcher r ON r.id = b.researcher_id
                 LEFT JOIN institution i ON r.institution_id = i.id
             WHERE
-                year_ >= {year}  
-                {filter} 
+                year_ >= {year}
+                {filter}
                 {filter_qualis}
                 AND r.id = '{researcher_id}'
                 AND b.type = 'ARTICLE'
-            ORDER BY 
+            ORDER BY
                 year DESC
             """
 
     if type == "ABSTRACT":
         script_sql = f"""
-        SELECT DISTINCT 
+        SELECT DISTINCT
             b.id AS id,
             title,
             year,
@@ -396,14 +399,14 @@ def lists_bibliographic_production_article_researcher_db(
             r.lattes_id AS lattes_id,
             jcr AS jif,
             jcr_link
-        FROM 
+        FROM
             bibliographic_production b
             LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
             LEFT JOIN researcher r ON r.id = b.researcher_id
             LEFT JOIN institution i ON r.institution_id = i.id
         WHERE
             year_ >= {year}
-            AND {filter} 
+            AND {filter}
             {filter_qualis}
             AND r.id = '{researcher_id}'
         ORDER BY
@@ -448,15 +451,15 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
         )
 
     sql = f"""
-        SELECT 
-            COUNT(*) AS qtd, 
+        SELECT
+            COUNT(*) AS qtd,
             bar.qualis
-        FROM 
+        FROM
             PUBLIC.bibliographic_production b
             LEFT JOIN graduate_program_researcher gpr ON b.researcher_id = gpr.researcher_id,
             bibliographic_production_article bar,
             periodical_magazine pm
-        WHERE 
+        WHERE
             pm.id = bar.periodical_magazine_id
             AND b.id = bar.bibliographic_production_id
             AND year_ >= {year}
@@ -486,31 +489,31 @@ def lists_word_researcher_db(researcher_id, graduate_program):
     elif graduate_program:
         filter_graduate_program = f"""
         JOIN
-        	graduate_program_researcher gpr ON
-        		b.researcher_id = gpr.researcher_id
+                graduate_program_researcher gpr ON
+                        b.researcher_id = gpr.researcher_id
         WHERE gpr.graduate_program_id = '{graduate_program}'
         """
 
     script_sql = f"""
         SELECT
-            translate(unaccent(LOWER(b.title)),'-\\.:;?(),', ' ')::tsvector  
-        FROM 
+            translate(unaccent(LOWER(b.title)),'-\\.:;?(),', ' ')::tsvector
+        FROM
             bibliographic_production b
         {filter_researcher}
         {filter_graduate_program}
         """
 
     script_sql = f"""
-            SELECT 
+            SELECT
                 ndoc AS qtd,
                 INITCAP(word) AS term
-            FROM 
+            FROM
                 ts_stat($${script_sql}$$)
-            WHERE 
-                CHAR_LENGTH(word)>3 
+            WHERE
+                CHAR_LENGTH(word)>3
                 AND word NOT IN {tuple(s.replace("'", ' ') for s in stopwords)}
-        	ORDER BY
-                ndoc DESC 
+                ORDER BY
+                ndoc DESC
             FETCH FIRST 20 ROWS ONLY;
             """
 
@@ -631,7 +634,7 @@ def lista_institution_production_db(text, institution, type_):
 def lista_researcher_id_db(researcher_id):
 
     script_sql = f"""
-        SELECT 
+        SELECT
             DISTINCT r.id AS id,
             opr.h_index,
             opr.relevance_score,
@@ -718,7 +721,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
     if graduate_program_id and graduate_program_id != "0":
         filter_graduate_program = f"""
             AND r.id IN (
-                SELECT DISTINCT gpr.researcher_id 
+                SELECT DISTINCT gpr.researcher_id
                 FROM graduate_program_researcher gpr
                 WHERE gpr.graduate_program_id = '{graduate_program_id}')
             """
@@ -788,11 +791,15 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
         ],
     )
 
-    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_graduate_program_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_research_group_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -898,7 +905,6 @@ def researcher_subsidy_db():
     return data_frame.fillna("")
 
 
-
 def researcher_departament():
     script_sql = """
         SELECT 
@@ -929,7 +935,8 @@ def researcher_departament():
             if dept['img_data']:
                 if isinstance(dept['img_data'], str):
                     dept['img_data'] = dept['img_data'].encode('utf-8')
-                dept['img_data'] = base64.b64encode(dept['img_data']).decode('utf-8')
+                dept['img_data'] = base64.b64encode(
+                    dept['img_data']).decode('utf-8')
         return department_list
 
     df['departments'] = df['departments'].apply(encode_img_data)

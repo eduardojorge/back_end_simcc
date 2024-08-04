@@ -960,15 +960,30 @@ def researcher_graduate_program_db():
 def researcher_research_group_db():
     script_sql = """
         SELECT 
-            rg.researcher_id as id,
+            rg.first_leader_id as id,
             jsonb_agg(jsonb_build_object(
-            'research_group_id', rg.research_group_id,
-            'name', rg.research_group_name
+            'group_id', rg.id,
+            'name', rg.name
             )) as research_groups
         FROM 
-            research_group rg
+            research_group_dgp rg
+        WHERE rg.first_leader_id IS NOT NULL
         GROUP BY
-            rg.researcher_id
+            rg.first_leader_id
+
+        UNION
+
+        SELECT 
+            rg.second_leader_id as id,
+            jsonb_agg(jsonb_build_object(
+            'group_id', rg.id,
+            'name', rg.name
+            )) as research_groups
+        FROM 
+            research_group_dgp rg
+        WHERE rg.second_leader_id IS NOT NULL
+        GROUP BY
+            rg.second_leader_id
         """
     registry = sgbdSQL.consultar_db(script_sql)
 

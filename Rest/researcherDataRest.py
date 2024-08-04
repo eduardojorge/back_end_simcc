@@ -26,7 +26,7 @@ def image():
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
-    except:
+    except FileNotFoundError:
         download_image(researcher_id)
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
