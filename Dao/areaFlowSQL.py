@@ -963,7 +963,8 @@ def researcher_research_group_db():
             rg.first_leader_id as id,
             jsonb_agg(jsonb_build_object(
             'group_id', rg.id,
-            'name', rg.name
+            'name', rg.name,
+            'area', rg.area
             )) as research_groups
         FROM 
             research_group_dgp rg
