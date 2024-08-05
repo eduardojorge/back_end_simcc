@@ -80,9 +80,9 @@ def lists_research_groups(group_id):
         FROM
             public.research_group_dgp
         WHERE
-            first_leader_id IS NOT NULL
+            (first_leader_id IS NOT NULL
             OR
-            second_leader_id IS NOT NULL
+            second_leader_id IS NOT NULL)
             {group_id_filter};
         """
 
