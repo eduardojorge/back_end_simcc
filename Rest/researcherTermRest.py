@@ -122,7 +122,8 @@ def brand_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, 1000)
+    df_bd = termFlowSQL.lists_brand_production_researcher_db(
+        researcher_id, 1000)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -146,7 +147,8 @@ def book_production_researcher():
     year = request.args.get("year")
     term = request.args.get("term")
 
-    df_bd = termFlowSQL.lists_book_production_researcher_db(researcher_id, year, term)
+    df_bd = termFlowSQL.lists_book_production_researcher_db(
+        researcher_id, year, term)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -224,7 +226,8 @@ def software_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
+    df_bd = termFlowSQL.lists_software_production_researcher_db(
+        researcher_id, year)
 
     for i, infos in df_bd.iterrows():
         s = Software_Researcher()
@@ -248,7 +251,8 @@ def pevent_researcher():
 
     nature = request.args.get("nature")
 
-    df_bd = termFlowSQL.lists_pevent_researcher_db(researcher_id, year, term, nature)
+    df_bd = termFlowSQL.lists_pevent_researcher_db(
+        researcher_id, year, term, nature)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -277,7 +281,8 @@ def patent_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
 
-    df_bd = termFlowSQL.lists_patent_production_researcher_db(researcher_id, year, term)
+    df_bd = termFlowSQL.lists_patent_production_researcher_db(
+        researcher_id, year, term)
 
     for i, infos in df_bd.iterrows():
         p = Patent_Researcher()
@@ -357,13 +362,14 @@ def qualis_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def lists_word_researcher():
     researcher_id = request.args.get("researcher_id")
-
+    dep_id = request.args.get('dep_id')
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
     lists_word = list()
-    df_bd = termFlowSQL.lists_word_researcher_db(researcher_id, graduate_program_id)
+    df_bd = termFlowSQL.lists_word_researcher_db(
+        researcher_id, graduate_program_id, dep_id)
 
     for Index, infos in df_bd.iterrows():
         words = {"among": str(infos.qtd), "term": str(infos.term)}
@@ -380,7 +386,8 @@ def institutionFrequenci():
     termNovo = terms.lower()
     university = str(request.args.get("university")) + ""
     type_ = str(request.args.get("type")) + ""
-    df_bd = termFlowSQL.lista_institution_production_db(termNovo, university, type_)
+    df_bd = termFlowSQL.lista_institution_production_db(
+        termNovo, university, type_)
 
     for i, infos in df_bd.iterrows():
         institution = {

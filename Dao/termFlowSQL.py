@@ -480,13 +480,24 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
     return df_bd
 
 
-def lists_word_researcher_db(researcher_id, graduate_program):
+def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
 
     stopwords = nltk.corpus.stopwords.words("portuguese")
     stopwords += nltk.corpus.stopwords.words("english")
 
     filter_researcher = str()
     filter_graduate_program = str()
+
+    if dep_id:
+        filter_departament = f'''
+            WHERE b.researcher_id IN (
+                SELECT researcher_id
+                FROM public.departament_researcher
+                WHERE dep_id = '{dep_id}'
+            )
+            '''
+    else:
+        filter_departament = str()
 
     if researcher_id:
         filter_researcher = f"WHERE b.researcher_id = '{researcher_id}'"
@@ -503,6 +514,7 @@ def lists_word_researcher_db(researcher_id, graduate_program):
             translate(unaccent(LOWER(b.title)),'-\\.:;?(),', ' ')::tsvector
         FROM
             bibliographic_production b
+        {filter_departament}
         {filter_researcher}
         {filter_graduate_program}
         """
