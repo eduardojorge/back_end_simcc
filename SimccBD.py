@@ -442,7 +442,7 @@ def recently_updated_db(year, institution, departament):
 
 
 def lists_bibliographic_production_article_db(
-    term, year, qualis, institution, distinct, graduate_program_id
+    term, year, qualis, institution, distinct, graduate_program_id, dep_id
 ):
     filter_institution = str()
     if institution:
@@ -457,6 +457,16 @@ def lists_bibliographic_production_article_db(
         filter_graduate_program = f"""
             AND gpr.graduate_program_id = '{graduate_program_id}'
             """
+    if dep_id:
+        filter_departament = f'''
+            AND r.id IN (
+                SELECT researcher_id
+                FROM public.departament_researcher
+                WHERE dep_id = '{dep_id}'
+            )
+            '''
+    else:
+        filter_departament = str()
 
     if distinct == "1":
         script_sql = f"""
@@ -492,6 +502,7 @@ def lists_bibliographic_production_article_db(
                 {filter_institution}
                 {filter_graduate_program}
                 {filter_qualis}
+                {filter_departament}
             ORDER BY
                 year_ DESC
                 """
@@ -557,6 +568,7 @@ def lists_bibliographic_production_article_db(
                 {filter_institution}
                 {filter_graduate_program}
                 {filter_qualis}
+                {filter_departament}
                 AND b.type = 'ARTICLE'
             ORDER BY
                 year_ DESC;
