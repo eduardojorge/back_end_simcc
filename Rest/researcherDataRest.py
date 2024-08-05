@@ -19,8 +19,19 @@ def image():
     researcher_id = request.args.get("researcher_id")
     if not researcher_id:
         name = request.args.get("name")
-        researcher_id = sgbdSQL.consultar_db(
-            f"""SELECT id FROM researcher WHERE unaccent(LOWER(name)) ILIKE '{unidecode(name.lower())}';""")[0][0]
+        script_sql = f"""
+            SELECT
+                id
+            FROM
+                researcher
+            WHERE
+                unaccent(LOWER(name)) ILIKE '{unidecode(name.lower())}'
+            LIMIT 1;"""
+        researcher_id = sgbdSQL.consultar_db(script_sql)
+        if researcher_id:
+            researcher_id = researcher_id[0][0]
+        else:
+            return jsonify('Pesquisador não encontrado'), HTTPStatus.NOT_FOUND
 
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
