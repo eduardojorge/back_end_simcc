@@ -353,6 +353,8 @@ def lists_bibliographic_production_article_researcher_db(
     if qualis:
         filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
+    if researcher_id:
+        filter_id = f"""AND r.id = '{researcher_id}'"""
     if type == "ARTICLE":
         script_sql = f"""
             SELECT DISTINCT
@@ -378,7 +380,7 @@ def lists_bibliographic_production_article_researcher_db(
                 year_ >= {year}
                 {filter}
                 {filter_qualis}
-                AND r.id = '{researcher_id}'
+                {filter_id}
                 AND b.type = 'ARTICLE'
             ORDER BY
                 year DESC
@@ -408,13 +410,13 @@ def lists_bibliographic_production_article_researcher_db(
             year_ >= {year}
             AND {filter}
             {filter_qualis}
-            AND r.id = '{researcher_id}'
+            {filter_id}
         ORDER BY
             year DESC
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
-
+    print(script_sql)
     data_frame = pd.DataFrame(
         reg,
         columns=[
