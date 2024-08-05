@@ -8,7 +8,7 @@ import Dao.researcherSQL as researcherSQL
 from Dao import sgbdSQL
 from Model.City import City
 from rest_imageResearcher import download_image
-
+from unidecode import unidecode
 researcherDataRest = Blueprint("researcherDataRest", __name__)
 
 
@@ -20,7 +20,8 @@ def image():
     if not researcher_id:
         name = request.args.get("name")
         researcher_id = sgbdSQL.consultar_db(
-            f"SELECT id FROM researcher WHERE name ILIKE '{name}';"
+            f"SELECT id FROM researcher WHERE unaccent(LOWER(name)) ILIKE '{
+                unidecode(name.lower())}';"
         )[0][0]
 
     try:
