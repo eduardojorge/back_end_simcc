@@ -25,8 +25,9 @@ def image():
             FROM
                 researcher
             WHERE
-                unaccent(LOWER(name)) ILIKE '{unidecode(name.lower())}'
+                unaccent(LOWER(name)) ILIKE '{unidecode(name.lower())}%'
             LIMIT 1;"""
+        print(script_sql)
         researcher_id = sgbdSQL.consultar_db(script_sql)
         if researcher_id:
             researcher_id = researcher_id[0][0]
