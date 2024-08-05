@@ -20,9 +20,7 @@ def image():
     if not researcher_id:
         name = request.args.get("name")
         researcher_id = sgbdSQL.consultar_db(
-            f"SELECT id FROM researcher WHERE unaccent(LOWER(name)) ILIKE '{
-                unidecode(name.lower())}';"
-        )[0][0]
+            f"""SELECT id FROM researcher WHERE unaccent(LOWER(name)) ILIKE '{unidecode(name.lower())}';""")[0][0]
 
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
