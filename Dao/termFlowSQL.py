@@ -355,6 +355,8 @@ def lists_bibliographic_production_article_researcher_db(
 
     if researcher_id:
         filter_id = f"""AND r.id = '{researcher_id}'"""
+    else:
+        filter_id = str()
     if type == "ARTICLE":
         script_sql = f"""
             SELECT DISTINCT
