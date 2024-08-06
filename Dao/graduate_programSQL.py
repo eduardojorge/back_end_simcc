@@ -267,7 +267,7 @@ def production_general_db(graduate_program_id, year, dep_id):
 
             SELECT COUNT(*) as qtd, UPPER(r.graduation)
             FROM researcher r 
-            {f'WHERE {filter_departament[3:]}' if filter_departament else None}
+            {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
             GROUP BY graduation
             """
     print(sql)

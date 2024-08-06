@@ -32,11 +32,11 @@ def image():
             researcher_id = researcher_id[0][0]
         else:
             return jsonify('Pesquisador não encontrado'), HTTPStatus.NOT_FOUND
-
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
-    except FileNotFoundError:
+    except:
+        print(f'download da foto - {researcher_id}')
         download_image(researcher_id)
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
