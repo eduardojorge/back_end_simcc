@@ -724,7 +724,7 @@ def city_search(city_name: str = None) -> str:
     return pd.DataFrame(sgbdSQL.consultar_db(sql=sql), columns=["id"])["id"][0]
 
 
-def lista_researcher_full_name_db(name, graduate_program_id):
+def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
     filter_name = str()
     if name:
         name = name.replace(";", " ")
@@ -738,6 +738,17 @@ def lista_researcher_full_name_db(name, graduate_program_id):
                 FROM graduate_program_researcher gpr
                 WHERE gpr.graduate_program_id = '{graduate_program_id}')
             """
+
+    filter_departament = str()
+    if dep_id:
+        filter_departament = f"""
+            AND r.id IN (
+                SELECT researcher_id
+                FROM public.departament_researcher
+                WHERE dep_id = '{dep_id}'
+            )
+            """
+
 
     script_sql = f"""
         SELECT
@@ -767,7 +778,8 @@ def lista_researcher_full_name_db(name, graduate_program_id):
         WHERE
             1 = 1
             {filter_name}
-            {filter_graduate_program};
+            {filter_graduate_program}
+            {filter_departament};
             """
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -794,7 +806,7 @@ def lista_researcher_full_name_db(name, graduate_program_id):
             "lattes_update",
         ],
     )
-
+    
     data_frame = data_frame.merge(
         researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(
@@ -807,6 +819,7 @@ def lista_researcher_full_name_db(name, graduate_program_id):
         researcher_departament(), on='id', how='left')
     data_frame = data_frame.merge(
         ufmg_researcher(), on='id', how='left')
+        
     return data_frame.fillna("").to_dict(orient="records")
 
 
@@ -1075,10 +1088,11 @@ def researcher_departament():
         GROUP BY
             dpr.researcher_id;
         """
+    
     reg = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(reg, columns=['id', 'departments'])
-
+        
     def encode_img_data(department_list):
         for dept in department_list:
             if dept['img_data']:

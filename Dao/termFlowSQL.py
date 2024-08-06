@@ -24,7 +24,6 @@ def get_researcher_address_db(researcher_id):
     return df_bd
 
 
-# Função para listar a palavras do dicionário passando as iniciais
 def list_research_dictionary_db(initials, type):
     initials = unidecode.unidecode(initials.lower())
 
@@ -40,7 +39,6 @@ def list_research_dictionary_db(initials, type):
                 name ILIKE '{initials}%';
         """
         reg = sgbdSQL.consultar_db(script_sql)
-        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     else:
         sql = """
             SELECT distinct unaccent(term) as term, count(frequency) as frequency, type_
@@ -69,7 +67,6 @@ def list_research_dictionary_db(initials, type):
         )
 
         reg = sgbdSQL.consultar_db(sql)
-        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     if type.lower() == 'area':
         script_sql = f'''
             SELECT name,
@@ -99,7 +96,8 @@ def list_research_dictionary_db(initials, type):
             GROUP BY name;
             '''
         reg = sgbdSQL.consultar_db(script_sql)
-        df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
+        
+    df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     return df_bd
 
 

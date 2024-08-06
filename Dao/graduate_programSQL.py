@@ -110,19 +110,8 @@ def graduate_program_profnit_db(graduate_program_id):
 def production_general_db(graduate_program_id, year, dep_id):
 
     filter = ""
-    if graduate_program_id != "0":
+    if graduate_program_id and graduate_program_id != "0":
         filter = f"AND graduate_program_id = '{graduate_program_id}'"
-
-    if dep_id:
-        filter_departament = f'''
-            AND r.id IN (
-                SELECT researcher_id
-                FROM public.departament_researcher
-                WHERE dep_id = '{dep_id}'
-            )
-            '''
-    else:
-        filter_departament = str()
 
     if filter != "":
         sql = f"""
@@ -208,6 +197,15 @@ def production_general_db(graduate_program_id, year, dep_id):
             GROUP BY graduation
             """
     else:
+        if dep_id:
+            filter_departament = f'''AND r.id IN (
+                    SELECT researcher_id
+                    FROM public.departament_researcher
+                    WHERE dep_id = '{dep_id}'
+                )
+                '''
+        else:
+            filter_departament = str()
         sql = f"""
             SELECT COUNT(r.id) AS qtd, 'PATENT' AS type
             FROM patent p, researcher r
@@ -268,9 +266,11 @@ def production_general_db(graduate_program_id, year, dep_id):
             UNION
 
             SELECT COUNT(*) as qtd, UPPER(r.graduation)
-            FROM researcher r GROUP BY graduation
-            {f'WHERE {filter_departament[3]}' if filter_departament else None}
+            FROM researcher r 
+            {f'WHERE {filter_departament[3:]}' if filter_departament else None}
+            GROUP BY graduation
             """
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":

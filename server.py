@@ -147,9 +147,9 @@ def researcherName():
 
     name = request.args.get("name")
     graduate_program_id = request.args.get("graduate_program_id")
-
+    dep_id = request.args.get('dep_id')
     list_researcher = Dao.areaFlowSQL.lista_researcher_full_name_db(
-        name, graduate_program_id
+        name, graduate_program_id, dep_id
     )
     return jsonify(list_researcher), HTTPStatus.OK
 
