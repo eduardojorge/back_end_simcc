@@ -1,22 +1,20 @@
+from Dao import sgbdSQL
+import pandas as pd
+from pprint import pprint
+import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-import json
-import os
-from pprint import pprint
-import pandas as pd
-
-import project
-from Dao import sgbdSQL
 
 
 def extract_institutions(data):
     for author in data["authorships"]:
         for institution in author["institutions"]:
             script_sql = f"""
-            SELECT 
+            SELECT
                 api.id
-            FROM 
+            FROM
                 public.open_alex_institutions api
             WHERE
                 similarity(
@@ -30,10 +28,10 @@ def extract_institutions(data):
                     INSERT INTO public.open_alex_institutions(
                     name, ror, country_code, type, lineage)
                     VALUES (
-                        '{institution['display_name']}', 
-                        '{institution['ror']}', 
-                        '{institution['country_code']}', 
-                        '{institution['type']}', 
+                        '{institution['display_name']}',
+                        '{institution['ror']}',
+                        '{institution['country_code']}',
+                        '{institution['type']}',
                         '{institution['lineage'][0]}');
                     """
                 sgbdSQL.execScript_db(script_sql)
@@ -99,8 +97,8 @@ def extract_article_tmp(id, data):
         authors_institution, language, citations_count, pdf, landing_page_url,
         keywords)
         VALUES (
-            '{id}', '{article_institution}', '{issn}', '{abstract}', 
-            '{authors_list}', '{institutions_list}', '{language}', 
+            '{id}', '{article_institution}', '{issn}', '{abstract}',
+            '{authors_list}', '{institutions_list}', '{language}',
             '{citations_count}', '{download_link}', '{landing_page_url}',
             '{keywords_list}');
         """
@@ -119,14 +117,13 @@ def extract_researcher_tmp(id, data):
     script_sql = f"""
         INSERT INTO public.openalex_researcher(
         researcher_id, h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex)
-        VALUES ('{id}', '{h_index}', 0, '{works_count}', '{cited_by_count}', '{i10_index}', '', '{orcid}', '{open_alex}');
+        VALUES ('{id}', '{h_index}', 0, '{works_count}',
+                '{cited_by_count}', '{i10_index}', '', '{orcid}', '{open_alex}');
         """
     sgbdSQL.execScript_db(script_sql)
 
 
 if __name__ == "__main__":
-    project.project_env = "4"
-
     for json_path in os.listdir("Files/openAlex_article"):
         if json_path.endswith(".json"):
             with open(f"Files/openAlex_article/{json_path}", "r") as f:

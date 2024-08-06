@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
-import project
 
 
 def getLattesId10(lattes_id: str) -> str:
@@ -39,8 +38,6 @@ def getLattesId10(lattes_id: str) -> str:
 
 def update_lattes_id_10():
 
-    project.project_env = "4"
-
     script_sql = """
         SELECT 
             r.id as id, 
@@ -60,7 +57,7 @@ def update_lattes_id_10():
         lattes_10_id = getLattesId10(infos["lattes"])
 
         script_sql = f"""
-            UPDATE researcher 
+            UPDATE researcher
             SET lattes_10_id = '{lattes_10_id}' WHERE id = '{infos['id']}';
             """
 

@@ -1,14 +1,12 @@
+import os
+import logging
+import pandas as pd
+import Dao.sgbdSQL as sgbdSQL
+import Dao.termFlowSQL as termFlowSQL
+import Dao.areaFlowSQL as areaFlowSQL
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-import Dao.areaFlowSQL as areaFlowSQL
-import Dao.termFlowSQL as termFlowSQL
-import Dao.sgbdSQL as sgbdSQL
-import pandas as pd
-import logging
-import project
-import sys
-import os
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -88,17 +86,17 @@ def create_researcher_production_db(test: bool = False):
 def new_researcher_production_db(researcher_id):
 
     sql = f"""
-        SELECT 
-            count(title) as qtd, 
-            b.type as tipo 
-        FROM 
-            bibliographic_production AS b 
-        WHERE 
+        SELECT
+            count(title) as qtd,
+            b.type as tipo
+        FROM
+            bibliographic_production AS b
+        WHERE
             researcher_id = '{researcher_id}'
-        GROUP BY 
-            tipo 
-        ORDER BY 
-            tipo 
+        GROUP BY
+            tipo
+        ORDER BY
+            tipo
         DESC;
             """
 
@@ -149,7 +147,7 @@ def new_researcher_production_db(researcher_id):
             patent,
             software,
             brand
-        ) 
+        )
         values(
             '{researcher_id}',
             '{qtd_article}',

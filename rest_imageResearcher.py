@@ -1,5 +1,4 @@
 from Dao import sgbdSQL as db
-import project
 import requests
 import pandas as pd
 from dotenv import load_dotenv
@@ -36,9 +35,6 @@ def download_image(id: str = None, name: str = None, lattes_id: str = None) -> N
 
 
 if __name__ == "__main__":
-    project.project_env = str(
-        input("Código do banco que sera utilizado [1-8]: "))
-
     researcher_data = pd.DataFrame(
         db.consultar_db("SELECT id, name, lattes_10_id FROM researcher "),
         columns=["id", "name", "lattes_10_id"],

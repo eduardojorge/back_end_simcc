@@ -1,10 +1,6 @@
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 
-import project
-
-project.project_env = "1"
-
 
 def insert_student_graduate_program_db(lattes_id, graduate_program_id, year, type_):
 
@@ -33,7 +29,8 @@ for i, infos in df.iterrows():
 
     print("teste x " + str(infos[ID_LATTES]))
 
-    insert_student_graduate_program_db(str(infos[ID_LATTES]), 4, 2023, "EFETIVO")
+    insert_student_graduate_program_db(
+        str(infos[ID_LATTES]), 4, 2023, "EFETIVO")
 
     x = x + 1
 print("Fim " + str(x))

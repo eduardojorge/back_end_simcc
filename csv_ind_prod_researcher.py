@@ -1,5 +1,4 @@
 import pandas as pd
-import project as project
 from Dao import sgbdSQL
 
 
@@ -36,7 +35,8 @@ def article_prod(Data):
 
     print(df_ind_prod_base_article.columns)
 
-    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
+    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(
+        int)
     return df_ind_prod_base_article
 
 
@@ -58,7 +58,8 @@ def book_prod(Data):
 
     registry = sgbdSQL.consultar_db(script_sql)
 
-    df_ind_prod_base_book = pd.DataFrame(registry, columns=["year", "count_book"])
+    df_ind_prod_base_book = pd.DataFrame(
+        registry, columns=["year", "count_book"])
 
     df_ind_prod_base_book["ind_prod_book"] = (
         df_ind_prod_base_book["count_book"] * weights["BOOK"]
@@ -92,7 +93,8 @@ def book_chapter_prod(Data):
     )
 
     df_ind_prod_base_book_chapter["ind_prod_book_chapter"] = (
-        df_ind_prod_base_book_chapter["count_book_chapter"] * weights["BOOK_CHAPTER"]
+        df_ind_prod_base_book_chapter["count_book_chapter"] *
+        weights["BOOK_CHAPTER"]
     )
     df_ind_prod_base_book_chapter = df_ind_prod_base_book_chapter.drop(
         "count_book_chapter", axis=1
@@ -109,12 +111,12 @@ def patent_prod(Data):
             development_year,
             'PATENT_GRANTED' as granted,
             COUNT(*) as count_patent
-        FROM 
+        FROM
             patent p
         WHERE
             p.researcher_id = '{Data['id']}'
             AND grant_date IS NOT NULL
-        GROUP BY 
+        GROUP BY
             development_year
 
         UNION
@@ -123,12 +125,12 @@ def patent_prod(Data):
             development_year,
             'PATENT_NOT_GRANTED',
             COUNT(*) as count_patent
-        FROM 
+        FROM
             patent p
         WHERE
             p.researcher_id = '{Data['id']}'
             AND grant_date IS NULL
-        GROUP BY 
+        GROUP BY
             development_year
         """
     registry = sgbdSQL.consultar_db(script_sql)
@@ -151,7 +153,8 @@ def patent_prod(Data):
         }
     )
     df_ind_prod_base_patent = df_ind_prod_base_patent.reset_index()
-    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
+    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(
+        int)
 
     return df_ind_prod_base_patent
 
@@ -161,7 +164,7 @@ def software_prod(Data):
         SELECT
             year,
             COUNT(*) as count_software
-        FROM 
+        FROM
             public.software
         WHERE
             researcher_id = '{Data['id']}'
@@ -178,7 +181,8 @@ def software_prod(Data):
     df_ind_prod_base_software["ind_prod_software"] = (
         df_ind_prod_base_software["count_software"] * weights["SOFTWARE"]
     )
-    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(int)
+    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(
+        int)
     return df_ind_prod_base_software
 
 
@@ -187,13 +191,13 @@ def report_prod(Data):
         SELECT
             year,
             COUNT(*) as count_report
-        FROM 
-            research_report 
-        WHERE 
+        FROM
+            research_report
+        WHERE
             researcher_id = '{Data['id']}'
         GROUP BY
             year
-        ORDER BY 
+        ORDER BY
             year
         """
 
@@ -204,14 +208,15 @@ def report_prod(Data):
         columns=["year", "count_report"],
     )
 
-    data_frame["ind_prod_report"] = data_frame["count_report"] * weights["REPORT"]
+    data_frame["ind_prod_report"] = data_frame["count_report"] * \
+        weights["REPORT"]
 
     return data_frame
 
 
 def guidance_prod(Data):
     script_sql = f"""
-        SELECT 
+        SELECT
             g.year,
             g.nature || ' ' || g.status AS nature_status,
             COUNT(*) as count_nature
@@ -233,7 +238,8 @@ def guidance_prod(Data):
     )
 
     data_frame_guidance["ind_prod_guidance"] = (
-        data_frame_guidance["nature"].map(weights) * data_frame_guidance["count_nature"]
+        data_frame_guidance["nature"].map(
+            weights) * data_frame_guidance["count_nature"]
     )
     data_frame_guidance = data_frame_guidance.groupby("year", as_index=False)[
         "ind_prod_guidance"
@@ -296,45 +302,45 @@ if __name__ == "__main__":
         else:
             data_frame["ind_prod_article"] = None
 
-        # df = book_prod(Data=Data)
+        df = book_prod(Data=Data)
 
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # else:
-        #     data_frame["ind_prod_book"] = None
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_book"] = None
 
-        # df = book_chapter_prod(Data=Data)
+        df = book_chapter_prod(Data=Data)
 
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # else:
-        #     data_frame["ind_prod_book_chapter"] = None
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_book_chapter"] = None
 
-        # df = patent_prod(Data=Data)
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # if "ind_prod_granted_patent" not in df.columns:
-        #     data_frame["ind_prod_granted_patent"] = None
-        # if "ind_prod_not_granted_patent" not in df.columns:
-        #     data_frame["ind_prod_not_granted_patent"] = None
+        df = patent_prod(Data=Data)
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        if "ind_prod_granted_patent" not in df.columns:
+            data_frame["ind_prod_granted_patent"] = None
+        if "ind_prod_not_granted_patent" not in df.columns:
+            data_frame["ind_prod_not_granted_patent"] = None
 
-        # df = software_prod(Data=Data)
+        df = software_prod(Data=Data)
 
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # else:
-        #     data_frame["ind_prod_software"] = None
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_software"] = None
 
-        # df = report_prod(Data=Data)
+        df = report_prod(Data=Data)
 
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # else:
-        #     data_frame["ind_prod_report"] = None
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_report"] = None
 
-        # df = guidance_prod(Data=Data)
+        df = guidance_prod(Data=Data)
 
-        # if not df.empty:
-        #     data_frame = pd.merge(data_frame, df, on="year", how="left")
-        # else:
-        #     data_frame["ind_prod_guidance"] = None
+        if not df.empty:
+            data_frame = pd.merge(data_frame, df, on="year", how="left")
+        else:
+            data_frame["ind_prod_guidance"] = None

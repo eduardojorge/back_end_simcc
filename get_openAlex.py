@@ -2,7 +2,6 @@ import os
 import time
 import json
 import requests
-import project
 from Dao import sgbdSQL as db
 
 
@@ -72,6 +71,5 @@ def scrapping_researcher_data():
 
 
 if __name__ == "__main__":
-    project.project_env = "4"
     scrapping_researcher_data()
     scrapping_article_data()

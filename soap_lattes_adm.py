@@ -1,18 +1,14 @@
+import zipfile
+import requests
+import Dao.sgbdSQL as sgbdSQL
+import logging
+import pandas as pd
+import os
+from datetime import datetime
+from zeep import Client
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-
-from zeep import Client
-from datetime import datetime
-import os
-import pandas as pd
-import logging
-from datetime import datetime
-import Dao.sgbdSQL as sgbdSQL
-import project as project
-import requests
-import project
-import zipfile
 
 
 def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
@@ -28,7 +24,8 @@ def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
 
 
 def last_update(id: str):
-    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
+    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{
+        id}';"
 
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -62,7 +59,8 @@ def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
     try:
         if alternative_cnpq_service:
-            url = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
+            url = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={
+                id}"
             resultado = requests.get(url, verify=False).content
         else:
             resultado = client.service.getCurriculoCompactado(id)
@@ -133,4 +131,5 @@ if __name__ == "__main__":
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    print(f"FIM, Quantidade de curriculos processados: {
+          str(quant_curriculos)}")

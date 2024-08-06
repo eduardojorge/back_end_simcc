@@ -10,10 +10,8 @@ import Dao.areaFlowSQL
 import Dao.generalSQL
 import Dao.researcherSQL
 import Dao.termFlowSQL
-import project
 import SimccBD as SimccBD
 from Model.Magazine import Magazine
-from Model.Researcher import Researcher
 from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
@@ -22,12 +20,8 @@ from Rest.ufmgRest import ufmgRest
 from dotenv import load_dotenv
 
 try:
-    project.project_env = sys.argv[1]
-except Exception as error:
-    project.project_env = "4"
-try:
     port = sys.argv[2]
-except Exception as error:
+except Exception:
     port = 8080
 
 

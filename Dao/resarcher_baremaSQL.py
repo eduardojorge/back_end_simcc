@@ -3,11 +3,6 @@ import pandas as pd
 import Dao.util as util
 import Model.Resarcher_Production as Resarcher_Production
 
-# Função para listar a palavras do dicionário passando as iniciais
-import project
-
-project.project_env = "4"
-
 
 def article_qualis(resarcher_Production, infos):
     if infos.tipo[7:10] == "A1":
@@ -36,7 +31,7 @@ def article_qualis(resarcher_Production, infos):
 def lists_guidance_researcher_db(year, resarcher_Production):
 
     sql = f"""
-        SELECT 
+        SELECT
             COUNT(g.id) AS qtd,
             status,
             nature
@@ -62,7 +57,8 @@ def lists_guidance_researcher_db(year, resarcher_Production):
             resarcher_Production.guidance_m_c = infos.qtd
 
         if (
-            util.unidecodelower(infos.nature.lower(), "Dissertação De Mestrado")
+            util.unidecodelower(infos.nature.lower(),
+                                "Dissertação De Mestrado")
             and infos.status == "Em andamento"
         ):
             resarcher_Production.guidance_m_a = infos.qtd
@@ -138,204 +134,205 @@ def production_general_db(name, lattes_id, year):
         filter = f"r.name='{name}' AND "
 
     script_sql = f"""
-        SELECT 
-            COUNT(p.id) AS qtd, 
-            'BRAND' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(p.id) AS qtd,
+            'BRAND' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            brand p, 
+        FROM
+            brand p,
             researcher r
-        WHERE 
-            p.researcher_id = r.id 
+        WHERE
+            p.researcher_id = r.id
             AND {filter} p.year >= {year.brand}
-        GROUP BY 
+        GROUP BY
             type,
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(p.id) AS qtd, 
-            'PATENT' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(p.id) AS qtd,
+            'PATENT' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            patent p, 
+        FROM
+            patent p,
             researcher r
-        WHERE 
-            p.researcher_id = r.id 
+        WHERE
+            p.researcher_id = r.id
             AND {filter} p.development_year::INT >= {year.patent}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(s.id) AS qtd, 
-            'SOFTWARE' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(s.id) AS qtd,
+            'SOFTWARE' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            software s, 
+        FROM
+            software s,
             researcher r
-        WHERE 
-            s.researcher_id = r.id 
+        WHERE
+            s.researcher_id = r.id
             AND {filter} s.year >= {year.software}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(ba.id) AS qtd, 
-            'ARTICLE' || ba.qualis AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(ba.id) AS qtd,
+            'ARTICLE' || ba.qualis AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            PUBLIC.bibliographic_production b, 
-            bibliographic_production_article ba, 
+        FROM
+            PUBLIC.bibliographic_production b,
+            bibliographic_production_article ba,
             researcher r
-        WHERE 
-            b.id = ba.bibliographic_production_id 
-            AND type='ARTICLE' 
+        WHERE
+            b.id = ba.bibliographic_production_id
+            AND type='ARTICLE'
             AND b.researcher_id = r.id
             AND {filter} b.year_ >= {year.article}
-        GROUP BY 
-            'ARTICLE' || ba.qualis, 
-            r.name, 
-            r.lattes_10_id, 
+        GROUP BY
+            'ARTICLE' || ba.qualis,
+            r.name,
+            r.lattes_10_id,
             r.graduation, r.id
         UNION
 
-        SELECT 
-            COUNT(b.id) AS qtd, 
-            'BOOK' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(b.id) AS qtd,
+            'BOOK' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            PUBLIC.bibliographic_production b, 
+        FROM
+            PUBLIC.bibliographic_production b,
             researcher r
-        WHERE 
-            b.researcher_id = r.id 
+        WHERE
+            b.researcher_id = r.id
             AND type IN ('BOOK')
             AND {filter} b.year_ >= {year.book}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(b.id) AS qtd, 
-            'BOOK_CHAPTER' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(b.id) AS qtd,
+            'BOOK_CHAPTER' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            PUBLIC.bibliographic_production b, 
+        FROM
+            PUBLIC.bibliographic_production b,
             researcher r
-        WHERE 
-            b.researcher_id = r.id 
+        WHERE
+            b.researcher_id = r.id
             AND type IN ('BOOK_CHAPTER')
             AND {filter} b.year_ >= {year.chapter_book}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(b.id) AS qtd, 
-            'WORK_IN_EVENT' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(b.id) AS qtd,
+            'WORK_IN_EVENT' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            PUBLIC.bibliographic_production b, 
+        FROM
+            PUBLIC.bibliographic_production b,
             researcher r
-        WHERE 
-            b.researcher_id = r.id 
+        WHERE
+            b.researcher_id = r.id
             AND type IN ('WORK_IN_EVENT')
             AND {filter} b.year_ >= {year.work_event}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(b.id) AS qtd, 
-            'EVENT_ORGANIZATION' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(b.id) AS qtd,
+            'EVENT_ORGANIZATION' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            event_organization b, 
+        FROM
+            event_organization b,
             researcher r
-        WHERE 
+        WHERE
             b.researcher_id = r.id
             AND {filter} b.year >= {year.participation_events}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
         UNION
 
-        SELECT 
-            COUNT(b.id) AS qtd, 
-            'PARTICIPATION_EVENTS' AS type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        SELECT
+            COUNT(b.id) AS qtd,
+            'PARTICIPATION_EVENTS' AS type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id
-        FROM 
-            participation_events b, 
+        FROM
+            participation_events b,
             researcher r
-        WHERE 
+        WHERE
             b.researcher_id = r.id
             AND {filter} b.year >= {year.participation_events}
-        GROUP BY 
-            type, 
-            r.name, 
-            r.lattes_10_id, 
-            r.graduation, 
+        GROUP BY
+            type,
+            r.name,
+            r.lattes_10_id,
+            r.graduation,
             r.id;
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(
         reg,
-        columns=["qtd", "tipo", "name_", "lattes_10_id", "graduation", "researcher_id"],
+        columns=["qtd", "tipo", "name_", "lattes_10_id",
+                 "graduation", "researcher_id"],
     )
     resarcher_Production = Resarcher_Production.Resarcher_Production()
 
@@ -395,7 +392,8 @@ def researcher_production_db(list_name, lattes_id, year):
         for cont, Data in df_bd.iterrows():
             cont += 1
             print(cont, " | ", Data["lattes_id"])
-            json_researcher.append(production_general_db("", Data["lattes_id"], year))
+            json_researcher.append(
+                production_general_db("", Data["lattes_id"], year))
 
         return json_researcher
     else:

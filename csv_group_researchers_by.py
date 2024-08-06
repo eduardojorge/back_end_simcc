@@ -1,6 +1,5 @@
 import sys
 import pandas as pd
-import project
 from Dao import sgbdSQL
 from Dao.resarcher_baremaSQL import researcher_production_db
 from Model.Year_Barema import Year_Barema
@@ -21,7 +20,8 @@ def set_barema():
     if int(input("Modificar os pesos para o indice de produção? [1 - Sim/0 - Não]")):
         for key, value in qualis_barema.items():
             qualis_barema[key] = int(
-                input(f"Alterando o peso para produções({key}).\nDe {value} para: ")
+                input(f"Alterando o peso para produções({
+                      key}).\nDe {value} para: ")
             )
 
     return qualis_barema
@@ -106,7 +106,8 @@ if __name__ == "__main__":
     lista = list()
     for Index, Data in data_frame_researchers.iterrows():
         print(Index, end=" ")
-        json_barema = researcher_production_db("", Data["lattes_id"], year_setup)[0]  # fmt: skip
+        json_barema = researcher_production_db(
+            "", Data["lattes_id"], year_setup)[0]  # fmt: skip
         json_barema["id"] = Data["id"]
         json_barema["name"] = Data["name"]
 

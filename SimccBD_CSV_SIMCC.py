@@ -1,16 +1,12 @@
+import Dao.sgbdSQL as sgbdSQL
+import pandas as pd
+from datetime import datetime
+import sys
+import logging
+import json
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-import json
-import logging
-import sys
-from datetime import datetime
-
-
-import pandas as pd
-
-import Dao.sgbdSQL as sgbdSQL
-import project
 
 
 def fat_simcc_bibliographic_production():
@@ -190,7 +186,8 @@ def fat_production_tecnical_year_novo_csv_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
+        columns=["title", "year", "type",
+                 "researcher_id", "city_id", "institution_id"],
     )
 
     df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
@@ -254,9 +251,9 @@ def dim_research_group():
     reg = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(reg, columns=[
-        'group_id', 
-        'group_name', 
-        'area', 
+        'group_id',
+        'group_name',
+        'area',
         'institution_id'])
 
     df.to_csv(dir + 'dim_research_group.csv')
@@ -278,7 +275,7 @@ def fat_group_leaders():
 
     df = pd.DataFrame(reg, columns=[
         'group_id',
-        'first_leader_id', 
+        'first_leader_id',
         'second_leader_id'])
 
     df.to_csv(dir + 'fat_group_leaders')

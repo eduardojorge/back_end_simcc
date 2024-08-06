@@ -2,9 +2,6 @@ import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 import unidecode
 import Dao.util as util
-import project
-
-project.project_env = "4"
 
 
 def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
@@ -15,10 +12,8 @@ def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
     filter_p = util.filterSQLRank2(term_p, ";", "p.title")
     filter_i = util.filterSQLRank2(term_i, ";", "p.title")
 
-    filter_p = filter_p[5 : len(filter_p)]
-    filter_i = filter_i[5 : len(filter_i)]
-
-    # filter= util.filterSQL(text,";","or","gae.name")
+    filter_p = filter_p[5: len(filter_p)]
+    filter_i = filter_i[5: len(filter_i)]
 
     sql = """
 
@@ -29,14 +24,7 @@ def lista_researcher_patent_db(tax, term_p, term_i, termos, tax_id):
                           FROM  researcher r  ,
                           patent p
                            WHERE 
-                         
-                      
-
                             ( %s or %s )
-
-                         
-                      
-     
      """ % (
         termos,
         tax,
@@ -159,7 +147,8 @@ for i, infos in df.iterrows():
             )
 
             if x != 0:
-                df_article = pd.concat([df_article, df1_article], axis=0, join="inner")
+                df_article = pd.concat(
+                    [df_article, df1_article], axis=0, join="inner")
             else:
                 df_article = df1_article
 

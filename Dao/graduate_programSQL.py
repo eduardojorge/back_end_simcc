@@ -36,24 +36,24 @@ def graduate_program_profnit_db(graduate_program_id):
             f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
         )
     sql = f"""
-        SELECT 
-            gp.graduate_program_id, 
-            gp.code, 
-            gp.name, 
-            gp.area, 
-            gp.modality, 
-            gp.type, 
-            gp.rating, 
+        SELECT
+            gp.graduate_program_id,
+            gp.code,
+            gp.name,
+            gp.area,
+            gp.modality,
+            gp.type,
+            gp.rating,
             gp.institution_id,
-            gp.description, 
+            gp.description,
             gp.url_image,
-            gp.city, 
-            gp.visible, 
-            gp.created_at, 
+            gp.city,
+            gp.visible,
+            gp.created_at,
             gp.updated_at,
             COUNT(CASE WHEN gr.type_ = 'PERMANENTE' THEN 1 END) as qtd_permanente,
             COUNT(CASE WHEN gr.type_ = 'COLABORADOR' THEN 1 END) as qtd_colaborador
-        FROM 
+        FROM
             graduate_program gp
             LEFT JOIN graduate_program_researcher gr ON gp.graduate_program_id = gr.graduate_program_id
             LEFT JOIN graduate_program_student gps ON gps.graduate_program_id = gp.graduate_program_id
@@ -86,10 +86,10 @@ def graduate_program_profnit_db(graduate_program_id):
     )
     print(data_frame)
     script_sql = """
-        SELECT 
+        SELECT
             gp.graduate_program_id,
             COUNT(gps.researcher_id)
-        FROM 
+        FROM
             graduate_program gp
             LEFT JOIN graduate_program_student gps ON gp.graduate_program_id = gps.graduate_program_id
         GROUP BY
@@ -107,79 +107,89 @@ def graduate_program_profnit_db(graduate_program_id):
     return data_frame.to_dict(orient="records")
 
 
-def production_general_db(graduate_program_id, year):
+def production_general_db(graduate_program_id, year, dep_id):
 
     filter = ""
-
     if graduate_program_id != "0":
         filter = f"AND graduate_program_id = '{graduate_program_id}'"
 
+    if dep_id:
+        filter_departament = f'''
+            AND r.id IN (
+                SELECT researcher_id
+                FROM public.departament_researcher
+                WHERE dep_id = '{dep_id}'
+            )
+            '''
+    else:
+        filter_departament = str()
+
     if filter != "":
         sql = f"""
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'PATENT' AS type, 
-                   graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
-            FROM 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'PATENT' AS type,
+                   graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
+            FROM
             patent p, graduate_program_researcher gpr
             WHERE gpr.researcher_id = p.researcher_id {filter} AND p.development_year::int >= {year}
-            GROUP BY type, graduate_program_id, gpr.year 
+            GROUP BY type, graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'SOFTWARE' AS type, 
-                   graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'SOFTWARE' AS type,
+                   graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
             FROM software s, graduate_program_researcher gpr
             WHERE gpr.researcher_id = s.researcher_id {filter} AND s.year >= {year}
-            GROUP BY graduate_program_id, gpr.year 
+            GROUP BY graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'BRAND' AS type, 
-                   graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'BRAND' AS type,
+                   graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
             FROM brand b, graduate_program_researcher gpr
             WHERE gpr.researcher_id = b.researcher_id {filter} AND b.year >= {year}
-            GROUP BY graduate_program_id, gpr.year 
+            GROUP BY graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'ARTICLE' AS type, 
-                   gpr.graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'ARTICLE' AS type,
+                   gpr.graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
             FROM PUBLIC.bibliographic_production b, graduate_program_researcher gpr
             WHERE b.researcher_id = gpr.researcher_id AND TYPE = 'ARTICLE' {filter} AND year_ >= {year}
-            GROUP BY TYPE, graduate_program_id, gpr.year 
+            GROUP BY TYPE, graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'BOOK' AS type, 
-                   gpr.graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'BOOK' AS type,
+                   gpr.graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
             FROM PUBLIC.bibliographic_production b, graduate_program_researcher gpr
             WHERE b.researcher_id = gpr.researcher_id AND TYPE = 'BOOK' {filter} AND year_ >= {year}
-            GROUP BY TYPE, graduate_program_id, gpr.year 
+            GROUP BY TYPE, graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'BOOK_CHAPTER' AS type, 
-                   gpr.graduate_program_id AS graduate_program_id, 
-                   gpr.year AS year_pos 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'BOOK_CHAPTER' AS type,
+                   gpr.graduate_program_id AS graduate_program_id,
+                   gpr.year AS year_pos
             FROM PUBLIC.bibliographic_production b, graduate_program_researcher gpr
             WHERE b.researcher_id = gpr.researcher_id AND TYPE = 'BOOK_CHAPTER' {filter} AND year_ >= {year}
-            GROUP BY TYPE, graduate_program_id, gpr.year 
+            GROUP BY TYPE, graduate_program_id, gpr.year
 
             UNION
 
-            SELECT COUNT(graduate_program_id) AS qtd, 
-                   'WORK_IN_EVENT' AS type, 
-                   gpr.graduate_program_id AS graduate_program_id, 
+            SELECT COUNT(graduate_program_id) AS qtd,
+                   'WORK_IN_EVENT' AS type,
+                   gpr.graduate_program_id AS graduate_program_id,
                    gpr.year AS year_pos
             FROM PUBLIC.bibliographic_production b, graduate_program_researcher gpr
             WHERE b.researcher_id = gpr.researcher_id AND TYPE = 'WORK_IN_EVENT' {filter} AND year_ >= {year}
@@ -187,12 +197,12 @@ def production_general_db(graduate_program_id, year):
 
             UNION
 
-            SELECT 
-                COUNT(*) as qtd, 
+            SELECT
+                COUNT(*) as qtd,
                 UPPER(r.graduation) as type,
-                gpr.graduate_program_id,
-            FROM 
-                researcher r 
+                gpr.graduate_program_id
+            FROM
+                researcher r
                 LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
                 WHERE year_ >= {year} {filter}
             GROUP BY graduation
@@ -201,57 +211,66 @@ def production_general_db(graduate_program_id, year):
         sql = f"""
             SELECT COUNT(r.id) AS qtd, 'PATENT' AS type
             FROM patent p, researcher r
-            WHERE r.id = p.researcher_id AND p.development_year::int >= {year}
+            WHERE
+                r.id = p.researcher_id
+                AND p.development_year::int >= {year}
+                {filter_departament}
             GROUP BY type
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'SOFTWARE' AS TYPE
             FROM software s, researcher r
             WHERE r.id = s.researcher_id AND s.year >= {year}
+            {filter_departament}
             GROUP BY TYPE
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'BRAND' AS TYPE
             FROM brand b, researcher r
             WHERE r.id = b.researcher_id AND b.year >= {year}
+            {filter_departament}
             GROUP BY TYPE
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'ARTICLE' AS TYPE
             FROM PUBLIC.bibliographic_production b, researcher r
             WHERE b.researcher_id = r.id AND TYPE = 'ARTICLE' AND year_ >= {year}
+            {filter_departament}
             GROUP BY TYPE
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'BOOK' AS TYPE
             FROM PUBLIC.bibliographic_production b, researcher r
             WHERE b.researcher_id = r.id AND TYPE = 'BOOK' AND year_ >= {year}
+            {filter_departament}
             GROUP BY TYPE
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'BOOK_CHAPTER' AS TYPE
             FROM PUBLIC.bibliographic_production b, researcher r
             WHERE b.researcher_id = r.id AND TYPE = 'BOOK_CHAPTER' AND year_ >= {year}
+            {filter_departament}
             GROUP BY TYPE
-            
+
             UNION
-            
+
             SELECT COUNT(r.id) AS qtd, 'WORK_IN_EVENT' AS TYPE
             FROM PUBLIC.bibliographic_production b, researcher r
             WHERE b.researcher_id = r.id AND TYPE = 'WORK_IN_EVENT' AND year_ >= {year}
+            {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(*) as qtd, UPPER(graduation) 
-            FROM researcher GROUP BY graduation
+            SELECT COUNT(*) as qtd, UPPER(r.graduation)
+            FROM researcher r GROUP BY graduation
+            {f'WHERE {filter_departament[3]}' if filter_departament else None}
             """
-
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":
@@ -295,8 +314,8 @@ def production_general_db(graduate_program_id, year):
 
     if filter != "":
         sql = f"""
-            SELECT COUNT(*) AS qtd 
-            FROM graduate_program_researcher gpr 
+            SELECT COUNT(*) AS qtd
+            FROM graduate_program_researcher gpr
             WHERE graduate_program_id = '{graduate_program_id}'
             """
     else:
@@ -310,6 +329,7 @@ def production_general_db(graduate_program_id, year):
 
         graduateProgram_Production_.researcher = str(infos.qtd)
 
-    list_graduateProgram_Production.append(graduateProgram_Production_.getJson())
+    list_graduateProgram_Production.append(
+        graduateProgram_Production_.getJson())
 
     return list_graduateProgram_Production

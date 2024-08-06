@@ -1,12 +1,5 @@
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
-import project
-import sys
-
-try:
-    project.project_env = sys.argv[1]
-except:
-    project.project_env = str(input("Código do banco que sera utilizado [1-8]: "))
 
 
 def insert_researcher_graduate_program_db(table, graduate_program_id, year):
@@ -19,7 +12,8 @@ def insert_researcher_graduate_program_db(table, graduate_program_id, year):
             {table} gdp,
             researcher r
         WHERE
-            similarity(unaccent(LOWER(gdp.name)), unaccent(LOWER(r.name))) > 0.8;
+            similarity(unaccent(LOWER(gdp.name)),
+                       unaccent(LOWER(r.name))) > 0.8;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -33,7 +27,8 @@ def insert_researcher_graduate_program_db(table, graduate_program_id, year):
 
         script_sql = f"""
         INSERT INTO public.graduate_program_researcher (researcher_id, graduate_program_id, year, type_)
-        VALUES ('{researcher_id}', '{graduate_program_id}', '{year}', '{type_}');
+        VALUES ('{researcher_id}', '{graduate_program_id}',
+                '{year}', '{type_}');
         """
 
         sgbdSQL.execScript_db(script_sql)
@@ -73,7 +68,8 @@ def graduate_program_researcher_csv_db():
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame_bd = pd.DataFrame(
-        registry, columns=["researcher_id", "graduate_program_id", "year", "type_"]
+        registry, columns=["researcher_id",
+                           "graduate_program_id", "year", "type_"]
     )
 
     data_frame_bd.to_csv("Files/cimatec_graduate_program_researcher.csv")
@@ -91,7 +87,8 @@ def graduate_program_student_researcher_csv_db():
         registry, columns=["researcher_id", "graduate_program_id", "year"]
     )
 
-    data_frame_db.to_csv("Files/indicadores_simcc/cimatec_graduate_program_student.csv")
+    data_frame_db.to_csv(
+        "Files/indicadores_simcc/cimatec_graduate_program_student.csv")
 
 
 def cimatec_researcher_production_year_distinct_csv_db():
@@ -121,7 +118,8 @@ def cimatec_researcher_production_year_distinct_csv_db():
 
     data_frame_bd = pd.DataFrame(
         registry,
-        columns=["title", "tipo", "year", "graduate_program_id", "year_pos", "qualis"],
+        columns=["title", "tipo", "year",
+                 "graduate_program_id", "year_pos", "qualis"],
     )
 
     data_frame_bd.to_csv("Files/cimatec_production_year_distinct.csv")
@@ -164,7 +162,8 @@ def cimatec_article_qualis_distinct_csv_db():
 
     data_frame_bd = pd.DataFrame(
         registry,
-        columns=["title", "qualis", "jcr", "year", "graduate_program_id", "year_pos"],
+        columns=["title", "qualis", "jcr", "year",
+                 "graduate_program_id", "year_pos"],
     )
 
     data_frame_bd.to_csv("Files/cimatec_article_qualis_distinct.csv")
@@ -173,14 +172,15 @@ def cimatec_article_qualis_distinct_csv_db():
 def insert_student_graduate_program_db(table, graduate_program_id, year):
 
     script_sql = f"""
-        SELECT 
+        SELECT
             r.id
         FROM
             {table}
             gdp,
             researcher r
         WHERE
-            similarity(unaccent(LOWER(gdp.aluno)), unaccent(LOWER(r.name))) > 0.8;
+            similarity(unaccent(LOWER(gdp.aluno)),
+                       unaccent(LOWER(r.name))) > 0.8;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -194,7 +194,8 @@ def insert_student_graduate_program_db(table, graduate_program_id, year):
         type_ = "EFETIVO"
         script_sql = f"""
         INSERT INTO public.graduate_program_student (researcher_id, graduate_program_id, year, type_)
-        VALUES ('{researcher_id}', '{graduate_program_id}', '{year}', '{type_}');
+        VALUES ('{researcher_id}', '{graduate_program_id}',
+                '{year}', '{type_}');
         """
 
         sgbdSQL.execScript_db(script_sql)
@@ -259,7 +260,8 @@ def cimatec_production_tecnical_year_csv_db():
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame_db = pd.DataFrame(
-        registry, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
+        registry, columns=["title", "year", "type",
+                           "graduate_program_id", "year_pos"]
     )
 
     data_frame_db.to_csv(f"Files/cimatec_production_tecnical_year.csv")

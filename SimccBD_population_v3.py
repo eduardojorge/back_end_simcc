@@ -5,9 +5,7 @@ from nltk.tokenize import RegexpTokenizer
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 import logging
-import project
 import nltk
-import sys
 
 
 def create_researcher_dictionary_db(
