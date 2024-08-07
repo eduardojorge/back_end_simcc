@@ -596,6 +596,27 @@ CREATE TABLE IF NOT EXISTS departament_researcher (
     FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
     FOREIGN KEY (researcher_id) REFERENCES researcher (id)
 );
+CREATE TABLE incite_graduate_program(
+    incite_graduate_program_id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(500) NULL,
+    link VARCHAR(500) NULL,
+    institution_id uuid NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    visible bool DEFAULT FALSE,
+    PRIMARY KEY (incite_graduate_program_id),
+    FOREIGN KEY (institution_id) REFERENCES institution (id)
+);
+CREATE TABLE incite_graduate_program_researcher(
+    incite_graduate_program_id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    researcher_id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (incite_graduate_program_id, researcher_id),
+    FOREIGN KEY (researcher_id) REFERENCES researcher (id),
+    FOREIGN KEY (incite_graduate_program_id) REFERENCES incite_graduate_program (incite_graduate_program_id)
+);
 CREATE INDEX IDX_NAME_GIN ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX IDX_ABSTRACT_GIN ON researcher USING gin (abstract gin_trgm_ops);
 CREATE INDEX IDX_ABSTRACT_EN_GIN ON researcher USING gin (abstract_en gin_trgm_ops);
