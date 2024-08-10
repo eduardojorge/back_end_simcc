@@ -2,7 +2,7 @@ import pandas as pd
 
 import Dao.sgbdSQL as sgbdSQL
 import Model.GraduateProgram_Production as GraduateProgram_Production
-
+pd.set_option('future.no_silent_downcasting', True)
 
 def graduate_program_db(institution_id):
 
@@ -270,7 +270,6 @@ def production_general_db(graduate_program_id, year, dep_id):
             {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
             GROUP BY graduation
             """
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":
