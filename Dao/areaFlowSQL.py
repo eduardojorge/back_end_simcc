@@ -806,24 +806,26 @@ def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
             "lattes_update",
         ],
     )
-    
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
-    data_frame = data_frame.merge(
-        ufmg_researcher(), on='id', how='left')
-        
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
+    data_frame = data_frame.merge(ufmg_researcher(), on='id', how='left')
+
     return data_frame.fillna("").to_dict(orient="records")
 
 
-def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
+def lista_researcher_book_db(text, institution, graduate_program_id,
+                             book_type):
     filter_term = util.web_search_filter(text, "b.title")
 
     filter_institution = str()
@@ -833,8 +835,7 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
     filter_graduate_program = str()
     if graduate_program_id:
         filter_graduate_program = (
-            f"AND gpr.graduate_program_id = '{graduate_program_id}'"
-        )
+            f"AND gpr.graduate_program_id = '{graduate_program_id}'")
 
     filter_type = str()
     if book_type:
@@ -843,13 +844,6 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
     script_sql = f"""
         SELECT
             COUNT(DISTINCT b.id) AS qtd,
-            opr.h_index,
-            opr.relevance_score,
-            opr.works_count,
-            opr.cited_by_count,
-            opr.i10_index,
-            opr.scopus,
-            opr.openalex,
             UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
             rp.area_specialty AS area_specialty,
             r.id AS id,
@@ -884,13 +878,6 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             {filter_type}
         GROUP BY
             rp.great_area,
-            opr.h_index,
-            opr.relevance_score,
-            opr.works_count,
-            opr.cited_by_count,
-            opr.i10_index,
-            opr.scopus,
-            opr.openalex,
             rp.area_specialty,
             r.id,
             r.name,
@@ -918,13 +905,6 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
         reg,
         columns=[
             "among",
-            "h_index",
-            "relevance_score",
-            "works_count",
-            "cited_by_count",
-            "i10_index",
-            "scopus",
-            "openalex",
             "area",
             "area_specialty",
             "id",
@@ -946,7 +926,22 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             "graduation",
         ],
     )
-    return data_frame.fillna(0).to_dict(orient="records")
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
+    data_frame = data_frame.merge(ufmg_researcher(), on='id', how='left')
+
+    return data_frame.fillna("").to_dict(orient="records")
 
 
 def researcher_graduate_program_db():
@@ -1088,11 +1083,11 @@ def researcher_departament():
         GROUP BY
             dpr.researcher_id;
         """
-    
+
     reg = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(reg, columns=['id', 'departments'])
-        
+
     def encode_img_data(department_list):
         for dept in department_list:
             if dept['img_data']:
