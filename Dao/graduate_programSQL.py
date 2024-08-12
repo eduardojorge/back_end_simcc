@@ -7,9 +7,8 @@ pd.set_option('future.no_silent_downcasting', True)
 def graduate_program_db(institution_id):
 
     reg = sgbdSQL.consultar_db(
-        " SELECT graduate_program_id,code,name as program,area,modality,type,rating "
-        " FROM graduate_program gp where institution_id='%s'" % institution_id
-    )
+        " SELECT graduate_program_id,code,name as program,area,modality,type, rating "
+        " FROM graduate_program gp where institution_id='%s'" % institution_id)
 
     df_bd = pd.DataFrame(
         reg,
@@ -33,8 +32,7 @@ def graduate_program_profnit_db(graduate_program_id):
     graduate_program_filter = str()
     if graduate_program_id:
         graduate_program_filter = (
-            f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
-        )
+            f"""WHERE gp.graduate_program_id = '{graduate_program_id}'""")
     sql = f"""
         SELECT
             gp.graduate_program_id,
@@ -189,12 +187,13 @@ def production_general_db(graduate_program_id, year, dep_id):
             SELECT
                 COUNT(*) as qtd,
                 UPPER(r.graduation) as type,
-                gpr.graduate_program_id
+                gpr.graduate_program_id,
+                0000 as year
             FROM
                 researcher r
                 LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
-                WHERE year_ >= {year} {filter}
-            GROUP BY graduation
+                WHERE year >= {year} {filter}
+            GROUP BY graduation, gpr.graduate_program_id
             """
     else:
         if dep_id:
@@ -270,6 +269,7 @@ def production_general_db(graduate_program_id, year, dep_id):
             {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
             GROUP BY graduation
             """
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":

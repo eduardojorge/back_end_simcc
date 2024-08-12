@@ -122,3 +122,15 @@ def DadosGerais():
     lista = researcherSQL.researcher_data_geral(
         year, graduate_program_id, dep_id)
     return jsonify(lista)
+
+
+@researcherDataRest.route("/researcher/DadosGerais", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def DadosGeraisResearcher():
+    year = request.args.get("year")
+    graduate_program_id = request.args.get('researcher_id')
+    lista = researcherSQL.researcher_data_geral(
+        year,
+        graduate_program_id,
+    )
+    return jsonify(lista)
