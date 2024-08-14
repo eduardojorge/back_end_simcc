@@ -278,7 +278,32 @@ def fat_group_leaders():
         'first_leader_id',
         'second_leader_id'])
 
-    df.to_csv(dir + 'fat_group_leaders')
+    df.to_csv(dir + 'fat_group_leaders.csv')
+
+
+def departament_csv_bd():
+    script_sql = """
+        SELECT 
+            dep_id, 
+            dep_nom, 
+            'Escola de Engenharia', 
+            '083a16f0-cccf-47d2-a676-d10b8931f66b'
+        FROM 
+            public.ufmg_departament
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
+    df_bd = pd.DataFrame(
+        reg, columns=['dep_id', 'dep_nom', 'institution', 'institution_id'])
+    df_bd.to_csv(dir + 'dim_departament.csv')
+
+
+def departament_researcher():
+    script_sql = """
+        SELECT dep_id, researcher_id FROM public.departament_researcher
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
+    df_bd = pd.DataFrame(reg, columns=['dep_id', 'researcher_id'])
+    df_bd.to_csv(dir + 'dim_departament_researcher.csv')
 
 
 if __name__ == "__main__":
@@ -343,3 +368,11 @@ if __name__ == "__main__":
     print('Inicio: fat_group_leaders()')
     fat_group_leaders()
     print('Fim: fat_group_leaders()')
+
+    print('Inicio: fat_departament_csv_bd()')
+    departament_csv_bd()
+    print('Fim: fat_departament_csv_bd()')
+
+    print('Inicio: dim_departament_csv_bd()')
+    departament_csv_bd()
+    print('Fim: dim_departament_csv_bd()')

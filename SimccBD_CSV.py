@@ -29,7 +29,6 @@ def researcher_production_tecnical_year_csv_db():
     df_bd = pd.DataFrame(
         reg, columns=["researcher_id", "title", "year", "type"])
 
-    print(df_bd)
     logger.debug(sql)
 
     df_bd.to_csv(dir + "production_tecnical_year.csv")
@@ -39,15 +38,13 @@ def researcher_production_year_csv_db():
 
     reg = sgbdSQL.consultar_db(
         "SELECT distinct  title,b.type as tipo,b.researcher_id,year,'institution' "
-        + " from bibliographic_production AS b, researcher r  "
-        + " where b.researcher_id is not null "
-        + "   AND r.id =  b.researcher_id "
-        + " GROUP BY title,tipo,b.researcher_id,year ORDER  BY year,Tipo desc"
-    )
+        + " from bibliographic_production AS b, researcher r  " +
+        " where b.researcher_id is not null " +
+        "   AND r.id =  b.researcher_id " +
+        " GROUP BY title,tipo,b.researcher_id,year ORDER  BY year,Tipo desc")
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "tipo", "researcher_id", "year", "institution"]
-    )
+        reg, columns=["title", "tipo", "researcher_id", "year", "institution"])
 
     df_bd.to_csv(dir + "production_year.csv")
 
@@ -55,13 +52,11 @@ def researcher_production_year_csv_db():
 def researcher_production_year_distinct_csv_db():
 
     reg = sgbdSQL.consultar_db(
-        "SELECT  distinct year,title,type as tipo,i.acronym as institution"
-        + " from bibliographic_production AS b,  institution i, researcher r "
-        + " where  "
-        + "   r.id =  b.researcher_id "
-        + "  AND r.institution_id = i.id "
-        " GROUP BY year,title,tipo,i.acronym "
-    )
+        "SELECT  distinct year,title,type as tipo,i.acronym as institution" +
+        " from bibliographic_production AS b,  institution i, researcher r " +
+        " where  " + "   r.id =  b.researcher_id " +
+        "  AND r.institution_id = i.id "
+        " GROUP BY year,title,tipo,i.acronym ")
 
     df_bd = pd.DataFrame(reg, columns=["year", "title", "tipo", "institution"])
 
@@ -144,8 +139,9 @@ def article_qualis_csv_distinct_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "qualis", "jcr", "year",
-                 "institution", "city", "jcr_link"],
+        columns=[
+            "title", "qualis", "jcr", "year", "institution", "city", "jcr_link"
+        ],
     )
     df_bd.to_csv(dir + "article_qualis_year_institution.csv")
 
@@ -407,9 +403,8 @@ def production_tecnical_year_novo_csv_db():
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "type",
-                      "graduate_program_id", "year_pos"]
-    )
+        reg,
+        columns=["title", "year", "type", "graduate_program_id", "year_pos"])
 
     df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
 
@@ -423,8 +418,7 @@ def graduate_program_researcher_csv_db():
     logger.debug(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["researcher_id", "graduate_program_id", "year", "type_"]
-    )
+        reg, columns=["researcher_id", "graduate_program_id", "year", "type_"])
 
     df_bd.to_csv(dir + "cimatec_graduate_program_researcher.csv")
 
@@ -505,7 +499,6 @@ def ind_prod_researcher_csv_db():
         ],
     )
 
-    print(data_frame_db)
 
     data_frame_db.to_csv(
         dir + "fat_researcher_ind_prod.csv",
@@ -520,9 +513,9 @@ def ind_prod_researcher_csv_db():
 def graduate_program_ind_prod_csv_db():
     script_sql = """
         SELECT graduate_program_id,year, 
-        replace( ind_prod_article::text, '.', ',') as  ind_prod_article,
-        replace( ind_prod_book::text, '.', ',') as  ind_prod_book,
-        replace( ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
+        replace(ind_prod_article::text, '.', ',') as  ind_prod_article,
+        replace(ind_prod_book::text, '.', ',') as  ind_prod_book,
+        replace(ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
         replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
         replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
         replace(ind_prod_software::text, '.', ',') as ind_prod_software,
@@ -559,11 +552,6 @@ def graduate_program_ind_prod_csv_db():
 
 
 if __name__ == "__main__":
-    try:
-        project.project_env = sys.argv[1]
-    except:
-        project.project_env = str(
-            input("Código do banco que sera utilizado [1-8]: "))
 
     dir = "Files/indicadores_simcc/"
 
@@ -581,7 +569,6 @@ if __name__ == "__main__":
     logger.debug("Inicio")
     list_data = []
     hoje = str(datetime.now())
-    print(hoje)
 
     data = {"data": hoje}
 
@@ -614,8 +601,8 @@ if __name__ == "__main__":
     researcher_production_tecnical_year_csv_db()
     print("Fim: researcher_production_tecnical_year_csv_db")
 
-    if project.project_env == "2":
-        profnit_graduate_program_csv_db()
+    # if project.project_env == "2":
+    #     profnit_graduate_program_csv_db()
 
     print("Inicio: researcher_csv_db")
     researcher_csv_db()
