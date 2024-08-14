@@ -218,9 +218,6 @@ def bibliographic_production_article():
     list_bibliographic_production_article = []
 
     terms = request.args.get("terms")
-    if not terms:
-        return jsonify([]), HTTPStatus.BAD_REQUEST
-
     year = request.args.get("year")
     qualis = request.args.get("qualis")
     university = request.args.get("university")

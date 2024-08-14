@@ -448,7 +448,10 @@ def lists_bibliographic_production_article_db(
     if institution:
         filter_institution = util.filterSQL(institution, ";", "or", "i.name")
 
-    filter_term = util.web_search_filter(term, "title")
+    if term:
+        filter_term = f"""AND {util.web_search_filter(term, "title")}"""
+    else:
+        filter_term = str()
 
     filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
 
@@ -532,10 +535,11 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
+
     elif distinct == "0":
         script_sql = f"""
             SELECT
-                DISTINCT title,
+                title,
                 r.id,
                 year_,
                 doi,
@@ -564,7 +568,7 @@ def lists_bibliographic_production_article_db(
                 LEFT JOIN openalex_article op ON op.article_id = b.id
             WHERE
                 year_ >= {year}
-                AND {filter_term}
+                {filter_term}
                 {filter_institution}
                 {filter_graduate_program}
                 {filter_qualis}
@@ -573,7 +577,6 @@ def lists_bibliographic_production_article_db(
             ORDER BY
                 year_ DESC;
             """
-
         reg = sgbdSQL.consultar_db(script_sql)
         data_frame = pd.DataFrame(
             reg,
@@ -600,7 +603,7 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
-
+    print(script_sql)
     return data_frame
 
 
