@@ -144,8 +144,8 @@ def lists_book_production_researcher_db(researcher_id, year, term):
         filter_term = f'AND {util.web_search_filter(term, "title")}'
 
     if researcher_id:
-        filter_researcher = """
-            AND researcher_id = '%s'
+        filter_researcher = f"""
+            AND researcher_id = '{researcher_id}'
             """
     else:
         filter_researcher = str()
