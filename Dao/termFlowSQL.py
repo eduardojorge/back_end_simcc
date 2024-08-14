@@ -162,7 +162,7 @@ def lists_book_production_researcher_db(researcher_id, year, term):
             bibliographic_production b,
             bibliographic_production_book bb,
             researcher r
-        where 
+        where
             bb.bibliographic_production_id = b.id
             AND r.id = b.researcher_id
             {filter_researcher}
@@ -175,7 +175,8 @@ def lists_book_production_researcher_db(researcher_id, year, term):
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"])
+        reg,
+        columns=["name", "id", "title", "year", "isbn", "publishing_company"])
 
     return df_bd
 
