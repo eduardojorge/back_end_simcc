@@ -189,26 +189,26 @@ def lista_researcher_area_expertise_db(term, institution):
     data_frame = data_frame.merge(
         researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
 
-def lista_production_article_area_expertise_db(
-    great_area_expertise, area_specialty, year, qualis, graduate_program_id
-):
+def lista_production_article_area_expertise_db(great_area_expertise,
+                                               area_specialty, year, qualis,
+                                               graduate_program_id):
 
     great_area_expertise = great_area_expertise.replace(" ", "_")
-    filter = util.filterSQL(great_area_expertise, ";",
-                            "or", "rp.great_area_expertise")
+    filter = util.filterSQL(great_area_expertise, ";", "or",
+                            "rp.great_area_expertise")
 
     area_specialty = area_specialty.replace("&", " ")
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
-    filter_specialty = util.filterSQLLike(
-        area_specialty, ";", "or", "rp.area_specialty"
-    )
+    filter_specialty = util.filterSQLLike(area_specialty, ";", "or",
+                                          "rp.area_specialty")
 
     filterQualis = util.filterSQL(qualis, ";", "or", "qualis")
 
@@ -310,7 +310,8 @@ def lista_production_article_area_expertise_db(
     return df_bd
 
 
-def lista_institution_area_expertise_db(great_area, area_specialty, institution):
+def lista_institution_area_expertise_db(great_area, area_specialty,
+                                        institution):
     # reg = consultar_db('SELECT  name,id FROM researcher WHERE '+
     #                 ' (name::tsvector@@ \''+termX+'\'::tsquery)=true')
 
@@ -321,35 +322,30 @@ def lista_institution_area_expertise_db(great_area, area_specialty, institution)
     area_specialty = area_specialty.replace("&", " ")
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
-    filter_specialty = util.filterSQLLike(
-        area_specialty, ";", "or", "rp.area_specialty"
-    )
+    filter_specialty = util.filterSQLLike(area_specialty, ";", "or",
+                                          "rp.area_specialty")
 
     filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
     if filterinstitution == " ":
         filterinstitution = " AND i.name in ('Universidade do Estado da Bahia','Universidade Estadual de Feira de Santana','Universidade Estadual de Santa Cruz','Universidade Estadual do Sudoeste da Bahia' )"
 
     reg = sgbdSQL.consultar_db(
-        "SELECT i.id as id,i.image as image,"
-        + "i.name as institution,count(r.id) as qtd"
-        + " FROM  researcher r , institution i,researcher_production rp  "
-        + " WHERE "
-        + " rp.researcher_id =r.id"
-        " AND r.institution_id = i.id "
-        + "%s" % filter_great_area
-        + "%s" % filter_specialty
-        + "%s" % filterinstitution
-        +
+        "SELECT i.id as id,i.image as image," +
+        "i.name as institution,count(r.id) as qtd" +
+        " FROM  researcher r , institution i,researcher_production rp  " +
+        " WHERE " + " rp.researcher_id =r.id"
+        " AND r.institution_id = i.id " + "%s" % filter_great_area +
+        "%s" % filter_specialty + "%s" % filterinstitution +
         # ' AND term = \''+term+"\'"
         # ' AND (name::tsvector@@ \''+termX+'\'::tsquery)=true ' +
-        " Group by i.id ,i.image," + "i.name " + " ORDER BY i.name"
-    )
+        " Group by i.id ,i.image," + "i.name " + " ORDER BY i.name")
 
     df_bd = pd.DataFrame(reg, columns=["id", "image", "institution", "qtd"])
     return df_bd
 
 
-def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
+def lista_researcher_area_speciality_db(term, institution,
+                                        graduate_program_id):
     term_filter = util.web_search_filter(term, "rp.area_specialty")
 
     institution_filter = str()
@@ -426,20 +422,25 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
 
-def lista_researcher_participation_event_db(term, institution, graduate_program_id):
+def lista_researcher_participation_event_db(term, institution,
+                                            graduate_program_id):
     term_filter = util.web_search_filter(term, "p.title")
 
     institution_filter = str()
@@ -521,15 +522,19 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -614,15 +619,19 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -700,15 +709,19 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(),
+                                  on="id",
+                                  how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(),
+                                  on="id",
+                                  how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on='id', how='left')
+    data_frame = data_frame.merge(researcher_departament(),
+                                  on='id',
+                                  how='left')
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -718,9 +731,7 @@ def city_search(city_name: str = None) -> str:
         return None
     sql = """
         SELECT id FROM city WHERE LOWER(unaccent(name)) = LOWER(unaccent('{filter}'));
-        """.format(
-        filter=city_name
-    )
+        """.format(filter=city_name)
     return pd.DataFrame(sgbdSQL.consultar_db(sql=sql), columns=["id"])["id"][0]
 
 
@@ -748,7 +759,6 @@ def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
                 WHERE dep_id = '{dep_id}'
             )
             """
-
 
     script_sql = f"""
         SELECT

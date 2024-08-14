@@ -138,7 +138,6 @@ def brand_production_researcher():
     return jsonify(list_brand_production_researcher), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/book_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_production_researcher():
@@ -153,6 +152,7 @@ def book_production_researcher():
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         b = Book_Researcher()
+        b.name = str(infos['name'])
         b.id = str(infos.id)
         b.title = str(infos.title)
         b.year = str(infos.year)
@@ -166,7 +166,8 @@ def book_production_researcher():
 
 
 # lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
-@researcherTermRest.route("/book_chapter_production_researcher", methods=["GET"])
+@researcherTermRest.route("/book_chapter_production_researcher",
+                          methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_chapter_production_researcher():
     list_book_chapter_production_researcher = []
@@ -176,11 +177,10 @@ def book_chapter_production_researcher():
     year = request.args.get("year")
 
     df_bd = termFlowSQL.lists_book_chapter_production_researcher_db(
-        researcher_id, year, term
-    )
-
+        researcher_id, year, term)
     for i, infos in df_bd.iterrows():
         b = Book_Chapter_Researcher()
+        b.name = str(infos['name'])
         b.id = str(infos.id)
         b.title = str(infos.title)
         b.year = str(infos.year)
@@ -251,14 +251,13 @@ def pevent_researcher():
 
     nature = request.args.get("nature")
 
-    df_bd = termFlowSQL.lists_pevent_researcher_db(
-        researcher_id, year, term, nature)
+    df_bd = termFlowSQL.lists_pevent_researcher_db(researcher_id, year, term,
+                                                   nature)
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
-        # print(str(infos.form_participation))
 
         p = PEvent_Researcher()
+        p.name = str(infos['name'])
         p.id = str(infos.id)
         p.event_name = str(infos.event_name)
         p.nature = str(infos.nature)

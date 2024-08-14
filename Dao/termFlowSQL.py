@@ -96,7 +96,7 @@ def list_research_dictionary_db(initials, type):
             GROUP BY name;
             '''
         reg = sgbdSQL.consultar_db(script_sql)
-        
+
     df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
     return df_bd
 
@@ -143,33 +143,39 @@ def lists_book_production_researcher_db(researcher_id, year, term):
     if term:
         filter_term = f'AND {util.web_search_filter(term, "title")}'
 
-    script_sql = """SELECT 
-                b.id as id, 
-                b.title as title, 
-                b.year as year,
-                bb.isbn,
-                bb.publishing_company
-            FROM   
-                bibliographic_production b,
-                bibliographic_production_book bb
-            where 
-                bb.bibliographic_production_id = b.id AND
-                researcher_id = '%s'
-                AND b.year_>=%s
-                AND b.type='%s'
-                %s
-                ORDER BY year_ desc""" % (
-        researcher_id,
-        year,
-        "BOOK",
-        filter_term,
-    )
-    print(script_sql)
+    if researcher_id:
+        filter_researcher = """
+            AND researcher_id = '%s'
+            """
+    else:
+        filter_researcher = str()
+
+    script_sql = f"""
+        SELECT
+            r.name,
+            b.id as id, 
+            b.title as title, 
+            b.year as year,
+            bb.isbn,
+            bb.publishing_company
+        FROM   
+            bibliographic_production b,
+            bibliographic_production_book bb,
+            researcher r
+        where 
+            bb.bibliographic_production_id = b.id
+            AND r.id = b.researcher_id
+            {filter_researcher}
+            AND b.year_>= {year}
+            AND b.type= 'BOOK'
+            {filter_term}
+            ORDER BY year_ desc
+            """
+
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "isbn", "publishing_company"]
-    )
+        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"])
 
     return df_bd
 
@@ -179,33 +185,36 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term):
     if term:
         filter = f'AND {util.web_search_filter(term, "title")}'
 
-    sql = """SELECT 
+    if researcher_id:
+        filter_researcher = f"""
+            AND researcher_id = '{researcher_id}'
+            """
+    else:
+        filter_researcher = str()
+    sql = f"""SELECT
+                r.name,
                 b.id as id, 
                 b.title as title, 
                 b.year as year,
                 bc.isbn,
                 bc.publishing_company
             FROM   
-                bibliographic_production b, bibliographic_production_book_chapter bc
+                bibliographic_production b, 
+                bibliographic_production_book_chapter bc,
+                researcher r
             where 
-                bc.bibliographic_production_id = b.id AND
-                researcher_id='%s'
-                AND b.year_>=%s
-                AND b.type='%s'
-                %s
-            ORDER BY year_ desc""" % (
-        researcher_id,
-        year,
-        "BOOK_CHAPTER",
-        filter,
-    )
+                bc.bibliographic_production_id = b.id
+                AND b.researcher_id = r.id
+                {filter_researcher}
+                AND b.year_>={year}
+                AND b.type='BOOK_CHAPTER'
+                {filter}
+            ORDER BY year_ desc"""
 
     reg = sgbdSQL.consultar_db(sql)
-
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "isbn", "publishing_company"]
-    )
-
+        reg,
+        columns=["name", "id", "title", "year", "isbn", "publishing_company"])
     return df_bd
 
 
@@ -246,10 +255,11 @@ def lists_Researcher_Report_db(researcher_id, year):
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year",
-                      "project_name", "financing_institutionc"]
-    )
+    df_bd = pd.DataFrame(reg,
+                         columns=[
+                             "id", "title", "year", "project_name",
+                             "financing_institutionc"
+                         ])
 
     return df_bd
 
@@ -276,39 +286,52 @@ def lists_guidance_researcher_db(researcher_id, year):
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "nature",
-                      "oriented", "type", "status", "year"]
-    )
+    df_bd = pd.DataFrame(reg,
+                         columns=[
+                             "id", "title", "nature", "oriented", "type",
+                             "status", "year"
+                         ])
 
     return df_bd
 
 
 def lists_pevent_researcher_db(researcher_id, year, term, nature):
-    filter = util.filterSQLRank(term, ";", "event_name")
+
+    if researcher_id:
+        filter_researcher = f"""
+        AND researcher_id = '{researcher_id}'
+        """
+    else:
+        filter_researcher = str()
+    if term:
+        filter = util.filterSQLRank(term, ";", "event_name")
+    else:
+        filter = str()
     filterNature = util.filterSQL(nature, ";", "or", "nature")
 
-    sql = """SELECT p.id as id, event_name, nature,form_participation,year
-           
-                        
-            FROM  participation_events p
-                           where 
-                           researcher_id='%s'
-                           AND p.year>=%s
-                           %s
-                           %s
-
-                           ORDER BY year desc""" % (
-        researcher_id,
-        year,
-        filterNature,
-        filter,
-    )
+    sql = f"""
+        SELECT
+            r.name,
+            p.id as id,
+            event_name,
+            nature,
+            form_participation,
+            year
+        FROM  
+            participation_events p
+            LEFT JOIN researcher r ON r.id = p.researcher_id
+        where 
+            p.year >= {year}
+            {filter_researcher}
+            {filterNature}
+            {filter}
+        ORDER BY year desc
+    """
 
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "event_name",
+        reg, columns=['name', "id", "event_name",
                       "nature", "form_participation", "year"]
     )
 
