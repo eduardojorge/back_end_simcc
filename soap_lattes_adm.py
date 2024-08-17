@@ -24,8 +24,7 @@ def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
 
 
 def last_update(id: str):
-    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{
-        id}';"
+    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
 
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -36,9 +35,9 @@ def last_update(id: str):
 
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
-    resultado = client.service.getIdentificadorCNPq(
-        nomeCompleto=name, dataNascimento=date, cpf=CPF
-    )
+    resultado = client.service.getIdentificadorCNPq(nomeCompleto=name,
+                                                    dataNascimento=date,
+                                                    cpf=CPF)
     if resultado:
         return resultado
 
@@ -46,8 +45,9 @@ def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
 def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
     if get_data_att(
-        id=id, alternative_cnpq_service=alternative_cnpq_service
-    ) <= last_update(id):
+            id=id,
+            alternative_cnpq_service=alternative_cnpq_service) <= last_update(
+                id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
@@ -59,8 +59,7 @@ def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
     try:
         if alternative_cnpq_service:
-            url = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={
-                id}"
+            url = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
             resultado = requests.get(url, verify=False).content
         else:
             resultado = client.service.getCurriculoCompactado(id)
@@ -97,7 +96,7 @@ if __name__ == "__main__":
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
-    dir = f"{os.environ["JADE_EXTRATOR_FOLTER"]}metadata/dataset/xml"
+    dir = f"{os.environ['JADE_EXTRATOR_FOLTER']}metadata/dataset/xml"
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
@@ -131,5 +130,5 @@ if __name__ == "__main__":
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(f"FIM, Quantidade de curriculos processados: {
-          str(quant_curriculos)}")
+    print(
+        f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")

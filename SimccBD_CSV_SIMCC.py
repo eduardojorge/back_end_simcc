@@ -281,7 +281,7 @@ def fat_group_leaders():
     df.to_csv(dir + 'fat_group_leaders.csv')
 
 
-def departament_csv_bd():
+def fat_departament_csv_bd():
     script_sql = """
         SELECT 
             dep_id, 
@@ -297,7 +297,7 @@ def departament_csv_bd():
     df_bd.to_csv(dir + 'dim_departament.csv')
 
 
-def departament_researcher():
+def dim_departament_researcher():
     script_sql = """
         SELECT dep_id, researcher_id FROM public.departament_researcher
         """
@@ -305,7 +305,10 @@ def departament_researcher():
     df_bd = pd.DataFrame(reg, columns=['dep_id', 'researcher_id'])
     df_bd.to_csv(dir + 'dim_departament_researcher.csv')
 
-
+def dim_departament_technician():
+    script_sql = """
+        """
+        
 if __name__ == "__main__":
 
     dir = "Files/indicadores_simcc/"
@@ -370,9 +373,13 @@ if __name__ == "__main__":
     print('Fim: fat_group_leaders()')
 
     print('Inicio: fat_departament_csv_bd()')
-    departament_csv_bd()
+    fat_departament_csv_bd()
     print('Fim: fat_departament_csv_bd()')
 
-    print('Inicio: dim_departament_csv_bd()')
-    departament_csv_bd()
-    print('Fim: dim_departament_csv_bd()')
+    print('Inicio: dim_departament_researcher()')
+    dim_departament_researcher()
+    print('Fim: dim_departament_researcher()')
+
+    print('Inicio: dim_departament_technician()')
+    dim_departament_technician()
+    print('Fim: dim_departament_technician()')
