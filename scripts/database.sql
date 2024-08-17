@@ -560,6 +560,7 @@ CREATE TABLE IF NOT EXISTS ufmg_teacher (
     PRIMARY KEY (matric, semester)
 );
 CREATE TABLE IF NOT EXISTS ufmg_technician (
+    technician_id uuid PRIMARY KEY,
     matric INT UNIQUE,
     ins_ufmg VARCHAR(255),
     nome VARCHAR(255),
@@ -576,6 +577,13 @@ CREATE TABLE IF NOT EXISTS ufmg_technician (
     dting_org DATE,
     data_prog DATE,
     semester character varying(6)
+);
+CREATE TABLE IF NOT EXISTS ufmg_departament_technician (
+    dep_id character varying(10),
+    technician_id uuid,
+    PRIMARY KEY (dep_id, technician_id),
+    FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
+    FOREIGN KEY (technician_id) REFERENCES ufmg_technician (technician_id)
 );
 CREATE TABLE IF NOT EXISTS ufmg_departament (
     dep_id VARCHAR(10),

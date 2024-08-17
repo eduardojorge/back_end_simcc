@@ -305,10 +305,18 @@ def dim_departament_researcher():
     df_bd = pd.DataFrame(reg, columns=['dep_id', 'researcher_id'])
     df_bd.to_csv(dir + 'dim_departament_researcher.csv')
 
+
 def dim_departament_technician():
     script_sql = """
+        SELECT dep_id, technician_id FROM
+        ufmg_departament_technician
         """
-        
+    registry = sgbdSQL.consultar_db(script_sql)
+    data_frame = pd.DataFrame(registry, columns=['dep_id', 'technician_id'])
+
+    data_frame.to_csv(dir + 'dim_departament_technician.csv')
+
+
 if __name__ == "__main__":
 
     dir = "Files/indicadores_simcc/"
