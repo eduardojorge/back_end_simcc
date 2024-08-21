@@ -101,7 +101,7 @@ if __name__ == "__main__":
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename="Log/soap_lattes_adm.log",
+        filename=f"{os.environ['HOME_SIMCC']}/log/soap_lattes_adm.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
