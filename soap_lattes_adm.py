@@ -79,7 +79,7 @@ def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
 
 def get_researcher_adm_simcc():
     script_sql = """
-        SELECT 
+        SELECT
             name,
             lattes_id
         FROM
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     for Files in os.listdir(dir):
         try:
             os.remove(os.path.join(dir, Files))
-        except:
+        except Exception:
             logger.error("Erro 003: Directory")
     logger.debug("Arquivos XML removidos")
 
