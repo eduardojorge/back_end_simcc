@@ -25,27 +25,28 @@ def create_researcher_dictionary(
     data_frame = pd.DataFrame(reg, columns=["id"])
 
     if article:
+
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary WHERE type_='ARTICLE' AND researcher_id = {infos['id']}"
+            script_sql = f"DELETE FROM research_dictionary WHERE type_='ARTICLE' AND researcher_id = '{infos['id']}'"
             sgbdSQL.execScript_db(script_sql)
             create_researcher_title_dictionary_db(infos.id)
             print(f"Artigo {i} concluído.")
 
     if abstract:
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='ABSTRACT' AND researcher_id = {infos['id']}"
+            script_sql = f"DELETE FROM research_dictionary where type_='ABSTRACT' AND researcher_id = '{infos['id']}'"
             sgbdSQL.execScript_db(script_sql)
             create_researcher_abstract_dictionary_db(infos.id)
 
     if patent:
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='PATENT' AND researcher_id = {infos['id']}"
+            script_sql = f"DELETE FROM research_dictionary where type_='PATENT' AND researcher_id = '{infos['id']}'"
             sgbdSQL.execScript_db(script_sql)
             create_researcher_patent_dictionary_db(infos.id)
 
     if event:
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='SPEAKER' AND researcher_id = {infos['id']}"
+            script_sql = f"DELETE FROM research_dictionary where type_='SPEAKER' AND researcher_id = '{infos['id']}'"
             sgbdSQL.execScript_db(script_sql)
             create_researcher_participation_events_dictionary_db(infos.id)
 
