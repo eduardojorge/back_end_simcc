@@ -5,49 +5,67 @@ from nltk.tokenize import RegexpTokenizer
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 import logging
+import project
 import nltk
 import sys
 
 
-def create_researcher_dictionary(
+def create_researcher_dictionary_db(
     test: bool = False,
     article: bool = True,
     abstract: bool = True,
     patent: bool = True,
     event: bool = True,
 ):
-    filter_debug = str()
-    if test:
-        filter_debug = "LIMIT 10"
 
-    script_sql = f"SELECT r.id FROM researcher r {filter_debug}"
+    filter = str()
+    if test:
+        filter = "LIMIT 10"
+
+    script_sql = f"SELECT r.id FROM researcher r {filter}"
     reg = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(reg, columns=["id"])
 
     if article:
+        script_sql = "DELETE FROM research_dictionary where type_='ARTICLE'"
 
+        sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary WHERE type_='ARTICLE' AND researcher_id = '{infos['id']}'"
-            sgbdSQL.execScript_db(script_sql)
+
+            if (i % 100) == 0:
+                print("Total Pesquisador Article: " + str(i))
+                logger.debug("Total Pesquisador Article: " + str(i))
+
             create_researcher_title_dictionary_db(infos.id)
-            print(f"Artigo {i} concluído.")
 
     if abstract:
+        script_sql = "DELETE FROM research_dictionary where type_='ABSTRACT'"
+        sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='ABSTRACT' AND researcher_id = '{infos['id']}'"
-            sgbdSQL.execScript_db(script_sql)
+            print("Total Pesquisador Abstract: " + str(i))
+            if (i % 100) == 0:
+                logger.debug("Total Pesquisador abstract: " + str(i))
+
             create_researcher_abstract_dictionary_db(infos.id)
 
     if patent:
+        script_sql = "DELETE FROM research_dictionary where type_='PATENT'"
+        sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='PATENT' AND researcher_id = '{infos['id']}'"
-            sgbdSQL.execScript_db(script_sql)
+            if (i % 100) == 0:
+                print("Total Pesquisador Patent: " + str(i))
+                logger.debug("Total Pesquisador Patent: " + str(i))
+
             create_researcher_patent_dictionary_db(infos.id)
 
     if event:
+        script_sql = "DELETE FROM research_dictionary where type_='SPEAKER'"
+        sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
-            script_sql = f"DELETE FROM research_dictionary where type_='SPEAKER' AND researcher_id = '{infos['id']}'"
-            sgbdSQL.execScript_db(script_sql)
+            if (i % 100) == 0:
+                print("Total Pesquisador Participacao Evento: " + str(i))
+                logger.debug("Total Pesquisador Participacao Evento: " + str(i))
+
             create_researcher_participation_events_dictionary_db(infos.id)
 
 
@@ -162,6 +180,7 @@ def insert_research_dictionary_db(tokens, type):
 
                     sgbdSQL.execScript_db(sql)
 
+                # else:
                 except Exception as e:
 
                     print(e)
@@ -270,4 +289,4 @@ if __name__ == "__main__":
     sgbdSQL.execScript_db(script_sql)
     logger.debug(script_sql)
 
-    create_researcher_dictionary()
+    create_researcher_dictionary_db()
