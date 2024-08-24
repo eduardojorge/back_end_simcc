@@ -256,9 +256,7 @@ def bibliographic_production_article():
 
         if distinct == "1":
             bibliographic_production_article_ = {
-                "researcher_id": str(infos.researcher_id),
                 "title": str(infos.title),
-                "researcher": str(infos.researcher),
                 "year": str(infos.year),
                 "doi": str(infos.doi),
                 "qualis": str(infos.qualis),
