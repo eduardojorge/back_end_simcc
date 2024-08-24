@@ -473,10 +473,10 @@ def lists_bibliographic_production_article_db(
 
     if distinct == "1":
         script_sql = f"""
-            SELECT DISTINCT title,
-                r.id AS researcher_id,
-                year_,
-                doi,
+            SELECT DISTINCT
+                b.title,
+                b.year_,
+                b.doi,
                 qualis,
                 periodical_magazine_name AS magazine,
                 a.jcr,
@@ -493,13 +493,13 @@ def lists_bibliographic_production_article_db(
                 op.keywords
             FROM
                 public.bibliographic_production b
-                LEFT JOIN researcher r ON r.id = b.researcher_id
-                LEFT JOIN institution i ON i.id = r.institution_id
-                LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
+                INNER JOIN researcher r ON r.id = b.researcher_id
+                INNER JOIN institution i ON i.id = r.institution_id
+                INNER JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
                 LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
                 LEFT JOIN openalex_article op ON op.article_id = b.id
             WHERE
-                year_ >= {year}
+                b.year_ >= 2020
                 AND b.type = 'ARTICLE'
                 {filter_term}
                 {filter_institution}
@@ -507,7 +507,7 @@ def lists_bibliographic_production_article_db(
                 {filter_qualis}
                 {filter_departament}
             ORDER BY
-                year_ DESC
+                b.year_ DESC;
                 """
 
         reg = sgbdSQL.consultar_db(script_sql)
@@ -516,7 +516,6 @@ def lists_bibliographic_production_article_db(
             reg,
             columns=[
                 "title",
-                "researcher_id",
                 "year",
                 "doi",
                 "qualis",
@@ -603,7 +602,6 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
-    print(script_sql)
     return data_frame
 
 
