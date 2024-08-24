@@ -499,7 +499,7 @@ def lists_bibliographic_production_article_db(
                 LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
                 LEFT JOIN openalex_article op ON op.article_id = b.id
             WHERE
-                b.year_ >= 2020
+                b.year_ >= {year}
                 AND b.type = 'ARTICLE'
                 {filter_term}
                 {filter_institution}
