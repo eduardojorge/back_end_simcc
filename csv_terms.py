@@ -62,9 +62,7 @@ termos_busca = pd.DataFrame(
         "term_normalize",
     ],
 )
-# Lista de documentos a serem adicionados
 
-# Referência à coleção
 termos_busca_ref = db.collection("termos_busca")
 
 

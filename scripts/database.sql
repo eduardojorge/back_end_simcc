@@ -1,3 +1,7 @@
+CREATE DATABASE simcc;
+
+\c simcc;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 create EXTENSION fuzzystrmatch;
 create EXTENSION pg_trgm;
@@ -533,6 +537,7 @@ CREATE TABLE public.graduate_program_ind_prod (
     ind_prod_guidance numeric(10, 3)
 );
 CREATE TABLE IF NOT EXISTS research_group_dgp(
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name character varying(200),
     institution character varying(200),
     first_leader character varying(200),
@@ -578,13 +583,6 @@ CREATE TABLE IF NOT EXISTS ufmg_technician (
     data_prog DATE,
     semester character varying(6)
 );
-CREATE TABLE IF NOT EXISTS ufmg_departament_technician (
-    dep_id character varying(10),
-    technician_id uuid,
-    PRIMARY KEY (dep_id, technician_id),
-    FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
-    FOREIGN KEY (technician_id) REFERENCES ufmg_technician (technician_id)
-);
 CREATE TABLE IF NOT EXISTS ufmg_departament (
     dep_id VARCHAR(10),
     org_cod VARCHAR(3),
@@ -596,6 +594,13 @@ CREATE TABLE IF NOT EXISTS ufmg_departament (
     dep_tel VARCHAR(20),
     img_data BYTEA,
     PRIMARY KEY (dep_id)
+);
+CREATE TABLE IF NOT EXISTS ufmg_departament_technician (
+    dep_id character varying(10),
+    technician_id uuid,
+    PRIMARY KEY (dep_id, technician_id),
+    FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
+    FOREIGN KEY (technician_id) REFERENCES ufmg_technician (technician_id)
 );
 CREATE TABLE IF NOT EXISTS departament_researcher (
     dep_id VARCHAR(10),

@@ -269,7 +269,6 @@ def production_general_db(graduate_program_id, year, dep_id):
             {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
             GROUP BY graduation
             """
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":
@@ -331,4 +330,8 @@ def production_general_db(graduate_program_id, year, dep_id):
     list_graduateProgram_Production.append(
         graduateProgram_Production_.getJson())
 
-    return list_graduateProgram_Production
+    list_graduateProgram_Production = pd.DataFrame(list_graduateProgram_Production)
+
+    print(list_graduateProgram_Production)
+
+    return list_graduateProgram_Production.replace("", 0).to_dict(orient="records")

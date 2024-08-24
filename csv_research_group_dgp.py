@@ -6,9 +6,7 @@ import pandas as pd
 import time
 import os
 
-# Configuração do driver do Selenium
 options = webdriver.ChromeOptions()
-# Rodar o navegador em modo headless (sem interface gráfica)
 options.headless = True
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options

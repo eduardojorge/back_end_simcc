@@ -116,12 +116,14 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
 
     script_sql = f"""
         SELECT
+            r.name,
             p.id as id,
             p.title as title,
             p.development_year as year,
             p.grant_date as grant_date
         FROM
             patent p
+            LEFT JOIN researcher r ON r.id = p.researcher_id
         where
             1 = 1
             {filter_term}
@@ -132,7 +134,7 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(reg, columns=["id", "title", "year", "grant_date"])
+    df_bd = pd.DataFrame(reg, columns=["name", "id", "title", "year", "grant_date"])
     df_bd["grant_date"] = df_bd["grant_date"].astype("str").replace("NaT", "")
 
     return df_bd
