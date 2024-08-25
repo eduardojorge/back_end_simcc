@@ -5,6 +5,8 @@ import Dao.sgbdSQL as sgbdSQL
 import Dao.termFlowSQL as termFlowSQL
 import Dao.areaFlowSQL as areaFlowSQL
 from dotenv import load_dotenv
+import os
+
 
 load_dotenv(override=True)
 
