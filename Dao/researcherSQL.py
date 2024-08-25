@@ -335,6 +335,12 @@ def generic_data(year_, graduate_program_id, dep_id):
     df.reset_index(inplace=True)
 
     df["year"] = df["year"].astype("int64")
+    qualis_list = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "SQ"]
+
+    for qualis in qualis_list:
+        if qualis not in df.columns:
+            df[qualis] = 0.0
+
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
@@ -662,6 +668,7 @@ def generic_researcher_data_data(year_, researcher_id):
     registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["qualis", "year", "count_article"])
+
     df = df.pivot_table(index="year",
                         columns="qualis",
                         values="count_article",
@@ -670,6 +677,12 @@ def generic_researcher_data_data(year_, researcher_id):
     df.reset_index(inplace=True)
 
     df["year"] = df["year"].astype("int64")
+    qualis_list = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "SQ"]
+
+    for qualis in qualis_list:
+        if qualis not in df.columns:
+            df[qualis] = 0.0
+
     if not df.empty:
         data_frame = pd.merge(data_frame, df, on="year", how="left")
     else:
