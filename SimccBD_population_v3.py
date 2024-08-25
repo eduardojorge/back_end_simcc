@@ -8,7 +8,7 @@ import logging
 import project
 import nltk
 import sys
-
+import os
 
 def create_researcher_dictionary_db(
     test: bool = False,
