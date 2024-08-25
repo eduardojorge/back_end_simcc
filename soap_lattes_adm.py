@@ -96,7 +96,7 @@ if __name__ == "__main__":
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
-    dir = f"{os.environ['JADE_EXTRATOR_FOLTER']}metadata/dataset/xml"
+    dir = os.environ["JADE_EXTRATOR_FOLTER"]
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
