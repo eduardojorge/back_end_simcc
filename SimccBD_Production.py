@@ -174,7 +174,7 @@ if __name__ == "__main__":
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_Production.log",
+        filename=f"{os.environ['HOME_SIMCC']}/Files/log/logfile_Production.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
