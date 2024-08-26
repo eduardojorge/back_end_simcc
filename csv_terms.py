@@ -65,7 +65,7 @@ termos_busca = pd.DataFrame(
 
 termos_busca_ref = db.collection("termos_busca")
 
-
-termos_busca_ref.add(termos_busca.to_dict(orient="records"))
+for item in termos_busca.to_dict(orient="records"):
+    termos_busca_ref.add(item)
 
 print("Documentos adicionados com sucesso.")
