@@ -289,7 +289,7 @@ def patent_production_researcher():
         p.title = str(infos.title)
         p.year = str(infos.year)
         p.grant_date = str(infos.grant_date)
-        p.researcher_name = str(infos["researcher_name"])
+        p.name = str(infos["researcher_name"])
 
         list_patent_production_researcher.append(p.getJson())
 

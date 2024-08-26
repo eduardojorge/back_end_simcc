@@ -4,7 +4,7 @@ class Patent_Researcher(object):
     title = ""
     year = ""
     grant_date = ""
-    researcher_name = ""
+    name = ""
 
     def __init__(self):
         self.id = ""
@@ -16,6 +16,6 @@ class Patent_Researcher(object):
             "title": self.title,
             "year": self.year,
             "grant_date": self.grant_date,
-            "researcher_name": self.researcher_name,
+            "name": self.name,
         }
         return Patent_Researcher
