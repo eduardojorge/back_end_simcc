@@ -68,7 +68,7 @@ def lists_research_groups(group_id):
         group_id_filter = str()
 
     script_sql = f"""
-        SELECT
+SELECT
             rg.id,
             name,
             institution,
@@ -80,7 +80,7 @@ def lists_research_groups(group_id):
         FROM
             research_group_dgp rg
         WHERE
-            (rg.first_leader IS NOT NULL AND rg.second_leader IS NOT NULL)
+            (rg.first_leader_id IS NOT NULL OR rg.second_leader_id IS NOT NULL)
             {group_id_filter}
         """
 
