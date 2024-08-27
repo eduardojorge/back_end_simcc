@@ -602,7 +602,7 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
-    return data_frame
+    return data_frame.fillna('')
 
 
 def lists_bibliographic_production_article_name_researcher_db(name, year, qualis):
