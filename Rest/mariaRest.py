@@ -8,8 +8,8 @@ mariaRest = Blueprint("mariaRest", __name__)
 
 @mariaRest.route('/maria/researcher/abstract', methods=['GET'])
 def researcher_abstract():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(query['query'], 'abstract')
+    query = request.args.get('query')
+    researcher = mariaSQL.search_by_embeddings(query, 'abstract')
     researcher = mariaSQL.mount_researchers(researcher)
     comment = mariaSQL.mount_comment(researcher)
     return jsonify({'query': comment, 'researcher': researcher}), HTTPStatus.OK
