@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from flask import Blueprint, jsonify, request, send_file
+from flask import Blueprint, jsonify, request
 
 from Dao import mariaSQL
 

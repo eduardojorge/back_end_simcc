@@ -630,6 +630,17 @@ CREATE TABLE incite_graduate_program_researcher(
     FOREIGN KEY (researcher_id) REFERENCES researcher (id),
     FOREIGN KEY (incite_graduate_program_id) REFERENCES incite_graduate_program (incite_graduate_program_id)
 );
+CREATE TABLE research_lines(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    research_group_id uuid,
+	title TEXT,
+	objective TEXT,
+	keyword VARCHAR(510),
+	group_identifier VARCHAR(510),
+	year INT,
+	predominant_major_area VARCHAR(510),
+	predominant_area VARCHAR(510)
+);
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;
 CREATE TABLE IF NOT EXISTS embeddings.abstract (

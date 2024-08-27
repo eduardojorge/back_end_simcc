@@ -38,8 +38,10 @@ if __name__ == "__main__":
         'SELECT id, abstract FROM researcher WHERE id NOT IN (SELECT researcher_id FROM embeddings.abstract);')
     data_frame = pd.DataFrame(registry, columns=['researcher_id', 'abstract'])
 
+    print('Processando resumos:')
     for index, data in data_frame.iterrows():
         if data['abstract']:
+            print(data['abstract'])
             total_tokens = count_tokens(data['abstract'])
             price = get_custos(len(total_tokens))
             embeddings = get_embeddings(data['abstract'])
@@ -48,59 +50,3 @@ if __name__ == "__main__":
                 VALUES ('{data['researcher_id']}', '{embeddings}', '{price}')
                 """
             sgbdSQL.execScript_db(script_sql)
-
-    # registry = sgbdSQL.consultar_db(
-    #     '''
-    #         SELECT
-    #             researcher_id,
-    #             title
-    #         FROM
-    #             bibliographic_production
-    #         WHERE
-    #             type = 'ARTICLE'
-    #             AND researcher_id NOT IN (
-    #                 SELECT
-    #                     researcher_id
-    #                 FROM
-    #                     embeddings.abstract);
-    #     ''')
-    # data_frame = pd.DataFrame(registry, columns=['researcher_id', 'article'])
-
-    # for index, data in data_frame.iterrows():
-    #     if data['article']:
-    #         total_tokens = count_tokens(data['article'])
-    #         price = get_custos(len(total_tokens))
-    #         embeddings = get_embeddings(data['article'])
-    #         script_sql = f"""
-    #             INSERT INTO embeddings.article (researcher_id, embeddings, price)
-    #             VALUES ('{data['researcher_id']}', '{embeddings}', '{price}')
-    #             """
-    #         sgbdSQL.execScript_db(script_sql)
-
-    # registry = sgbdSQL.consultar_db(
-    #     '''
-    #         SELECT
-    #             researcher_id,
-    #             title
-    #         FROM
-    #             bibliographic_production
-    #         WHERE
-    #             type = 'ARTICLE'
-    #             AND researcher_id NOT IN (
-    #                 SELECT
-    #                     researcher_id
-    #                 FROM
-    #                     embeddings.abstract);
-    #     ''')
-    # data_frame = pd.DataFrame(registry, columns=['researcher_id', 'article'])
-
-    # for index, data in data_frame.iterrows():
-    #     if data['article']:
-    #         total_tokens = count_tokens(data['article'])
-    #         price = get_custos(len(total_tokens))
-    #         embeddings = get_embeddings(data['article'])
-    #         script_sql = f"""
-    #             INSERT INTO embeddings.article (researcher_id, embeddings, price)
-    #             VALUES ('{data['researcher_id']}', '{embeddings}', '{price}')
-    #             """
-    #         sgbdSQL.execScript_db(script_sql)

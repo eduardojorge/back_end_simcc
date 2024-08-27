@@ -62,28 +62,44 @@ def list_count_researcher_groups():
 def lists_research_groups(group_id):
     if group_id:
         group_id_filter = f"""
-            AND id = '{group_id}'
+            AND rg.id = '{group_id}'
             """
     else:
         group_id_filter = str()
 
     script_sql = f"""
         SELECT
-            id,
+            rg.id,
             name,
             institution,
             first_leader,
             first_leader_id,
             second_leader,
             second_leader_id,
-            area
+            area,
+            JSONB_AGG(jsonb_build_object(
+                'line', rl.title,
+                'objective', rl.objective,
+                'keywords', rl.keyword,
+                'major_area', rl.predominant_major_area,
+                'area', rl.predominant_area
+            ))
         FROM
-            public.research_group_dgp
+            research_group_dgp rg,
+            research_lines rl
         WHERE
-            (first_leader_id IS NOT NULL
-            OR
-            second_leader_id IS NOT NULL)
-            {group_id_filter};
+            (rg.first_leader IS NOT NULL AND rg.second_leader IS NOT NULL)
+            AND rg.id = rl.research_group_id
+            {group_id_filter}
+        GROUP BY
+            rg.id,
+            name,
+            institution,
+            first_leader,
+            first_leader_id,
+            second_leader,
+            second_leader_id,
+            area;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -98,6 +114,7 @@ def lists_research_groups(group_id):
             "second_leader",
             "second_leader_id",
             "area",
+            "research_lines",
         ],
     )
 
