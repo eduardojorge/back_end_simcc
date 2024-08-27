@@ -631,37 +631,8 @@ CREATE TABLE incite_graduate_program_researcher(
     FOREIGN KEY (incite_graduate_program_id) REFERENCES incite_graduate_program (incite_graduate_program_id)
 );
 CREATE SCHEMA IF NOT EXISTS embeddings;
+CREATE EXTENSION vector;
 CREATE TABLE IF NOT EXISTS embeddings.abstract (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
-    embeddings vector,
-    price numeric(20,18)
-);
-CREATE TABLE IF NOT EXISTS embeddings.article (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
-    embeddings vector,
-    price numeric(20,18)
-);
-CREATE TABLE IF NOT EXISTS embeddings.article_abstract (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
-    embeddings vector,
-    price numeric(20,18)
-);
-CREATE TABLE IF NOT EXISTS embeddings.book (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
-    embeddings vector,
-    price numeric(20,18)
-);
-CREATE TABLE IF NOT EXISTS embeddings.event (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
-    embeddings vector,
-    price numeric(20,18)
-);
-CREATE TABLE IF NOT EXISTS embeddings.patent (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     researcher_id uuid REFERENCES public.researcher(id),
     embeddings vector,

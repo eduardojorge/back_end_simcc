@@ -16,7 +16,6 @@ def search_by_embeddings(query, search_type):
         LIMIT 10;
         """
 
-    print(script_sql)
     registry = db.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         registry, columns=['researcher_id', 'proximidade'])
