@@ -16,6 +16,7 @@ from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
+from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from dotenv import load_dotenv
 
@@ -38,6 +39,7 @@ app.register_blueprint(areaRest)
 app.register_blueprint(researcherTermRest)
 app.register_blueprint(graduateProgramRest)
 app.register_blueprint(researcherDataRest)
+app.register_blueprint(mariaRest)
 
 app.config["CORS_HEADERS"] = "Content-Type"
 

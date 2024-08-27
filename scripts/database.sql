@@ -630,6 +630,43 @@ CREATE TABLE incite_graduate_program_researcher(
     FOREIGN KEY (researcher_id) REFERENCES researcher (id),
     FOREIGN KEY (incite_graduate_program_id) REFERENCES incite_graduate_program (incite_graduate_program_id)
 );
+CREATE SCHEMA IF NOT EXISTS embeddings;
+CREATE TABLE IF NOT EXISTS embeddings.abstract (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.article (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.article_abstract (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.book (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.event (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.patent (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
 CREATE INDEX IDX_NAME_GIN ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX IDX_ABSTRACT_GIN ON researcher USING gin (abstract gin_trgm_ops);
 CREATE INDEX IDX_ABSTRACT_EN_GIN ON researcher USING gin (abstract_en gin_trgm_ops);

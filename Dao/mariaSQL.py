@@ -1,0 +1,112 @@
+import pandas as pd
+import Dao.sgbdSQL as db
+from Dao.termFlowSQL import researcher_graduate_program_db, researcher_research_group_db, researcher_openAlex_db, researcher_subsidy_db, researcher_departament
+import bd_maria
+from langchain_openai import ChatOpenAI
+maria = ChatOpenAI(model='gpt-3.5-turbo', temperature=0.9)
+
+
+def search_by_embeddings(query, search_type):
+    embedding = bd_maria.get_embeddings(query)
+
+    script_sql = f"""
+        SELECT researcher_id, 1 - (embeddings <=> '{embedding}') AS cosine_similarity
+        FROM embeddings.{search_type}
+        ORDER BY cosine_similarity desc
+        LIMIT 10;
+        """
+
+    print(script_sql)
+    registry = db.consultar_db(script_sql)
+    data_frame = pd.DataFrame(
+        registry, columns=['researcher_id', 'proximidade'])
+    return data_frame
+
+
+def mount_researchers(data_frame):
+    script_sql = f"""
+        SELECT
+            r.id AS id,
+            r.name AS researcher_name,
+            r.lattes_id AS lattes,
+            COUNT(DISTINCT b.id) as among,
+            rp.articles AS articles,
+            rp.book_chapters AS book_chapters,
+            rp.book AS book,
+            rp.patent AS patent,
+            rp.software AS software,
+            rp.brand AS brand,
+            i.name AS university,
+            r.abstract AS abstract,
+            UPPER(REPLACE(LOWER(TRIM(rp.great_area)), '_', ' ')) AS area,
+            rp.city AS city,
+            r.orcid AS orcid,
+            i.image AS image_university,
+            r.graduation AS graduation,
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+        FROM
+            researcher r
+            LEFT JOIN city c ON c.id = r.city_id
+            LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN researcher_production rp ON r.id = rp.researcher_id
+            RIGHT JOIN bibliographic_production b ON b.researcher_id = r.id
+        WHERE
+            r.id IN {tuple(data_frame['researcher_id'].to_list())}
+        GROUP BY
+            r.id, r.name, r.lattes_id, rp.articles, rp.book_chapters,
+            rp.book, rp.software, rp.brand, i.name, r.abstract,
+            rp.great_area, rp.city, r.orcid, i.image, r.graduation,
+            r.last_update, rp.patent
+        ORDER BY
+            among DESC;
+            """
+
+    registry = db.consultar_db(script_sql)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "id",
+            "name",
+            "lattes_id",
+            "among",
+            "articles",
+            "book_chapters",
+            "book",
+            "patent",
+            "software",
+            "brand",
+            "university",
+            "abstract",
+            "area",
+            "city",
+            "orcid",
+            "image_university",
+            "graduation",
+            "lattes_update",
+        ],
+    )
+
+    data_frame = data_frame.merge(
+        researcher_graduate_program_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_research_group_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(
+        researcher_departament(), on="id", how="left")
+
+    return data_frame.fillna("").to_dict(orient="records")
+
+
+def mount_comment(data_dict):
+    PROMPT_TEMPLATE = f"""
+    Você é um chatbot chamado maria, que ajuda pesquisadores a encontrarem produções relevantes e outros pesquisadores especialistas em alguma area especifica, quero que escreva um resumo sobre o que achar de mais interessante no texto a seguir:
+
+    {data_dict}
+    """
+
+    response = maria.invoke(PROMPT_TEMPLATE)
+    return str(response.content)
