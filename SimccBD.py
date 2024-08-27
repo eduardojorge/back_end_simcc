@@ -76,30 +76,12 @@ def lists_research_groups(group_id):
             first_leader_id,
             second_leader,
             second_leader_id,
-            area,
-            JSONB_AGG(jsonb_build_object(
-                'line', rl.title,
-                'objective', rl.objective,
-                'keywords', rl.keyword,
-                'major_area', rl.predominant_major_area,
-                'area', rl.predominant_area
-            ))
+            area
         FROM
-            research_group_dgp rg,
-            research_lines rl
+            research_group_dgp rg
         WHERE
             (rg.first_leader IS NOT NULL AND rg.second_leader IS NOT NULL)
-            AND rg.id = rl.research_group_id
             {group_id_filter}
-        GROUP BY
-            rg.id,
-            name,
-            institution,
-            first_leader,
-            first_leader_id,
-            second_leader,
-            second_leader_id,
-            area;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -113,12 +95,48 @@ def lists_research_groups(group_id):
             "first_leader_id",
             "second_leader",
             "second_leader_id",
-            "area",
-            "research_lines",
+            "area"
         ],
     )
 
     return data_frame.to_dict(orient="records")
+
+def list_research_lines(group_id):
+    script_sql = f"""
+        SELECT
+            JSONB_AGG(jsonb_build_object(
+                'line', rl.title,
+                'objective', rl.objective,
+                'keywords', rl.keyword,
+                'major_area', rl.predominant_major_area,
+                'area', rl.predominant_area
+            ))
+        FROM 
+            research_lines rl
+        WHERE
+            rl.research_group_id = '{group_id}'
+        GROUP BY
+            rl.research_group_id
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    return registry[0][0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def researcher_text_db():

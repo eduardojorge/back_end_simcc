@@ -313,6 +313,14 @@ def get_research_group():
     return research_group
 
 
+@app.route("/research_group_lines", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def list_research_lines():
+    group_id = request.args.get('group_id')
+    research_group = SimccBD.list_research_lines(group_id)
+    return research_group
+
+
 @app.route("/research_group/count", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group_count():
