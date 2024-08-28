@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS public.periodical_magazine (
     updated_at timestamp without time zone,
     deleted_at timestamp without time zone,
     jcr character varying(100),
-    jcr_link character varying(200) DEFAULT NULL::character varying,
+    jcr_link character varying(200) DEFAULT VARCHAR(255),
     CONSTRAINT "PK_35bb0df687d8879d763c1f3ae68" PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS public.great_area_expertise (
@@ -416,14 +416,14 @@ CREATE TABLE IF NOT EXISTS public.JCR (
     journalName character varying,
     jcrYear character varying,
     abbrJournal character varying,
-    issn character varying DEFAULT NULL::character varying,
-    eissn character varying DEFAULT NULL::character varying,
-    totalCites character varying DEFAULT NULL::character varying,
-    totalArticles character varying DEFAULT NULL::character varying,
-    citableItems character varying DEFAULT NULL::character varying,
-    citedHalfLife character varying DEFAULT NULL::character varying,
-    citingHalfLife character varying DEFAULT NULL::character varying,
-    jif2019 character varying DEFAULT NULL::character varying,
+    issn character varying DEFAULT VARCHAR(255),
+    eissn character varying DEFAULT VARCHAR(255),
+    totalCites character varying DEFAULT VARCHAR(255),
+    totalArticles character varying DEFAULT VARCHAR(255),
+    citableItems character varying DEFAULT VARCHAR(255),
+    citedHalfLife character varying DEFAULT VARCHAR(255),
+    citingHalfLife character varying DEFAULT VARCHAR(255),
+    jif2019 character varying DEFAULT VARCHAR(255),
     url_revista character varying NOT NULL
 );
 CREATE TABLE IF NOT EXISTS public.researcher_production (
@@ -645,7 +645,37 @@ CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;
 CREATE TABLE IF NOT EXISTS embeddings.abstract (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    researcher_id uuid REFERENCES public.researcher(id),
+    reference_id uuid REFERENCES public.researcher(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.article (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reference_id uuid REFERENCES public.bibliographic_production(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.article_abstract (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reference_id uuid REFERENCES public.openalex_article(article_id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.book (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reference_id uuid REFERENCES public.bibliographic_production(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.event (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reference_id uuid REFERENCES public.bibliographic_production(id),
+    embeddings vector,
+    price numeric(20,18)
+);
+CREATE TABLE IF NOT EXISTS embeddings.patent (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reference_id uuid REFERENCES public.patent(id),
     embeddings vector,
     price numeric(20,18)
 );

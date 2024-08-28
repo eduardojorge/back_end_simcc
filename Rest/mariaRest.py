@@ -17,40 +17,39 @@ def researcher_abstract():
 
 @mariaRest.route('/maria/researcher/article', methods=['GET'])
 def researcher_article():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(query['query'], 'article')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "article")
     researcher = mariaSQL.mount_researchers(researcher)
     return jsonify(researcher), HTTPStatus.OK
 
 
 @mariaRest.route('/maria/researcher/article_abstract', methods=['GET'])
 def researcher_article_abstract():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(
-        query['query'], 'article_abstract')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "article_abstract")
     researcher = mariaSQL.mount_researchers(researcher)
     return jsonify(researcher), HTTPStatus.OK
 
 
 @mariaRest.route('/maria/researcher/book', methods=['GET'])
 def researcher_book():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(query['query'], 'book')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "book")
     researcher = mariaSQL.mount_researchers(researcher)
     return jsonify(researcher), HTTPStatus.OK
 
 
 @mariaRest.route('/maria/researcher/event', methods=['GET'])
 def researcher_event():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(query['query'], 'event')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "event")
     researcher = mariaSQL.mount_researchers(researcher)
     return jsonify(researcher), HTTPStatus.OK
 
 
 @mariaRest.route('/maria/researcher/patent', methods=['GET'])
 def researcher_patent():
-    query = request.get_json()
-    researcher = mariaSQL.search_by_embeddings(query['query'], 'patent')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "patent")
     researcher = mariaSQL.mount_researchers(researcher)
     return jsonify(researcher), HTTPStatus.OK

@@ -10,16 +10,42 @@ def search_by_embeddings(query, search_type):
     embedding = bd_maria.get_embeddings(query)
 
     script_sql = f"""
-        SELECT researcher_id, 1 - (embeddings <=> '{embedding}') AS cosine_similarity
+        SELECT reference_id, 1 - (embeddings <=> '{embedding}') AS cosine_similarity
         FROM embeddings.{search_type}
         ORDER BY cosine_similarity desc
         LIMIT 10;
         """
 
     registry = db.consultar_db(script_sql)
-    data_frame = pd.DataFrame(
-        registry, columns=['researcher_id', 'proximidade'])
+    data_frame = pd.DataFrame(registry, columns=["id", "proximidade"])
+
+    data_frame = get_researcher_id(data_frame, search_type)
     return data_frame
+
+
+def get_researcher_id(data, search_type):
+    match search_type:
+        case "article" | "book" | "event" | "article_abstract":
+            SCRIPT_SQL = f"""
+                SELECT researcher_id
+                FROM bibliographic_production
+                WHERE id IN {tuple(data['id'].to_list())}
+                """
+            registry = db.consultar_db(SCRIPT_SQL)
+            data_frame = pd.DataFrame(registry, columns=["researcher_id"])
+            return data_frame
+        case "abstract":
+            data["researcher_id"] = data["id"]
+            return data
+        case "patent":
+            SCRIPT_SQL = f"""
+                SELECT researcher_id
+                FROM patent
+                WHERE id IN {tuple(data['id'].to_list())}
+                """
+            registry = db.consultar_db(SCRIPT_SQL)
+            data_frame = pd.DataFrame(registry, columns=["researcher_id"])
+            return data_frame
 
 
 def mount_researchers(data_frame):
@@ -59,7 +85,7 @@ def mount_researchers(data_frame):
         ORDER BY
             among DESC;
             """
-
+    print(script_sql)
     registry = db.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(

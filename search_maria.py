@@ -21,5 +21,5 @@ def term_search(query):
 
 
 if __name__ == "__main__":
-    # query = input('query: ')
-    # term_search(query)
+    query = input("query: ")
+    term_search(query)
