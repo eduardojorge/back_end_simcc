@@ -7,16 +7,19 @@ from Model.GraduateProgram import GraduateProgram
 graduateProgramRest = Blueprint("graduateProgramRest", __name__)
 
 
-# print(list_originals_words_initials_term_db("rob"))
 @graduateProgramRest.route("/graduate_program_production", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def graduate_program_production():
     graduate_program_id = request.args.get("graduate_program_id")
     year = request.args.get("year")
-    dep_id = request.args.get('dep_id')
+    dep_id = request.args.get("dep_id")
     list_production = graduate_programSQL.production_general_db(
-        graduate_program_id, year, dep_id)
-    return jsonify(list_production), 200,
+        graduate_program_id, year, dep_id
+    )
+    return (
+        jsonify(list_production),
+        200,
+    )
 
 
 # print(list_originals_words_initials_term_db("rob"))
@@ -47,7 +50,6 @@ def graduate_program():
 @graduateProgramRest.route("/graduate_program_profnit", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def graduate_program_profnit():
-
     graduate_program_id = request.args.get("id")
     json_graduate_program = graduate_programSQL.graduate_program_profnit_db(
         graduate_program_id

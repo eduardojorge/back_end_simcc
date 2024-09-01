@@ -1,9 +1,16 @@
 import pandas as pd
 import Dao.sgbdSQL as db
-from Dao.termFlowSQL import researcher_graduate_program_db, researcher_research_group_db, researcher_openAlex_db, researcher_subsidy_db, researcher_departament
+from Dao.termFlowSQL import (
+    researcher_graduate_program_db,
+    researcher_research_group_db,
+    researcher_openAlex_db,
+    researcher_subsidy_db,
+    researcher_departament,
+)
 import bd_maria
 from langchain_openai import ChatOpenAI
-maria = ChatOpenAI(model='gpt-3.5-turbo', temperature=0.9)
+
+maria = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9)
 
 
 def search_by_embeddings(query, search_type):
@@ -24,28 +31,27 @@ def search_by_embeddings(query, search_type):
 
 
 def get_researcher_id(data, search_type):
-    match search_type:
-        case "article" | "book" | "event" | "article_abstract":
-            SCRIPT_SQL = f"""
-                SELECT researcher_id
-                FROM bibliographic_production
-                WHERE id IN {tuple(data['id'].to_list())}
-                """
-            registry = db.consultar_db(SCRIPT_SQL)
-            data_frame = pd.DataFrame(registry, columns=["researcher_id"])
-            return data_frame
-        case "abstract":
-            data["researcher_id"] = data["id"]
-            return data
-        case "patent":
-            SCRIPT_SQL = f"""
-                SELECT researcher_id
-                FROM patent
-                WHERE id IN {tuple(data['id'].to_list())}
-                """
-            registry = db.consultar_db(SCRIPT_SQL)
-            data_frame = pd.DataFrame(registry, columns=["researcher_id"])
-            return data_frame
+    if search_type in ["article", "book", "event", "article_abstract"]:
+        SCRIPT_SQL = f"""
+            SELECT researcher_id
+            FROM bibliographic_production
+            WHERE id IN {tuple(data['id'].to_list())}
+            """
+        registry = db.consultar_db(SCRIPT_SQL)
+        data_frame = pd.DataFrame(registry, columns=["researcher_id"])
+        return data_frame
+    elif search_type == "abstract":
+        data["researcher_id"] = data["id"]
+        return data
+    elif search_type == "patent":
+        SCRIPT_SQL = f"""
+            SELECT researcher_id
+            FROM patent
+            WHERE id IN {tuple(data['id'].to_list())}
+            """
+        registry = db.consultar_db(SCRIPT_SQL)
+        data_frame = pd.DataFrame(registry, columns=["researcher_id"])
+        return data_frame
 
 
 def mount_researchers(data_frame):
@@ -112,16 +118,11 @@ def mount_researchers(data_frame):
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
 
