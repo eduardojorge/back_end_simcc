@@ -2,13 +2,15 @@ import pandas as pd
 
 import Dao.sgbdSQL as sgbdSQL
 import Model.GraduateProgram_Production as GraduateProgram_Production
-pd.set_option('future.no_silent_downcasting', True)
+
+pd.set_option("future.no_silent_downcasting", True)
+
 
 def graduate_program_db(institution_id):
-
     reg = sgbdSQL.consultar_db(
         " SELECT graduate_program_id,code,name as program,area,modality,type, rating "
-        " FROM graduate_program gp where institution_id='%s'" % institution_id)
+        " FROM graduate_program gp where institution_id='%s'" % institution_id
+    )
 
     df_bd = pd.DataFrame(
         reg,
@@ -32,7 +34,8 @@ def graduate_program_profnit_db(graduate_program_id):
     graduate_program_filter = str()
     if graduate_program_id:
         graduate_program_filter = (
-            f"""WHERE gp.graduate_program_id = '{graduate_program_id}'""")
+            f"""WHERE gp.graduate_program_id = '{graduate_program_id}'"""
+        )
     sql = f"""
         SELECT
             gp.graduate_program_id,
@@ -106,7 +109,6 @@ def graduate_program_profnit_db(graduate_program_id):
 
 
 def production_general_db(graduate_program_id, year, dep_id):
-
     filter = ""
     if graduate_program_id and graduate_program_id != "0":
         filter = f"AND graduate_program_id = '{graduate_program_id}'"
@@ -197,68 +199,67 @@ def production_general_db(graduate_program_id, year, dep_id):
             """
     else:
         if dep_id:
-            filter_departament = f'''AND r.id IN (
+            filter_departament = f"""AND r.id IN (
                     SELECT researcher_id
                     FROM public.departament_researcher
                     WHERE dep_id = '{dep_id}'
                 )
-                '''
+                """
         else:
             filter_departament = str()
         sql = f"""
-            SELECT COUNT(r.id) AS qtd, 'PATENT' AS type
-            FROM patent p, researcher r
+            SELECT COUNT(DISTINCT p.title) AS qtd, 'PATENT' AS type
+            FROM patent p
             WHERE
-                r.id = p.researcher_id
-                AND p.development_year::int >= {year}
+                p.development_year::int >= {year}
                 {filter_departament}
             GROUP BY type
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'SOFTWARE' AS TYPE
-            FROM software s, researcher r
-            WHERE r.id = s.researcher_id AND s.year >= {year}
+            SELECT COUNT(DISTINCT s.title) AS qtd, 'SOFTWARE' AS TYPE
+            FROM software s
+            WHERE s.year >= {year}
             {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'BRAND' AS TYPE
-            FROM brand b, researcher r
-            WHERE r.id = b.researcher_id AND b.year >= {year}
+            SELECT COUNT(DISTINCT b.title) AS qtd, 'BRAND' AS TYPE
+            FROM brand b
+            WHERE b.year >= {year}
             {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'ARTICLE' AS TYPE
-            FROM PUBLIC.bibliographic_production b, researcher r
-            WHERE b.researcher_id = r.id AND TYPE = 'ARTICLE' AND year_ >= {year}
+            SELECT COUNT(DISTINCT b.title) AS qtd, 'ARTICLE' AS TYPE
+            FROM PUBLIC.bibliographic_production b
+            WHERE TYPE = 'ARTICLE' AND year_ >= {year}
             {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'BOOK' AS TYPE
-            FROM PUBLIC.bibliographic_production b, researcher r
-            WHERE b.researcher_id = r.id AND TYPE = 'BOOK' AND year_ >= {year}
+            SELECT COUNT(DISTINCT b.title) AS qtd, 'BOOK' AS TYPE
+            FROM PUBLIC.bibliographic_production b
+            WHERE TYPE = 'BOOK' AND year_ >= {year}
             {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'BOOK_CHAPTER' AS TYPE
-            FROM PUBLIC.bibliographic_production b, researcher r
-            WHERE b.researcher_id = r.id AND TYPE = 'BOOK_CHAPTER' AND year_ >= {year}
+            SELECT COUNT(DISTINCT b.title) AS qtd, 'BOOK_CHAPTER' AS TYPE
+            FROM PUBLIC.bibliographic_production b
+            WHERE TYPE = 'BOOK_CHAPTER' AND year_ >= {year}
             {filter_departament}
             GROUP BY TYPE
 
             UNION
 
-            SELECT COUNT(r.id) AS qtd, 'WORK_IN_EVENT' AS TYPE
-            FROM PUBLIC.bibliographic_production b, researcher r
-            WHERE b.researcher_id = r.id AND TYPE = 'WORK_IN_EVENT' AND year_ >= {year}
+            SELECT COUNT(DISTINCT b.title) AS qtd, 'WORK_IN_EVENT' AS TYPE
+            FROM PUBLIC.bibliographic_production b
+            WHERE TYPE = 'WORK_IN_EVENT' AND year_ >= {year}
             {filter_departament}
             GROUP BY TYPE
 
@@ -269,6 +270,7 @@ def production_general_db(graduate_program_id, year, dep_id):
             {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
             GROUP BY graduation
             """
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":
@@ -324,11 +326,9 @@ def production_general_db(graduate_program_id, year, dep_id):
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(reg, columns=["qtd"])
     for i, infos in df_bd.iterrows():
-
         graduateProgram_Production_.researcher = str(infos.qtd)
 
-    list_graduateProgram_Production.append(
-        graduateProgram_Production_.getJson())
+    list_graduateProgram_Production.append(graduateProgram_Production_.getJson())
 
     list_graduateProgram_Production = pd.DataFrame(list_graduateProgram_Production)
 
