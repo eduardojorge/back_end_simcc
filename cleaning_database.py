@@ -9,8 +9,6 @@ script_sql = """
         year 
     FROM 
         bibliographic_production 
-    WHERE 
-        type = 'ARTICLE' 
     GROUP BY 
         title, 
         researcher_id, 
@@ -38,6 +36,8 @@ for id, data in df.iterrows():
 
     for b_id, data in df_2.iterrows():
         script_sql = f"""
+        DELETE FROM bibliographic_production_book_chapter WHERE bibliographic_production_id = '{data.b_id}';
+        DELETE FROM bibliographic_production_book WHERE bibliographic_production_id = '{data.b_id}';
         DELETE FROM bibliographic_production_article WHERE bibliographic_production_id = '{data.b_id}';
         DELETE FROM bibliographic_production WHERE id = '{data.b_id}';
         """

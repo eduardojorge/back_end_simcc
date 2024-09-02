@@ -20,6 +20,7 @@ from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from dotenv import load_dotenv
 
+YEAR = 2020
 try:
     port = sys.argv[2]
 except Exception:
@@ -146,10 +147,9 @@ def researcher_image():
 @app.route("/researcherName", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherName():
-
     name = request.args.get("name")
     graduate_program_id = request.args.get("graduate_program_id")
-    dep_id = request.args.get('dep_id')
+    dep_id = request.args.get("dep_id")
     list_researcher = Dao.areaFlowSQL.lista_researcher_full_name_db(
         name, graduate_program_id, dep_id
     )
@@ -180,6 +180,8 @@ def total():
 def recently_updated():
     list_bibliographic_production_article = list()
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     university = request.args.get("university")
     departament = request.args.get("departament")
 
@@ -208,8 +210,7 @@ def recently_updated():
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
         }
-        list_bibliographic_production_article.append(
-            bibliographic_production_article_)
+        list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
@@ -221,11 +222,13 @@ def bibliographic_production_article():
 
     terms = request.args.get("terms")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     qualis = request.args.get("qualis")
     university = request.args.get("university")
     distinct = request.args.get("distinct")
     graduate_program_id = request.args.get("graduate_program_id")
-    dep_id = request.args.get('dep_id')
+    dep_id = request.args.get("dep_id")
 
     df_bd = SimccBD.lists_bibliographic_production_article_db(
         terms, year, qualis, university, distinct, graduate_program_id, dep_id
@@ -277,8 +280,7 @@ def bibliographic_production_article():
                 "keywords": infos.keywords,
             }
 
-        list_bibliographic_production_article.append(
-            bibliographic_production_article_)
+        list_bibliographic_production_article.append(bibliographic_production_article_)
 
     return jsonify(list_bibliographic_production_article), 200
 
@@ -308,7 +310,7 @@ def getDataAtualizacaoCV():
 @app.route("/research_group", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group():
-    group_id = request.args.get('group_id')
+    group_id = request.args.get("group_id")
     research_group = SimccBD.lists_research_groups(group_id)
     return research_group
 
@@ -316,7 +318,7 @@ def get_research_group():
 @app.route("/research_group_lines", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def list_research_lines():
-    group_id = request.args.get('group_id')
+    group_id = request.args.get("group_id")
     research_group = SimccBD.list_research_lines(group_id)
     return research_group
 

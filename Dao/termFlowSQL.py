@@ -155,33 +155,37 @@ def lists_book_production_researcher_db(researcher_id, year, term):
 
     script_sql = f"""
         SELECT
-            r.name,
-            b.id as id, 
-            b.title as title, 
-            b.year as year,
-            bb.isbn,
-            bb.publishing_company
+            MIN(b.title) AS title,
+            MIN(b.year) AS YEAR,
+            bc.isbn,
+            MIN(bc.publishing_company) AS publishing_company,
+            jsonb_agg(DISTINCT jsonb_build_object(
+                'name', r.name,
+                'researcher_id', b.researcher_id
+            ))
         FROM   
-            bibliographic_production b,
-            bibliographic_production_book bb,
+            bibliographic_production b, 
+            bibliographic_production_book bc,
             researcher r
-        where
-            bb.bibliographic_production_id = b.id
-            AND r.id = b.researcher_id
+        where 
+            bc.bibliographic_production_id = b.id
+            AND b.researcher_id = r.id
             {filter_researcher}
             AND b.year_>= {year}
-            AND b.type= 'BOOK'
+            AND b.type='BOOK'
             {filter_term}
-            ORDER BY year_ desc
+        GROUP BY
+            bc.isbn
+        ORDER BY 
+            year desc
             """
-
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"]
+        reg, columns=["title", "year", "isbn", "publishing_company", "researcher"]
     )
 
-    return df_bd
+    return df_bd.to_dict(orient="records")
 
 
 def lists_book_chapter_production_researcher_db(researcher_id, year, term):
@@ -195,13 +199,16 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term):
             """
     else:
         filter_researcher = str()
+
     sql = f"""SELECT
-                r.name,
-                b.id as id, 
-                b.title as title, 
-                b.year as year,
+                MIN(b.title) AS title,
+                MIN(b.year) AS YEAR,
                 bc.isbn,
-                bc.publishing_company
+                MIN(bc.publishing_company) AS publishing_company,
+                jsonb_agg(DISTINCT jsonb_build_object(
+                    'name', r.name,
+                    'researcher_id', b.researcher_id
+                ))
             FROM   
                 bibliographic_production b, 
                 bibliographic_production_book_chapter bc,
@@ -213,13 +220,16 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term):
                 AND b.year_>={year}
                 AND b.type='BOOK_CHAPTER'
                 {filter}
-            ORDER BY year_ desc"""
+            GROUP BY
+                bc.isbn
+            ORDER BY 
+                year desc"""
 
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(
-        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"]
+        reg, columns=["title", "year", "isbn", "publishing_company", "researcher"]
     )
-    return df_bd
+    return df_bd.to_dict(orient="records")
 
 
 def lists_brand_production_researcher_db(researcher_id, year):

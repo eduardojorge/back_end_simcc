@@ -8,8 +8,6 @@ import Dao.termFlowSQL as termFlowSQL
 from Model.Bibliographic_Production_Researcher import (
     Bibliographic_Production_Researcher,
 )
-from Model.Book_Chapter_Researcher import Book_Chapter_Researcher
-from Model.Book_Researcher import Book_Researcher
 from Model.Brand_Researcher import Brand_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.Patent_Researcher import Patent_Researcher
@@ -143,7 +141,6 @@ def brand_production_researcher():
 @researcherTermRest.route("/book_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_production_researcher():
-    list_book_production_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
     if not year:
@@ -152,28 +149,12 @@ def book_production_researcher():
 
     df_bd = termFlowSQL.lists_book_production_researcher_db(researcher_id, year, term)
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        b = Book_Researcher()
-        b.name = str(infos["name"])
-        b.id = str(infos.id)
-        b.title = str(infos.title)
-        b.year = str(infos.year)
-        b.isbn = str(infos.isbn)
-        b.publishing_company = str(infos.publishing_company)
-
-        # print(researcher)
-        list_book_production_researcher.append(b.getJson())
-
-    return jsonify(list_book_production_researcher), 200
+    return jsonify(df_bd), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/book_chapter_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_chapter_production_researcher():
-    list_book_chapter_production_researcher = []
-
     researcher_id = request.args.get("researcher_id")
     term = request.args.get("term")
     year = request.args.get("year")
@@ -183,18 +164,8 @@ def book_chapter_production_researcher():
     df_bd = termFlowSQL.lists_book_chapter_production_researcher_db(
         researcher_id, year, term
     )
-    for i, infos in df_bd.iterrows():
-        b = Book_Chapter_Researcher()
-        b.name = str(infos["name"])
-        b.id = str(infos.id)
-        b.title = str(infos.title)
-        b.year = str(infos.year)
-        b.isbn = str(infos.isbn)
-        b.publishing_company = str(infos.publishing_company)
 
-        list_book_chapter_production_researcher.append(b.getJson())
-
-    return jsonify(list_book_chapter_production_researcher), 200
+    return jsonify(df_bd), 200
 
 
 # lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
