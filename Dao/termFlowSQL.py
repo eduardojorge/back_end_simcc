@@ -7,7 +7,6 @@ import Dao.util as util
 
 
 def get_researcher_address_db(researcher_id):
-
     script_sql = f"""
         SELECT
             distinct city,
@@ -67,8 +66,8 @@ def list_research_dictionary_db(initials, type):
         )
 
         reg = sgbdSQL.consultar_db(sql)
-    if type.lower() == 'area':
-        script_sql = f'''
+    if type.lower() == "area":
+        script_sql = f"""
             SELECT name,
                 count(*) AS count,
                 'AREA_SPECIALTY' AS type_
@@ -94,7 +93,7 @@ def list_research_dictionary_db(initials, type):
             WHERE name ILIKE '{initials}%'
 
             GROUP BY name;
-            '''
+            """
         reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["term", "frequency", "type"])
@@ -135,7 +134,8 @@ def lists_patent_production_researcher_db(researcher_id, year, term):
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["researcher_name", "id", "title", "year", "grant_date"])
+        reg, columns=["researcher_name", "id", "title", "year", "grant_date"]
+    )
     df_bd["grant_date"] = df_bd["grant_date"].astype("str").replace("NaT", "")
 
     return df_bd
@@ -178,8 +178,8 @@ def lists_book_production_researcher_db(researcher_id, year, term):
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg,
-        columns=["name", "id", "title", "year", "isbn", "publishing_company"])
+        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"]
+    )
 
     return df_bd
 
@@ -217,8 +217,8 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term):
 
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(
-        reg,
-        columns=["name", "id", "title", "year", "isbn", "publishing_company"])
+        reg, columns=["name", "id", "title", "year", "isbn", "publishing_company"]
+    )
     return df_bd
 
 
@@ -244,7 +244,6 @@ def lists_brand_production_researcher_db(researcher_id, year):
 
 
 def lists_Researcher_Report_db(researcher_id, year):
-
     sql = """SELECT rr.id as id, rr.title as title, 
             rr.year as year,project_name,financing_institutionc
                         
@@ -259,11 +258,9 @@ def lists_Researcher_Report_db(researcher_id, year):
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg,
-                         columns=[
-                             "id", "title", "year", "project_name",
-                             "financing_institutionc"
-                         ])
+    df_bd = pd.DataFrame(
+        reg, columns=["id", "title", "year", "project_name", "financing_institutionc"]
+    )
 
     return df_bd
 
@@ -290,17 +287,14 @@ def lists_guidance_researcher_db(researcher_id, year):
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(reg,
-                         columns=[
-                             "id", "title", "nature", "oriented", "type",
-                             "status", "year"
-                         ])
+    df_bd = pd.DataFrame(
+        reg, columns=["id", "title", "nature", "oriented", "type", "status", "year"]
+    )
 
     return df_bd
 
 
 def lists_pevent_researcher_db(researcher_id, year, term, nature):
-
     if researcher_id:
         filter_researcher = f"""
         AND researcher_id = '{researcher_id}'
@@ -335,8 +329,8 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=['name', "id", "event_name",
-                      "nature", "form_participation", "year"]
+        reg,
+        columns=["name", "id", "event_name", "nature", "form_participation", "year"],
     )
 
     return df_bd
@@ -369,7 +363,6 @@ def lists_bibliographic_production_article_researcher_db(
     type: str = None,
     qualis: str = None,
 ):
-
     filter = str()
     if term:
         filter = f'AND {util.web_search_filter(term, "title")}'
@@ -443,7 +436,6 @@ def lists_bibliographic_production_article_researcher_db(
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
-    print(script_sql)
     data_frame = pd.DataFrame(
         reg,
         columns=[
@@ -468,7 +460,6 @@ def lists_bibliographic_production_article_researcher_db(
 def lists_bibliographic_production_qtd_qualis_researcher_db(
     researcher_id, year, graduate_program_id
 ):
-
     filter_researcher = ""
     if researcher_id != "":
         filter_researcher = f"AND b.researcher_id='{researcher_id}'"
@@ -506,7 +497,6 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
 
 
 def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
-
     stopwords = nltk.corpus.stopwords.words("portuguese")
     stopwords += nltk.corpus.stopwords.words("english")
 
@@ -514,13 +504,13 @@ def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
     filter_graduate_program = str()
 
     if dep_id:
-        filter_departament = f'''
+        filter_departament = f"""
             WHERE b.researcher_id IN (
                 SELECT researcher_id
                 FROM public.departament_researcher
                 WHERE dep_id = '{dep_id}'
             )
-            '''
+            """
     else:
         filter_departament = str()
 
@@ -566,7 +556,6 @@ def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
 
 
 def lista_institution_production_db(text, institution, type_):
-
     text = unidecode.unidecode(text)
     filter = filter = util.filterSQLRank(text, ";", "b.title")
 
@@ -580,7 +569,6 @@ def lista_institution_production_db(text, institution, type_):
     sql = ""
 
     if type_ == "SPEAKER":
-
         filter = filter = util.filterSQLRank(text, ";", "event_name")
 
         sql = """SELECT  COUNT(distinct r.id) AS qtd,i.id as id, i.name as institution,image 
@@ -603,7 +591,6 @@ def lista_institution_production_db(text, institution, type_):
         )
 
     if type_ == "ABSTRACT":
-
         filter = filter = util.filterSQLRank(text, ";", "r.abstract")
 
         sql = """SELECT  COUNT(distinct r.id) AS qtd,i.id as id, i.name as institution,image 
@@ -673,7 +660,6 @@ def lista_institution_production_db(text, institution, type_):
 
 
 def lista_researcher_id_db(researcher_id):
-
     script_sql = f"""
         SELECT
             DISTINCT r.id AS id,
@@ -832,15 +818,11 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
         ],
     )
 
-    data_frame = data_frame.merge(
-        researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_openAlex_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(
-        researcher_departament(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
 
@@ -969,17 +951,16 @@ def researcher_departament():
         """
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df = pd.DataFrame(reg, columns=['id', 'departments'])
+    df = pd.DataFrame(reg, columns=["id", "departments"])
 
     def encode_img_data(department_list):
         for dept in department_list:
-            if dept['img_data']:
-                if isinstance(dept['img_data'], str):
-                    dept['img_data'] = dept['img_data'].encode('utf-8')
-                dept['img_data'] = base64.b64encode(
-                    dept['img_data']).decode('utf-8')
+            if dept["img_data"]:
+                if isinstance(dept["img_data"], str):
+                    dept["img_data"] = dept["img_data"].encode("utf-8")
+                dept["img_data"] = base64.b64encode(dept["img_data"]).decode("utf-8")
         return department_list
 
-    df['departments'] = df['departments'].apply(encode_img_data)
+    df["departments"] = df["departments"].apply(encode_img_data)
 
     return df

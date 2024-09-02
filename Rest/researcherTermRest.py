@@ -1,4 +1,3 @@
-# import nltk
 import unidecode
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
@@ -20,6 +19,8 @@ from Model.Software_Researcher import Software_Researcher
 from Model.Year_Barema import Year_Barema
 
 researcherTermRest = Blueprint("researcherTermRest", __name__)
+
+YEAR = 2020
 
 
 @researcherTermRest.route("/resarcher_barema", methods=["GET"])
@@ -54,7 +55,6 @@ def resarcher_barema():
 @researcherTermRest.route("/originals_words", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def originals_words():
-
     initials = request.args.get("initials")
     type = request.args.get("type")
     df_bd = termFlowSQL.list_research_dictionary_db(initials, type)
@@ -74,7 +74,6 @@ def originals_words():
 @researcherTermRest.route("/researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def research():
-
     terms = unidecode.unidecode(request.args.get("terms"))
     if not terms:
         return jsonify([]), HTTPStatus.BAD_REQUEST
@@ -96,6 +95,8 @@ def guidance_researcher():
     list_guidance_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     df_bd = termFlowSQL.lists_guidance_researcher_db(researcher_id, year)
 
     for i, infos in df_bd.iterrows():
@@ -121,9 +122,10 @@ def brand_production_researcher():
     # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
-    df_bd = termFlowSQL.lists_brand_production_researcher_db(
-        researcher_id, 1000)
+    df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, 1000)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
@@ -144,15 +146,16 @@ def book_production_researcher():
     list_book_production_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     term = request.args.get("term")
 
-    df_bd = termFlowSQL.lists_book_production_researcher_db(
-        researcher_id, year, term)
+    df_bd = termFlowSQL.lists_book_production_researcher_db(researcher_id, year, term)
 
     # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         b = Book_Researcher()
-        b.name = str(infos['name'])
+        b.name = str(infos["name"])
         b.id = str(infos.id)
         b.title = str(infos.title)
         b.year = str(infos.year)
@@ -166,8 +169,7 @@ def book_production_researcher():
 
 
 # lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
-@researcherTermRest.route("/book_chapter_production_researcher",
-                          methods=["GET"])
+@researcherTermRest.route("/book_chapter_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def book_chapter_production_researcher():
     list_book_chapter_production_researcher = []
@@ -175,12 +177,15 @@ def book_chapter_production_researcher():
     researcher_id = request.args.get("researcher_id")
     term = request.args.get("term")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
     df_bd = termFlowSQL.lists_book_chapter_production_researcher_db(
-        researcher_id, year, term)
+        researcher_id, year, term
+    )
     for i, infos in df_bd.iterrows():
         b = Book_Chapter_Researcher()
-        b.name = str(infos['name'])
+        b.name = str(infos["name"])
         b.id = str(infos.id)
         b.title = str(infos.title)
         b.year = str(infos.year)
@@ -202,6 +207,8 @@ def researcher_report():
     # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
     df_bd = termFlowSQL.lists_Researcher_Report_db(researcher_id, year)
 
@@ -225,9 +232,10 @@ def software_production_researcher():
     list_software_production_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
-    df_bd = termFlowSQL.lists_software_production_researcher_db(
-        researcher_id, year)
+    df_bd = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
 
     for i, infos in df_bd.iterrows():
         s = Software_Researcher()
@@ -246,18 +254,18 @@ def pevent_researcher():
     list_pevent_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
     term = request.args.get("term")
 
     nature = request.args.get("nature")
 
-    df_bd = termFlowSQL.lists_pevent_researcher_db(researcher_id, year, term,
-                                                   nature)
+    df_bd = termFlowSQL.lists_pevent_researcher_db(researcher_id, year, term, nature)
 
     for i, infos in df_bd.iterrows():
-
         p = PEvent_Researcher()
-        p.name = str(infos['name'])
+        p.name = str(infos["name"])
         p.id = str(infos.id)
         p.event_name = str(infos.event_name)
         p.nature = str(infos.nature)
@@ -274,14 +282,14 @@ def pevent_researcher():
 @researcherTermRest.route("/patent_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
-
     list_patent_production_researcher = []
     term = request.args.get("term")
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
 
-    df_bd = termFlowSQL.lists_patent_production_researcher_db(
-        researcher_id, year, term)
+    df_bd = termFlowSQL.lists_patent_production_researcher_db(researcher_id, year, term)
 
     for i, infos in df_bd.iterrows():
         p = Patent_Researcher()
@@ -299,13 +307,14 @@ def patent_production_researcher():
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_researcher():
-
     list_bibliographic_production_researcher = list()
 
     researcher_id = request.args.get("researcher_id")
     qualis = request.args.get("qualis")
     terms = request.args.get("terms")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     type = request.args.get("type")
 
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
@@ -338,6 +347,8 @@ def bibliographic_production_researcher():
 def qualis_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = YEAR
     lista_qualis = []
 
     graduate_program_id = request.args.get("graduate_program_id")
@@ -362,14 +373,15 @@ def qualis_researcher():
 @cross_origin(origin="*", headers=["Content-Type"])
 def lists_word_researcher():
     researcher_id = request.args.get("researcher_id")
-    dep_id = request.args.get('dep_id')
+    dep_id = request.args.get("dep_id")
     graduate_program_id = request.args.get("graduate_program_id")
     if graduate_program_id is None:
         graduate_program_id = ""
 
     lists_word = list()
     df_bd = termFlowSQL.lists_word_researcher_db(
-        researcher_id, graduate_program_id, dep_id)
+        researcher_id, graduate_program_id, dep_id
+    )
 
     for Index, infos in df_bd.iterrows():
         words = {"among": str(infos.qtd), "term": str(infos.term)}
@@ -386,8 +398,7 @@ def institutionFrequenci():
     termNovo = terms.lower()
     university = str(request.args.get("university")) + ""
     type_ = str(request.args.get("type")) + ""
-    df_bd = termFlowSQL.lista_institution_production_db(
-        termNovo, university, type_)
+    df_bd = termFlowSQL.lista_institution_production_db(termNovo, university, type_)
 
     for i, infos in df_bd.iterrows():
         institution = {
