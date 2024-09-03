@@ -1,7 +1,5 @@
 CREATE DATABASE simcc;
-
-\c simcc;
-
+\ c simcc;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 create EXTENSION fuzzystrmatch;
 create EXTENSION pg_trgm;
@@ -74,7 +72,7 @@ CREATE TABLE IF NOT EXISTS public.periodical_magazine (
     updated_at timestamp without time zone,
     deleted_at timestamp without time zone,
     jcr character varying(100),
-    jcr_link character varying(200) DEFAULT VARCHAR(255),
+    jcr_link character varying(200),
     CONSTRAINT "PK_35bb0df687d8879d763c1f3ae68" PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS public.great_area_expertise (
@@ -370,7 +368,7 @@ CREATE TABLE IF NOT EXISTS public.research_dictionary (
     CONSTRAINT research_dictionary_pkey PRIMARY KEY (research_dictionary_id),
     CONSTRAINT research_dictionary_term_type__key UNIQUE (term, type_)
 );
-CREATE TABLE graduate_program(
+CREATE TABLE IF NOT EXISTS public.graduate_program(
     graduate_program_id uuid NOT NULL DEFAULT uuid_generate_v4(),
     code VARCHAR(100),
     name VARCHAR(100) NOT NULL,
@@ -382,29 +380,31 @@ CREATE TABLE graduate_program(
     state character varying(4) DEFAULT 'BA'::character varying,
     city character varying(100) DEFAULT 'Salvador'::character varying,
     region character varying(100) DEFAULT 'Nordeste'::character varying,
-    instituicao character varying(100),
     url_image VARCHAR(200) NULL,
-    sigla character varying(100),
-    description VARCHAR(500) NULL,
+    acronym character varying(100),
+    description TEXT,
     visible bool DEFAULT FALSE,
+    site TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (graduate_program_id),
     FOREIGN KEY (institution_id) REFERENCES institution (id)
 );
-CREATE TABLE IF NOT EXISTS public.graduate_program_researcher (
+CREATE TABLE IF NOT EXISTS public.graduate_program_researcher(
     graduate_program_id uuid NOT NULL,
     researcher_id uuid NOT NULL,
-    year integer NOT NULL,
+    year INT [],
     type_ relationship,
-    CONSTRAINT graduate_program_researcher_pkey PRIMARY KEY (graduate_program_id, researcher_id, year),
-    CONSTRAINT graduate_program_researcher_graduate_program_id_fkey FOREIGN KEY (graduate_program_id) REFERENCES public.graduate_program (graduate_program_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
-    CONSTRAINT graduate_program_researcher_researcher_id_fkey FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (graduate_program_id, researcher_id),
+    FOREIGN KEY (researcher_id) REFERENCES researcher (id),
+    FOREIGN KEY (graduate_program_id) REFERENCES graduate_program (graduate_program_id)
 );
-CREATE TABLE graduate_program_student(
+CREATE TABLE IF NOT EXISTS public.graduate_program_student(
     graduate_program_id uuid NOT NULL DEFAULT uuid_generate_v4(),
     researcher_id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    year INTEGER,
+    year INT [],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (graduate_program_id, researcher_id, year),
@@ -416,14 +416,14 @@ CREATE TABLE IF NOT EXISTS public.JCR (
     journalName character varying,
     jcrYear character varying,
     abbrJournal character varying,
-    issn character varying DEFAULT VARCHAR(255),
-    eissn character varying DEFAULT VARCHAR(255),
-    totalCites character varying DEFAULT VARCHAR(255),
-    totalArticles character varying DEFAULT VARCHAR(255),
-    citableItems character varying DEFAULT VARCHAR(255),
-    citedHalfLife character varying DEFAULT VARCHAR(255),
-    citingHalfLife character varying DEFAULT VARCHAR(255),
-    jif2019 character varying DEFAULT VARCHAR(255),
+    issn character varying,
+    eissn character varying,
+    totalCites character varying,
+    totalArticles character varying,
+    citableItems character varying,
+    citedHalfLife character varying,
+    citingHalfLife character varying,
+    jif2019 character varying,
     url_revista character varying NOT NULL
 );
 CREATE TABLE IF NOT EXISTS public.researcher_production (
@@ -544,7 +544,14 @@ CREATE TABLE IF NOT EXISTS research_group_dgp(
     first_leader_id uuid,
     second_leader character varying(200),
     second_leader_id uuid,
-    area character varying(200)
+    area character varying(200),
+    census int,
+    start_of_collection character varying(200),
+    end_of_collection character varying(200),
+    group_identifier character varying(200),
+    year int,
+    institution_name character varying(200),
+    category character varying(200)
 );
 CREATE TABLE IF NOT EXISTS ufmg_teacher (
     researcher_id uuid,
@@ -633,13 +640,46 @@ CREATE TABLE incite_graduate_program_researcher(
 CREATE TABLE research_lines(
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     research_group_id uuid,
-	title TEXT,
-	objective TEXT,
-	keyword VARCHAR(510),
-	group_identifier VARCHAR(510),
-	year INT,
-	predominant_major_area VARCHAR(510),
-	predominant_area VARCHAR(510)
+    title TEXT,
+    objective TEXT,
+    keyword VARCHAR(510),
+    group_identifier VARCHAR(510),
+    year INT,
+    predominant_major_area VARCHAR(510),
+    predominant_area VARCHAR(510)
+);
+CREATE TABLE research_project (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    researcher_id uuid NOT NULL REFERENCES public.researcher(id),
+    start_year INT,
+    end_year INT,
+    agency_code VARCHAR(255),
+    agency_name VARCHAR(255),
+    project_name TEXT,
+    status VARCHAR(255),
+    nature VARCHAR(255),
+    number_undergraduates INT DEFAULT 0,
+    number_specialists INT DEFAULT 0,
+    number_academic_masters INT DEFAULT 0,
+    number_phd INT DEFAULT 0,
+    description TEXT
+);
+CREATE TABLE research_project_components (
+    project_id uuid NOT NULL REFERENCES public.research_project(id),
+    name VARCHAR(255),
+    lattes_id VARCHAR(255),
+    citations VARCHAR
+);
+CREATE TABLE research_project_foment (
+    project_id uuid NOT NULL REFERENCES public.research_project(id),
+    agency_name VARCHAR(255),
+    agency_code VARCHAR(255),
+    nature VARCHAR(255)
+);
+CREATE TABLE research_project_production (
+    project_id uuid NOT NULL REFERENCES public.research_project(id),
+    title TEXT,
+    type VARCHAR(255)
 );
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;
@@ -647,37 +687,37 @@ CREATE TABLE IF NOT EXISTS embeddings.abstract (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.researcher(id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE TABLE IF NOT EXISTS embeddings.article (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.bibliographic_production(id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE TABLE IF NOT EXISTS embeddings.article_abstract (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.openalex_article(article_id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE TABLE IF NOT EXISTS embeddings.book (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.bibliographic_production(id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE TABLE IF NOT EXISTS embeddings.event (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.bibliographic_production(id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE TABLE IF NOT EXISTS embeddings.patent (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.patent(id),
     embeddings vector,
-    price numeric(20,18)
+    price numeric(20, 18)
 );
 CREATE INDEX IDX_NAME_GIN ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX IDX_ABSTRACT_GIN ON researcher USING gin (abstract gin_trgm_ops);

@@ -9,10 +9,23 @@ from http import HTTPStatus
 areaRest = Blueprint("areaRest", __name__)
 
 
+@areaRest.route("/researcher_research_project", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type"])
+def researcher_research_project():
+    term = request.args.get("term")
+    year = request.args.get("year")
+    graduate_program_id = request.args.get("graduate_program_id")
+    researcher_id = request.args.get("researcher_id")
+
+    data_frame = areaFlowSQL.researcher_research_project(
+        term, year, graduate_program_id, researcher_id
+    )
+    return jsonify(data_frame), HTTPStatus.OK
+
+
 @areaRest.route("/researcherEvent", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherEvent():
-
     term = request.args.get("term")
     if not term:
         return jsonify([]), HTTPStatus.BAD_REQUEST
@@ -130,7 +143,6 @@ def area_specialitInitials():
 @areaRest.route("/researcherArea_expertise", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_expertise():
-
     area = request.args.get("area")
     if not area:
         return jsonify([]), HTTPStatus.BAD_REQUEST
@@ -146,7 +158,6 @@ def researcherArea_expertise():
 @areaRest.route("/researcherArea_specialty", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_specialty():
-
     area = request.args.get("area_specialty")
     if not area:
         return jsonify([]), HTTPStatus.BAD_REQUEST
@@ -164,7 +175,6 @@ def researcherArea_specialty():
 @areaRest.route("/bibliographic_production_article_area", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article_area():
-
     list_bibliographic_production_article = []
 
     great_area = request.args.get("great_area")

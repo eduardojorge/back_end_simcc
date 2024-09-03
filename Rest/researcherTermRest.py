@@ -8,9 +8,7 @@ import Dao.termFlowSQL as termFlowSQL
 from Model.Bibliographic_Production_Researcher import (
     Bibliographic_Production_Researcher,
 )
-from Model.Brand_Researcher import Brand_Researcher
 from Model.Guidance_Researcher import Guidance_Researcher
-from Model.Patent_Researcher import Patent_Researcher
 from Model.PEvent_Researcher import PEvent_Researcher
 from Model.Researcher_Report import Researcher_Report
 from Model.Software_Researcher import Software_Researcher
@@ -116,8 +114,6 @@ def guidance_researcher():
 @researcherTermRest.route("/brand_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def brand_production_researcher():
-    list_brand_production_researcher = []
-    # terms = request.args.get('terms')
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
     if not year:
@@ -125,17 +121,7 @@ def brand_production_researcher():
 
     df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, 1000)
 
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
-    for i, infos in df_bd.iterrows():
-        b = Brand_Researcher()
-        b.id = str(infos.id)
-        b.title = str(infos.title)
-        b.year = str(infos.year)
-
-        # print(researcher)
-        list_brand_production_researcher.append(b.getJson())
-
-    return jsonify(list_brand_production_researcher), 200
+    return jsonify(df_bd), 200
 
 
 @researcherTermRest.route("/book_production_researcher", methods=["GET"])
@@ -143,11 +129,14 @@ def brand_production_researcher():
 def book_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    distinct = request.args.get("distinct")
     if not year:
         year = YEAR
     term = request.args.get("term")
 
-    df_bd = termFlowSQL.lists_book_production_researcher_db(researcher_id, year, term)
+    df_bd = termFlowSQL.lists_book_production_researcher_db(
+        researcher_id, year, term, distinct
+    )
 
     return jsonify(df_bd), 200
 
@@ -160,9 +149,10 @@ def book_chapter_production_researcher():
     year = request.args.get("year")
     if not year:
         year = YEAR
+    distinct = request.args.get("distinct")
 
     df_bd = termFlowSQL.lists_book_chapter_production_researcher_db(
-        researcher_id, year, term
+        researcher_id, year, term, distinct
     )
 
     return jsonify(df_bd), 200
@@ -253,26 +243,17 @@ def pevent_researcher():
 @researcherTermRest.route("/patent_production_researcher", methods=["GET"])
 @cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
-    list_patent_production_researcher = []
     term = request.args.get("term")
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
     if not year:
         year = YEAR
+    distinct = request.args.get("distinct")
+    df_bd = termFlowSQL.lists_patent_production_researcher_db(
+        researcher_id, year, term, distinct
+    )
 
-    df_bd = termFlowSQL.lists_patent_production_researcher_db(researcher_id, year, term)
-
-    for i, infos in df_bd.iterrows():
-        p = Patent_Researcher()
-        p.id = str(infos.id)
-        p.title = str(infos.title)
-        p.year = str(infos.year)
-        p.grant_date = str(infos.grant_date)
-        p.name = str(infos["researcher_name"])
-
-        list_patent_production_researcher.append(p.getJson())
-
-    return jsonify(list_patent_production_researcher), 200
+    return jsonify(df_bd), 200
 
 
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])

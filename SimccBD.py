@@ -76,7 +76,14 @@ SELECT
             first_leader_id,
             second_leader,
             second_leader_id,
-            area
+            area,
+            census,
+            start_of_collection,
+            end_of_collection,
+            group_identifier,
+            year,
+            institution_name,
+            category
         FROM
             research_group_dgp rg
         WHERE
@@ -88,18 +95,19 @@ SELECT
     data_frame = pd.DataFrame(
         registry,
         columns=[
-            'id',
+            "id",
             "name",
             "institution",
             "first_leader",
             "first_leader_id",
             "second_leader",
             "second_leader_id",
-            "area"
+            "area",
         ],
     )
 
     return data_frame.to_dict(orient="records")
+
 
 def list_research_lines(group_id):
     script_sql = f"""
@@ -109,7 +117,8 @@ def list_research_lines(group_id):
                 'objective', rl.objective,
                 'keywords', rl.keyword,
                 'major_area', rl.predominant_major_area,
-                'area', rl.predominant_area
+                'area', rl.predominant_area,
+                'year', rl.year
             ))
         FROM 
             research_lines rl
@@ -122,21 +131,6 @@ def list_research_lines(group_id):
     registry = sgbdSQL.consultar_db(script_sql)
 
     return registry[0][0]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def researcher_text_db():
@@ -279,7 +273,7 @@ def list_researcher_sub_area_expertise_db(sub_area_experise):
         + " FROM sub_area_expertise sub,researcher_area_expertise rae "
         + " WHERE "
         + "  LOWER(unaccent(sub.name))='"
-        + sub_area_experise.lower()
+        + initials.lower()
         + "'"
         + " AND sub.id = rae.sub_area_expertise_id"
     )
@@ -290,7 +284,6 @@ def list_researcher_sub_area_expertise_db(sub_area_experise):
 
 
 def list_area_expertise_term_db(term):
-
     term = unidecode.unidecode(term)
 
     script_sql = (
@@ -326,7 +319,7 @@ def lista_researcher_name_db(text):
     for word in tokens:
         term = term + word + " & "
     x = len(term)
-    termX = term[0: x - 3]
+    termX = term[0 : x - 3]
     print(termX)
 
     script_sql = (
@@ -362,7 +355,6 @@ def lista_researcher_name_db(text):
 
 
 def lists_researcher_initials_term_db(initials, graduate_program_id):
-
     initials = unidecode.unidecode(initials)
     filter = util.filterSQLRank2(initials, ";", "r.name")
     filtergraduate_program = ""
@@ -382,7 +374,6 @@ def lists_researcher_initials_term_db(initials, graduate_program_id):
 
 
 def recently_updated_db(year, institution, departament):
-
     filter_institution = str()
     if not institution:
         filter_institution = util.filterSQL(institution, ";", "or", "i.name")
@@ -467,8 +458,7 @@ def recently_updated_db(year, institution, departament):
             """
         registry = sgbdSQL.consultar_db(script_sql)
 
-        data_frame_researchers = pd.DataFrame(
-            registry, columns=["researcher_id"])
+        data_frame_researchers = pd.DataFrame(registry, columns=["researcher_id"])
 
         data_frame = pd.merge(
             data_frame, data_frame_researchers, on="researcher_id", how="right"
@@ -496,13 +486,13 @@ def lists_bibliographic_production_article_db(
             AND gpr.graduate_program_id = '{graduate_program_id}'
             """
     if dep_id:
-        filter_departament = f'''
+        filter_departament = f"""
             AND r.id IN (
                 SELECT researcher_id
                 FROM public.departament_researcher
                 WHERE dep_id = '{dep_id}'
             )
-            '''
+            """
     else:
         filter_departament = str()
 
@@ -637,11 +627,10 @@ def lists_bibliographic_production_article_db(
                 "keywords",
             ],
         )
-    return data_frame.fillna('')
+    return data_frame.fillna("")
 
 
 def lists_bibliographic_production_article_name_researcher_db(name, year, qualis):
-
     name = unidecode.unidecode(name.lower())
     t = []
     t = name.split(";")
@@ -651,7 +640,7 @@ def lists_bibliographic_production_article_name_researcher_db(name, year, qualis
         filter = "unaccent(LOWER(r.name))='" + word.lower() + "' or " + filter
         i = i + 1
     x = len(filter)
-    filter = filter[0: x - 3]
+    filter = filter[0 : x - 3]
     filter = "(" + filter + ")"
     if qualis == "":
         filterQualis = ""
@@ -662,12 +651,11 @@ def lists_bibliographic_production_article_name_researcher_db(name, year, qualis
         i = 0
         for word in t:
             filterQualis = (
-                "unaccent(LOWER(qualis))='" + word.lower() +
-                "' or " + filterQualis
+                "unaccent(LOWER(qualis))='" + word.lower() + "' or " + filterQualis
             )
             i = i + 1
         x = len(filterQualis)
-        filterQualis = filterQualis[0: x - 3]
+        filterQualis = filterQualis[0 : x - 3]
         filterQualis = " AND (" + filterQualis + ")"
 
     reg = sgbdSQL.consultar_db(
@@ -684,8 +672,7 @@ def lists_bibliographic_production_article_name_researcher_db(name, year, qualis
     )
 
     df_bd = pd.DataFrame(
-        reg, columns=["id", "title", "year", "doi",
-                      "qualis", "researcher", "magazine"]
+        reg, columns=["id", "title", "year", "doi", "qualis", "researcher", "magazine"]
     )
     print(df_bd)
     return df_bd

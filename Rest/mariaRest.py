@@ -6,16 +6,16 @@ from Dao import mariaSQL
 mariaRest = Blueprint("mariaRest", __name__)
 
 
-@mariaRest.route('/maria/researcher/abstract', methods=['GET'])
+@mariaRest.route("/maria/researcher/abstract", methods=["GET"])
 def researcher_abstract():
-    query = request.args.get('query')
-    researcher = mariaSQL.search_by_embeddings(query, 'abstract')
+    query = request.args.get("query")
+    researcher = mariaSQL.search_by_embeddings(query, "abstract")
     researcher = mariaSQL.mount_researchers(researcher)
     comment = mariaSQL.mount_comment(researcher)
-    return jsonify({'query': comment, 'researcher': researcher}), HTTPStatus.OK
+    return jsonify({"query": comment, "researcher": researcher}), HTTPStatus.OK
 
 
-@mariaRest.route('/maria/researcher/article', methods=['GET'])
+@mariaRest.route("/maria/researcher/article", methods=["GET"])
 def researcher_article():
     query = request.args.get("query")
     researcher = mariaSQL.search_by_embeddings(query, "article")
@@ -23,7 +23,7 @@ def researcher_article():
     return jsonify(researcher), HTTPStatus.OK
 
 
-@mariaRest.route('/maria/researcher/article_abstract', methods=['GET'])
+@mariaRest.route("/maria/researcher/article_abstract", methods=["GET"])
 def researcher_article_abstract():
     query = request.args.get("query")
     researcher = mariaSQL.search_by_embeddings(query, "article_abstract")
@@ -31,7 +31,7 @@ def researcher_article_abstract():
     return jsonify(researcher), HTTPStatus.OK
 
 
-@mariaRest.route('/maria/researcher/book', methods=['GET'])
+@mariaRest.route("/maria/researcher/book", methods=["GET"])
 def researcher_book():
     query = request.args.get("query")
     researcher = mariaSQL.search_by_embeddings(query, "book")
@@ -39,7 +39,7 @@ def researcher_book():
     return jsonify(researcher), HTTPStatus.OK
 
 
-@mariaRest.route('/maria/researcher/event', methods=['GET'])
+@mariaRest.route("/maria/researcher/event", methods=["GET"])
 def researcher_event():
     query = request.args.get("query")
     researcher = mariaSQL.search_by_embeddings(query, "event")
@@ -47,7 +47,7 @@ def researcher_event():
     return jsonify(researcher), HTTPStatus.OK
 
 
-@mariaRest.route('/maria/researcher/patent', methods=['GET'])
+@mariaRest.route("/maria/researcher/patent", methods=["GET"])
 def researcher_patent():
     query = request.args.get("query")
     researcher = mariaSQL.search_by_embeddings(query, "patent")
