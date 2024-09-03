@@ -373,7 +373,7 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
     else:
         filter_researcher = str()
     if term:
-        filter = f"AND {util.web_search_filter(term, "event_name")}"
+        filter = f"AND {util.web_search_filter(term, 'event_name')}"
     else:
         filter = str()
     filterNature = util.filterSQL(nature, ";", "or", "nature")

@@ -6,7 +6,6 @@ from Dao import sgbdSQL as db
 
 
 def scrapping_article_data():
-
     openAlex_url = "https://api.openalex.org/works/https://doi.org/"
 
     script_sql = """
@@ -33,7 +32,7 @@ def scrapping_article_data():
                 with open(f"Files/json_doi/{data[1]}.json", "w") as arquivo:
                     arquivo.write(str(response.status_code))
                 print("[404] - NOT FOUND")
-            time.sleep(15)
+            time.sleep(7)
         else:
             print(f"[200] - OK")
 
@@ -65,7 +64,7 @@ def scrapping_researcher_data():
                 with open(f"Files/json_doi/{data[1]}.json", "w") as arquivo:
                     arquivo.write(str(response.status_code))
                 print("[404] - NOT FOUND")
-            time.sleep(15)
+            time.sleep(7)
         else:
             print(f"[200] - OK")
 
