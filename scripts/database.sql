@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     graduate_program character varying(255),
     graduation character varying(30),
     update_abstract boolean DEFAULT true,
+    student boolean DEFAULT false,
     CONSTRAINT "PK_7b53850398061862ebe70d4ce44" PRIMARY KEY (id),
     CONSTRAINT "UQ_cd7166a27f090d19d4e985592db" UNIQUE (lattes_10_id),
     CONSTRAINT "UQ_fdf2bde0f46501e3e84ec154c32" UNIQUE (lattes_id),
