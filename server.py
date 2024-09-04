@@ -20,7 +20,7 @@ from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from dotenv import load_dotenv
 
-YEAR = 2020
+YEAR = 1990
 try:
     port = sys.argv[2]
 except Exception:

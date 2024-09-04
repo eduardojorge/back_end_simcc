@@ -3,7 +3,6 @@ from Dao import sgbdSQL
 
 
 def article_prod(Data):
-
     script_sql = f"""
         SELECT
             year,
@@ -35,8 +34,7 @@ def article_prod(Data):
 
     print(df_ind_prod_base_article.columns)
 
-    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(
-        int)
+    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
     return df_ind_prod_base_article
 
 
@@ -58,8 +56,7 @@ def book_prod(Data):
 
     registry = sgbdSQL.consultar_db(script_sql)
 
-    df_ind_prod_base_book = pd.DataFrame(
-        registry, columns=["year", "count_book"])
+    df_ind_prod_base_book = pd.DataFrame(registry, columns=["year", "count_book"])
 
     df_ind_prod_base_book["ind_prod_book"] = (
         df_ind_prod_base_book["count_book"] * weights["BOOK"]
@@ -70,7 +67,6 @@ def book_prod(Data):
 
 
 def book_chapter_prod(Data):
-
     script_sql = f"""
         SELECT
             year,
@@ -93,8 +89,7 @@ def book_chapter_prod(Data):
     )
 
     df_ind_prod_base_book_chapter["ind_prod_book_chapter"] = (
-        df_ind_prod_base_book_chapter["count_book_chapter"] *
-        weights["BOOK_CHAPTER"]
+        df_ind_prod_base_book_chapter["count_book_chapter"] * weights["BOOK_CHAPTER"]
     )
     df_ind_prod_base_book_chapter = df_ind_prod_base_book_chapter.drop(
         "count_book_chapter", axis=1
@@ -153,8 +148,7 @@ def patent_prod(Data):
         }
     )
     df_ind_prod_base_patent = df_ind_prod_base_patent.reset_index()
-    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(
-        int)
+    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
 
     return df_ind_prod_base_patent
 
@@ -181,8 +175,7 @@ def software_prod(Data):
     df_ind_prod_base_software["ind_prod_software"] = (
         df_ind_prod_base_software["count_software"] * weights["SOFTWARE"]
     )
-    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(
-        int)
+    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(int)
     return df_ind_prod_base_software
 
 
@@ -208,8 +201,7 @@ def report_prod(Data):
         columns=["year", "count_report"],
     )
 
-    data_frame["ind_prod_report"] = data_frame["count_report"] * \
-        weights["REPORT"]
+    data_frame["ind_prod_report"] = data_frame["count_report"] * weights["REPORT"]
 
     return data_frame
 
@@ -238,8 +230,7 @@ def guidance_prod(Data):
     )
 
     data_frame_guidance["ind_prod_guidance"] = (
-        data_frame_guidance["nature"].map(
-            weights) * data_frame_guidance["count_nature"]
+        data_frame_guidance["nature"].map(weights) * data_frame_guidance["count_nature"]
     )
     data_frame_guidance = data_frame_guidance.groupby("year", as_index=False)[
         "ind_prod_guidance"
@@ -248,9 +239,6 @@ def guidance_prod(Data):
 
 
 if __name__ == "__main__":
-
-    project.project_env = "4"
-
     sgbdSQL.execScript_db("DELETE FROM researcher_ind_prod;")
 
     weights = {
