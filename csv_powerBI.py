@@ -239,13 +239,13 @@ def dim_research_group():
     script_sql = """
         SELECT
             rg.id,
-            TRANSLATE(rg.name, '"', ''),
+            TRANSLATE(rg.name, '"', '') AS name,
             rg.area,
-            i.id as institution_id
+            i.id AS institution_id
         FROM
             public.research_group_dgp rg
-            LEFT JOIN institution i ON i.acronym = rg.institution
-            WHERE rg.institution = 'UFMG'
+        RIGHT JOIN
+            institution i ON rg.institution ILIKE '%' || i.acronym || '%'
         """
     reg = sgbdSQL.consultar_db(script_sql)
 
@@ -256,19 +256,50 @@ def dim_research_group():
 
 def fat_group_leaders():
     script_sql = """
-        SELECT 
+        SELECT
             id,
-            first_leader_id, 
-            second_leader_id
+            name,
+            institution,
+            first_leader,
+            first_leader_id,
+            second_leader,
+            second_leader_id,
+            AREA,
+            census,
+            start_of_collection,
+            end_of_collection,
+            group_identifier,
+            YEAR,
+            institution_name,
+            category
         FROM
             public.research_group_dgp
-        WHERE 
+        WHERE
             first_leader_id IS NOT NULL
             OR second_leader_id IS NOT NULL
             """
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df = pd.DataFrame(reg, columns=["group_id", "first_leader_id", "second_leader_id"])
+    df = pd.DataFrame(
+        reg,
+        columns=[
+            "id",
+            "name",
+            "institution",
+            "first_leader",
+            "first_leader_id",
+            "second_leader",
+            "second_leader_id",
+            "AREA",
+            "census",
+            "start_of_collection",
+            "end_of_collection",
+            "group_identifier",
+            "YEAR",
+            "institution_name",
+            "category",
+        ],
+    )
 
     df.to_csv(dir + "fat_group_leaders.csv")
 
@@ -310,7 +341,6 @@ def dim_departament_technician():
     data_frame.to_csv(dir + "dim_departament_technician.csv")
 
 
-# Função processar e inserir a produção de cada pesquisador
 def researcher_production_tecnical_year_csv_db():
     sql = """
           SELECT researcher_id,title,development_year::int AS YEAR, 'PATENT' as type FROM patent
@@ -320,7 +350,6 @@ def researcher_production_tecnical_year_csv_db():
           SELECT researcher_id,title,YEAR,'BRAND' from brand
           UNION
           SELECT researcher_id,title,YEAR,'REPORT' from research_report
-
     """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -365,29 +394,16 @@ def researcher_production_year_distinct_csv_db():
 
 def researcher_article_qualis_csv_db():
     sql = """
-            
          	SELECT DISTINCT  title,
-            
-            
             bar.qualis as qualis,year,r.id as researcher_id,
             r.name as researcher_id,'institution' ,'city',
 			pm.name AS name_magazine,pm.issn AS issn,bar.jcr as jcr,bar.jcr_link as jcr_link, b.type as type
-			
-                           
           FROM  
           PUBLIC.bibliographic_production b LEFT JOIN  (bibliographic_production_article bar 
 			 LEFT JOIN   periodical_magazine pm ON pm.id = bar.periodical_magazine_id) ON b.id = bar.bibliographic_production_id ,
-              
 	      researcher r
           WHERE 
-       
-                                 
            r.id =  b.researcher_id
-      
-         
-
-                    
-        
          """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -811,6 +827,29 @@ def graduate_program_researcher_year_unnest():
     df = pd.DataFrame(reg, columns=["graduate_program_id", "researcher_id", "year"])
 
     df.to_csv(dir + "graduate_program_researcher_year_unnest.csv")
+
+
+def dim_graduate_program_acronym():
+    script_sql = """
+        SELECT
+            graduate_program_id,
+            acronym,
+            name
+        FROM 
+            graduate_program
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(
+        reg,
+        columns=[
+            "graduate_program_id",
+            "acronym",
+            "name",
+        ],
+    )
+
+    df.to_csv(dir + "dim_graduate_program_acronym.csv")
 
 
 def graduate_program_ind_prod_csv_db():
