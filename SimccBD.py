@@ -103,6 +103,13 @@ SELECT
             "second_leader",
             "second_leader_id",
             "area",
+            "census",
+            "start_of_collection",
+            "end_of_collection",
+            "group_identifier",
+            "year",
+            "institution_name",
+            "category",
         ],
     )
 

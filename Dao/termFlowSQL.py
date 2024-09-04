@@ -807,6 +807,7 @@ def lista_researcher_id_db(researcher_id):
 
 def list_researchers_originals_words_db(terms, institution, type_, graduate_program_id):
     filter_type = str()
+
     if type_ == "ARTICLE":
         term_filter = util.web_search_filter(terms, "title")
         filter_type = " AND b.type='ARTICLE' "
@@ -1003,37 +1004,49 @@ def researcher_subsidy_db():
 
 def researcher_departament():
     script_sql = """
-        SELECT 
-            dpr.researcher_id as id,
-            jsonb_agg(jsonb_build_object(
-                'dep_id', dp.dep_id,
-                'org_cod', dp.org_cod,
-                'dep_nom', dp.dep_nom,
-                'dep_des', dp.dep_des,
-                'dep_email', dp.dep_email,
-                'dep_site', dp.dep_site,
-                'dep_sigla', dp.dep_sigla,
-                'dep_tel', dp.dep_tel,
-                'img_data', dp.img_data
-            )) as departments
-        FROM
-            public.departament_researcher dpr
-            LEFT JOIN public.ufmg_departament dp ON dpr.dep_id = dp.dep_id
-        GROUP BY
-            dpr.researcher_id;
+        SELECT dep_id, org_cod, dep_nom, dep_des, dep_email, dep_site, dep_sigla, dep_tel, img_data
+        FROM public.ufmg_departament;
         """
+
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df = pd.DataFrame(reg, columns=["id", "departments"])
+    new_reg = []
 
-    def encode_img_data(department_list):
-        for dept in department_list:
-            if dept["img_data"]:
-                if isinstance(dept["img_data"], str):
-                    dept["img_data"] = dept["img_data"].encode("utf-8")
-                dept["img_data"] = base64.b64encode(dept["img_data"]).decode("utf-8")
-        return department_list
+    for departament in reg:
+        departament_list = list(departament)
+        departament_list[8] = base64.b64encode(departament[8]).decode("utf-8")[:60]
+        new_reg.append(tuple(departament_list))
 
-    df["departments"] = df["departments"].apply(encode_img_data)
+    df = pd.DataFrame(
+        new_reg,
+        columns=[
+            "dep_id",
+            "org_cod",
+            "dep_nom",
+            "dep_des",
+            "dep_email",
+            "dep_site",
+            "dep_sigla",
+            "dep_tel",
+            "img_data",
+        ],
+    )
+    dicionario = df.to_dict(orient="records")
+    dicionario = [(departamento["dep_id"], departamento) for departamento in dicionario]
 
-    return df
+    df = pd.DataFrame(dicionario, columns=["dep_id", "departaments"])
+
+    script_sql = """
+        SELECT
+            researcher_id,
+            dep_id
+        FROM
+            departament_researcher
+        """
+
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    departaments = pd.DataFrame(reg, columns=["id", "dep_id"])
+    departaments = departaments.merge(df, on="dep_id", how="left")
+    departaments = departaments.groupby("id").agg({"departaments": list}).reset_index()
+    return departaments
