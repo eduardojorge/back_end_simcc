@@ -1053,3 +1053,7 @@ if __name__ == "__main__":
     print("Inicio: graduate_program_researcher_year_unnest()")
     graduate_program_researcher_year_unnest()
     print("Fim: graduate_program_researcher_year_unnest()")
+
+    print("Inicio: dim_graduate_program_acronym()")
+    dim_graduate_program_acronym()
+    print("Fim: dim_graduate_program_acronym()")

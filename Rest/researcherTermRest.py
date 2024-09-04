@@ -16,7 +16,7 @@ from Model.Year_Barema import Year_Barema
 
 researcherTermRest = Blueprint("researcherTermRest", __name__)
 
-YEAR = 2020
+YEAR = 1990
 
 
 @researcherTermRest.route("/resarcher_barema", methods=["GET"])
