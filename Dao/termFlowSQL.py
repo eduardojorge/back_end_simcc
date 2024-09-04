@@ -1014,7 +1014,7 @@ def researcher_departament():
 
     for departament in reg:
         departament_list = list(departament)
-        departament_list[8] = base64.b64encode(departament[8]).decode("utf-8")[:60]
+        departament_list[8] = base64.b64encode(departament[8]).decode("utf-8")
         new_reg.append(tuple(departament_list))
 
     df = pd.DataFrame(
