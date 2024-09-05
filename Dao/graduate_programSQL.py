@@ -187,15 +187,18 @@ def production_general_db(graduate_program_id, year, dep_id):
             UNION
 
             SELECT
-                COUNT(*) as qtd,
-                UPPER(r.graduation) as type,
+                COUNT(*),
+                r.graduation,
                 gpr.graduate_program_id,
-                0000 as year
+                NULL as year
             FROM
                 researcher r
-                LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
-                WHERE year >= {year} {filter}
-            GROUP BY graduation, gpr.graduate_program_id
+                RIGHT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id 
+            WHERE
+            1 = 1
+            {filter}
+            GROUP BY
+                r.graduation, gpr.graduate_program_id
             """
     else:
         if dep_id:
