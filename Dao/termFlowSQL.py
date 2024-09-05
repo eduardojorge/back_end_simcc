@@ -1014,8 +1014,7 @@ def researcher_departament():
                 'dep_email', dp.dep_email,
                 'dep_site', dp.dep_site,
                 'dep_sigla', dp.dep_sigla,
-                'dep_tel', dp.dep_tel,
-                'img_data', dp.img_data
+                'dep_tel', dp.dep_tel
             )) as departments
         FROM
             public.departament_researcher dpr
@@ -1027,15 +1026,5 @@ def researcher_departament():
     reg = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(reg, columns=["id", "departments"])
-
-    def encode_img_data(department_list):
-        for dept in department_list:
-            if dept["img_data"]:
-                if isinstance(dept["img_data"], str):
-                    dept["img_data"] = dept["img_data"].encode("utf-8")
-                dept["img_data"] = base64.b64encode(dept["img_data"]).decode("utf-8")
-        return department_list
-
-    df["departments"] = df["departments"].apply(encode_img_data)
 
     return df
