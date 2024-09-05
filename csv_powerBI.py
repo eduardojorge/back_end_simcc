@@ -842,7 +842,7 @@ def dim_graduate_program_student_year_unnest():
 
     df = pd.DataFrame(reg, columns=["graduate_program_id", "researcher_id", "year"])
 
-    df.to_csv(dir + "dim_graduate_program_student_year_unnest.csv")
+    df.to_csv(dir + "graduate_program_student_year_unnest.csv")
 
 
 def dim_graduate_program_acronym():
