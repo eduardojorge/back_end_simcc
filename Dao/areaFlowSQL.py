@@ -2,12 +2,6 @@ import Dao.sgbdSQL as sgbdSQL
 import unidecode
 import pandas as pd
 import Dao.util as util
-import base64
-
-# Função para listar a palavras do dicionário passando as iniciais
-
-
-# Função que lista  as áreas de expertrize por Iniciais
 
 
 def lists_great_area_expertise_researcher_db(researcher_id):

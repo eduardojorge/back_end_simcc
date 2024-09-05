@@ -829,6 +829,22 @@ def graduate_program_researcher_year_unnest():
     df.to_csv(dir + "graduate_program_researcher_year_unnest.csv")
 
 
+def dim_graduate_program_student_year_unnest():
+    script_sql = """
+        SELECT
+            graduate_program_id,
+            researcher_id,
+            unnest(year) AS year
+        FROM
+            public.graduate_program_student;
+        """
+    reg = sgbdSQL.consultar_db(script_sql)
+
+    df = pd.DataFrame(reg, columns=["graduate_program_id", "researcher_id", "year"])
+
+    df.to_csv(dir + "dim_graduate_program_student_year_unnest.csv")
+
+
 def dim_graduate_program_acronym():
     script_sql = """
         SELECT
@@ -1057,3 +1073,7 @@ if __name__ == "__main__":
     print("Inicio: dim_graduate_program_acronym()")
     dim_graduate_program_acronym()
     print("Fim: dim_graduate_program_acronym()")
+
+    print("Inicio: dim_graduate_program_student_year_unnest()")
+    dim_graduate_program_student_year_unnest()
+    print("Fim: dim_graduate_program_student_year_unnest()")

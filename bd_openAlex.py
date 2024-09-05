@@ -1,6 +1,4 @@
 from Dao import sgbdSQL
-import pandas as pd
-from pprint import pprint
 import os
 import json
 from dotenv import load_dotenv
@@ -106,7 +104,6 @@ def extract_article_tmp(id, data):
 
 
 def extract_researcher_tmp(id, data):
-
     h_index = data["summary_stats"]["h_index"]
     i10_index = data["summary_stats"]["i10_index"]
     orcid = data["ids"]["orcid"][-18:]
