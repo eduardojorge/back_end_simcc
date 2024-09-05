@@ -200,7 +200,6 @@ def software_production_researcher():
 
     for i, infos in df_bd.iterrows():
         s = Software_Researcher()
-        s.id = str(infos.id)
         s.title = str(infos.title)
         s.year = str(infos.year)
 
