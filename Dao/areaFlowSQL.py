@@ -1147,52 +1147,30 @@ def researcher_subsidy_db():
 
 def researcher_departament():
     script_sql = """
-        SELECT dep_id, org_cod, dep_nom, dep_des, dep_email, dep_site, dep_sigla, dep_tel, img_data
-        FROM public.ufmg_departament;
-        """
-
-    reg = sgbdSQL.consultar_db(script_sql)
-
-    new_reg = []
-
-    for departament in reg:
-        departament_list = list(departament)
-        departament_list[8] = base64.b64encode(departament[8]).decode("utf-8")
-        new_reg.append(tuple(departament_list))
-
-    df = pd.DataFrame(
-        new_reg,
-        columns=[
-            "dep_id",
-            "org_cod",
-            "dep_nom",
-            "dep_des",
-            "dep_email",
-            "dep_site",
-            "dep_sigla",
-            "dep_tel",
-            "img_data",
-        ],
-    )
-    dicionario = df.to_dict(orient="records")
-    dicionario = [(departamento["dep_id"], departamento) for departamento in dicionario]
-
-    df = pd.DataFrame(dicionario, columns=["dep_id", "departaments"])
-
-    script_sql = """
-        SELECT
-            researcher_id,
-            dep_id
+        SELECT 
+            dpr.researcher_id as id,
+            jsonb_agg(jsonb_build_object(
+                'dep_id', dp.dep_id,
+                'org_cod', dp.org_cod,
+                'dep_nom', dp.dep_nom,
+                'dep_des', dp.dep_des,
+                'dep_email', dp.dep_email,
+                'dep_site', dp.dep_site,
+                'dep_sigla', dp.dep_sigla,
+                'dep_tel', dp.dep_tel
+            )) as departments
         FROM
-            departament_researcher
+            public.departament_researcher dpr
+            LEFT JOIN public.ufmg_departament dp ON dpr.dep_id = dp.dep_id
+        GROUP BY
+            dpr.researcher_id;
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
 
-    departaments = pd.DataFrame(reg, columns=["id", "dep_id"])
-    departaments = departaments.merge(df, on="dep_id", how="left")
-    departaments = departaments.groupby("id").agg({"departaments": list}).reset_index()
-    return departaments
+    df = pd.DataFrame(reg, columns=["id", "departments"])
+
+    return df
 
 
 def ufmg_researcher():

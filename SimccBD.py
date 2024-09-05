@@ -68,7 +68,7 @@ def lists_research_groups(group_id):
         group_id_filter = str()
 
     script_sql = f"""
-SELECT
+        SELECT
             rg.id,
             name,
             institution,
