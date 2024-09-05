@@ -1004,7 +1004,7 @@ def researcher_subsidy_db():
 
 def researcher_departament():
     script_sql = """
-        SELECT dep_id, org_cod, dep_nom, dep_des, dep_email, dep_site, dep_sigla, dep_tel, img_data
+        SELECT dep_id, org_cod, dep_nom, dep_des, dep_email, dep_site, dep_sigla, dep_tel
         FROM public.ufmg_departament;
         """
 
@@ -1028,7 +1028,6 @@ def researcher_departament():
             "dep_site",
             "dep_sigla",
             "dep_tel",
-            "img_data",
         ],
     )
     dicionario = df.to_dict(orient="records")
