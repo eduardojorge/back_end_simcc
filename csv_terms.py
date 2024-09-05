@@ -97,9 +97,14 @@ termos_busca = pd.DataFrame(
     ],
 )
 
+
 termos_busca_ref = db.collection("termos_busca_cimatec")
+docs = termos_busca_ref.stream()
+for doc in docs:
+    doc.reference.delete()
 
 for item in termos_busca.to_dict(orient="records"):
+    print(item)
     termos_busca_ref.add(item)
 
 print("Documentos adicionados com sucesso.")
