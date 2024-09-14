@@ -18,6 +18,7 @@ from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
 from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
+from Rest.research_productionRest import productionRest
 from dotenv import load_dotenv
 
 YEAR = 1990
@@ -29,22 +30,20 @@ except Exception:
 
 def create_app():
     app = Flask(__name__)
+    app.register_blueprint(ufmgRest)
+    app.register_blueprint(areaRest)
+    app.register_blueprint(researcherTermRest)
+    app.register_blueprint(graduateProgramRest)
+    app.register_blueprint(researcherDataRest)
+    app.register_blueprint(mariaRest)
+    app.register_blueprint(productionRest)
+
+    CORS(app)
     return app
 
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 app = create_app()
-
-app.register_blueprint(ufmgRest)
-app.register_blueprint(areaRest)
-app.register_blueprint(researcherTermRest)
-app.register_blueprint(graduateProgramRest)
-app.register_blueprint(researcherDataRest)
-app.register_blueprint(mariaRest)
-
-app.config["CORS_HEADERS"] = "Content-Type"
-
-CORS(app)
 
 
 @app.route("/secondWord", methods=["GET"])
@@ -338,7 +337,7 @@ def get_productivityResearch():
 
 
 if __name__ == "__main__":
-    load_dotenv()
+    load_dotenv(override=True)
     app.run(
         debug=True,
         port=port,
