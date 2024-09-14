@@ -23,7 +23,7 @@ def participation_events(year: int, researcher_id=None):
     if researcher_id:
         SCRIPT_SQL += f"AND researcher_id = '{researcher_id}'"
     if year:
-        SCRIPT_SQL += f"AND year_ = {year}"
+        SCRIPT_SQL += f"AND year_ >= {year}"
     registry = db.consultar_db(SCRIPT_SQL)
     dataframe = pd.DataFrame(
         registry,
@@ -65,7 +65,7 @@ def text_in_newpaper_magazine(year: int, researcher_id=None):
     if researcher_id:
         SCRIPT_SQL += f"AND researcher_id = '{researcher_id}'"
     if year:
-        SCRIPT_SQL += f"AND year_ = {year}"
+        SCRIPT_SQL += f"AND year_ >= {year}"
     registry = db.consultar_db(SCRIPT_SQL)
     dataframe = pd.DataFrame(
         registry,

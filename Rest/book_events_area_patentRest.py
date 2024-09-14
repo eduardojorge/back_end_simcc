@@ -14,6 +14,8 @@ areaRest = Blueprint("areaRest", __name__)
 def researcher_research_project():
     term = request.args.get("term")
     year = request.args.get("year")
+    if not year:
+        year = 1990
     graduate_program_id = request.args.get("graduate_program_id")
     researcher_id = request.args.get("researcher_id")
 
