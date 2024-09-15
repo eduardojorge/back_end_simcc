@@ -47,7 +47,6 @@ app = create_app()
 
 
 @app.route("/secondWord", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def secondWord():
     if not (term := unidecode.unidecode(request.args.get("term").lower())):
         return jsonify("No Content"), 204
@@ -80,7 +79,6 @@ def secondWord():
 
 
 @app.route("/magazine", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
     list_magazine = []
     magazine_initialis = request.args.get("initials")
@@ -103,7 +101,6 @@ def patent_production_researcher():
 
 
 @app.route("/reasercherInitials", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def reasercherInitials():
     list_researcher = []
     initials = request.args.get("initials")
@@ -127,7 +124,6 @@ def reasercherInitials():
 
 
 @app.route("/researcher_image", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcher_image():
     df_bd = SimccBD.lista_researcher_full_name_db()
     list_iamge = []
@@ -144,7 +140,6 @@ def researcher_image():
 
 
 @app.route("/researcherName", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherName():
     name = request.args.get("name")
     graduate_program_id = request.args.get("graduate_program_id")
@@ -156,7 +151,6 @@ def researcherName():
 
 
 @app.route("/total", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def total():
     researcher_total = SimccBD.researcher_total_db()
     institution_total = SimccBD.institution_total_db()
@@ -175,7 +169,6 @@ def total():
 
 
 @app.route("/recently_updated", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def recently_updated():
     list_bibliographic_production_article = list()
     year = request.args.get("year")
@@ -215,7 +208,6 @@ def recently_updated():
 
 
 @app.route("/bibliographic_production_article", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article():
     list_bibliographic_production_article = []
 
@@ -285,7 +277,6 @@ def bibliographic_production_article():
 
 
 @app.route("/getCurriculoCompactado", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def getCurriculoCompactado():
     lattes_id = request.args.get("lattes_id")
     try:
@@ -299,7 +290,6 @@ def getCurriculoCompactado():
 
 
 @app.route("/getDataAtualizacaoCV", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def getDataAtualizacaoCV():
     lattes_id = request.args.get("lattes_id")
     resultado = client.service.getDataAtualizacaoCV(lattes_id)
@@ -307,7 +297,6 @@ def getDataAtualizacaoCV():
 
 
 @app.route("/research_group", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group():
     group_id = request.args.get("group_id")
     research_group = SimccBD.lists_research_groups(group_id)
@@ -315,7 +304,6 @@ def get_research_group():
 
 
 @app.route("/research_group_lines", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def list_research_lines():
     group_id = request.args.get("group_id")
     research_group = SimccBD.list_research_lines(group_id)
@@ -323,14 +311,12 @@ def list_research_lines():
 
 
 @app.route("/research_group/count", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def get_research_group_count():
     research_group = SimccBD.list_count_researcher_groups()
     return research_group
 
 
 @app.route("/productivity_research", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def get_productivityResearch():
     productivity_research = SimccBD.list_productivity_research()
     return productivity_research

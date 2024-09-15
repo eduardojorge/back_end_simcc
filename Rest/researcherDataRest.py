@@ -9,13 +9,12 @@ from Dao import sgbdSQL
 from Model.City import City
 from rest_imageResearcher import download_image
 from unidecode import unidecode
+
 researcherDataRest = Blueprint("researcherDataRest", __name__)
 
 
 @researcherDataRest.route("/ResearcherData/Image", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def image():
-
     researcher_id = request.args.get("researcher_id")
     if not researcher_id:
         name = request.args.get("name")
@@ -31,19 +30,18 @@ def image():
         if researcher_id:
             researcher_id = researcher_id[0][0]
         else:
-            return jsonify('Pesquisador não encontrado'), HTTPStatus.NOT_FOUND
+            return jsonify("Pesquisador não encontrado"), HTTPStatus.NOT_FOUND
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
     except:
-        print(f'download da foto - {researcher_id}')
+        print(f"download da foto - {researcher_id}")
         download_image(researcher_id)
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
 
 
 @researcherDataRest.route("/ResearcherData/ByCity", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def byCity():
     city_name = request.args.get("city")
     city_id = researcherSQL.city_search(city_name)
@@ -52,9 +50,16 @@ def byCity():
     researcher_list = list()
     if city_id == None:
         for Index, researcher in researchers.iterrows():
-            area = str(";").join([great_area.strip().replace(
-                # fmt: skip
-                "_", " ") for great_area in researcher["area"].split(";")])
+            area = str(";").join(
+                [
+                    great_area.strip().replace(
+                        # fmt: skip
+                        "_",
+                        " ",
+                    )
+                    for great_area in researcher["area"].split(";")
+                ]
+            )
             dict_researcher = {
                 "id": researcher["id"],
                 "researcher_name": researcher["researcher_name"],
@@ -72,10 +77,8 @@ def byCity():
 
 
 @researcherDataRest.route("/ResearcherData/TaxonomyCSV", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def getCSV():
-    csv_taxonomy = pd.read_csv(
-        "/home/ejorge/simcc/back_end_simcc/article_tax.csv")
+    csv_taxonomy = pd.read_csv("/home/ejorge/simcc/back_end_simcc/article_tax.csv")
 
     JsonTax = list()
     for Index, Taxonomy in csv_taxonomy.iterrows():
@@ -96,7 +99,6 @@ def getCSV():
 
 
 @researcherDataRest.route("/ResearcherData/City", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def city():
     city_data_frame = generalSQL.queryCity()
 
@@ -114,20 +116,18 @@ def city():
 
 
 @researcherDataRest.route("/ResearcherData/DadosGerais", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def DadosGerais():
     year = request.args.get("year")
-    graduate_program_id = request.args.get('graduate_program_id')
-    dep_id = request.args.get('dep_id')
+    graduate_program_id = request.args.get("graduate_program_id")
+    dep_id = request.args.get("dep_id")
     lista = researcherSQL.generic_data(year, graduate_program_id, dep_id)
     return jsonify(lista)
 
 
 @researcherDataRest.route("/researcher/DadosGerais", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def generic_researcher_data():
     year = request.args.get("year")
-    graduate_program_id = request.args.get('researcher_id')
+    graduate_program_id = request.args.get("researcher_id")
     lista = researcherSQL.generic_researcher_data_data(
         year,
         graduate_program_id,

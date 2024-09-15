@@ -20,7 +20,6 @@ YEAR = 1990
 
 
 @researcherTermRest.route("/resarcher_barema", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def resarcher_barema():
     list_name = request.args.get("name")
 
@@ -49,7 +48,6 @@ def resarcher_barema():
 
 
 @researcherTermRest.route("/originals_words", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def originals_words():
     initials = request.args.get("initials")
     type = request.args.get("type")
@@ -68,7 +66,6 @@ def originals_words():
 
 
 @researcherTermRest.route("/researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def research():
     terms = unidecode.unidecode(request.args.get("terms"))
     if not terms:
@@ -86,7 +83,6 @@ def research():
 
 
 @researcherTermRest.route("/guidance_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def guidance_researcher():
     list_guidance_researcher = []
     researcher_id = request.args.get("researcher_id")
@@ -112,7 +108,6 @@ def guidance_researcher():
 
 # lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/brand_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def brand_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
@@ -125,7 +120,6 @@ def brand_production_researcher():
 
 
 @researcherTermRest.route("/book_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def book_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
@@ -142,7 +136,6 @@ def book_production_researcher():
 
 
 @researcherTermRest.route("/book_chapter_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def book_chapter_production_researcher():
     researcher_id = request.args.get("researcher_id")
     term = request.args.get("term")
@@ -162,7 +155,6 @@ def book_chapter_production_researcher():
 
 
 @researcherTermRest.route("/researcher_report", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcher_report():
     list_researcher_report = []
     # terms = request.args.get('terms')
@@ -188,7 +180,6 @@ def researcher_report():
 
 
 @researcherTermRest.route("/software_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def software_production_researcher():
     list_software_production_researcher = []
     researcher_id = request.args.get("researcher_id")
@@ -209,7 +200,6 @@ def software_production_researcher():
 
 
 @researcherTermRest.route("/pevent_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def pevent_researcher():
     list_pevent_researcher = []
     researcher_id = request.args.get("researcher_id")
@@ -240,7 +230,6 @@ def pevent_researcher():
 
 
 @researcherTermRest.route("/patent_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def patent_production_researcher():
     term = request.args.get("term")
     researcher_id = request.args.get("researcher_id")
@@ -256,7 +245,6 @@ def patent_production_researcher():
 
 
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_researcher():
     list_bibliographic_production_researcher = list()
 
@@ -294,7 +282,6 @@ def bibliographic_production_researcher():
 
 
 @researcherTermRest.route("/qualis_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def qualis_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
@@ -321,7 +308,6 @@ def qualis_researcher():
 
 
 @researcherTermRest.route("/lists_word_researcher", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def lists_word_researcher():
     researcher_id = request.args.get("researcher_id")
     dep_id = request.args.get("dep_id")
@@ -342,7 +328,6 @@ def lists_word_researcher():
 
 
 @researcherTermRest.route("/institutionFrequenci", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def institutionFrequenci():
     list_institutionFrequenci = []
     terms = request.args.get("terms")
@@ -365,7 +350,6 @@ def institutionFrequenci():
 
 
 @researcherTermRest.route("/researcherID", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherID():
     researcher_id = request.args.get("researcher_id")
     list_researcher = termFlowSQL.lista_researcher_id_db(researcher_id)

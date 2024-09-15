@@ -10,7 +10,6 @@ areaRest = Blueprint("areaRest", __name__)
 
 
 @areaRest.route("/researcher_research_project", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcher_research_project():
     term = request.args.get("term")
     year = request.args.get("year")
@@ -26,7 +25,6 @@ def researcher_research_project():
 
 
 @areaRest.route("/researcherEvent", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherEvent():
     term = request.args.get("term")
     if not term:
@@ -43,7 +41,6 @@ def researcherEvent():
 
 
 @areaRest.route("/researcherPatent", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherPatent():
     term = request.args.get("term")
     if not term:
@@ -60,7 +57,6 @@ def researcherPatent():
 
 
 @areaRest.route("/researcherParticipationEvent", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherParticipationEvent():
     term = request.args.get("term")
     if not term:
@@ -75,7 +71,6 @@ def researcherParticipationEvent():
 
 
 @areaRest.route("/researcherBook", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherBook():
     term = request.args.get("term")
     if not term:
@@ -93,7 +88,6 @@ def researcherBook():
 
 
 @areaRest.route("/area_expertiseInitials", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def area_expertiseInitials():
     list_area_expertise = []
     initials = request.args.get("initials")
@@ -113,7 +107,6 @@ def area_expertiseInitials():
 
 
 @areaRest.route("/area_specialitInitials", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def area_specialitInitials():
     list_area_specialit = []
     initials = request.args.get("initials")
@@ -143,7 +136,6 @@ def area_specialitInitials():
 
 
 @areaRest.route("/researcherArea_expertise", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_expertise():
     area = request.args.get("area")
     if not area:
@@ -158,7 +150,6 @@ def researcherArea_expertise():
 
 
 @areaRest.route("/researcherArea_specialty", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def researcherArea_specialty():
     area = request.args.get("area_specialty")
     if not area:
@@ -175,7 +166,6 @@ def researcherArea_specialty():
 
 
 @areaRest.route("/bibliographic_production_article_area", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def bibliographic_production_article_area():
     list_bibliographic_production_article = []
 
@@ -226,7 +216,6 @@ def bibliographic_production_article_area():
 
 
 @areaRest.route("/institutionArea", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type"])
 def institutionArea():
     list_institutionFrequenci = []
     great_area = request.args.get("great_area")
