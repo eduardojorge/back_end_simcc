@@ -999,9 +999,9 @@ def researcher_research_project(term, year, graduate_program_id, researcher_id):
             "number_academic_masters",
             "number_phd",
             "description",
-            "components",
-            "foment",
             "production",
+            "foment",
+            "components",
         ],
     )
     return data_frame.fillna("").to_dict(orient="records")
