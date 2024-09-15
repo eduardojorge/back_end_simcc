@@ -230,20 +230,14 @@ def institutionArea():
     great_area = request.args.get("great_area")
     area_specialty = request.args.get("area_specialty")
 
-    # stemmer = nltk.RSLPStemmer()
-
     great_area = unidecode.unidecode(great_area.lower())
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
     university = ""
     university = str(request.args.get("university")) + ""
-    # terms = unidecode(terms.lower())
-    # print(termNovo)
-    # print(stemmer.stem(termNovo))
     df_bd = areaFlowSQL.lista_institution_area_expertise_db(
         great_area, area_specialty, university
     )
-    # df_bd.sort_values(by="articles", ascending=False, inplace=True)
     for i, infos in df_bd.iterrows():
         institution = {
             "id": str(infos.id),
@@ -251,14 +245,10 @@ def institutionArea():
             "among": str(infos.qtd),
             "image": str(infos.image),
         }
-        # print(researcher)
         list_institutionFrequenci.append(institution)
 
     return jsonify(list_institutionFrequenci), 200
 
 
-##############################################################################
-
 if __name__ == "__main__":
-    # run app in debug mode on port 5000
     areaRest.run(debug=True, port=5001, host="0.0.0.0")

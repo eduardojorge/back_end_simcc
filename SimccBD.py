@@ -470,7 +470,7 @@ def recently_updated_db(year, institution, departament):
         data_frame = pd.merge(
             data_frame, data_frame_researchers, on="researcher_id", how="right"
         )
-    return data_frame
+    return data_frame.fillna("")
 
 
 def lists_bibliographic_production_article_db(
