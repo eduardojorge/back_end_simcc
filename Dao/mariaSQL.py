@@ -91,7 +91,6 @@ def mount_researchers(data_frame):
         ORDER BY
             among DESC;
             """
-    print(script_sql)
     registry = db.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
@@ -117,13 +116,6 @@ def mount_researchers(data_frame):
             "lattes_update",
         ],
     )
-
-    data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
-
     return data_frame.fillna("").to_dict(orient="records")
 
 
