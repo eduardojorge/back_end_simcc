@@ -6,11 +6,14 @@ if __name__ == "__main__":
         if json_path.endswith(".json"):
             SCRIPT_SQL = f"""
                 SELECT doi 
-                FROM bibliographic_production_article
+                FROM bibliographic_production
                 WHERE id = '{json_path[:-5]}'
                 """
             registry = db.consultar_db(SCRIPT_SQL)
-            os.rename(f"Files/openAlex_article/{registry[0][0]}.json")
+            os.rename(
+                f"Files/openAlex_article/{json_path}",
+                f"Files/openAlex_article/{registry[0][0]}.json",
+            )
 
     for json_path in os.listdir("Files/openAlex_researcher"):
         if json_path.endswith(".json"):
@@ -20,4 +23,7 @@ if __name__ == "__main__":
                 WHERE id = '{json_path[:-5]}'
                 """
             registry = db.consultar_db(SCRIPT_SQL)
-            os.rename(f"Files/openAlex_researcher/{registry[0][0]}.json")
+            os.rename(
+                f"Files/openAlex_researcher/{json_path}",
+                f"Files/openAlex_researcher/{registry[0][0]}.json",
+            )
