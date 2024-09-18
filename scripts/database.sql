@@ -1,5 +1,3 @@
-CREATE DATABASE simcc;
-\ c simcc;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 create EXTENSION fuzzystrmatch;
 create EXTENSION pg_trgm;
