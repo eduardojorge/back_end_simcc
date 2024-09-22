@@ -486,7 +486,6 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
         ORDER BY
             among;
             """
-    print(script_sql)
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(

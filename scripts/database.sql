@@ -567,8 +567,7 @@ CREATE TABLE IF NOT EXISTS ufmg_teacher (
     titulacao character varying(40),
     entradaNaUFMG DATE,
     progressao DATE,
-    semester character varying(6),
-    PRIMARY KEY (matric, semester)
+    semester character varying(6)
 );
 CREATE TABLE IF NOT EXISTS ufmg_technician (
     technician_id uuid PRIMARY KEY,
@@ -609,7 +608,7 @@ CREATE TABLE IF NOT EXISTS ufmg_departament_technician (
     FOREIGN KEY (technician_id) REFERENCES ufmg_technician (technician_id)
 );
 CREATE TABLE IF NOT EXISTS departament_researcher (
-    dep_id VARCHAR(10),
+    dep_id VARCHAR(20),
     researcher_id uuid NOT NULL,
     PRIMARY KEY (dep_id, researcher_id),
     FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
@@ -718,9 +717,9 @@ CREATE TABLE IF NOT EXISTS embeddings.patent (
     embeddings vector,
     price numeric(20, 18)
 );
-CREATE INDEX IDX_NAME_GIN ON researcher USING gin (name gin_trgm_ops);
-CREATE INDEX IDX_ABSTRACT_GIN ON researcher USING gin (abstract gin_trgm_ops);
-CREATE INDEX IDX_ABSTRACT_EN_GIN ON researcher USING gin (abstract_en gin_trgm_ops);
-CREATE INDEX IDX_GREAT_AREA_EXPERTISE_GIN ON great_area_expertise USING gin (name gin_trgm_ops);
-CREATE INDEX IDX_AREA_EXPERTISE_GIN ON area_expertise USING gin (name gin_trgm_ops);
-CREATE INDEX IDX_PERIODICAL_MAGAZINE_GIN ON periodical_magazine USING gin (name gin_trgm_ops);
+CREATE INDEX ON researcher USING gin (name gin_trgm_ops);
+CREATE INDEX ON researcher USING gin (abstract gin_trgm_ops);
+CREATE INDEX ON researcher USING gin (abstract_en gin_trgm_ops);
+CREATE INDEX ON great_area_expertise USING gin (name gin_trgm_ops);
+CREATE INDEX ON area_expertise USING gin (name gin_trgm_ops);
+CREATE INDEX ON periodical_magazine USING gin (name gin_trgm_ops);
