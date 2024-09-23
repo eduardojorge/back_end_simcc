@@ -35,19 +35,17 @@ def last_update(id: str):
 
 
 def get_id_cnpq(name: str = str(), date: str = str(), CPF: str = str()):
-    resultado = client.service.getIdentificadorCNPq(nomeCompleto=name,
-                                                    dataNascimento=date,
-                                                    cpf=CPF)
+    resultado = client.service.getIdentificadorCNPq(
+        nomeCompleto=name, dataNascimento=date, cpf=CPF
+    )
     if resultado:
         return resultado
 
 
 def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
-
     if get_data_att(
-            id=id,
-            alternative_cnpq_service=alternative_cnpq_service) <= last_update(
-                id):
+        id=id, alternative_cnpq_service=alternative_cnpq_service
+    ) <= last_update(id):
         msg = f"Currículo já está atualizado id: {str(id)}"
         print(msg)
         logger.debug(msg)
@@ -96,12 +94,12 @@ if __name__ == "__main__":
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
-    dir = os.environ["JADE_EXTRATOR_FOLTER"]
+    dir = f'{os.environ["JADE_EXTRATOR_FOLTER"]}/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename=f"{os.environ['HOME_SIMCC']}/Files/log/soap_lattes_adm.log",
+        filename="Files/log/soap_lattes_adm.log",
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
@@ -121,7 +119,6 @@ if __name__ == "__main__":
     df = get_researcher_adm_simcc()
 
     for Index, Data in df.iterrows():
-
         print(f"Curriculo número: {quant_curriculos}")
         print(f"ID do pesquisador: {Data['lattes_id']}")
 
@@ -130,5 +127,4 @@ if __name__ == "__main__":
         quant_curriculos += 1
 
     logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(
-        f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")

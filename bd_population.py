@@ -10,6 +10,7 @@ import nltk
 import sys
 import os
 
+
 def create_researcher_dictionary_db(
     test: bool = False,
     article: bool = True,
@@ -17,7 +18,6 @@ def create_researcher_dictionary_db(
     patent: bool = True,
     event: bool = True,
 ):
-
     filter = str()
     if test:
         filter = "LIMIT 10"
@@ -31,7 +31,6 @@ def create_researcher_dictionary_db(
 
         sgbdSQL.execScript_db(script_sql)
         for i, infos in data_frame.iterrows():
-
             if (i % 100) == 0:
                 print("Total Pesquisador Article: " + str(i))
                 logger.debug("Total Pesquisador Article: " + str(i))
@@ -70,7 +69,6 @@ def create_researcher_dictionary_db(
 
 
 def create_researcher_title_dictionary_db(researcher_id):
-
     script_sql = f"""
         SELECT  
             distinct title,
@@ -95,7 +93,6 @@ def create_researcher_title_dictionary_db(researcher_id):
 
 
 def create_researcher_abstract_dictionary_db(researcher_id):
-
     reg = sgbdSQL.consultar_db(
         "SELECT  r.abstract as abstract from researcher as r"
         + " WHERE "
@@ -114,7 +111,6 @@ def create_researcher_abstract_dictionary_db(researcher_id):
 
 
 def create_researcher_patent_dictionary_db(researcher_id):
-
     sql = (
         """SELECT distinct title,development_year  as  year  from patent AS b  WHERE researcher_id='%s' """
         % researcher_id
@@ -126,7 +122,6 @@ def create_researcher_patent_dictionary_db(researcher_id):
     df_bd = pd.DataFrame(reg, columns=["title", "year"])
 
     for i, infos in df_bd.iterrows():
-
         tokenize = RegexpTokenizer(r"\w+")
         tokens = []
         tokens = tokenize.tokenize(infos.title)
@@ -135,7 +130,6 @@ def create_researcher_patent_dictionary_db(researcher_id):
 
 
 def create_researcher_participation_events_dictionary_db(researcher_id):
-
     sql = """SELECT distinct event_name,year  as  year  from participation_events AS p
           WHERE  type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista')   and  p.researcher_id='%s' """ % (
         researcher_id
@@ -147,7 +141,6 @@ def create_researcher_participation_events_dictionary_db(researcher_id):
     df_bd = pd.DataFrame(reg, columns=["title", "year"])
 
     for i, infos in df_bd.iterrows():
-
         tokenize = RegexpTokenizer(r"\w+")
         tokens = []
         tokens = tokenize.tokenize(infos.title)
@@ -156,7 +149,6 @@ def create_researcher_participation_events_dictionary_db(researcher_id):
 
 
 def insert_research_dictionary_db(tokens, type):
-
     stopwords_portuguese = nltk.corpus.stopwords.words("portuguese")
     stopwords_english = nltk.corpus.stopwords.words("english")
 
@@ -166,7 +158,6 @@ def insert_research_dictionary_db(tokens, type):
                 (word.lower() in stopwords_portuguese)
                 or (word.lower() in stopwords_english)
             ):
-
                 try:
                     sql = """
                       INSERT into public.research_dictionary  (term,frequency,type_)  VALUES ('%s',1,'%s') 
@@ -182,24 +173,26 @@ def insert_research_dictionary_db(tokens, type):
 
                 # else:
                 except Exception as e:
-
                     print(e)
                     logger.debug(e)
 
 
 if __name__ == "__main__":
+    log_dir = "Files/log"
+    log_file = "bd_population.log"
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename=f"{os.environ['HOME_SIMCC']}/Files/log/logfile_Population.log",
+        filename=os.path.join(log_dir, log_file),
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
     )
     logger = logging.getLogger()
-
-    logger.debug("Inicio")
 
     script_sql = """
         UPDATE 
@@ -211,8 +204,6 @@ if __name__ == "__main__":
         """
 
     sgbdSQL.execScript_db(script_sql)
-
-    logger.debug(script_sql)
 
     script_sql = """
         UPDATE  
@@ -235,8 +226,6 @@ if __name__ == "__main__":
 
     sgbdSQL.execScript_db(script_sql)
 
-    logger.debug(script_sql)
-
     script_sql = """
     UPDATE  
         bibliographic_production_article p 
@@ -257,7 +246,6 @@ if __name__ == "__main__":
     """
 
     sgbdSQL.execScript_db(script_sql)
-    logger.debug(script_sql)
 
     script_sql = """
         UPDATE 
@@ -267,7 +255,6 @@ if __name__ == "__main__":
         """
 
     sgbdSQL.execScript_db(script_sql)
-    logger.debug(script_sql)
 
     script_sql = """
         UPDATE 
@@ -280,13 +267,11 @@ if __name__ == "__main__":
         """
 
     sgbdSQL.execScript_db(script_sql)
-    logger.debug(script_sql)
 
     script_sql = """
         UPDATE bibliographic_production
         SET title = translate(title, '''', ' ')
         """
     sgbdSQL.execScript_db(script_sql)
-    logger.debug(script_sql)
 
     create_researcher_dictionary_db()

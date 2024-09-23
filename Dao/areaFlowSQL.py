@@ -429,6 +429,8 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
 
     return data_frame.fillna("").to_dict(orient="records")
 
+    print(script_sql)
+
 
 def lista_researcher_participation_event_db(term, institution, graduate_program_id):
     term_filter = util.web_search_filter(term, "event_name")

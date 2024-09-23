@@ -4,6 +4,7 @@ version = "3.0.0"
 description = ""
 authors = ["meirelesgc <geu_costa@outlook.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.9.2"
@@ -16,6 +17,7 @@ python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
 pandas = "^2.2.3"
 langchain-openai = "^0.2.0"
+beautifulsoup4 = "^4.12.3"
 
 
 [build-system]

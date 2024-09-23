@@ -34,7 +34,7 @@ def scrapping_article_data():
                 print("[404] - NOT FOUND")
             time.sleep(7)
         else:
-            print(f"[200] - OK")
+            print("[200] - OK")
 
 
 def scrapping_researcher_data():
@@ -66,7 +66,7 @@ def scrapping_researcher_data():
                 print("[404] - NOT FOUND")
             time.sleep(7)
         else:
-            print(f"[200] - OK")
+            print("[200] - OK")
 
 
 if __name__ == "__main__":

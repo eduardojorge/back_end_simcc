@@ -5,8 +5,6 @@ import Dao.sgbdSQL as sgbdSQL
 import Dao.termFlowSQL as termFlowSQL
 import Dao.areaFlowSQL as areaFlowSQL
 from dotenv import load_dotenv
-import os
-
 
 load_dotenv(override=True)
 
@@ -71,11 +69,10 @@ def list_researcher_to_update():
 
 
 def create_researcher_production_db(test: bool = False):
-
-    script_sql = f"DELETE FROM researcher_production"
+    script_sql = "DELETE FROM researcher_production"
     sgbdSQL.execScript_db(script_sql)
 
-    script_sql = f"SELECT id FROM researcher"
+    script_sql = "SELECT id FROM researcher"
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["id"])
@@ -86,7 +83,6 @@ def create_researcher_production_db(test: bool = False):
 
 
 def new_researcher_production_db(researcher_id):
-
     sql = f"""
         SELECT
             count(title) as qtd,
@@ -166,22 +162,28 @@ def new_researcher_production_db(researcher_id):
         );
         """
 
-    logger.debug(sql)
     sgbdSQL.execScript_db(sql)
 
     return df_bd
 
 
 if __name__ == "__main__":
+    log_dir = "Files/log"
+    log_file = "bd_production.log"
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename=f"{os.environ['HOME_SIMCC']}/Files/log/logfile_Production.log",
+        filename=os.path.join(log_dir, log_file),
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
     )
 
     logger = logging.getLogger()
+    logger.debug("Inicio")
 
     create_researcher_production_db(test=False)

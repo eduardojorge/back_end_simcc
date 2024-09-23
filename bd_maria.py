@@ -7,27 +7,19 @@ import pandas as pd
 
 
 def get_embeddings(text):
-    """
-    #Função responsável por gerar os embeddings
-    """
     embeddings_model = OpenAIEmbeddings(
-        model="text-embedding-3-large", openai_api_key=os.getenv("OPENAI_API_KEY"))
+        model="text-embedding-3-large", openai_api_key=os.getenv("OPENAI_API_KEY")
+    )
     embeddings = embeddings_model.embed_query(text)
     return embeddings
 
 
 def count_tokens(texto):
-    """
-    #Função responsável por contar a quantidade de tokens
-    """
     tokenizer = tiktoken.get_encoding("cl100k_base")
     return tokenizer.encode(texto)
 
 
 def get_custos(total_tokens):
-    """
-    #Função responsável por calcular os custos
-    """
     custos = total_tokens / 1000 * 0.0001
     return custos
 

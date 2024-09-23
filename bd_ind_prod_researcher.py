@@ -6,27 +6,23 @@ from Dao import sgbdSQL
 
 
 def article_prod(Data):
-
     script_sql = f"""
         SELECT
-            bp.year,
+            year,
             qualis,
-            COUNT(DISTINCT title) AS count_article
+            COUNT(*) AS count_article
         FROM
             public.bibliographic_production bp
         JOIN
             public.bibliographic_production_article bpa ON
             bp.id = bpa.bibliographic_production_id
-        JOIN
-            public.graduate_program_researcher gpr ON
-            gpr.researcher_id = bp.researcher_id
         WHERE
-            type = 'ARTICLE'
-            AND gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            researcher_id = '{Data['id']}'
+            AND type = 'ARTICLE'
         GROUP BY
-            bp.year, qualis
+            year, qualis
         ORDER BY
-            bp.year, qualis;
+            year, qualis;
         """
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -41,7 +37,6 @@ def article_prod(Data):
     df_ind_prod_base_article = df_ind_prod_base_article.groupby("year", as_index=False)[
         "ind_prod_article"
     ].sum()
-
     df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
     return df_ind_prod_base_article
 
@@ -49,20 +44,18 @@ def article_prod(Data):
 def book_prod(Data):
     script_sql = f"""
         SELECT
-            bp.year,
-            COUNT(DISTINCT title) AS count_book
+            year,
+            COUNT(*) AS count_book
         FROM
             public.bibliographic_production bp
-        JOIN graduate_program_researcher gpr ON
-            gpr.researcher_id = bp.researcher_id
         WHERE
-            type = 'BOOK'
-            AND gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            researcher_id = '{Data['id']}'
+            AND type = 'BOOK'
         GROUP BY
-            bp.year
+            year
         ORDER BY
-            bp.year;
-                """
+            year;
+        """
 
     registry = sgbdSQL.consultar_db(script_sql)
 
@@ -77,23 +70,19 @@ def book_prod(Data):
 
 
 def book_chapter_prod(Data):
-
     script_sql = f"""
         SELECT
-            bp.year,
-            COUNT(DISTINCT title) AS count_book_chapter
+            year,
+            COUNT(*) AS count_book_chapter
         FROM
             public.bibliographic_production bp
-        JOIN
-            public.graduate_program_researcher gpr ON
-            gpr.researcher_id = bp.researcher_id
         WHERE
-            type = 'BOOK_CHAPTER'
-            AND gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            researcher_id = '{Data['id']}'
+            AND type = 'BOOK_CHAPTER'
         GROUP BY
-            bp.year
+            year
         ORDER BY
-            bp.year;
+            year;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -119,13 +108,11 @@ def patent_prod(Data):
         SELECT
             development_year,
             'PATENT_GRANTED' as granted,
-            COUNT(DISTINCT title) as count_patent
+            COUNT(*) as count_patent
         FROM 
             patent p
-        JOIN public.graduate_program_researcher gpr ON
-            gpr.researcher_id = p.researcher_id
         WHERE
-            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            p.researcher_id = '{Data['id']}'
             AND grant_date IS NOT NULL
         GROUP BY 
             development_year
@@ -135,13 +122,11 @@ def patent_prod(Data):
         SELECT
             development_year,
             'PATENT_NOT_GRANTED',
-            COUNT(DISTINCT title) as count_patent
+            COUNT(*) as count_patent
         FROM 
             patent p
-        JOIN public.graduate_program_researcher gpr ON
-            gpr.researcher_id = p.researcher_id
         WHERE
-            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            p.researcher_id = '{Data['id']}'
             AND grant_date IS NULL
         GROUP BY 
             development_year
@@ -174,16 +159,14 @@ def patent_prod(Data):
 def software_prod(Data):
     script_sql = f"""
         SELECT
-            sw.year,
-            COUNT(DISTINCT title) as count_software
+            year,
+            COUNT(*) as count_software
         FROM 
-            public.software sw
-        JOIN public.graduate_program_researcher gpr ON
-            gpr.researcher_id = sw.researcher_id
+            public.software
         WHERE
-            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+            researcher_id = '{Data['id']}'
         GROUP BY
-            sw.year
+            researcher_id, year
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -202,18 +185,16 @@ def software_prod(Data):
 def report_prod(Data):
     script_sql = f"""
         SELECT
-            rr.year,
-            COUNT(DISTINCT title) as count_report
+            year,
+            COUNT(*) as count_report
         FROM 
-            research_report rr
-        JOIN graduate_program_researcher gp ON
-            gp.researcher_id = rr.researcher_id 
+            research_report 
         WHERE 
-            gp.graduate_program_id = '{Data['graduate_program_id']}'
+            researcher_id = '{Data['id']}'
         GROUP BY
-            rr.year
+            year
         ORDER BY 
-            rr.year
+            year
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -236,10 +217,8 @@ def guidance_prod(Data):
             COUNT(*) as count_nature
         FROM
             guidance g
-        JOIN graduate_program_researcher gpr ON
-            gpr.researcher_id = g.researcher_id
-        WHERE 
-            gpr.graduate_program_id = '{Data['graduate_program_id']}'
+        WHERE
+            g.researcher_id = '{Data['id']}'
         GROUP BY
             g.year, nature_status
         ORDER BY
@@ -263,7 +242,7 @@ def guidance_prod(Data):
 
 
 if __name__ == "__main__":
-    sgbdSQL.execScript_db("DELETE FROM graduate_program_ind_prod;")
+    sgbdSQL.execScript_db("DELETE FROM researcher_ind_prod;")
 
     weights = {
         "A1": 1,
@@ -294,26 +273,26 @@ if __name__ == "__main__":
 
     script_sql = """
         SELECT 
-            graduate_program_id, 
+            id, 
             name 
         FROM 
-            graduate_program
+            researcher
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
 
-    df_graduate_program = pd.DataFrame(
-        registry, columns=["graduate_program_id", "name"]
-    )
+    df_researchers = pd.DataFrame(registry, columns=["id", "name"])
 
-    for Index, Data in df_graduate_program.iterrows():
+    for Index, Data in df_researchers.iterrows():
         print(Index, end=" ")
         data_frame = pd.DataFrame(year, columns=["year"])
 
         df = article_prod(Data=Data)
 
         if not df.empty:
-            data_frame = pd.merge(data_frame, df, on="year", how="left")
+            data_frame = pd.merge(
+                data_frame, article_prod(Data=Data), on="year", how="left"
+            )
         else:
             data_frame["ind_prod_article"] = None
 
@@ -340,6 +319,7 @@ if __name__ == "__main__":
             data_frame["ind_prod_not_granted_patent"] = None
 
         df = software_prod(Data=Data)
+
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")
         else:
@@ -353,6 +333,7 @@ if __name__ == "__main__":
             data_frame["ind_prod_report"] = None
 
         df = guidance_prod(Data=Data)
+
         if not df.empty:
             data_frame = pd.merge(data_frame, df, on="year", how="left")
         else:
@@ -360,26 +341,28 @@ if __name__ == "__main__":
 
         for Intern_Index, Intern_Data in data_frame.fillna(0).iterrows():
             script_sql = f"""
-            INSERT INTO public.graduate_program_ind_prod(
-                graduate_program_id,
-                year,
-                ind_prod_article,
-                ind_prod_book,
-                ind_prod_book_chapter,
-                ind_prod_software,
-                ind_prod_granted_patent,
-                ind_prod_not_granted_patent,
-                ind_prod_report,
-                ind_prod_guidance)
+            INSERT INTO 
+                public.researcher_ind_prod(
+                    researcher_id,
+                    year, 
+                    ind_prod_article, 
+                    ind_prod_book, 
+                    ind_prod_book_chapter, 
+                    ind_prod_software,
+                    ind_prod_granted_patent, 
+                    ind_prod_not_granted_patent, 
+                    ind_prod_report,
+                    ind_prod_guidance
+                    )
             VALUES (
-                '{Data['graduate_program_id']}',
-                {Intern_Data['year']},
-                {Intern_Data['ind_prod_article']},
-                {Intern_Data['ind_prod_book']},
-                {Intern_Data['ind_prod_book_chapter']},
-                {Intern_Data['ind_prod_software']},
-                {Intern_Data['ind_prod_granted_patent']},
-                {Intern_Data['ind_prod_not_granted_patent']},
+                '{Data['id']}', 
+                {Intern_Data['year']}, 
+                {Intern_Data['ind_prod_article']}, 
+                {Intern_Data['ind_prod_book']}, 
+                {Intern_Data['ind_prod_book_chapter']}, 
+                {Intern_Data['ind_prod_software']}, 
+                {Intern_Data['ind_prod_granted_patent']}, 
+                {Intern_Data['ind_prod_not_granted_patent']}, 
                 {Intern_Data['ind_prod_report']},
                 {Intern_Data['ind_prod_guidance']});
             """
