@@ -3,8 +3,6 @@ import pandas as pd
 import Dao.sgbdSQL as sgbdSQL
 import Model.GraduateProgram_Production as GraduateProgram_Production
 
-pd.set_option("future.no_silent_downcasting", True)
-
 
 def graduate_program_db(institution_id):
     reg = sgbdSQL.consultar_db(
