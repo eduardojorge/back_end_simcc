@@ -91,21 +91,28 @@ def get_researcher_adm_simcc():
 
 
 if __name__ == "__main__":
+    log_dir = "Files/log"
+    log_file = "soap_lattes_adm.log"
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+
+    logging.basicConfig(
+        filename=os.path.join(log_dir, log_file),
+        filemode="w",
+        format=Log_Format,
+        level=logging.DEBUG,
+    )
+    logger = logging.getLogger()
+
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
     dir = f'{os.environ["JADE_EXTRATOR_FOLTER"]}/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
-    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
-    logging.basicConfig(
-        filename="Files/log/soap_lattes_adm.log",
-        filemode="w",
-        format=Log_Format,
-        level=logging.DEBUG,
-    )
-    logger = logging.getLogger()
-    logger.debug("Inicio")
 
     for Files in os.listdir(dir):
         try:
