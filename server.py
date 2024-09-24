@@ -150,7 +150,24 @@ def researcherName():
     return jsonify(list_researcher), HTTPStatus.OK
 
 
-@app.route("/total", methods=["GET"])
+from fastapi import FastAPI
+
+app_fast_api = FastAPI()
+
+from pydantic import BaseModel
+
+
+class Total(BaseModel):
+    researcher: str
+    publications: str
+    organizations: str
+    version: str
+
+
+@app_fast_api.get(
+    "/total",
+    response_model=list[Total],
+)
 def total():
     researcher_total = SimccBD.researcher_total_db()
     institution_total = SimccBD.institution_total_db()
@@ -161,11 +178,11 @@ def total():
             "researcher": str(researcher_total),
             "publications": str(bibliographic_production_total),
             "organizations": str(institution_total),
-            "version": "1.0.5 (beta)",
+            "version": "3.0.0 (beta)",
         }
     ]
 
-    return jsonify(total_), 200
+    return total_
 
 
 @app.route("/recently_updated", methods=["GET"])
