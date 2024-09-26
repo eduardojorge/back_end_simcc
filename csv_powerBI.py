@@ -577,11 +577,17 @@ def researcher_production_novo_csv_db():
 
 def article_distinct_novo_csv_db():
     sql = """
-         SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,bar.periodical_magazine_name 
-                             
-                                   FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
-	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
-                                   WHERE 
+         SELECT 
+            distinct title,
+            qualis,
+            jcr,
+            b.year as year,
+            gp.graduate_program_id as graduate_program_id,
+            1900 as year_pos,
+            bar.periodical_magazine_name 
+        FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
+        researcher r, graduate_program_researcher gpr,  graduate_program gp
+        WHERE 
                                
                                     gpr.graduate_program_id = gp.graduate_program_id 
                                    AND gpr.researcher_id = r.id 
@@ -642,20 +648,23 @@ def production_coauthors_csv_db():
 
 def production_distinct_novo_csv_db():
     sql = """
-        SELECT distinct title,qualis,jcr,b.year as year,gp.graduate_program_id as graduate_program_id,gpr.year as year_pos,b.type AS type 
-                             
-                                   FROM  bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
-			 									 ON b.id = bar.bibliographic_production_id , 
-	                                researcher r, graduate_program_researcher gpr,  graduate_program gp
-                                   WHERE 
-                               
-                                    gpr.graduate_program_id = gp.graduate_program_id 
-                                   AND gpr.researcher_id = r.id 
-                                     AND r.id = b.researcher_id
-                                 
-                                   
-
-                        order by qualis desc
+        SELECT 
+            distinct title,
+            qualis,jcr,
+            b.year as year,
+            gp.graduate_program_id as graduate_program_id,
+            1900 as year_pos,
+            b.type AS type 
+        FROM 
+            bibliographic_production b 
+            LEFT JOIN  bibliographic_production_article bar 
+            ON b.id = bar.bibliographic_production_id , 
+            researcher r, graduate_program_researcher gpr, graduate_program gp
+        WHERE 
+            gpr.graduate_program_id = gp.graduate_program_id 
+            AND gpr.researcher_id = r.id 
+            AND r.id = b.researcher_id
+        order by qualis desc
     """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -679,23 +688,23 @@ def production_distinct_novo_csv_db():
 # Função processar e inserir a produção de cada pesquisador
 def production_tecnical_year_novo_csv_db():
     sql = """
-          SELECT distinct title,development_year::int AS year, 'PATENT' as type, gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
+          SELECT distinct title,development_year::int AS year, 'PATENT' as type, gp.graduate_program_id as graduate_program_id,1900 as year_pos 
           FROM patent p,graduate_program_researcher gpr,  graduate_program gp 
           WHERE  gpr.graduate_program_id = gp.graduate_program_id 
                 AND gpr.researcher_id = p.researcher_id 
 
           UNION
-          SELECT distinct title,s.year as year,'SOFTWARE',gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
+          SELECT distinct title,s.year as year,'SOFTWARE',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
           from software s,graduate_program_researcher gpr,  graduate_program gp 
           WHERE  gpr.graduate_program_id = gp.graduate_program_id
                 AND gpr.researcher_id = s.researcher_id 
           UNION
-          SELECT distinct title,b.year as year,'BRAND',gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
+          SELECT distinct title,b.year as year,'BRAND',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
           from brand b,graduate_program_researcher gpr,  graduate_program gp 
           WHERE  gpr.graduate_program_id = gp.graduate_program_id 
                 AND gpr.researcher_id = b.researcher_id 
           UNION
-          SELECT distinct title,b.year as year,'REPORT',gp.graduate_program_id as graduate_program_id,gpr.year as year_pos 
+          SELECT distinct title,b.year as year,'REPORT',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
           from research_report b,graduate_program_researcher gpr,  graduate_program gp 
           WHERE  gpr.graduate_program_id = gp.graduate_program_id 
                 AND gpr.researcher_id = b.researcher_id 
@@ -716,8 +725,12 @@ def production_tecnical_year_novo_csv_db():
 
 def graduate_program_researcher_csv_db():
     sql = """
-    SELECT researcher_id,graduate_program_id,year,type_ 
-        FROM graduate_program_researcher
+    SELECT 
+        researcher_id,
+        graduate_program_id,
+        2024,
+        type_ 
+    FROM graduate_program_researcher
     """
     reg = sgbdSQL.consultar_db(sql)
     logger.debug(sql)
@@ -727,6 +740,21 @@ def graduate_program_researcher_csv_db():
     )
 
     df_bd.to_csv(dir + "cimatec_graduate_program_researcher.csv")
+
+
+def graduate_program_student_researcher_csv_db():
+    script_sql = """
+        SELECT researcher_id, graduate_program_id, 2024
+        FROM graduate_program_student
+        """
+
+    registry = sgbdSQL.consultar_db(script_sql)
+
+    data_frame_db = pd.DataFrame(
+        registry, columns=["researcher_id", "graduate_program_id", "year"]
+    )
+
+    data_frame_db.to_csv(dir + "cimatec_graduate_program_student.csv")
 
 
 def profnit_graduate_program_csv_db():
@@ -909,6 +937,18 @@ def graduate_program_ind_prod_csv_db():
     )
 
 
+def data_csv():
+    list_data = []
+    hoje = str(datetime.now())
+
+    data = {"data": hoje}
+
+    list_data.append(data)
+    json_string = json.dumps(list_data)
+    df = pd.read_json(json_string)
+    df.to_csv(dir + "data.csv")
+
+
 if __name__ == "__main__":
     dir = "Files/indicadores_simcc/"
 
@@ -924,156 +964,38 @@ if __name__ == "__main__":
     logger = logging.getLogger()
 
     logger.debug("Inicio")
-    list_data = []
-    hoje = str(datetime.now())
 
-    data = {"data": hoje}
-
-    list_data.append(data)
-    json_string = json.dumps(list_data)
-    df = pd.read_json(json_string)
-    df.to_csv(dir + "data.csv")
-
-    print("Inicio: graduate_program_csv_db")
+    data_csv()
     graduate_program_csv_db()
-    print("Fim: graduate_program_csv_db")
-
-    print("Inicio: graduate_program_researcher_csv_db")
     graduate_program_researcher_csv_db()
-    print("Fim: graduate_program_researcher_csv_db")
-
-    print("Inicio: production_distinct_novo_csv_db")
     production_distinct_novo_csv_db()
-    print("Fim: production_distinct_novo_csv_db")
-
-    print("Inicio: article_distinct_novo_csv_db")
     article_distinct_novo_csv_db()
-    print("Fim: article_distinct_novo_csv_db")
-
-    print("Inicio: researcher_production_novo_csv_db")
     researcher_production_novo_csv_db()
-    print("Fim: researcher_production_novo_csv_db")
-
-    print("Inicio: researcher_production_tecnical_year_csv_db")
     researcher_production_tecnical_year_csv_db()
-    print("Fim: researcher_production_tecnical_year_csv_db")
-
-    # if project.project_env == "2":
-    #     profnit_graduate_program_csv_db()
-
-    print("Inicio: researcher_csv_db")
     researcher_csv_db()
-    print("Fim: researcher_csv_db")
-
-    print("Inicio: graduate_program_ind_prod_csv_db")
     graduate_program_ind_prod_csv_db()
-    print("Fim: graduate_program_ind_prod_csv_db")
-
-    print("Inicio: ind_prod_researcher_csv_db")
     ind_prod_researcher_csv_db()
-    print("Fim: ind_prod_researcher_csv_db")
-
-    print("Inicio: production_coauthors_csv_db")
     production_coauthors_csv_db()
-    print("Fim: production_coauthors_csv_db")
-
     researcher_production_year_csv_db()
-
     researcher_production_year_distinct_csv_db()
-
     researcher_article_qualis_csv_db()
-
     researcher_production_csv_db()
-
     article_qualis_csv_distinct_db()
-
     researcher_csv_db()
-
     researcher_production_tecnical_year_csv_db()
-
     institution_csv_db()
-
-    dir = "Files/indicadores_simcc/"
-
-    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
-
-    logging.basicConfig(
-        filename="logfile_csv.log",
-        filemode="w",
-        format=Log_Format,
-        level=logging.DEBUG,
-    )
-
-    logger = logging.getLogger()
-
-    logger.debug("Inicio")
-    list_data = []
-    hoje = str(datetime.now())
-    print(hoje)
-
-    data = {"data": hoje}
-
-    list_data.append(data)
-    json_string = json.dumps(list_data)
-    df = pd.read_json(json_string)
-    df.to_csv(dir + "data.csv")
-
-    print("Inicio: fat_simcc_bibliographic_production")
     fat_simcc_bibliographic_production()
-    print("Fim:fat_simcc_bibliographic_production")
-
-    print("Inicio:dim_researcher_csv_db")
     dim_researcher_csv_db()
-    print("Fim: dim_researcher_csv_db")
-
-    print("Inicio:dim_institution_csv_db")
     dim_institution_csv_db()
-    print("Fim: dim_institution_csv_db")
-
-    print("Inicio:dim_city_csv_db")
     dim_city_csv_db()
-    print("Fim: dim_city_csv_db")
-
-    print("Inicio:fat_production_tecnical_year_novo_csv_db()")
     fat_production_tecnical_year_novo_csv_db()
-    print("Fim: fat_production_tecnical_year_novo_csv_db()")
-
-    print("Inicio: fat_foment()")
     fat_foment()
-    print("Fim: fat_foment()")
-
-    print("Inicio: dim_category_level_code()")
     dim_category_level_code()
-    print("Fim: dim_category_level_code()")
-
-    print("Inicio: dim_research_group()")
     dim_research_group()
-    print("Fim: dim_research_group()")
-
-    print("Inicio: fat_group_leaders()")
     fat_group_leaders()
-    print("Fim: fat_group_leaders()")
-
-    print("Inicio: fat_departament_csv_bd()")
-    fat_departament_csv_bd()
-    print("Fim: fat_departament_csv_bd()")
-
-    print("Inicio: dim_departament_researcher()")
     dim_departament_researcher()
-    print("Fim: dim_departament_researcher()")
-
-    print("Inicio: dim_departament_technician()")
     dim_departament_technician()
-    print("Fim: dim_departament_technician()")
-
-    print("Inicio: graduate_program_researcher_year_unnest()")
     graduate_program_researcher_year_unnest()
-    print("Fim: graduate_program_researcher_year_unnest()")
-
-    print("Inicio: dim_graduate_program_acronym()")
     dim_graduate_program_acronym()
-    print("Fim: dim_graduate_program_acronym()")
-
-    print("Inicio: dim_graduate_program_student_year_unnest()")
     dim_graduate_program_student_year_unnest()
-    print("Fim: dim_graduate_program_student_year_unnest()")
+    graduate_program_student_researcher_csv_db()
