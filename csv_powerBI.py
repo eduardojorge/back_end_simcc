@@ -577,25 +577,24 @@ def researcher_production_novo_csv_db():
 
 def article_distinct_novo_csv_db():
     sql = """
-         SELECT 
+        SELECT 
             distinct title,
-            qualis,
-            jcr,
+            qualis,jcr,
             b.year as year,
             gp.graduate_program_id as graduate_program_id,
-            1900 as year_pos,
-            bar.periodical_magazine_name 
-        FROM  PUBLIC.bibliographic_production b,bibliographic_production_article bar,
-        researcher r, graduate_program_researcher gpr,  graduate_program gp
+            b.year as year_pos,
+            b.type AS type 
+        FROM 
+            bibliographic_production b 
+            LEFT JOIN  bibliographic_production_article bar 
+            ON b.id = bar.bibliographic_production_id , 
+            researcher r, graduate_program_researcher gpr, graduate_program gp
         WHERE 
-                               
-                                    gpr.graduate_program_id = gp.graduate_program_id 
-                                   AND gpr.researcher_id = r.id 
-                                     AND r.id = b.researcher_id
-                                 
-                                   AND   b.id = bar.bibliographic_production_id
-
-                        order by qualis desc
+            gpr.graduate_program_id = gp.graduate_program_id 
+            AND gpr.researcher_id = r.id 
+            AND r.id = b.researcher_id
+            AND b.year::INT = ANY(gpr.year)
+        order by qualis desc
    """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -653,7 +652,7 @@ def production_distinct_novo_csv_db():
             qualis,jcr,
             b.year as year,
             gp.graduate_program_id as graduate_program_id,
-            1900 as year_pos,
+            b.year as year_pos,
             b.type AS type 
         FROM 
             bibliographic_production b 
@@ -664,6 +663,7 @@ def production_distinct_novo_csv_db():
             gpr.graduate_program_id = gp.graduate_program_id 
             AND gpr.researcher_id = r.id 
             AND r.id = b.researcher_id
+            AND b.year::INT = ANY(gpr.year)
         order by qualis desc
     """
 
@@ -688,31 +688,66 @@ def production_distinct_novo_csv_db():
 # Função processar e inserir a produção de cada pesquisador
 def production_tecnical_year_novo_csv_db():
     sql = """
-          SELECT distinct title,development_year::int AS year, 'PATENT' as type, gp.graduate_program_id as graduate_program_id,1900 as year_pos 
-          FROM patent p,graduate_program_researcher gpr,  graduate_program gp 
-          WHERE  gpr.graduate_program_id = gp.graduate_program_id 
-                AND gpr.researcher_id = p.researcher_id 
-
-          UNION
-          SELECT distinct title,s.year as year,'SOFTWARE',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
-          from software s,graduate_program_researcher gpr,  graduate_program gp 
-          WHERE  gpr.graduate_program_id = gp.graduate_program_id
-                AND gpr.researcher_id = s.researcher_id 
-          UNION
-          SELECT distinct title,b.year as year,'BRAND',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
-          from brand b,graduate_program_researcher gpr,  graduate_program gp 
-          WHERE  gpr.graduate_program_id = gp.graduate_program_id 
-                AND gpr.researcher_id = b.researcher_id 
-          UNION
-          SELECT distinct title,b.year as year,'REPORT',gp.graduate_program_id as graduate_program_id,1900 as year_pos 
-          from research_report b,graduate_program_researcher gpr,  graduate_program gp 
-          WHERE  gpr.graduate_program_id = gp.graduate_program_id 
-                AND gpr.researcher_id = b.researcher_id 
-
-
-               
-
-    """
+        SELECT DISTINCT
+            title,
+            development_year::INT AS YEAR,
+            'PATENT' AS type,
+            gp.graduate_program_id AS graduate_program_id,
+            development_year::INT AS year_pos
+        FROM
+            patent p,
+            graduate_program_researcher gpr,
+            graduate_program gp
+        WHERE
+            gpr.graduate_program_id = gp.graduate_program_id
+            AND gpr.researcher_id = p.researcher_id
+            AND development_year::INT = ANY(gpr.year)
+        UNION
+        SELECT DISTINCT
+            title,
+            s.year AS YEAR,
+            'SOFTWARE',
+            gp.graduate_program_id AS graduate_program_id,
+            s.year AS year_pos
+        FROM
+            software s,
+            graduate_program_researcher gpr,
+            graduate_program gp
+        WHERE
+            gpr.graduate_program_id = gp.graduate_program_id
+            AND gpr.researcher_id = s.researcher_id
+            AND s.year = ANY(gpr.year)
+        UNION
+        SELECT DISTINCT
+            title,
+            b.year AS YEAR,
+            'BRAND',
+            gp.graduate_program_id AS graduate_program_id,
+            b.year AS year_pos
+        FROM
+            brand b,
+            graduate_program_researcher gpr,
+            graduate_program gp
+        WHERE
+            gpr.graduate_program_id = gp.graduate_program_id
+            AND gpr.researcher_id = b.researcher_id
+            AND b.year = ANY(gpr.year)
+        UNION
+        SELECT DISTINCT
+            title,
+            b.year AS YEAR,
+            'REPORT',
+            gp.graduate_program_id AS graduate_program_id,
+            b.year AS year_pos
+        FROM
+            research_report b,
+            graduate_program_researcher gpr,
+            graduate_program gp
+        WHERE
+            gpr.graduate_program_id = gp.graduate_program_id
+            AND gpr.researcher_id = b.researcher_id
+            AND b.year = ANY(gpr.year)
+        """
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -801,16 +836,19 @@ def graduate_program_csv_db():
 
 def ind_prod_researcher_csv_db():
     script_sql = """
-        SELECT researcher_id,year, 
-        replace( ind_prod_article::text, '.', ',') as  ind_prod_article,
-        replace( ind_prod_book::text, '.', ',') as  ind_prod_book,
-        replace( ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
-        replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
-        replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
-        replace(ind_prod_software::text, '.', ',') as ind_prod_software,
-        replace(ind_prod_report::text, '.', ',') as ind_prod_report,
-        replace(ind_prod_guidance::text, '.', ',') as ind_prod_guidance
-        FROM researcher_ind_prod;
+        SELECT
+            researcher_id,
+            YEAR,
+            ind_prod_article,
+            ind_prod_book,
+            ind_prod_book_chapter,
+            ind_prod_granted_patent,
+            ind_prod_not_granted_patent,
+            ind_prod_software,
+            ind_prod_report,
+            ind_prod_guidance
+        FROM
+            researcher_ind_prod;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
@@ -898,16 +936,19 @@ def dim_graduate_program_acronym():
 
 def graduate_program_ind_prod_csv_db():
     script_sql = """
-        SELECT graduate_program_id,year, 
-        replace(ind_prod_article::text, '.', ',') as  ind_prod_article,
-        replace(ind_prod_book::text, '.', ',') as  ind_prod_book,
-        replace(ind_prod_book_chapter::text, '.', ',') as  ind_prod_book_chapter,
-        replace(ind_prod_granted_patent::text, '.', ',') as ind_prod_granted_patent,
-        replace(ind_prod_not_granted_patent::text, '.', ',') as ind_prod_not_granted_patent,
-        replace(ind_prod_software::text, '.', ',') as ind_prod_software,
-        replace(ind_prod_report::text, '.', ',') as ind_prod_report,
-        replace(ind_prod_guidance::text, '.', ',') as ind_prod_guidance
-        FROM graduate_program_ind_prod;
+        SELECT
+            graduate_program_id,
+            YEAR,
+            ind_prod_article,
+            ind_prod_book,
+            ind_prod_book_chapter,
+            ind_prod_granted_patent,
+            ind_prod_not_granted_patent,
+            ind_prod_software,
+            ind_prod_report,
+            ind_prod_guidance
+        FROM
+            graduate_program_ind_prod;
         """
 
     registry = sgbdSQL.consultar_db(script_sql)
