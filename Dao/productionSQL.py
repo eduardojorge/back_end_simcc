@@ -21,9 +21,12 @@ def participation_events(year: int, researcher_id=None):
             type = 'WORK_IN_EVENT'
         """
     if researcher_id:
-        SCRIPT_SQL += f"AND researcher_id = '{researcher_id}'"
+        SCRIPT_SQL += f"AND researcher_id = '{researcher_id}' "
     if year:
-        SCRIPT_SQL += f"AND year_ >= {year}"
+        SCRIPT_SQL += f"AND year_ >= {year} "
+
+    SCRIPT_SQL += "ORDER BY year_ desc"
+
     registry = db.consultar_db(SCRIPT_SQL)
     dataframe = pd.DataFrame(
         registry,
