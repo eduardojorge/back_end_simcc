@@ -20,6 +20,7 @@ langchain-openai = "^0.2.0"
 beautifulsoup4 = "^4.12.3"
 fastapi = "^0.115.0"
 uvicorn = "^0.30.6"
+gunicorn = "^23.0.0"
 
 
 [build-system]
