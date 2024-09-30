@@ -1,19 +1,11 @@
 FROM python:3.11-slim
 
-ENV POETRY_VIRTUALENVS_CREATE=false
-
 WORKDIR /app
-
-COPY pyproject.toml poetry.lock /app/
 COPY . .
 
-RUN pip install poetry
+RUN pip install -r requirements.txt
 
-RUN poetry config installer.max-workers 10
-
-RUN poetry install --no-interaction --no-ansi
+RUN python -m nltk.downloader stopwords
 
 EXPOSE 5001
-
-CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0:5001", "server:app", "--reload", "--log-level", "error", "--access-logfile", "-", "--error-logfile", "-", "--workers", "4"]
-
+CMD python -m gunicorn --certfile=$CERT_FILE --keyfile=$KEY_FILE -b 0.0.0.0:5001 server:app --reload --timeout 20
