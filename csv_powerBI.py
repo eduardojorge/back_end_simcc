@@ -202,7 +202,9 @@ def fat_foment():
             scholarship_quantity
         FROM 
             public.foment s
-            LEFT JOIN researcher r ON r.id = s.researcher_id;
+            LEFT JOIN researcher r ON r.id = s.researcher_id
+        WHERE
+            s.researcher_id IS NOT NULL
         """
 
     reg = sgbdSQL.consultar_db(script_sql)
