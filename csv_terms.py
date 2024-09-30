@@ -98,7 +98,7 @@ termos_busca = pd.DataFrame(
 )
 
 
-termos_busca_ref = db.collection("termos_busca_cimatec")
+termos_busca_ref = db.collection("termos_busca")
 docs = termos_busca_ref.stream()
 for doc in docs:
     doc.reference.delete()

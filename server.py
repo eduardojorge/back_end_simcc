@@ -192,8 +192,7 @@ def recently_updated():
     if not year:
         year = YEAR
     university = request.args.get("university")
-    departament = request.args.get("departament")
-
+    departament = request.args.get("dep_id")
     data_frame = SimccBD.recently_updated_db(year, university, departament)
 
     for Index, infos in data_frame.iterrows():
