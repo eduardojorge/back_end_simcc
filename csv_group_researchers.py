@@ -35,7 +35,8 @@ def article_prod():
     )
     df_ind_prod_base_article.reset_index(inplace=True)
 
-    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
+    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(
+        int)
     return df_ind_prod_base_article
 
 
@@ -111,7 +112,8 @@ def patent_prod():
         registry, columns=["year", "granted", "count_patent", "researcher_id"]
     )
 
-    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
+    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(
+        int)
 
     df_pivot = df_ind_prod_base_patent.pivot_table(
         index=["year", "researcher_id"],
@@ -141,7 +143,8 @@ def software_prod():
         registry, columns=["year", "SOFTWARE", "researcher_id"]
     )
 
-    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(int)
+    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(
+        int)
     return df_ind_prod_base_software
 
 
@@ -274,6 +277,8 @@ def event_organization_prod():
     )
     data_frame["year"] = data_frame["year"].astype(int)
     return data_frame
+
+
 def participation_event_prod():
     SCRIPT_SQL = """
         SELECT
@@ -293,10 +298,11 @@ def participation_event_prod():
     )
     return data_frame
 
+
 def researcher_data():
     SCRIPT_SQL = """
         SELECT
-            researcher.name, researcher.graduation, researcher.lattes_id, education.education_end, i.acronym,
+            researcher.id, researcher.name, researcher.graduation, researcher.lattes_id, education.education_end, i.acronym,
             bp_book.year, bp_chapter.year, bp_article.year, bp_work.year, bp_text.year, p.development_year,
             g.year, s.year
         FROM researcher
@@ -355,6 +361,53 @@ def researcher_data():
         GROUP BY researcher.id, researcher.name, researcher.graduation, education.education_end, i.acronym,
             bp_book.year, bp_chapter.year, bp_article.year, bp_work.year, bp_text.year, p.development_year, g.year, s.year;
         """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(registry, columns=[
+        'researcher_id', 'NAME', 'GRADUATION', 'LATTES_ID', 'FIRST_DOC',
+        'INSTITUTION', 'MIN_BOOK', 'MIN_BOOK_CHAPTER', 'MIN_ARTICLE',
+        'MIN_WORK_IN_EVENT', 'MIN_TEXT_IN_NEWSPAPER_MAGAZINE', 'MIN_PATENT',
+        'MIN_GUIDANCE', 'MIN_SOFTWARE',
+    ])
+    return data_frame
+
+
+def classificar_pesquisador(row):
+    tempo_doutorado = row['FIRST_DOC']
+    A1 = row['A1']
+    A2 = row['A2']
+    A3 = row['A3']
+    A4 = row['A4']
+    B1 = row['B1']
+    B2 = row['B2']
+    B3 = row['B3']
+    B4 = row['B4']
+    C = row['C']
+    SQ = row['SQ']
+    patente_granted = row['PATENT_GRANTED']
+    software = row['SOFTWARE']
+
+    if tempo_doutorado >= 10 and A1 >= 2 and row['GUIDANCE_M_C'] >= 4 and (A1 >= 1 and patente_granted >= 1):
+        return 'A+'
+    elif tempo_doutorado >= 10 and A1 >= 1 and row['GUIDANCE_M_C'] >= 2 and patente_granted >= 1:
+        return 'A'
+    elif tempo_doutorado >= 8 and (A1 + A2 + A3 + A4) >= 2 and (row['GUIDANCE_M_A'] >= 2 or row['GUIDANCE_M_C'] >= 1) and (A1 + A2 + A3 + A4 >= 1 and (patente_granted >= 1 or software >= 3)):
+        return 'B+'
+    elif tempo_doutorado >= 8 and (A1 + A2 + A3 + A4) >= 1 and (row['GUIDANCE_M_A'] >= 2 or row['GUIDANCE_M_C'] >= 1) and (patente_granted >= 1 or software >= 3):
+        return 'B'
+    elif tempo_doutorado >= 6 and (A1 + A2 + A3 + A4) >= 2 and (row['GUIDANCE_IC_A'] >= 1 or row['GUIDANCE_IC_C'] >= 1) and (A1 + A2 + A3 + A4 >= 1 and (patente_granted >= 1 or software >= 3)):
+        return 'C+'
+    elif tempo_doutorado >= 6 and (A1 + A2 + A3 + A4) >= 1 and (row['GUIDANCE_IC_A'] >= 1 or row['GUIDANCE_IC_C'] >= 1) and (patente_granted >= 1 or software >= 3):
+        return 'C'
+    elif tempo_doutorado >= 3 and (A1 + A2 + A3 + A4) >= 1 and (patente_granted >= 1 or software >= 3):
+        return 'D+'
+    elif tempo_doutorado >= 3 and (B1 + B2 + B3 + B4) >= 1 and (patente_granted >= 1 or software >= 3):
+        return 'D'
+    elif tempo_doutorado < 3 and (B1 + B2 + B3 + B4) >= 1 and (A1 >= 1 or patente_granted >= 1 or software >= 3):
+        return 'E+'
+    else:
+        return 'E'
+
 
 weights = {
     "A1": 1,
@@ -442,8 +495,19 @@ if __name__ == "__main__":
 
     data_frame.fillna(0, inplace=True)
 
-    data_frame['IND_PROD'] = sum(data_frame[col] * weight for col, weight in weights.items())
+    data_frame = data_frame.drop(columns='year')
 
-    data_frame.groupby("researcher_id").sum().reset_index().to_csv(
-        "Files/researcher_group.csv", index=False
+    data_frame = data_frame.groupby("researcher_id").sum().reset_index()
+
+    data_frame['IND_PROD'] = sum(
+        data_frame[col] * weight for col, weight in weights.items())
+
+    data_frame = pd.merge(
+        data_frame, researcher_data(), on=["researcher_id"], how="left"
+    )
+
+    data_frame['CLASS'] = data_frame.apply(classificar_pesquisador, axis=1)
+
+    data_frame.to_csv(
+        "Files/researcher_group.csv", index=False, encoding='utf-8-sig'
     )
