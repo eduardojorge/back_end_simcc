@@ -1,5 +1,4 @@
 class Resarcher_Production(object):
-
     id = ""
 
     year = ""
@@ -21,6 +20,7 @@ class Resarcher_Production(object):
     book_chapter = ""
     work_in_event = ""
     researcher = ""
+
     guidance_ic_a = ""
     guidance_ic_c = ""
 
@@ -45,7 +45,6 @@ class Resarcher_Production(object):
         self.id = ""
 
     def getJson(self):
-
         resarcher_Production = {
             "id": self.id,
             "patent": self.patent,
