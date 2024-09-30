@@ -45,7 +45,7 @@ script_sql = """
     UNION
 
     SELECT
-        LOWER(name),
+        unaccent(LOWER(name)),
         1,
         'NAME',
         '0',
@@ -76,8 +76,8 @@ script_sql = """
 
     SELECT
         name,
-        '0',
-        '0',
+        '1',
+        'NAME',
         '0',
         unaccent(LOWER(name))
     FROM 
