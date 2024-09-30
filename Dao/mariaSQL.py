@@ -4,7 +4,7 @@ from Dao.termFlowSQL import (
     researcher_graduate_program_db,
     researcher_research_group_db,
     researcher_openAlex_db,
-    researcher_subsidy_db,
+    researcher_foment_db,
     researcher_departament,
 )
 import bd_maria

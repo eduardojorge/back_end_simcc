@@ -442,9 +442,9 @@ CREATE TABLE IF NOT EXISTS public.researcher_production (
     CONSTRAINT researcher_production_pkey PRIMARY KEY (researcher_production_id),
     CONSTRAINT researcher_production_researcher_id_fkey FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
-CREATE TABLE IF NOT EXISTS public.subsidy (
+CREATE TABLE IF NOT EXISTS public.foment (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    researcher_id uuid NOT NULL,
+    researcher_id uuid REFERENCES researcher(id) ON DELETE CASCADE,
     modality_code character varying(50),
     modality_name character varying(255),
     call_title character varying(255),
@@ -466,19 +466,6 @@ CREATE TABLE education (
     CONSTRAINT pk_education PRIMARY KEY (id),
     CONSTRAINT fk_researcher_education FOREIGN KEY (researcher_id) REFERENCES public.researcher (id),
     CONSTRAINT fk_institution_education FOREIGN KEY (institution_id) REFERENCES public.institution (id)
-);
-CREATE TABLE research_group (
-    research_group_id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    research_group_name VARCHAR(255),
-    researcher_id uuid,
-    institution_id uuid,
-    area VARCHAR(255),
-    last_date_sent DATE,
-    situation VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_researcher_id FOREIGN KEY (researcher_id) REFERENCES researcher(id),
-    CONSTRAINT fk_institution_id FOREIGN KEY (institution_id) REFERENCES institution(id)
 );
 CREATE TABLE IF NOT EXISTS public.openalex_article (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -535,7 +522,7 @@ CREATE TABLE public.graduate_program_ind_prod (
     ind_prod_not_granted_patent numeric(10, 3),
     ind_prod_guidance numeric(10, 3)
 );
-CREATE TABLE IF NOT EXISTS research_group_dgp(
+CREATE TABLE IF NOT EXISTS research_group(
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name character varying(200),
     institution character varying(200),

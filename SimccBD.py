@@ -20,7 +20,7 @@ def list_productivity_research():
             s.aid_quantity, 
             s.scholarship_quantity
         FROM 
-            subsidy s
+            foment s
             LEFT JOIN researcher r ON s.researcher_id = r.id
     """
     registry = sgbdSQL.consultar_db(script_sql)
@@ -85,7 +85,7 @@ def lists_research_groups(group_id):
             institution_name,
             category
         FROM
-            research_group_dgp rg
+            research_group rg
         WHERE
             (rg.first_leader_id IS NOT NULL OR rg.second_leader_id IS NOT NULL)
             {group_id_filter}

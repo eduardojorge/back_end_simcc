@@ -184,7 +184,7 @@ def lista_researcher_area_expertise_db(term, institution):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -424,7 +424,7 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -517,7 +517,7 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -606,7 +606,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -688,7 +688,7 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -787,7 +787,7 @@ def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
     data_frame = data_frame.merge(ufmg_researcher(), on="id", how="left")
 
@@ -899,7 +899,7 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
     data_frame = data_frame.merge(ufmg_researcher(), on="id", how="left")
 
@@ -1046,7 +1046,7 @@ def researcher_research_group_db():
             'category', rg.category
             )) as research_groups
         FROM 
-            research_group_dgp rg
+            research_group rg
         WHERE rg.first_leader_id IS NOT NULL
         GROUP BY
             rg.first_leader_id
@@ -1068,7 +1068,7 @@ def researcher_research_group_db():
             'category', rg.category
             )) as research_groups
         FROM 
-            research_group_dgp rg
+            research_group rg
         WHERE rg.second_leader_id IS NOT NULL
         GROUP BY
             rg.second_leader_id
@@ -1113,7 +1113,7 @@ def researcher_openAlex_db():
     return data_frame.fillna("")
 
 
-def researcher_subsidy_db():
+def researcher_foment_db():
     script_sql = """
         SELECT 
             s.researcher_id as id,
@@ -1127,9 +1127,9 @@ def researcher_subsidy_db():
             'institute_name', s.institute_name, 
             'aid_quantity', s.aid_quantity, 
             'scholarship_quantity', s.scholarship_quantity
-            )) as subsidy
+            )) as foment
         FROM
-            subsidy s
+            foment s
         GROUP BY
             s.researcher_id
         """

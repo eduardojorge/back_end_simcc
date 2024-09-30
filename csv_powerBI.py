@@ -201,7 +201,7 @@ def fat_foment():
             aid_quantity,
             scholarship_quantity
         FROM 
-            public.subsidy s
+            public.foment s
             LEFT JOIN researcher r ON r.id = s.researcher_id;
         """
 
@@ -226,7 +226,7 @@ def fat_foment():
 
 def dim_category_level_code():
     script_sql = """
-    SELECT DISTINCT category_level_code FROM subsidy
+    SELECT DISTINCT category_level_code FROM foment
     """
     reg = sgbdSQL.consultar_db(script_sql)
 
@@ -243,7 +243,7 @@ def dim_research_group():
             rg.area,
             i.id AS institution_id
         FROM
-            public.research_group_dgp rg
+            public.research_group rg
         RIGHT JOIN
             institution i ON rg.institution ILIKE '%' || i.acronym || '%'
         """
@@ -273,7 +273,7 @@ def fat_group_leaders():
             institution_name,
             category
         FROM
-            public.research_group_dgp
+            public.research_group
         WHERE
             first_leader_id IS NOT NULL
             OR second_leader_id IS NOT NULL

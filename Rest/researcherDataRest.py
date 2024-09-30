@@ -1,7 +1,6 @@
 from http import HTTPStatus
 import pandas as pd
 from flask import Blueprint, jsonify, request, send_file
-from flask_cors import cross_origin
 
 import Dao.generalSQL as generalSQL
 import Dao.researcherSQL as researcherSQL
@@ -11,6 +10,13 @@ from rest_imageResearcher import download_image
 from unidecode import unidecode
 
 researcherDataRest = Blueprint("researcherDataRest", __name__)
+
+
+@researcherDataRest.route("/foment", methods=["GET"])
+def researcher_query_grant():
+    institution_id = request.args.get("institution_id")
+    researchers_list = researcherSQL.researcher_query_grant(institution_id)
+    return jsonify(researchers_list), HTTPStatus.OK
 
 
 @researcherDataRest.route("/ResearcherData/Image", methods=["GET"])

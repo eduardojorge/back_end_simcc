@@ -1,3 +1,4 @@
+import datetime
 from dotenv import load_dotenv
 import unidecode
 import pandas as pd
@@ -35,8 +36,7 @@ def article_prod():
     )
     df_ind_prod_base_article.reset_index(inplace=True)
 
-    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(
-        int)
+    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
     return df_ind_prod_base_article
 
 
@@ -93,7 +93,7 @@ def patent_prod():
     SCRIPT_SQL = """
         SELECT
             development_year,
-            CASE 
+            CASE
                 WHEN grant_date IS NOT NULL THEN 'PATENT_GRANTED'
                 ELSE 'PATENT_NOT_GRANTED'
             END AS granted,
@@ -112,8 +112,7 @@ def patent_prod():
         registry, columns=["year", "granted", "count_patent", "researcher_id"]
     )
 
-    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(
-        int)
+    df_ind_prod_base_patent["year"] = df_ind_prod_base_patent["year"].astype(int)
 
     df_pivot = df_ind_prod_base_patent.pivot_table(
         index=["year", "researcher_id"],
@@ -131,7 +130,7 @@ def software_prod():
             year,
             COUNT(*),
             researcher_id
-        FROM 
+        FROM
             public.software
         GROUP BY
             researcher_id, year
@@ -143,8 +142,7 @@ def software_prod():
         registry, columns=["year", "SOFTWARE", "researcher_id"]
     )
 
-    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(
-        int)
+    df_ind_prod_base_software["year"] = df_ind_prod_base_software["year"].astype(int)
     return df_ind_prod_base_software
 
 
@@ -154,8 +152,8 @@ def report_prod():
             year,
             COUNT(*) as count_report,
             researcher_id
-        FROM 
-            research_report 
+        FROM
+            research_report
         GROUP BY
             year, researcher_id;
         """
@@ -171,7 +169,7 @@ def report_prod():
 
 def guidance_prod():
     SCRIPT_SQL = """
-        SELECT 
+        SELECT
             g.year,
             unaccent(lower((g.nature || ' ' || g.status))) AS nature_status,
             COUNT(*) as count_nature,
@@ -217,11 +215,11 @@ def guidance_prod():
 
 def brand_prod():
     SCRIPT_SQL = """
-        SELECT 
+        SELECT
             year,
             COUNT(*) as count_brand,
             researcher_id
-        FROM 
+        FROM
             brand
         GROUP BY
             year, researcher_id
@@ -241,9 +239,9 @@ def work_in_event_prod():
             year,
             COUNT(*) AS count_we,
             researcher_id
-        FROM 
+        FROM
             bibliographic_production
-        WHERE 
+        WHERE
             type = 'WORK_IN_EVENT'
         GROUP BY
             year, researcher_id
@@ -363,50 +361,84 @@ def researcher_data():
         """
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
-    data_frame = pd.DataFrame(registry, columns=[
-        'researcher_id', 'NAME', 'GRADUATION', 'LATTES_ID', 'FIRST_DOC',
-        'INSTITUTION', 'MIN_BOOK', 'MIN_BOOK_CHAPTER', 'MIN_ARTICLE',
-        'MIN_WORK_IN_EVENT', 'MIN_TEXT_IN_NEWSPAPER_MAGAZINE', 'MIN_PATENT',
-        'MIN_GUIDANCE', 'MIN_SOFTWARE',
-    ])
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "researcher_id",
+            "NAME",
+            "GRADUATION",
+            "LATTES_ID",
+            "FIRST_DOC",
+            "INSTITUTION",
+            "MIN_BOOK",
+            "MIN_BOOK_CHAPTER",
+            "MIN_ARTICLE",
+            "MIN_WORK_IN_EVENT",
+            "MIN_TEXT_IN_NEWSPAPER_MAGAZINE",
+            "MIN_PATENT",
+            "MIN_GUIDANCE",
+            "MIN_SOFTWARE",
+        ],
+    )
     return data_frame
 
 
-def classificar_pesquisador(row):
-    tempo_doutorado = row['FIRST_DOC']
-    A1 = row['A1']
-    A2 = row['A2']
-    A3 = row['A3']
-    A4 = row['A4']
-    B1 = row['B1']
-    B2 = row['B2']
-    B3 = row['B3']
-    B4 = row['B4']
-    C = row['C']
-    SQ = row['SQ']
-    patente_granted = row['PATENT_GRANTED']
-    software = row['SOFTWARE']
+def classificar_pesquisador(researcher):
+    year = datetime.datetime.now().year
+    GUIDANCE_DOC = researcher["GUIDANCE_D_C"] + researcher["GUIDANCE_D_A"]
+    GUIDANCE_MAS = researcher["GUIDANCE_M_C"] + researcher["GUIDANCE_M_A"]
+    QUALIS_A = researcher["A1"] + researcher["A2"] + researcher["A3"] + researcher["A4"]
+    QUALIS_B = researcher["B1"] + researcher["B2"] + researcher["B3"] + researcher["B4"]
 
-    if tempo_doutorado >= 10 and A1 >= 2 and row['GUIDANCE_M_C'] >= 4 and (A1 >= 1 and patente_granted >= 1):
-        return 'A+'
-    elif tempo_doutorado >= 10 and A1 >= 1 and row['GUIDANCE_M_C'] >= 2 and patente_granted >= 1:
-        return 'A'
-    elif tempo_doutorado >= 8 and (A1 + A2 + A3 + A4) >= 2 and (row['GUIDANCE_M_A'] >= 2 or row['GUIDANCE_M_C'] >= 1) and (A1 + A2 + A3 + A4 >= 1 and (patente_granted >= 1 or software >= 3)):
-        return 'B+'
-    elif tempo_doutorado >= 8 and (A1 + A2 + A3 + A4) >= 1 and (row['GUIDANCE_M_A'] >= 2 or row['GUIDANCE_M_C'] >= 1) and (patente_granted >= 1 or software >= 3):
-        return 'B'
-    elif tempo_doutorado >= 6 and (A1 + A2 + A3 + A4) >= 2 and (row['GUIDANCE_IC_A'] >= 1 or row['GUIDANCE_IC_C'] >= 1) and (A1 + A2 + A3 + A4 >= 1 and (patente_granted >= 1 or software >= 3)):
-        return 'C+'
-    elif tempo_doutorado >= 6 and (A1 + A2 + A3 + A4) >= 1 and (row['GUIDANCE_IC_A'] >= 1 or row['GUIDANCE_IC_C'] >= 1) and (patente_granted >= 1 or software >= 3):
-        return 'C'
-    elif tempo_doutorado >= 3 and (A1 + A2 + A3 + A4) >= 1 and (patente_granted >= 1 or software >= 3):
-        return 'D+'
-    elif tempo_doutorado >= 3 and (B1 + B2 + B3 + B4) >= 1 and (patente_granted >= 1 or software >= 3):
-        return 'D'
-    elif tempo_doutorado < 3 and (B1 + B2 + B3 + B4) >= 1 and (A1 >= 1 or patente_granted >= 1 or software >= 3):
-        return 'E+'
-    else:
-        return 'E'
+    if year - researcher["FIRST_DOC"] >= 10:
+        if (researcher["A1"] >= 2 and GUIDANCE_DOC >= 4) or (
+            researcher["A1"] >= 1 and researcher["PATENT_GRANTED"] >= 1
+        ):
+            return "A+"
+        if (researcher["A1"] >= 1 and GUIDANCE_DOC >= 2) or (
+            researcher["PATENT_GRANTED"] >= 1
+        ):
+            return "A"
+
+    if year - researcher["FIRST_DOC"] >= 8:
+        if (QUALIS_A >= 2 and (GUIDANCE_MAS >= 2 or GUIDANCE_DOC >= 1)) or (
+            QUALIS_A >= 1
+            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
+        ):
+            return "B+"
+        if (QUALIS_A >= 1 and (GUIDANCE_MAS >= 2 or GUIDANCE_DOC >= 1)) or (
+            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
+        ):
+            return "B"
+
+    if year - researcher["FIRST_DOC"] >= 6:
+        if (QUALIS_A >= 2 and (GUIDANCE_MAS >= 1 or GUIDANCE_DOC >= 1)) or (
+            QUALIS_A >= 1
+            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
+        ):
+            return "C+"
+        if (QUALIS_A >= 1 and (GUIDANCE_MAS >= 1 or GUIDANCE_DOC >= 1)) or (
+            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
+        ):
+            return "C"
+
+    if year - researcher["FIRST_DOC"] >= 3:
+        if QUALIS_A >= 1 or (
+            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
+        ):
+            return "D+"
+        if QUALIS_B >= 1 or (
+            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
+        ):
+            return "D+"
+
+    if year - researcher["FIRST_DOC"] > 0:
+        if QUALIS_B >= 1 or (
+            QUALIS_A >= 1
+            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
+        ):
+            return "E+"
+    return "E"
 
 
 weights = {
@@ -437,7 +469,7 @@ weights = {
 if __name__ == "__main__":
     load_dotenv(override=True)
 
-    year = list(range(2008, 2025))
+    year = list(range(2010, 2025))
 
     SCRIPT_SQL = "SELECT id FROM researcher"
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
@@ -495,19 +527,18 @@ if __name__ == "__main__":
 
     data_frame.fillna(0, inplace=True)
 
-    data_frame = data_frame.drop(columns='year')
+    data_frame = data_frame.drop(columns="year")
 
     data_frame = data_frame.groupby("researcher_id").sum().reset_index()
 
-    data_frame['IND_PROD'] = sum(
-        data_frame[col] * weight for col, weight in weights.items())
+    data_frame["IND_PROD"] = sum(
+        data_frame[col] * weight for col, weight in weights.items()
+    )
 
     data_frame = pd.merge(
         data_frame, researcher_data(), on=["researcher_id"], how="left"
     )
 
-    data_frame['CLASS'] = data_frame.apply(classificar_pesquisador, axis=1)
+    data_frame["CLASS"] = data_frame.apply(classificar_pesquisador, axis=1)
 
-    data_frame.to_csv(
-        "Files/researcher_group.csv", index=False, encoding='utf-8-sig'
-    )
+    data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")

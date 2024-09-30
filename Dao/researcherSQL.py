@@ -102,10 +102,8 @@ def researcher_search_city(city_id: str = None):
         data_frame = data_frame.merge(
             researcher_research_group_db(), on="id", how="left"
         )
-        data_frame = data_frame.merge(
-            researcher_openAlex_db(), on="id", how="left")
-        data_frame = data_frame.merge(
-            researcher_subsidy_db(), on="id", how="left")
+        data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
+        data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
 
         return data_frame.fillna("").to_dict(orient="records")
 
@@ -327,10 +325,9 @@ def generic_data(year_, graduate_program_id, dep_id):
     registre = sgbdSQL.consultar_db(script_sql)
 
     df = pd.DataFrame(registre, columns=["qualis", "year", "count_article"])
-    df = df.pivot_table(index="year",
-                        columns="qualis",
-                        values="count_article",
-                        fill_value=0)
+    df = df.pivot_table(
+        index="year", columns="qualis", values="count_article", fill_value=0
+    )
     df["count_article"] = df.sum(axis=1)
     df.reset_index(inplace=True)
 
@@ -444,7 +441,7 @@ def researcher_openAlex_db():
     return data_frame.fillna("")
 
 
-def researcher_subsidy_db():
+def researcher_foment_db():
     script_sql = """
         SELECT 
             s.researcher_id as id,
@@ -458,9 +455,9 @@ def researcher_subsidy_db():
             'institute_name', s.institute_name, 
             'aid_quantity', s.aid_quantity, 
             'scholarship_quantity', s.scholarship_quantity
-            )) as subsidy
+            )) as foment
         FROM
-            subsidy s
+            foment s
         GROUP BY
             s.researcher_id
         """
@@ -669,10 +666,9 @@ def generic_researcher_data_data(year_, researcher_id):
 
     df = pd.DataFrame(registre, columns=["qualis", "year", "count_article"])
 
-    df = df.pivot_table(index="year",
-                        columns="qualis",
-                        values="count_article",
-                        fill_value=0)
+    df = df.pivot_table(
+        index="year", columns="qualis", values="count_article", fill_value=0
+    )
     df["count_article"] = df.sum(axis=1)
     df.reset_index(inplace=True)
 
@@ -709,3 +705,51 @@ def generic_researcher_data_data(year_, researcher_id):
         data_frame["count_brand"] = None
 
     return data_frame.fillna(0).to_dict(orient="records")
+
+
+def researcher_query_grant(institution_id):
+    filter_institution = str()
+    if institution_id:
+        filter_institution = f"""
+                AND r.institution_id = '{institution_id}'
+                """
+
+    SCRIPT_SQL = f"""
+        SELECT
+            s.researcher_id,
+            r.name,
+            s.modality_code,
+            s.modality_name,
+            s.call_title,
+            s.category_level_code,
+            s.funding_program_name,
+            s.institute_name,
+            s.aid_quantity,
+            s.scholarship_quantity
+        FROM
+            foment s
+            LEFT JOIN researcher r ON s.researcher_id = r.id
+        WHERE
+        s.researcher_id IS NOT NULL
+        {filter_institution}
+        """
+
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=[
+            "researcher_id",
+            "name",
+            "modality_code",
+            "modality_name",
+            "call_title",
+            "category_level_code",
+            "funding_program_name",
+            "institute_name",
+            "aid_quantity",
+            "scholarship_quantity",
+        ],
+    )
+
+    return data_frame.to_dict(orient="records")

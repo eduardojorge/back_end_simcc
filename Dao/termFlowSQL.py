@@ -895,7 +895,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_research_group_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_openAlex_db(), on="id", how="left")
-    data_frame = data_frame.merge(researcher_subsidy_db(), on="id", how="left")
+    data_frame = data_frame.merge(researcher_foment_db(), on="id", how="left")
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
@@ -975,7 +975,7 @@ def researcher_openAlex_db():
     return data_frame.fillna("")
 
 
-def researcher_subsidy_db():
+def researcher_foment_db():
     script_sql = """
         SELECT 
             s.researcher_id as id,
@@ -989,9 +989,9 @@ def researcher_subsidy_db():
             'institute_name', s.institute_name, 
             'aid_quantity', s.aid_quantity, 
             'scholarship_quantity', s.scholarship_quantity
-            )) as subsidy
+            )) as foment
         FROM
-            subsidy s
+            foment s
         GROUP BY
             s.researcher_id
         """
