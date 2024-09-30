@@ -200,12 +200,20 @@ def production_general_db(graduate_program_id, year, dep_id):
             """
     else:
         if dep_id:
-            filter_departament = f"""AND r.id IN (
+            filter_departament = f"""AND researcher_id IN (
                     SELECT researcher_id
                     FROM public.departament_researcher
                     WHERE dep_id = '{dep_id}'
                 )
                 """
+
+            filter_departament_researcher = f"""AND id IN (
+                    SELECT researcher_id
+                    FROM public.departament_researcher
+                    WHERE dep_id = '{dep_id}'
+                )
+                """
+
         else:
             filter_departament = str()
         sql = f"""
@@ -268,9 +276,10 @@ def production_general_db(graduate_program_id, year, dep_id):
 
             SELECT COUNT(*) as qtd, UPPER(r.graduation)
             FROM researcher r 
-            {f'WHERE {filter_departament[3:]}' if filter_departament else str()}
+            {f'WHERE {filter_departament_researcher[3:]}' if filter_departament_researcher else str()}
             GROUP BY graduation
             """
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":
