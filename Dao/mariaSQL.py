@@ -1,12 +1,5 @@
 import pandas as pd
 import Dao.sgbdSQL as db
-from Dao.termFlowSQL import (
-    researcher_graduate_program_db,
-    researcher_research_group_db,
-    researcher_openAlex_db,
-    researcher_foment_db,
-    researcher_departament,
-)
 import bd_maria
 from langchain_openai import ChatOpenAI
 

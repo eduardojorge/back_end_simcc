@@ -83,7 +83,6 @@ def graduate_program_profnit_db(graduate_program_id):
             "qtd_colaborador",
         ],
     )
-    print(data_frame)
     script_sql = """
         SELECT
             gp.graduate_program_id,
@@ -281,7 +280,6 @@ def production_general_db(graduate_program_id, year, dep_id):
             {f'WHERE {filter_departament_researcher[3:]}' if filter_departament_researcher else str()}
             GROUP BY graduation
             """
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     if filter != "":

@@ -866,6 +866,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
         ORDER BY
             among DESC;
             """
+    print(script_sql)
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
@@ -924,16 +925,34 @@ def researcher_graduate_program_db():
 
 def researcher_research_group_db():
     script_sql = """
-        SELECT 
-            rg.researcher_id as id,
-            jsonb_agg(jsonb_build_object(
-            'research_group_id', rg.research_group_id,
-            'name', rg.research_group_name
-            )) as research_groups
-        FROM 
-            research_group rg
-        GROUP BY
-            rg.researcher_id
+SELECT
+    rg.first_leader_id AS leader_id,
+    jsonb_agg(
+        jsonb_build_object(
+            'research_group_id', rg.id,
+            'name', rg.name
+        )
+    ) AS research_groups
+FROM 
+    public.research_group rg
+GROUP BY
+    rg.first_leader_id
+
+UNION ALL
+
+SELECT
+    rg.second_leader_id AS leader_id,
+    jsonb_agg(
+        jsonb_build_object(
+            'research_group_id', rg.id,
+            'name', rg.name
+        )
+    ) AS research_groups
+FROM 
+    public.research_group rg
+GROUP BY
+    rg.second_leader_id;
+
         """
     registry = sgbdSQL.consultar_db(script_sql)
 
