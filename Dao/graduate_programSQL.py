@@ -216,6 +216,8 @@ def production_general_db(graduate_program_id, year, dep_id):
 
         else:
             filter_departament = str()
+            filter_departament_researcher = str()
+
         sql = f"""
             SELECT COUNT(DISTINCT p.title) AS qtd, 'PATENT' AS type
             FROM patent p
