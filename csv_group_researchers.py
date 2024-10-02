@@ -1,6 +1,5 @@
 import datetime
 from dotenv import load_dotenv
-import unidecode
 import pandas as pd
 from Dao import sgbdSQL
 
@@ -426,7 +425,7 @@ def classificar_pesquisador(researcher):
         if QUALIS_A >= 1 or (
             researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
         ):
-            return "D+"
+            return "D"
         if QUALIS_B >= 1 or (
             researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
         ):
@@ -527,16 +526,19 @@ if __name__ == "__main__":
 
     data_frame.fillna(0, inplace=True)
 
+    data_frame = pd.merge(
+        data_frame, researcher_data(), on=["researcher_id"], how="left"
+    )
+    data_frame.to_csv(
+        "Files/researcher_group_years.csv", index=False, encoding="utf-8-sig"
+    )
+
     data_frame = data_frame.drop(columns="year")
 
     data_frame = data_frame.groupby("researcher_id").sum().reset_index()
 
     data_frame["IND_PROD"] = sum(
         data_frame[col] * weight for col, weight in weights.items()
-    )
-
-    data_frame = pd.merge(
-        data_frame, researcher_data(), on=["researcher_id"], how="left"
     )
 
     data_frame["CLASS"] = data_frame.apply(classificar_pesquisador, axis=1)
