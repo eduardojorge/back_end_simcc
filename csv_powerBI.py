@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 import json
 from dotenv import load_dotenv
+import os
 
 load_dotenv(override=True)
 
@@ -993,19 +994,22 @@ def data_csv():
 
 
 if __name__ == "__main__":
-    dir = "Files/indicadores_simcc/"
+    log_dir = "Files/indicadores_simcc/"
+    log_file = "logfile_csv.log"
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
     Log_Format = "%(levelname)s %(asctime)s - %(message)s"
 
     logging.basicConfig(
-        filename="logfile_csv.log",
+        filename=os.path.join(log_dir, log_file),
         filemode="w",
         format=Log_Format,
         level=logging.DEBUG,
     )
 
     logger = logging.getLogger()
-
     logger.debug("Inicio")
 
     data_csv()

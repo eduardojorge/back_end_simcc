@@ -1,11 +1,12 @@
-from dotenv import load_dotenv
-
-load_dotenv()
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 from Dao import sgbdSQL
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cred = credentials.Certificate("cert.json")
 
@@ -98,7 +99,7 @@ termos_busca = pd.DataFrame(
 )
 
 
-termos_busca_ref = db.collection("termos_busca")
+termos_busca_ref = db.collection(os.getenv("FIREBASE_COLLECTION", "termos_busca"))
 docs = termos_busca_ref.stream()
 for doc in docs:
     doc.reference.delete()
