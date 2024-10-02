@@ -1130,8 +1130,6 @@ def researcher_foment_db():
             )) as foment
         FROM
             foment s
-        WHERE
-            researcher_id NOT IN (SELECT id FROM researcher WHERE docente = false)
         GROUP BY
             s.researcher_id
         """

@@ -748,6 +748,7 @@ def researcher_query_grant(institution_id):
             LEFT JOIN researcher r ON s.researcher_id = r.id
         WHERE
         s.researcher_id IS NOT NULL
+        AND researcher_id NOT IN (SELECT id FROM researcher WHERE docente = false)
         {filter_institution}
         """
 
