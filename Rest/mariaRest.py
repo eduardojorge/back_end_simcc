@@ -8,9 +8,10 @@ mariaRest = Blueprint("mariaRest", __name__)
 
 @mariaRest.route("/maria/researcher/abstract", methods=["GET"])
 def researcher_abstract():
-    query = request.args.get("query")
-
     try:
+        query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "abstract")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
@@ -30,6 +31,8 @@ def researcher_abstract():
 def researcher_article():
     try:
         query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "article")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
@@ -48,6 +51,8 @@ def researcher_article():
 def researcher_article_abstract():
     try:
         query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "article_abstract")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
@@ -66,6 +71,8 @@ def researcher_article_abstract():
 def researcher_book():
     try:
         query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "book")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
@@ -84,6 +91,8 @@ def researcher_book():
 def researcher_event():
     try:
         query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "event")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
@@ -102,6 +111,8 @@ def researcher_event():
 def researcher_patent():
     try:
         query = request.args.get("query")
+        if not query:
+            return []
         researcher = mariaSQL.search_by_embeddings(query, "patent")
         researcher = mariaSQL.mount_researchers(researcher)
         comment = mariaSQL.mount_comment(researcher)
