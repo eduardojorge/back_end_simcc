@@ -312,8 +312,6 @@ def lists_word_researcher():
     researcher_id = request.args.get("researcher_id")
     dep_id = request.args.get("dep_id")
     graduate_program_id = request.args.get("graduate_program_id")
-    if graduate_program_id is None:
-        graduate_program_id = ""
 
     lists_word = list()
     df_bd = termFlowSQL.lists_word_researcher_db(

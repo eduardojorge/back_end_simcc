@@ -1,55 +1,44 @@
 from dotenv import load_dotenv
-
-load_dotenv(override=True)
 import psycopg2
 import os
 
+load_dotenv(override=True)
 
-def execScript_db(sql):
+
+def conecta_db():
+    return psycopg2.connect(
+        host=os.getenv("DATABASE_HOST"),
+        database=os.getenv("DATABASE_NAME"),
+        user=os.getenv("DATABASE_USER"),
+        password=os.getenv("DATABASE_PASSWORD"),
+    )
+
+
+def exec_script_db(sql, params=None):
     con = conecta_db()
     cur = con.cursor()
     try:
-        cur.execute(sql)
+        cur.execute(sql, params)
         con.commit()
     except (Exception, psycopg2.DatabaseError) as error:
-        print("Error: %s" % error)
+        print(f"Error: {error}")
         con.rollback()
-        cur.close()
         return 1
-    cur.close()
-
-
-def consultar_db(sql, database: str = None):
-    try:
-        if database:
-            con = conecta_db(database=database)
-        else:
-            con = conecta_db()
-        cur = con.cursor()
-        cur.execute(sql)
-        registros = cur.fetchall()
+    finally:
+        cur.close()
         con.close()
-        cur.close()
 
+
+def consultar_db(sql, params=None, database=None):
+    con = conecta_db() if database is None else conecta_db(database=database)
+    cur = con.cursor()
+    try:
+        cur.execute(sql, params)
+        registros = cur.fetchall()
+        return registros
     except (Exception, psycopg2.DatabaseError) as error:
-        print("Error: %s" % error)
-        con.rollback()
-        cur.close()
+        print(f"Error: {error}")
         return 1
-    return registros
-
-
-def conecta_db(
-    password=os.getenv("DATABASE_PASSWORD"),
-    host=os.getenv("DATABASE_HOST"),
-    database=os.getenv("DATABASE_NAME"),
-    user=os.getenv("DATABASE_USER"),
-):
-
-    con = psycopg2.connect(
-        host=host,
-        database=database,
-        user=user,
-        password=password,
-    )
-    return con
+    finally:
+        cur.close()
+        con.close()

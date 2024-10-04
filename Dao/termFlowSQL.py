@@ -573,38 +573,39 @@ def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
     stopwords = nltk.corpus.stopwords.words("portuguese")
     stopwords += nltk.corpus.stopwords.words("english")
 
-    filter_researcher = str()
-    filter_graduate_program = str()
+    filter_ = (
+        f"""
+        WHERE 
+            b.researcher_id IN (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}') """
+        if dep_id
+        else str()
+    )
 
-    if dep_id:
-        filter_departament = f"""
-            WHERE b.researcher_id IN (
-                SELECT researcher_id
-                FROM public.departament_researcher
-                WHERE dep_id = '{dep_id}'
-            )
+    filter_ = (
+        f"""
+        WHERE 
+            b.researcher_id = '{researcher_id}'"""
+        if researcher_id
+        else str()
+    )
+
+    filter_ = (
+        f"""
+        RIGHT JOIN 
+            graduate_program_researcher gpr 
+            ON b.researcher_id = gpr.researcher_id 
+            AND gpr.graduate_program_id = '{graduate_program}' 
             """
-    else:
-        filter_departament = str()
-
-    if researcher_id:
-        filter_researcher = f"WHERE b.researcher_id = '{researcher_id}'"
-    elif graduate_program:
-        filter_graduate_program = f"""
-        JOIN
-                graduate_program_researcher gpr ON
-                        b.researcher_id = gpr.researcher_id
-        WHERE gpr.graduate_program_id = '{graduate_program}'
-        """
+        if graduate_program
+        else str()
+    )
 
     script_sql = f"""
-        SELECT
-            translate(unaccent(LOWER(b.title)),'-\\.:;?(),', ' ')::tsvector
+        SELECT DISTINCT
+            translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
         FROM
             bibliographic_production b
-        {filter_departament}
-        {filter_researcher}
-        {filter_graduate_program}
+        {filter_}
         """
 
     script_sql = f"""
@@ -614,13 +615,12 @@ def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
             FROM
                 ts_stat($${script_sql}$$)
             WHERE
-                CHAR_LENGTH(word)>3
-                AND word NOT IN {tuple(s.replace("'", ' ') for s in stopwords)}
+                CHAR_LENGTH(word) > 3
                 ORDER BY
                 ndoc DESC
             FETCH FIRST 20 ROWS ONLY;
             """
-
+    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
