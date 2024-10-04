@@ -3,6 +3,8 @@ import pandas as pd
 import Dao.sgbdSQL as sgbdSQL
 import Model.GraduateProgram_Production as GraduateProgram_Production
 
+pd.set_option("future.no_silent_downcasting", True)
+
 
 def graduate_program_db(institution_id):
     reg = sgbdSQL.consultar_db(
@@ -198,24 +200,23 @@ def production_general_db(graduate_program_id, year, dep_id):
                 r.graduation, gpr.graduate_program_id
             """
     else:
-        if dep_id:
-            filter_departament = f"""AND researcher_id IN (
-                    SELECT researcher_id
-                    FROM public.departament_researcher
-                    WHERE dep_id = '{dep_id}'
-                )
-                """
+        filter_departament = (
+            f"""
+            AND researcher_id IN 
+            (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            """
+            if dep_id
+            else str()
+        )
 
-            filter_departament_researcher = f"""AND id IN (
-                    SELECT researcher_id
-                    FROM public.departament_researcher
-                    WHERE dep_id = '{dep_id}'
-                )
-                """
-
-        else:
-            filter_departament = str()
-            filter_departament_researcher = str()
+        filter_departament_researcher = (
+            f"""
+            AND id IN 
+            (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            """
+            if dep_id
+            else str()
+        )
 
         sql = f"""
             SELECT COUNT(DISTINCT p.title) AS qtd, 'PATENT' AS type
@@ -276,8 +277,11 @@ def production_general_db(graduate_program_id, year, dep_id):
             UNION
 
             SELECT COUNT(*) as qtd, UPPER(r.graduation)
-            FROM researcher r 
-            {f'WHERE {filter_departament_researcher[3:]}' if filter_departament_researcher else str()}
+            FROM researcher r
+            WHERE 
+            1 = 1
+            AND r.id NOT IN (SELECT researcher_id FROM graduate_program_student)
+            {filter_departament_researcher[3:]}
             GROUP BY graduation
             """
     reg = sgbdSQL.consultar_db(sql)
