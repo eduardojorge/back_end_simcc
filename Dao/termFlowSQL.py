@@ -1,7 +1,6 @@
 import nltk
 import pandas as pd
 import unidecode
-import base64
 import Dao.sgbdSQL as sgbdSQL
 import Dao.util as util
 
@@ -616,11 +615,11 @@ def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
                 ts_stat($${script_sql}$$)
             WHERE
                 CHAR_LENGTH(word) > 3
+                AND word not in ({', '.join([f'$${term}$$' for term in stopwords])})
                 ORDER BY
                 ndoc DESC
             FETCH FIRST 20 ROWS ONLY;
             """
-    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
