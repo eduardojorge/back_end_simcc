@@ -468,7 +468,7 @@ def recently_updated_db(year, institution, departament):
         data_frame_researchers = pd.DataFrame(registry, columns=["researcher_id"])
 
         data_frame = pd.merge(
-            data_frame, data_frame_researchers, on="researcher_id", how="right"
+            data_frame, data_frame_researchers, on="researcher_id", how="inner"
         )
     return data_frame.fillna("")
 
