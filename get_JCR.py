@@ -94,7 +94,7 @@ def make_requests_and_save_to_csv(total_results=21522, results_per_request=200):
 
     df = pd.DataFrame(all_results)
     df.to_csv("Files/all_results_jcr.csv", index=False)
-    print(f"All results saved to all_results_jcr.csv")
+    print("All results saved to all_results_jcr.csv")
 
 
 make_requests_and_save_to_csv()
