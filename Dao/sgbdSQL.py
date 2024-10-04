@@ -14,7 +14,7 @@ def conecta_db():
     )
 
 
-def exec_script_db(sql, params=None):
+def execScript_db(sql, params=None):
     con = conecta_db()
     cur = con.cursor()
     try:

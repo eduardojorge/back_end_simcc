@@ -114,7 +114,7 @@ def mount_researchers(data_frame):
 
 def mount_comment(data_dict):
     PROMPT_TEMPLATE = f"""
-    Você é um chatbot chamado maria, que ajuda pesquisadores a encontrarem produções relevantes e outros pesquisadores especialistas em alguma area especifica, quero que escreva um resumo sobre o que achar de mais interessante no texto a seguir:
+    Você é um chatbot chamado Maria, especializada em auxiliar pesquisadores. Gostaria que você analisasse os dados de alguns pesquisadores e me fornecesse um resumo conciso da seção de resultados, destacando os principais achados e suas implicações para a área de [área de pesquisa]. Por favor, utilize uma linguagem clara e objetiva, adequada para um público com conhecimento intermediário. Além disso, gostaria que você indicasse quais outras pesquisas poderiam complementar este estudo e se existem lacunas de conhecimento ainda a serem exploradas.
 
     {data_dict}
     """
