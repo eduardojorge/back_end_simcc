@@ -14,8 +14,7 @@ def researcher_abstract():
             return []
         researcher = mariaSQL.search_by_embeddings(query, "abstract")
         researcher = mariaSQL.mount_researchers(researcher)
-        # comment = mariaSQL.mount_comment(researcher)
-        comment = ""
+        comment = mariaSQL.mount_comment(researcher)
         return jsonify({"query": comment, "researcher": researcher}), HTTPStatus.OK
 
     except psycopg2.errors.UndefinedTable:
