@@ -408,6 +408,9 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
 
 
 def lists_software_production_researcher_db(researcher_id, year):
+    filter_researcher = (
+        f"AND researcher_id='{researcher_id}'" if researcher_id else str()
+    )
     sql = f"""
         SELECT 
             DISTINCT 
@@ -416,11 +419,11 @@ def lists_software_production_researcher_db(researcher_id, year):
         FROM 
             software s
         WHERE 
-            researcher_id='{researcher_id}'
-            AND s.year >= {year}
+            s.year >= {year}
+            {filter_researcher}
         ORDER BY year DESC
         """
-
+    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(reg, columns=["title", "year"])
