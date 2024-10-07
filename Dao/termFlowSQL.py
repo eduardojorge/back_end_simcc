@@ -423,7 +423,6 @@ def lists_software_production_researcher_db(researcher_id, year):
             {filter_researcher}
         ORDER BY year DESC
         """
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(reg, columns=["title", "year"])
