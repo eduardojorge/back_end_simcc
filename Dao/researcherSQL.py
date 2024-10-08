@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def researcher_search_city(city_id: str = None):
-    if city_id == None:
+    if city_id is None:
         script_sql = """
             SELECT DISTINCT
                 r.id AS researcher_id,
@@ -39,7 +39,7 @@ def researcher_search_city(city_id: str = None):
         return data_frame
 
     else:
-        script_sql = f"""
+        script_sql = """
         SELECT
                 r.id AS id,
                 r.name AS researcher_name,
@@ -746,7 +746,7 @@ def researcher_query_grant(institution_id):
         FROM
             foment s
             LEFT JOIN researcher r ON s.researcher_id = r.id
-        WHERE
+        WHERE 
         s.researcher_id IS NOT NULL
         AND researcher_id NOT IN (SELECT id FROM researcher WHERE docente = false)
         {filter_institution}

@@ -110,7 +110,7 @@ if __name__ == "__main__":
     if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
         print("baixando curriculos pelo Tupi")
 
-    dir = f'{os.environ["JADE_EXTRATOR_FOLTER"]}/metadata/dataset/xml/'
+    dir = f'{os.environ["JADE_EXTRATOR_FOLTER"]}/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
 
     client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 

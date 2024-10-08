@@ -40,7 +40,7 @@ def image():
     try:
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
         return send_file(path_or_file=path_image)
-    except:
+    except Exception:
         print(f"download da foto - {researcher_id}")
         download_image(researcher_id)
         path_image = f"Files/image_researcher/{researcher_id}.jpg"
@@ -54,12 +54,11 @@ def byCity():
     researchers = researcherSQL.researcher_search_city(city_id)
 
     researcher_list = list()
-    if city_id == None:
+    if city_id is None:
         for Index, researcher in researchers.iterrows():
             area = str(";").join(
                 [
                     great_area.strip().replace(
-                        # fmt: skip
                         "_",
                         " ",
                     )

@@ -1,12 +1,8 @@
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
 from nltk.tokenize import RegexpTokenizer
 import Dao.sgbdSQL as sgbdSQL
 import pandas as pd
 import logging
 import nltk
-import sys
 import os
 
 
@@ -202,6 +198,11 @@ if __name__ == "__main__":
             ba.issn = '17412242'
         """
 
+    sgbdSQL.execScript_db(script_sql)
+
+    script_sql = """
+        UPDATE researcher SET docente = true WHERE id IN (SELECT researcher_id FROM graduate_program_researcher);
+        """
     sgbdSQL.execScript_db(script_sql)
 
     script_sql = """

@@ -1,9 +1,7 @@
 import Dao.sgbdSQL as sgbdSQL
 import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
-from datetime import datetime
 import logging
-import json
 from dotenv import load_dotenv
 import os
 
@@ -58,7 +56,7 @@ def fat_simcc_bibliographic_production():
         ],
     )
 
-    df_bd.to_csv(dir + "fat_simcc_bibliographic_production.csv")
+    df_bd.to_csv(csv_dir + "fat_simcc_bibliographic_production.csv")
 
 
 def dim_researcher_csv_db():
@@ -90,7 +88,7 @@ def dim_researcher_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "dim_researcher.csv")
+    df_bd.to_csv(csv_dir + "dim_researcher.csv")
 
 
 def dim_institution_csv_db():
@@ -109,7 +107,7 @@ def dim_institution_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym "])
 
-    df_bd.to_csv(dir + "dim_institution.csv")
+    df_bd.to_csv(csv_dir + "dim_institution.csv")
 
 
 def dim_city_csv_db():
@@ -126,7 +124,7 @@ def dim_city_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["city_id", "name"])
 
-    df_bd.to_csv(dir + "dim_city.csv")
+    df_bd.to_csv(csv_dir + "dim_city.csv")
 
 
 def fat_production_tecnical_year_novo_csv_db():
@@ -187,7 +185,7 @@ def fat_production_tecnical_year_novo_csv_db():
         columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
     )
 
-    df_bd.to_csv(dir + "fat_production_tecnical_year_novo_csv_db.csv")
+    df_bd.to_csv(csv_dir + "fat_production_tecnical_year_novo_csv_db.csv")
 
 
 def fat_foment():
@@ -224,7 +222,7 @@ def fat_foment():
         ],
     )
 
-    df.to_csv(dir + "fat_foment.csv")
+    df.to_csv(csv_dir + "fat_foment.csv")
 
 
 def dim_category_level_code():
@@ -235,7 +233,7 @@ def dim_category_level_code():
 
     df = pd.DataFrame(reg, columns=["category_level_code"])
 
-    df.to_csv(dir + "dim_category_level_code.csv")
+    df.to_csv(csv_dir + "dim_category_level_code.csv")
 
 
 def dim_research_group():
@@ -254,7 +252,7 @@ def dim_research_group():
 
     df = pd.DataFrame(reg, columns=["group_id", "group_name", "area", "institution_id"])
 
-    df.to_csv(dir + "dim_research_group.csv")
+    df.to_csv(csv_dir + "dim_research_group.csv")
 
 
 def fat_group_leaders():
@@ -304,7 +302,7 @@ def fat_group_leaders():
         ],
     )
 
-    df.to_csv(dir + "fat_group_leaders.csv")
+    df.to_csv(csv_dir + "fat_group_leaders.csv")
 
 
 def fat_departament_csv_bd():
@@ -321,7 +319,7 @@ def fat_departament_csv_bd():
     df_bd = pd.DataFrame(
         reg, columns=["dep_id", "dep_nom", "institution", "institution_id"]
     )
-    df_bd.to_csv(dir + "dim_departament.csv")
+    df_bd.to_csv(csv_dir + "dim_departament.csv")
 
 
 def dim_departament_researcher():
@@ -330,7 +328,7 @@ def dim_departament_researcher():
         """
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(reg, columns=["dep_id", "researcher_id"])
-    df_bd.to_csv(dir + "dim_departament_researcher.csv")
+    df_bd.to_csv(csv_dir + "dim_departament_researcher.csv")
 
 
 def dim_departament_technician():
@@ -341,7 +339,7 @@ def dim_departament_technician():
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(registry, columns=["dep_id", "technician_id"])
 
-    data_frame.to_csv(dir + "dim_departament_technician.csv")
+    data_frame.to_csv(csv_dir + "dim_departament_technician.csv")
 
 
 def researcher_production_tecnical_year_csv_db():
@@ -361,7 +359,7 @@ def researcher_production_tecnical_year_csv_db():
 
     logger.debug(sql)
 
-    df_bd.to_csv(dir + "production_tecnical_year.csv")
+    df_bd.to_csv(csv_dir + "production_tecnical_year.csv")
 
 
 def researcher_production_year_csv_db():
@@ -377,7 +375,7 @@ def researcher_production_year_csv_db():
         reg, columns=["title", "tipo", "researcher_id", "year", "institution"]
     )
 
-    df_bd.to_csv(dir + "production_year.csv")
+    df_bd.to_csv(csv_dir + "production_year.csv")
 
 
 def researcher_production_year_distinct_csv_db():
@@ -392,7 +390,7 @@ def researcher_production_year_distinct_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["year", "title", "tipo", "institution"])
 
-    df_bd.to_csv(dir + "production_year_distinct.csv")
+    df_bd.to_csv(csv_dir + "production_year_distinct.csv")
 
 
 def researcher_article_qualis_csv_db():
@@ -429,7 +427,7 @@ def researcher_article_qualis_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "article_qualis_year.csv")
+    df_bd.to_csv(csv_dir + "article_qualis_year.csv")
 
 
 def article_qualis_csv_distinct_db():
@@ -458,7 +456,7 @@ def article_qualis_csv_distinct_db():
         reg,
         columns=["title", "qualis", "jcr", "year", "institution", "city", "jcr_link"],
     )
-    df_bd.to_csv(dir + "article_qualis_year_institution.csv")
+    df_bd.to_csv(csv_dir + "article_qualis_year_institution.csv")
 
 
 def researcher_production_csv_db():
@@ -490,7 +488,7 @@ def researcher_production_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "production__researcher.csv")
+    df_bd.to_csv(csv_dir + "production__researcher.csv")
 
 
 def researcher_csv_db():
@@ -514,7 +512,7 @@ def researcher_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "researcher.csv")
+    df_bd.to_csv(csv_dir + "researcher.csv")
 
 
 def institution_csv_db():
@@ -529,7 +527,7 @@ def institution_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym"])
 
-    df_bd.to_csv(dir + "dim_institution.csv")
+    df_bd.to_csv(csv_dir + "dim_institution.csv")
 
 
 def researcher_production_novo_csv_db():
@@ -575,7 +573,7 @@ def researcher_production_novo_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "researcher_production_novo_csv_db.csv")
+    df_bd.to_csv(csv_dir + "researcher_production_novo_csv_db.csv")
 
 
 def article_distinct_novo_csv_db():
@@ -615,7 +613,7 @@ def article_distinct_novo_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "article_distinct_novo_csv_db.csv")
+    df_bd.to_csv(csv_dir + "article_distinct_novo_csv_db.csv")
 
 
 def production_coauthors_csv_db():
@@ -645,7 +643,7 @@ def production_coauthors_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "production_coauthors_csv_db.csv")
+    df_bd.to_csv(csv_dir + "production_coauthors_csv_db.csv")
 
 
 def production_distinct_novo_csv_db():
@@ -685,7 +683,7 @@ def production_distinct_novo_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "production_distinct_novo_csv_db.csv")
+    df_bd.to_csv(csv_dir + "production_distinct_novo_csv_db.csv")
 
 
 # Função processar e inserir a produção de cada pesquisador
@@ -758,7 +756,7 @@ def production_tecnical_year_novo_csv_db():
         reg, columns=["title", "year", "type", "graduate_program_id", "year_pos"]
     )
 
-    df_bd.to_csv(dir + "production_tecnical_year_novo_csv_db.csv")
+    df_bd.to_csv(csv_dir + "production_tecnical_year_novo_csv_db.csv")
 
 
 def graduate_program_researcher_csv_db():
@@ -777,7 +775,7 @@ def graduate_program_researcher_csv_db():
         reg, columns=["researcher_id", "graduate_program_id", "year", "type_"]
     )
 
-    df_bd.to_csv(dir + "cimatec_graduate_program_researcher.csv")
+    df_bd.to_csv(csv_dir + "cimatec_graduate_program_researcher.csv")
 
 
 def graduate_program_student_researcher_csv_db():
@@ -792,14 +790,14 @@ def graduate_program_student_researcher_csv_db():
         registry, columns=["researcher_id", "graduate_program_id", "year"]
     )
 
-    data_frame_db.to_csv(dir + "cimatec_graduate_program_student.csv")
+    data_frame_db.to_csv(csv_dir + "cimatec_graduate_program_student.csv")
 
 
 def profnit_graduate_program_csv_db():
     df_bd = graduate_programSQL.graduate_program_profnit_db()
     logger.debug(profnit_graduate_program_csv_db)
 
-    df_bd.to_csv(dir + "profnit_graduate_program.csv")
+    df_bd.to_csv(csv_dir + "profnit_graduate_program.csv")
 
 
 def graduate_program_csv_db():
@@ -834,7 +832,7 @@ def graduate_program_csv_db():
         ],
     )
 
-    df_bd.to_csv(dir + "cimatec_graduate_program.csv")
+    df_bd.to_csv(csv_dir + "cimatec_graduate_program.csv")
 
 
 def ind_prod_researcher_csv_db():
@@ -873,7 +871,7 @@ def ind_prod_researcher_csv_db():
     )
 
     data_frame_db.to_csv(
-        dir + "fat_researcher_ind_prod.csv",
+        csv_dir + "fat_researcher_ind_prod.csv",
         decimal=",",
         sep=";",
         index=False,
@@ -895,7 +893,7 @@ def graduate_program_researcher_year_unnest():
 
     df = pd.DataFrame(reg, columns=["graduate_program_id", "researcher_id", "year"])
 
-    df.to_csv(dir + "graduate_program_researcher_year_unnest.csv")
+    df.to_csv(csv_dir + "graduate_program_researcher_year_unnest.csv")
 
 
 def dim_graduate_program_student_year_unnest():
@@ -911,7 +909,7 @@ def dim_graduate_program_student_year_unnest():
 
     df = pd.DataFrame(reg, columns=["graduate_program_id", "researcher_id", "year"])
 
-    df.to_csv(dir + "graduate_program_student_year_unnest.csv")
+    df.to_csv(csv_dir + "graduate_program_student_year_unnest.csv")
 
 
 def dim_graduate_program_acronym():
@@ -934,7 +932,7 @@ def dim_graduate_program_acronym():
         ],
     )
 
-    df.to_csv(dir + "dim_graduate_program_acronym.csv")
+    df.to_csv(csv_dir + "dim_graduate_program_acronym.csv")
 
 
 def graduate_program_ind_prod_csv_db():
@@ -972,7 +970,7 @@ def graduate_program_ind_prod_csv_db():
     )
 
     data_frame_db.to_csv(
-        dir + "graduate_program_ind_prod.csv",
+        csv_dir + "graduate_program_ind_prod.csv",
         decimal=",",
         sep=";",
         index=False,
@@ -981,22 +979,10 @@ def graduate_program_ind_prod_csv_db():
     )
 
 
-def data_csv():
-    list_data = []
-    hoje = str(datetime.now())
-
-    data = {"data": hoje}
-
-    list_data.append(data)
-    json_string = json.dumps(list_data)
-    df = pd.read_json(json_string)
-    df.to_csv(dir + "data.csv")
-
-
 if __name__ == "__main__":
-    log_dir = "Files/indicadores_simcc/"
+    csv_dir = "Files/indicadores_simcc/"
+    log_dir = "Files/log"
     log_file = "logfile_csv.log"
-
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
@@ -1012,7 +998,6 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.debug("Inicio")
 
-    data_csv()
     graduate_program_csv_db()
     graduate_program_researcher_csv_db()
     production_distinct_novo_csv_db()
