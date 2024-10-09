@@ -5,10 +5,10 @@ import os
 load_dotenv(override=True)
 
 
-def conecta_db():
+def conecta_db(database=None):
     return psycopg2.connect(
         host=os.getenv("DATABASE_HOST"),
-        database=os.getenv("DATABASE_NAME"),
+        database=database if database else os.getenv("DATABASE_NAME"),
         user=os.getenv("DATABASE_USER"),
         password=os.getenv("DATABASE_PASSWORD"),
     )

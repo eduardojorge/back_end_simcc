@@ -26,10 +26,10 @@ trap "rm -f $LOCK_FILE" EXIT
 
 echo "Iniciando execução do script em $DATE_FORMAT"
 
-# python3 "${MY_PROJECT_HOME}/soap_lattes_adm.py"
+python3 "${MY_PROJECT_HOME}/soap_lattes_adm.py"
 check_error "soap_lattes_adm.py"
 
-# "${JADE_EXTRATOR_FOLTER}/hop-run.sh" -r local -j Jade-Extrator-Hop -f "${PROJECT_HOME}/metadata/dataset/workflow/Index.hwf"
+"${JADE_EXTRATOR_FOLTER}/hop-run.sh" -r local -j Jade-Extrator-Hop -f "${PROJECT_HOME}/metadata/dataset/workflow/Index.hwf"
 check_error "hop-run.sh"
 
 python3 "${MY_PROJECT_HOME}/bd_population.py"

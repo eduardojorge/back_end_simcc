@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     city_id uuid,
     country_id uuid,
     has_image boolean NOT NULL DEFAULT false,
+    docente boolean NOT NULL DEFAULT false,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone,
     deleted_at timestamp without time zone,
@@ -423,7 +424,7 @@ CREATE TABLE IF NOT EXISTS public.JCR (
     citedHalfLife character varying,
     citingHalfLife character varying,
     jif2019 character varying,
-    url_revista character varying NOT NULL
+    url_revista character varying
 );
 CREATE TABLE IF NOT EXISTS public.researcher_production (
     researcher_production_id uuid NOT NULL DEFAULT uuid_generate_v4(),
