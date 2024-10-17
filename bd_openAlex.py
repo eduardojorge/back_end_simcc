@@ -95,11 +95,12 @@ def extract_article_tmp(id, data):
         authors_institution, language, citations_count, pdf, landing_page_url,
         keywords)
         VALUES (
-            '{id}', '{article_institution}', '{issn}', '{abstract}',
-            '{authors_list}', '{institutions_list}', '{language}',
-            '{citations_count}', '{download_link}', '{landing_page_url}',
-            '{keywords_list}');
+            $${id}$$, $${article_institution}$$, $${issn}$$, $${abstract}$$,
+            $${authors_list}$$, $${institutions_list}$$, $${language}$$,
+            $${citations_count}$$, $${download_link}$$, $${landing_page_url}$$,
+            $${keywords_list}$$);
         """
+
     sgbdSQL.execScript_db(script_sql)
 
 
