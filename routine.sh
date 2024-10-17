@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-MY_PROJECT_HOME="${PWD}"
-LOG_FILE="${HOME_SIMCC}/routine.log"
+MY_PROJECT_HOME=$(dirname "$(readlink -f "$0")")
+LOG_FILE="${MY_PROJECT_HOME}/routine.log"
+
 source "${MY_PROJECT_HOME}/.env"
 source "${MY_PROJECT_HOME}/.venv/bin/activate"
 

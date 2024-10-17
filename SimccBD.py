@@ -492,6 +492,7 @@ def lists_bibliographic_production_article_db(
         filter_graduate_program = f"""
             AND gpr.graduate_program_id = '{graduate_program_id}'
             """
+
     if dep_id:
         filter_departament = f"""
             AND r.id IN (

@@ -14,8 +14,8 @@ def conecta_db(database=None):
     )
 
 
-def execScript_db(sql, params=None):
-    con = conecta_db()
+def execScript_db(sql, params=None, database=None):
+    con = conecta_db() if database is None else conecta_db(database=database)
     cur = con.cursor()
     try:
         cur.execute(sql, params)

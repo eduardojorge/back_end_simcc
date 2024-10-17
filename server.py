@@ -3,7 +3,7 @@ import sys
 import nltk
 import unidecode
 from flask import Flask, jsonify, request, send_file
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from nltk.tokenize import RegexpTokenizer
 from http import HTTPStatus
 import Dao.areaFlowSQL

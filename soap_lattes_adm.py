@@ -37,8 +37,11 @@ def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
 def last_update(id: str) -> datetime:
     script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
     registry = sgbdSQL.consultar_db(script_sql)
-    resultado = registry[0][0] if registry else "01/01/0001 00:00:00"
-    return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
+    return (
+        registry[0][0]
+        if registry
+        else datetime.strptime("01/01/0001 00:00:00", "%d/%m/%Y %H:%M:%S")
+    )
 
 
 def get_id_cnpq(name: str = "", date: str = "", CPF: str = "") -> str:
