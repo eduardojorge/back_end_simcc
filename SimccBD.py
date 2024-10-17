@@ -113,7 +113,7 @@ def lists_research_groups(group_id):
         ],
     )
 
-    return data_frame.to_dict(orient="records")
+    return data_frame.fillna("").to_dict(orient="records")
 
 
 def list_research_lines(group_id):
