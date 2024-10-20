@@ -40,12 +40,12 @@ def extract_institutions(data):
 def extract_article_tmp(id, data):
     try:
         issn = str(", ").join(data["primary_location"]["source"]["issn"])
-    except:
+    except Exception:
         issn = str()
 
     try:
         article_institution = data["primary_location"]["source"]["display_name"]
-    except:
+    except Exception:
         article_institution = str()
 
     op_abstract = data["abstract_inverted_index"]
@@ -57,7 +57,7 @@ def extract_article_tmp(id, data):
             for word in item[1]:
                 abstract[word] = item[0].replace("'", " ")
         abstract = str(" ").join(abstract)
-    except:
+    except Exception:
         abstract = str()
 
     authors = data["authorships"]
@@ -70,7 +70,7 @@ def extract_article_tmp(id, data):
     for institutions in authors:
         try:
             institutions_list.append(author["institutions"][0]["display_name"])
-        except:
+        except Exception:
             institutions_list.append("")
     institutions_list = str("; ").join(institutions_list)
 

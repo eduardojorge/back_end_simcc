@@ -23,20 +23,39 @@ def article_prod():
         """
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
-    df_ind_prod_base_article = pd.DataFrame(
+    data_frame = pd.DataFrame(
         registry, columns=["year", "qualis", "count_article", "researcher_id"]
     )
-    df_ind_prod_base_article = df_ind_prod_base_article.pivot_table(
+    data_frame = data_frame.pivot_table(
         index=["year", "researcher_id"],
         columns="qualis",
         values="count_article",
         aggfunc="sum",
         fill_value=0,
     )
-    df_ind_prod_base_article.reset_index(inplace=True)
+    data_frame.reset_index(inplace=True)
 
-    df_ind_prod_base_article["year"] = df_ind_prod_base_article["year"].astype(int)
-    return df_ind_prod_base_article
+    SCRIPT_SQL = """
+        SELECT
+            bp.researcher_id,
+            bp.year,
+            COUNT(bpa.jcr)
+        FROM bibliographic_production bp
+        INNER JOIN bibliographic_production_article bpa ON 
+            bpa.bibliographic_production_id = bp.id 
+            AND bpa.jcr IS NOT NULL
+        GROUP BY
+            researcher_id, year
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    df = pd.DataFrame(registry, columns=["researcher_id", "year", "JCR"])
+
+    data_frame = pd.merge(data_frame, df, on=["researcher_id", "year"], how="left")
+
+    data_frame["year"] = data_frame["year"].astype(int)
+
+    return data_frame
 
 
 def book_prod():
@@ -120,6 +139,12 @@ def patent_prod():
         fill_value=0,
     ).reset_index()
 
+    if "PATENT_GRANTED" not in df_pivot.columns:
+        df_pivot["PATENT_GRANTED"] = 0
+
+    if "PATENT_NOT_GRANTED" not in df_pivot.columns:
+        df_pivot["PATENT_NOT_GRANTED"] = 0
+
     return df_pivot
 
 
@@ -177,7 +202,7 @@ def guidance_prod():
             guidance g
         GROUP BY
             g.year, nature_status, researcher_id;
-        """
+    """
 
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
@@ -192,6 +217,7 @@ def guidance_prod():
         values="count_nature",
         fill_value=0,
     ).reset_index()
+
     rename_dict = {
         "iniciacao cientifica concluida": "GUIDANCE_IC_C",
         "iniciacao cientifica em andamento": "GUIDANCE_IC_A",
@@ -207,8 +233,12 @@ def guidance_prod():
         "supervisao de pos-doutorado concluida": "GUIDANCE_SD_C",
         "supervisao de pos-doutorado em andamento": "GUIDANCE_SD_A",
     }
+
     data_frame_guidance.rename(columns=rename_dict, inplace=True)
 
+    data_frame_guidance = data_frame_guidance.reindex(
+        columns=["year", "researcher_id"] + list(rename_dict.values()), fill_value=0
+    )
     return data_frame_guidance
 
 
@@ -252,6 +282,28 @@ def work_in_event_prod():
         columns=["year", "WORK_IN_EVENT", "researcher_id"],
     )
     data_frame["year"] = data_frame["year"].astype(int)
+    return data_frame
+
+
+def research_project_prod():
+    SCRIPT_SQL = """
+        SELECT 
+            researcher_id,
+            end_year,
+            COUNT(*)
+        FROM 
+            research_project
+        WHERE
+            end_year IS NOT NULL
+        GROUP BY 
+            researcher_id, end_year;
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(
+        registry, columns=["researcher_id", "year", "RESEARCH_PROJECT"]
+    )
+
     return data_frame
 
 
@@ -382,7 +434,7 @@ def researcher_data():
     return data_frame
 
 
-def classificar_pesquisador(researcher):
+def class_researcher(researcher):
     year = datetime.datetime.now().year
     GUIDANCE_DOC = researcher["GUIDANCE_D_C"] + researcher["GUIDANCE_D_A"]
     GUIDANCE_MAS = researcher["GUIDANCE_M_C"] + researcher["GUIDANCE_M_A"]
@@ -440,6 +492,109 @@ def classificar_pesquisador(researcher):
     return "E"
 
 
+def education_prod():
+    SCRIPT_SQL = """
+        SELECT 
+            researcher_id, 
+            degree, 
+            education_end as year,  
+            COUNT(*) AS total  
+        FROM 
+            education 
+        WHERE
+            education_end IS NOT NULL
+        GROUP BY 
+            researcher_id, 
+            degree, 
+            education_end
+        ORDER BY 
+            researcher_id;
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(
+        registry, columns=["researcher_id", "degree", "year", "count"]
+    )
+    data_frame = data_frame.pivot_table(
+        index=["researcher_id", "year"],
+        columns="degree",
+        values="count",
+        fill_value=0,
+    ).reset_index()
+    data_frame = data_frame.reindex(
+        columns=["researcher_id", "year"]
+        + ["DOUTORADO", "ESPECIALIZACAO", "MESTRADO", "GRADUACAO"],
+        fill_value=0,
+    )
+    return data_frame
+
+
+def apply_barema(data_frame):
+    data_frame["BAREMA_MESTRADO"] = data_frame["MESTRADO"].apply(
+        lambda x: 1.5 if x > 0 else 0
+    )
+    data_frame["BAREMA_ESPECIALIZACAO"] = (
+        data_frame["ESPECIALIZACAO"].clip(upper=2) * 0.25
+    )
+
+    data_frame["BAREMA_RESEARCH_PROJECT"] = (
+        data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
+    )
+
+    data_frame["BAREMA_RESEARCH_PROJECT"] = (
+        data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
+    )
+
+    INDEXED = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR"]
+    data_frame["BAREMA_INDEXED_ARTICLE"] = data_frame[INDEXED].sum(axis=1)
+
+    data_frame["BAREMA_INDEXED_ARTICLE"] = (
+        data_frame["BAREMA_INDEXED_ARTICLE"].clip(upper=3) * 0.5
+    )
+
+    data_frame["BAREMA_NOT_INDEXED_ARTICLE"] = data_frame["SQ"].clip(upper=2) * 0.25
+
+    data_frame["BAREMA_BOOK"] = data_frame["BOOK"].clip(upper=3) * 0.5
+
+    data_frame["BAREMA_BOOK_CHAPTER"] = data_frame["BOOK_CHAPTER"].clip(upper=4) * 0.25
+
+    THECHNICAL_PRODUCTION = [
+        "SOFTWARE",
+        "PATENT_NOT_GRANTED",
+        "PATENT_GRANTED",
+        "BRAND",
+    ]
+    data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
+        axis=1
+    )
+    data_frame["BAREMA_THECHNICAL_PRODUCTION"] = (
+        data_frame["BAREMA_THECHNICAL_PRODUCTION"].clip(upper=5) * 0.25
+    )
+
+    data_frame["BAREMA_EVENT_ORGANIZATION"] = (
+        data_frame["EVENT_ORGANIZATION"].clip(upper=5) * 0.10
+    )
+
+    GUIDANCE = [
+        "GUIDANCE_IC_C",
+        "GUIDANCE_IC_A",
+        "GUIDANCE_M_C",
+        "GUIDANCE_M_A",
+        "GUIDANCE_D_C",
+        "GUIDANCE_D_A",
+        "GUIDANCE_G_C",
+        "GUIDANCE_G_A",
+        "GUIDANCE_E_C",
+        "GUIDANCE_E_A",
+        "GUIDANCE_O_C",
+        "GUIDANCE_SD_C",
+        "GUIDANCE_SD_A",
+    ]
+    data_frame["BAREMA_GUIDANCE"] = data_frame[GUIDANCE].sum(axis=1)
+    data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
+    return data_frame
+
+
 weights = {
     "A1": 1,
     "A2": 0.875,
@@ -468,7 +623,7 @@ weights = {
 if __name__ == "__main__":
     load_dotenv(override=True)
 
-    year = list(range(2010, 2025))
+    year = list(range(1900, 2025))
 
     SCRIPT_SQL = "SELECT id FROM researcher"
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
@@ -524,23 +679,30 @@ if __name__ == "__main__":
         data_frame, participation_event_prod(), on=["year", "researcher_id"], how="left"
     )
 
-    data_frame.fillna(0, inplace=True)
+    data_frame = pd.merge(
+        data_frame, education_prod(), on=["year", "researcher_id"], how="left"
+    )
 
     data_frame = pd.merge(
-        data_frame, researcher_data(), on=["researcher_id"], how="left"
+        data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
     )
-    data_frame.to_csv(
-        "Files/researcher_group_years.csv", index=False, encoding="utf-8-sig"
-    )
+
+    data_frame.fillna(0, inplace=True)
 
     data_frame = data_frame.drop(columns="year")
 
     data_frame = data_frame.groupby("researcher_id").sum().reset_index()
 
+    data_frame = pd.merge(
+        data_frame, researcher_data(), on=["researcher_id"], how="left"
+    )
+
     data_frame["IND_PROD"] = sum(
         data_frame[col] * weight for col, weight in weights.items()
     )
 
-    data_frame["CLASS"] = data_frame.apply(classificar_pesquisador, axis=1)
+    data_frame = apply_barema(data_frame)
 
-    data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")
+    data_frame.to_csv(
+        "Files/researcher_group.csv", index=False, encoding="utf-8-sig", decimal=","
+    )
