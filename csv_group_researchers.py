@@ -541,10 +541,6 @@ def apply_barema(data_frame):
         data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
     )
 
-    data_frame["BAREMA_RESEARCH_PROJECT"] = (
-        data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
-    )
-
     INDEXED = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR"]
     data_frame["BAREMA_INDEXED_ARTICLE"] = data_frame[INDEXED].sum(axis=1)
 
