@@ -4,6 +4,10 @@ import pandas as pd
 import logging
 from dotenv import load_dotenv
 import os
+from datetime import datetime
+import json
+from io import StringIO
+
 
 load_dotenv(override=True)
 
@@ -530,6 +534,21 @@ def institution_csv_db():
     df_bd.to_csv(csv_dir + "dim_institution.csv")
 
 
+def save_data_to_csv():
+    list_data = []
+    hoje = str(datetime.now())
+    data = {"data": hoje}
+    list_data.append(data)
+
+    json_string = json.dumps(list_data)
+
+    json_buffer = StringIO(json_string)
+
+    df = pd.read_json(json_buffer)
+
+    df.to_csv(csv_dir + "data.csv")
+
+
 def researcher_production_novo_csv_db():
     sql = """
             
@@ -1031,3 +1050,4 @@ if __name__ == "__main__":
     dim_graduate_program_acronym()
     dim_graduate_program_student_year_unnest()
     graduate_program_student_researcher_csv_db()
+    save_data_to_csv()

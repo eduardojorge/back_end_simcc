@@ -293,8 +293,6 @@ def research_project_prod():
             COUNT(*)
         FROM 
             research_project
-        WHERE
-            end_year IS NOT NULL
         GROUP BY 
             researcher_id, end_year;
         """
@@ -619,7 +617,7 @@ weights = {
 if __name__ == "__main__":
     load_dotenv(override=True)
 
-    year = list(range(1900, 2025))
+    year = list(range(2019, 2025))
 
     SCRIPT_SQL = "SELECT id FROM researcher"
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
@@ -698,6 +696,12 @@ if __name__ == "__main__":
     )
 
     data_frame = apply_barema(data_frame)
+
+    df = pd.read_csv("Files/lattes_list.csv")
+
+    df["LATTES_ID"] = df["LATTES"].apply(lambda x: str(x).split("/")[-1])
+
+    data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
 
     data_frame.to_csv(
         "Files/researcher_group.csv", index=False, encoding="utf-8-sig", decimal=","

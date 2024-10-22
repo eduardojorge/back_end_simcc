@@ -1,4 +1,7 @@
-from zeep import Client
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 import sys
 import nltk
 import unidecode
@@ -19,7 +22,6 @@ from Rest.researcherTermRest import researcherTermRest
 from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from Rest.research_productionRest import productionRest
-from dotenv import load_dotenv
 
 YEAR = 1990
 try:
@@ -42,7 +44,7 @@ def create_app():
     return app
 
 
-client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
+# client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 app = create_app()
 
 
@@ -320,7 +322,6 @@ def get_productivityResearch():
 
 
 if __name__ == "__main__":
-    load_dotenv(override=True)
     app.run(
         debug=True,
         port=port,

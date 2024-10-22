@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
-
-load_dotenv(override=True)
 import pandas as pd
 from Dao import sgbdSQL
+
+load_dotenv(override=True)
 
 
 def article_prod(Data):
