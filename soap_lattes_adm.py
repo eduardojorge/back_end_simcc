@@ -51,13 +51,13 @@ def get_id_cnpq(name: str = "", date: str = "", CPF: str = "") -> str:
 
 
 def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
-    # if get_data_att(
-    #     id=id, alternative_cnpq_service=alternative_cnpq_service
-    # ) <= last_update(id):
-    #     msg = f"Currículo já está atualizado id: {id}"
-    #     print(msg)
-    #     logger.debug(msg)
-    #     return
+    if get_data_att(
+        id=id, alternative_cnpq_service=alternative_cnpq_service
+    ) <= last_update(id):
+        msg = f"Currículo já está atualizado id: {id}"
+        print(msg)
+        logger.debug(msg)
+        return
 
     msg = f"Currículo não atualizado id: {id}"
     print(msg)
