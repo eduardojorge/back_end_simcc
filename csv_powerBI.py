@@ -599,21 +599,25 @@ def article_distinct_novo_csv_db():
     sql = """
         SELECT 
             distinct title,
-            qualis,jcr,
+            bar.qualis,
+            bar.jcr,
             b.year as year,
             gp.graduate_program_id as graduate_program_id,
             b.year as year_pos,
-            b.type AS type 
+            periodical_magazine.name AS type
         FROM 
             bibliographic_production b 
             LEFT JOIN  bibliographic_production_article bar 
-            ON b.id = bar.bibliographic_production_id , 
+            ON b.id = bar.bibliographic_production_id 
+            LEFT JOIN periodical_magazine ON periodical_magazine.id = bar.periodical_magazine_id, 
             researcher r, graduate_program_researcher gpr, graduate_program gp
-        WHERE 
+        WHERE
             gpr.graduate_program_id = gp.graduate_program_id 
             AND gpr.researcher_id = r.id 
             AND r.id = b.researcher_id
             AND b.year::INT = ANY(gpr.year)
+            AND b.type = 'ARTICLE'
+            ------ AND gpr.type_ = 'PERMANENTE'
         order by qualis desc
    """
 

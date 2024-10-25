@@ -495,7 +495,6 @@ def education_prod():
         SELECT 
             researcher_id, 
             degree, 
-            education_end as year,  
             COUNT(*) AS total  
         FROM 
             education 
@@ -503,33 +502,40 @@ def education_prod():
             education_end IS NOT NULL
         GROUP BY 
             researcher_id, 
-            degree, 
-            education_end
+            degree
         ORDER BY 
             researcher_id;
         """
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
-    data_frame = pd.DataFrame(
-        registry, columns=["researcher_id", "degree", "year", "count"]
-    )
+    data_frame = pd.DataFrame(registry, columns=["researcher_id", "degree", "count"])
     data_frame = data_frame.pivot_table(
-        index=["researcher_id", "year"],
+        index=["researcher_id"],
         columns="degree",
         values="count",
         fill_value=0,
     ).reset_index()
     data_frame = data_frame.reindex(
-        columns=["researcher_id", "year"]
-        + ["DOUTORADO", "ESPECIALIZACAO", "MESTRADO", "GRADUACAO"],
+        columns=["researcher_id"]
+        + [
+            "DOUTORADO",
+            "ESPECIALIZACAO",
+            "MESTRADO",
+            "GRADUACAO",
+            "MESTRADO-PROFISSIONALIZANTE",
+        ],
         fill_value=0,
     )
     return data_frame
 
 
 def apply_barema(data_frame):
-    data_frame["BAREMA_MESTRADO"] = data_frame["MESTRADO"].apply(
-        lambda x: 1.5 if x > 0 else 0
+    print(data_frame.columns)
+    data_frame["BAREMA_MESTRADO"] = data_frame.apply(
+        lambda row: 1.5
+        if row["MESTRADO"] > 0 or row["MESTRADO-PROFISSIONALIZANTE"] > 0
+        else 0,
+        axis=1,
     )
     data_frame["BAREMA_ESPECIALIZACAO"] = (
         data_frame["ESPECIALIZACAO"].clip(upper=2) * 0.25
@@ -674,10 +680,6 @@ if __name__ == "__main__":
     )
 
     data_frame = pd.merge(
-        data_frame, education_prod(), on=["year", "researcher_id"], how="left"
-    )
-
-    data_frame = pd.merge(
         data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
     )
 
@@ -686,6 +688,10 @@ if __name__ == "__main__":
     data_frame = data_frame.drop(columns="year")
 
     data_frame = data_frame.groupby("researcher_id").sum().reset_index()
+
+    data_frame = pd.merge(
+        data_frame, education_prod(), on=["researcher_id"], how="left"
+    )
 
     data_frame = pd.merge(
         data_frame, researcher_data(), on=["researcher_id"], how="left"

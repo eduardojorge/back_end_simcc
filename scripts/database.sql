@@ -667,6 +667,71 @@ CREATE TABLE research_project_production (
     title TEXT,
     type VARCHAR(255)
 );
+CREATE TABLE IF NOT EXISTS public.technical_work (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    country VARCHAR,
+    title TEXT NOT NULL,
+    nature VARCHAR,
+    funding_institution VARCHAR,
+    duration INT,
+    year INT,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
+CREATE TABLE IF NOT EXISTS public.technical_work_presentation (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    country VARCHAR,
+    title TEXT NOT NULL,
+    nature VARCHAR,
+    year INT,
+	event_name VARCHAR,
+	promoting_institution VARCHAR,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
+CREATE TABLE IF NOT EXISTS public.technical_work_program (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    country VARCHAR,
+    title TEXT NOT NULL,
+    nature VARCHAR,
+    year INT,
+	theme VARCHAR,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
+CREATE TABLE IF NOT EXISTS public.technological_product (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    country VARCHAR,
+    title TEXT NOT NULL,
+    nature VARCHAR,
+	type VARCHAR,
+    year INT,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
+CREATE TABLE IF NOT EXISTS public.didactic_material (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    title TEXT NOT NULL,
+    country VARCHAR,
+    nature VARCHAR,
+	description TEXT,
+    year INT,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
+CREATE TABLE IF NOT EXISTS public.artistic_production (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL,
+    title TEXT NOT NULL,
+    year INT,
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
+);
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;
 CREATE TABLE IF NOT EXISTS embeddings.abstract (
