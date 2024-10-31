@@ -5,15 +5,13 @@ import logging
 import pandas as pd
 import os
 from datetime import datetime
-from zeep import Client
-from dotenv import load_dotenv
 import urllib3
 from config import settings
+from zeep import Client
 
+client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
-load_dotenv(override=True)
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 

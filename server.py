@@ -1,7 +1,4 @@
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
-
+import shutil
 import sys
 import nltk
 import unidecode
@@ -22,6 +19,10 @@ from Rest.researcherTermRest import researcherTermRest
 from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from Rest.research_productionRest import productionRest
+from zeep import Client
+from csv_powerBI import csv_powerBI
+
+client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 
 YEAR = 1990
 try:
@@ -319,6 +320,14 @@ def get_research_group_count():
 def get_productivityResearch():
     productivity_research = SimccBD.list_productivity_research()
     return productivity_research
+
+
+@app.route("/download-indicadores", methods=["GET"])
+def download_indicadores():
+    csv_powerBI()
+    path = "Files/indicadores_simcc.zip"
+    shutil.make_archive("Files/indicadores_simcc", "zip", "Files", "indicadores_simcc")
+    return send_file(path, as_attachment=True)
 
 
 if __name__ == "__main__":

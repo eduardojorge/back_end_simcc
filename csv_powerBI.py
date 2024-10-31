@@ -1,15 +1,12 @@
 import Dao.sgbdSQL as sgbdSQL
 import Dao.graduate_programSQL as graduate_programSQL
 import pandas as pd
-import logging
-from dotenv import load_dotenv
-import os
 from datetime import datetime
 import json
 from io import StringIO
 
 
-load_dotenv(override=True)
+csv_dir = "Files/indicadores_simcc/"
 
 
 def fat_simcc_bibliographic_production():
@@ -41,8 +38,6 @@ def fat_simcc_bibliographic_production():
     """
 
     reg = sgbdSQL.consultar_db(sql)
-
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(
         reg,
@@ -78,8 +73,6 @@ def dim_researcher_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    logger.debug(sql)
-
     df_bd = pd.DataFrame(
         reg,
         columns=[
@@ -107,8 +100,6 @@ def dim_institution_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    logger.debug(sql)
-
     df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym "])
 
     df_bd.to_csv(csv_dir + "dim_institution.csv")
@@ -123,8 +114,6 @@ def dim_city_csv_db():
             city c"""
 
     reg = sgbdSQL.consultar_db(sql)
-
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(reg, columns=["city_id", "name"])
 
@@ -361,8 +350,6 @@ def researcher_production_tecnical_year_csv_db():
 
     df_bd = pd.DataFrame(reg, columns=["researcher_id", "title", "year", "type"])
 
-    logger.debug(sql)
-
     df_bd.to_csv(csv_dir + "production_tecnical_year.csv")
 
 
@@ -503,8 +490,6 @@ def researcher_csv_db():
 
     reg = sgbdSQL.consultar_db(sql)
 
-    logger.debug(sql)
-
     df_bd = pd.DataFrame(
         reg,
         columns=[
@@ -526,8 +511,6 @@ def institution_csv_db():
         FROM  institution i """
 
     reg = sgbdSQL.consultar_db(sql)
-
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(reg, columns=["institution_id", "name", "acronym"])
 
@@ -573,8 +556,6 @@ def researcher_production_novo_csv_db():
          """
 
     reg = sgbdSQL.consultar_db(sql)
-
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(
         reg,
@@ -622,7 +603,7 @@ def article_distinct_novo_csv_db():
    """
 
     reg = sgbdSQL.consultar_db(sql)
-    logger.debug(sql)
+
     df_bd = pd.DataFrame(
         reg,
         columns=[
@@ -651,7 +632,7 @@ def production_coauthors_csv_db():
     """
 
     reg = sgbdSQL.consultar_db(sql)
-    logger.debug(sql)
+
     df_bd = pd.DataFrame(
         reg,
         columns=[
@@ -692,7 +673,7 @@ def production_distinct_novo_csv_db():
     """
 
     reg = sgbdSQL.consultar_db(sql)
-    logger.debug(sql)
+
     df_bd = pd.DataFrame(
         reg,
         columns=[
@@ -792,7 +773,6 @@ def graduate_program_researcher_csv_db():
     FROM graduate_program_researcher
     """
     reg = sgbdSQL.consultar_db(sql)
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(
         reg, columns=["researcher_id", "graduate_program_id", "year", "type_"]
@@ -839,7 +819,6 @@ def graduate_program_csv_db():
     """
 
     reg = sgbdSQL.consultar_db(sql)
-    logger.debug(sql)
 
     df_bd = pd.DataFrame(
         reg,
@@ -1002,25 +981,7 @@ def graduate_program_ind_prod_csv_db():
     )
 
 
-if __name__ == "__main__":
-    csv_dir = "Files/indicadores_simcc/"
-    log_dir = "Files/log"
-    log_file = "logfile_csv.log"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-
-    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
-
-    logging.basicConfig(
-        filename=os.path.join(log_dir, log_file),
-        filemode="w",
-        format=Log_Format,
-        level=logging.DEBUG,
-    )
-
-    logger = logging.getLogger()
-    logger.debug("Inicio")
-
+def csv_powerBI():
     graduate_program_csv_db()
     graduate_program_researcher_csv_db()
     production_distinct_novo_csv_db()
@@ -1055,3 +1016,7 @@ if __name__ == "__main__":
     dim_graduate_program_student_year_unnest()
     graduate_program_student_researcher_csv_db()
     save_data_to_csv()
+
+
+if __name__ == "__main__":
+    csv_powerBI()

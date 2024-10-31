@@ -673,14 +673,24 @@ if __name__ == "__main__":
 
     data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
 
-    data_frame.infer_objects(copy=False).fillna(0, inplace=True)
+    data_frame = apply_barema(data_frame)
 
-    columns = df.filter(regex="^BAREMA_").columns
-    print(columns)
-    # data_frame["TOTAL"] = data_frame[columns].sum()
+    columns = [
+        "BAREMA_MESTRADO",
+        "BAREMA_ESPECIALIZACAO",
+        "BAREMA_RESEARCH_PROJECT",
+        "BAREMA_INDEXED_ARTICLE",
+        "BAREMA_NOT_INDEXED_ARTICLE",
+        "BAREMA_BOOK",
+        "BAREMA_BOOK_CHAPTER",
+        "BAREMA_ARTISTIC_PRODUCTION",
+        "BAREMA_THECHNICAL_PRODUCTION",
+        "BAREMA_EVENT_ORGANIZATION",
+        "BAREMA_GUIDANCE",
+    ]
+    data_frame["TOTAL"] = data_frame[columns].sum(axis=1)
 
-    # data_frame = apply_barema(data_frame)
-    # for _, data in data_frame.iterrows():
-    #     print(data)
+    for _, data in data_frame.iterrows():
+        print(data)
 
     # data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")
