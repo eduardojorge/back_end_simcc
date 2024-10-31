@@ -619,7 +619,8 @@ weights = {
     "GUIDANCE_IC_A": 0.1,
 }
 
-if __name__ == "__main__":
+
+def csv_group():
     year = list(range(2019, 2025))
 
     SCRIPT_SQL = "SELECT id FROM researcher;"
@@ -632,84 +633,89 @@ if __name__ == "__main__":
         researchers.assign(key=1), years.assign(key=1), on="key"
     ).drop("key", axis=1)
 
-    # data_frame = pd.merge(
-    #     data_frame, article_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, article_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, book_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, book_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, book_chapter_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, book_chapter_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, patent_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, patent_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, software_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, software_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, report_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, report_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, guidance_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, guidance_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, brand_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, brand_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, work_in_event_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, work_in_event_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, participation_event_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, participation_event_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame.fillna(0, inplace=True)
+    data_frame.fillna(0, inplace=True)
 
-    # data_frame = data_frame.drop(columns="year")
+    data_frame = data_frame.drop(columns="year")
 
-    # data_frame = data_frame.groupby("researcher_id").sum().reset_index()
+    data_frame = data_frame.groupby("researcher_id").sum().reset_index()
 
     data_frame = pd.merge(
         data_frame, education_prod(), on=["researcher_id"], how="left"
     )
-    print(data_frame)
 
-    # data_frame = pd.merge(
-    #     data_frame, researcher_data(), on=["researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, researcher_data(), on=["researcher_id"], how="left"
+    )
 
-    # data_frame["IND_PROD"] = sum(
-    #     data_frame[col] * weight for col, weight in weights.items()
-    # )
+    data_frame["IND_PROD"] = sum(
+        data_frame[col] * weight for col, weight in weights.items()
+    )
 
-    # data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")
+    data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")
 
-    data_frame = apply_barema(data_frame)
+    # data_frame = apply_barema(data_frame)
 
-    # SCRIPT_SQL = """
-    #     SELECT name, lattes_id FROM
-    #     researcher;
-    #     """
-    # registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
-    # df = pd.DataFrame(registry, columns=["NAME", "LATTES_ID"])
+    SCRIPT_SQL = """
+        SELECT name, lattes_id FROM
+        researcher;
+        """
+    registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
+    df = pd.DataFrame(registry, columns=["NAME", "LATTES_ID"])
 
-    # data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
+    data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
 
-    # data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")
+    data_frame.to_csv(
+        "Files/barema.csv", index=False, encoding="utf-8-sig", decimal=","
+    )
+
+
+if __name__ == "__main__":
+    csv_group()

@@ -21,6 +21,7 @@ from Rest.ufmgRest import ufmgRest
 from Rest.research_productionRest import productionRest
 from zeep import Client
 from csv_powerBI import csv_powerBI
+from csv_group_researchers import csv_group
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 
@@ -322,11 +323,18 @@ def get_productivityResearch():
     return productivity_research
 
 
-@app.route("/download-indicadores", methods=["GET"])
-def download_indicadores():
+@app.route("/csv_powerBI", methods=["GET"])
+def download_csv():
     csv_powerBI()
     path = "Files/indicadores_simcc.zip"
     shutil.make_archive("Files/indicadores_simcc", "zip", "Files", "indicadores_simcc")
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv_group", methods=["GET"])
+def download_csv_group():
+    csv_group()
+    path = "Files/researcher_group.csv"
     return send_file(path, as_attachment=True)
 
 
