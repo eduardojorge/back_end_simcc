@@ -300,7 +300,7 @@ def research_project_prod():
     data_frame = pd.DataFrame(
         registry, columns=["researcher_id", "year", "RESEARCH_PROJECT"]
     )
-
+    data_frame["year"] = data_frame["year"].fillna(2024)
     return data_frame
 
 
@@ -322,6 +322,24 @@ def event_organization_prod():
         columns=["year", "EVENT_ORGANIZATION", "researcher_id"],
     )
     data_frame["year"] = data_frame["year"].astype(int)
+    return data_frame
+
+
+def technical_artistic_production_prod():
+    SCRIPT_SQL = """
+        SELECT 
+            year,
+            COUNT(*),
+            researcher_id
+        FROM 
+            artistic_production
+        GROUP BY
+            year, researcher_id;
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+    data_frame = pd.DataFrame(
+        registry, columns=["year", "ARTISTIC_PRODUCTION", "researcher_id"]
+    )
     return data_frame
 
 
@@ -348,64 +366,10 @@ def participation_event_prod():
 def researcher_data():
     SCRIPT_SQL = """
         SELECT
-            researcher.id, researcher.name, researcher.graduation, researcher.lattes_id, education.education_end, i.acronym,
-            bp_book.year, bp_chapter.year, bp_article.year, bp_work.year, bp_text.year, p.development_year,
-            g.year, s.year
+            researcher.id, researcher.name, researcher.graduation, researcher.lattes_id, i.acronym
         FROM researcher
         LEFT JOIN institution i ON researcher.institution_id = i.id
-        LEFT JOIN (
-            SELECT researcher_id, MAX(education_end) AS education_end
-            FROM education
-            WHERE degree = 'DOUTORADO'
-            GROUP BY researcher_id
-        ) education ON researcher.id = education.researcher_id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM bibliographic_production
-            WHERE type = 'BOOK'
-            GROUP BY researcher_id
-        ) bp_book ON bp_book.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM bibliographic_production
-            WHERE type = 'BOOK_CHAPTER'
-            GROUP BY researcher_id
-        ) bp_chapter ON bp_chapter.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM bibliographic_production
-            WHERE type = 'ARTICLE'
-            GROUP BY researcher_id
-        ) bp_article ON bp_article.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM bibliographic_production
-            WHERE type = 'WORK_IN_EVENT'
-            GROUP BY researcher_id
-        ) bp_work ON bp_work.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM bibliographic_production
-            WHERE type = 'TEXT_IN_NEWSPAPER_MAGAZINE'
-            GROUP BY researcher_id
-        ) bp_text ON bp_text.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(development_year) AS development_year
-            FROM patent
-            GROUP BY researcher_id
-        ) p ON p.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM guidance
-            GROUP BY researcher_id
-        ) g ON g.researcher_id = researcher.id
-        LEFT JOIN (
-            SELECT researcher_id, MIN(YEAR) AS YEAR
-            FROM software
-            GROUP BY researcher_id
-        ) s ON s.researcher_id = researcher.id
-        GROUP BY researcher.id, researcher.name, researcher.graduation, education.education_end, i.acronym,
-            bp_book.year, bp_chapter.year, bp_article.year, bp_work.year, bp_text.year, p.development_year, g.year, s.year;
+        GROUP BY researcher.id, researcher.name, researcher.graduation, i.acronym;
         """
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
@@ -416,16 +380,7 @@ def researcher_data():
             "NAME",
             "GRADUATION",
             "LATTES_ID",
-            "FIRST_DOC",
             "INSTITUTION",
-            "MIN_BOOK",
-            "MIN_BOOK_CHAPTER",
-            "MIN_ARTICLE",
-            "MIN_WORK_IN_EVENT",
-            "MIN_TEXT_IN_NEWSPAPER_MAGAZINE",
-            "MIN_PATENT",
-            "MIN_GUIDANCE",
-            "MIN_SOFTWARE",
         ],
     )
     return data_frame
@@ -540,57 +495,61 @@ def apply_barema(data_frame):
         data_frame["ESPECIALIZACAO"].clip(upper=2) * 0.25
     )
 
-    # data_frame["BAREMA_RESEARCH_PROJECT"] = (
-    #     data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
-    # )
+    data_frame["BAREMA_RESEARCH_PROJECT"] = (
+        data_frame["RESEARCH_PROJECT"].clip(upper=3) * 0.5
+    )
 
-    # INDEXED = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR"]
-    # data_frame["BAREMA_INDEXED_ARTICLE"] = data_frame[INDEXED].sum(axis=1)
+    INDEXED = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR"]
+    data_frame["BAREMA_INDEXED_ARTICLE"] = data_frame[INDEXED].sum(axis=1)
 
-    # data_frame["BAREMA_INDEXED_ARTICLE"] = (
-    #     data_frame["BAREMA_INDEXED_ARTICLE"].clip(upper=3) * 0.5
-    # )
+    data_frame["BAREMA_INDEXED_ARTICLE"] = (
+        data_frame["BAREMA_INDEXED_ARTICLE"].clip(upper=3) * 0.5
+    )
 
-    # data_frame["BAREMA_NOT_INDEXED_ARTICLE"] = data_frame["SQ"].clip(upper=2) * 0.25
+    data_frame["BAREMA_NOT_INDEXED_ARTICLE"] = data_frame["SQ"].clip(upper=2) * 0.25
 
-    # data_frame["BAREMA_BOOK"] = data_frame["BOOK"].clip(upper=3) * 0.5
+    data_frame["BAREMA_BOOK"] = data_frame["BOOK"].clip(upper=3) * 0.5
 
-    # data_frame["BAREMA_BOOK_CHAPTER"] = data_frame["BOOK_CHAPTER"].clip(upper=4) * 0.25
+    data_frame["BAREMA_BOOK_CHAPTER"] = data_frame["BOOK_CHAPTER"].clip(upper=4) * 0.25
 
-    # THECHNICAL_PRODUCTION = [
-    #     "SOFTWARE",
-    #     "PATENT_NOT_GRANTED",
-    #     "PATENT_GRANTED",
-    #     "BRAND",
-    # ]
-    # data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
-    #     axis=1
-    # )
-    # data_frame["BAREMA_THECHNICAL_PRODUCTION"] = (
-    #     data_frame["BAREMA_THECHNICAL_PRODUCTION"].clip(upper=5) * 0.25
-    # )
+    data_frame["BAREMA_ARTISTIC_PRODUCTION"] = (
+        data_frame["ARTISTIC_PRODUCTION"].clip(upper=4) * 0.25
+    )
 
-    # data_frame["BAREMA_EVENT_ORGANIZATION"] = (
-    #     data_frame["EVENT_ORGANIZATION"].clip(upper=5) * 0.10
-    # )
+    THECHNICAL_PRODUCTION = [
+        "SOFTWARE",
+        "PATENT_NOT_GRANTED",
+        "PATENT_GRANTED",
+        "BRAND",
+    ]
+    data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
+        axis=1
+    )
+    data_frame["BAREMA_THECHNICAL_PRODUCTION"] = (
+        data_frame["BAREMA_THECHNICAL_PRODUCTION"].clip(upper=5) * 0.25
+    )
 
-    # GUIDANCE = [
-    #     "GUIDANCE_IC_C",
-    #     "GUIDANCE_IC_A",
-    #     "GUIDANCE_M_C",
-    #     "GUIDANCE_M_A",
-    #     "GUIDANCE_D_C",
-    #     "GUIDANCE_D_A",
-    #     "GUIDANCE_G_C",
-    #     "GUIDANCE_G_A",
-    #     "GUIDANCE_E_C",
-    #     "GUIDANCE_E_A",
-    #     "GUIDANCE_O_C",
-    #     "GUIDANCE_SD_C",
-    #     "GUIDANCE_SD_A",
-    # ]
-    # data_frame["BAREMA_GUIDANCE"] = data_frame[GUIDANCE].sum(axis=1)
-    # data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
+    data_frame["BAREMA_EVENT_ORGANIZATION"] = (
+        data_frame["EVENT_ORGANIZATION"].clip(upper=5) * 0.10
+    )
+
+    GUIDANCE = [
+        "GUIDANCE_IC_C",
+        "GUIDANCE_IC_A",
+        "GUIDANCE_M_C",
+        "GUIDANCE_M_A",
+        "GUIDANCE_D_C",
+        "GUIDANCE_D_A",
+        "GUIDANCE_G_C",
+        "GUIDANCE_G_A",
+        "GUIDANCE_E_C",
+        "GUIDANCE_E_A",
+        "GUIDANCE_O_C",
+        "GUIDANCE_SD_C",
+        "GUIDANCE_SD_A",
+    ]
+    data_frame["BAREMA_GUIDANCE"] = data_frame[GUIDANCE].sum(axis=1)
+    data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
     return data_frame
 
 
@@ -632,84 +591,96 @@ if __name__ == "__main__":
         researchers.assign(key=1), years.assign(key=1), on="key"
     ).drop("key", axis=1)
 
-    # data_frame = pd.merge(
-    #     data_frame, article_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, article_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, book_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, book_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, book_chapter_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, book_chapter_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, patent_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame,
+        technical_artistic_production_prod(),
+        on=["year", "researcher_id"],
+        how="left",
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, software_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, patent_prod(), on=["year", "researcher_id"], how="left"
+    )
+
+    data_frame = pd.merge(
+        data_frame, software_prod(), on=["year", "researcher_id"], how="left"
+    )
 
     # data_frame = pd.merge(
     #     data_frame, report_prod(), on=["year", "researcher_id"], how="left"
     # )
 
-    # data_frame = pd.merge(
-    #     data_frame, guidance_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, guidance_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame = pd.merge(
-    #     data_frame, brand_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, brand_prod(), on=["year", "researcher_id"], how="left"
+    )
 
     # data_frame = pd.merge(
     #     data_frame, work_in_event_prod(), on=["year", "researcher_id"], how="left"
     # )
 
-    # data_frame = pd.merge(
-    #     data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
+    )
 
     # data_frame = pd.merge(
     #     data_frame, participation_event_prod(), on=["year", "researcher_id"], how="left"
     # )
 
-    # data_frame = pd.merge(
-    #     data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
+    )
 
-    # data_frame.fillna(0, inplace=True)
+    data_frame.infer_objects(copy=False).fillna(0, inplace=True)
 
-    # data_frame = data_frame.drop(columns="year")
+    data_frame = data_frame.drop(columns="year")
 
-    # data_frame = data_frame.groupby("researcher_id").sum().reset_index()
+    data_frame = data_frame.groupby("researcher_id").sum().reset_index()
+
+    ### Abaixo, todos os campos que não dependem dos anos
+    data_frame = pd.merge(
+        data_frame,
+        education_prod().groupby("researcher_id").sum(),
+        on=["researcher_id"],
+        how="left",
+    )
 
     data_frame = pd.merge(
-        data_frame, education_prod(), on=["researcher_id"], how="left"
+        data_frame, researcher_data(), on=["researcher_id"], how="left"
     )
-    print(data_frame)
 
-    # data_frame = pd.merge(
-    #     data_frame, researcher_data(), on=["researcher_id"], how="left"
-    # )
+    SCRIPT_SQL = """
+        SELECT lattes_id FROM
+        researcher;
+        """
+    registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
+    df = pd.DataFrame(registry, columns=["LATTES_ID"])
 
-    # data_frame["IND_PROD"] = sum(
-    #     data_frame[col] * weight for col, weight in weights.items()
-    # )
+    data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
 
-    # data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")
+    data_frame.infer_objects(copy=False).fillna(0, inplace=True)
 
-    data_frame = apply_barema(data_frame)
+    columns = df.filter(regex="^BAREMA_").columns
+    print(columns)
+    # data_frame["TOTAL"] = data_frame[columns].sum()
 
-    # SCRIPT_SQL = """
-    #     SELECT name, lattes_id FROM
-    #     researcher;
-    #     """
-    # registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
-    # df = pd.DataFrame(registry, columns=["NAME", "LATTES_ID"])
-
-    # data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
+    # data_frame = apply_barema(data_frame)
+    # for _, data in data_frame.iterrows():
+    #     print(data)
 
     # data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")

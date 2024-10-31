@@ -1,16 +1,14 @@
-from dotenv import load_dotenv
 import psycopg2
-import os
-
-load_dotenv(override=True)
+from config import settings
 
 
 def conecta_db(database=None):
     return psycopg2.connect(
-        host=os.getenv("DATABASE_HOST"),
-        database=database if database else os.getenv("DATABASE_NAME"),
-        user=os.getenv("DATABASE_USER"),
-        password=os.getenv("DATABASE_PASSWORD"),
+        host=settings.DATABASE_HOST,
+        database=database if database else settings.DATABASE_NAME,
+        user=settings.DATABASE_USER,
+        password=settings.DATABASE_PASSWORD,
+        port=settings.PORT,
     )
 
 

@@ -20,6 +20,7 @@ langchain-openai = "^0.2.0"
 beautifulsoup4 = "^4.12.3"
 gunicorn = "^23.0.0"
 firebase-admin = "^6.5.0"
+pydantic-settings = "^2.6.0"
 
 
 [build-system]

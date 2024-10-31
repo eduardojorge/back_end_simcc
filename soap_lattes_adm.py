@@ -8,6 +8,7 @@ from datetime import datetime
 from zeep import Client
 from dotenv import load_dotenv
 import urllib3
+from config import settings
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -114,10 +115,13 @@ if __name__ == "__main__":
     )
     logger = logging.getLogger()
 
-    if os.getenv("ALTERNATIVE_CNPQ_SERVICE", False):
+    if settings.ALTERNATIVE_CNPQ_SERVICE:
         print("baixando curriculos pelo Tupi")
 
-    dir = f'{os.environ["JADE_EXTRATOR_FOLTER"]}/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
+    dir = (
+        settings.JADE_EXTRATOR_FOLTER
+        + "/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/"
+    )
 
     for Files in os.listdir(dir):
         try:
