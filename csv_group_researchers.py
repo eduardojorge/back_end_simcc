@@ -528,72 +528,6 @@ def education_prod():
     return data_frame
 
 
-def apply_barema(data_frame):
-    data_frame["BAREMA_MESTRADO"] = data_frame.apply(
-        lambda row: 1.5
-        if row["MESTRADO"] > 0 or row["MESTRADO-PROFISSIONALIZANTE"] > 0
-        else 0,
-        axis=1,
-    )
-
-    data_frame["BAREMA_ESPECIALIZACAO"] = (
-        data_frame["ESPECIALIZACAO"].clip(upper=2) * 0.25
-    )
-
-    # data_frame["BAREMA_RESEARCH_PROJECT"] = (
-    #     data_frame["RESEARCH_PROJECT"].clip(upper=2) * 0.25
-    # )
-
-    # INDEXED = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR"]
-    # data_frame["BAREMA_INDEXED_ARTICLE"] = data_frame[INDEXED].sum(axis=1)
-
-    # data_frame["BAREMA_INDEXED_ARTICLE"] = (
-    #     data_frame["BAREMA_INDEXED_ARTICLE"].clip(upper=3) * 0.5
-    # )
-
-    # data_frame["BAREMA_NOT_INDEXED_ARTICLE"] = data_frame["SQ"].clip(upper=2) * 0.25
-
-    # data_frame["BAREMA_BOOK"] = data_frame["BOOK"].clip(upper=3) * 0.5
-
-    # data_frame["BAREMA_BOOK_CHAPTER"] = data_frame["BOOK_CHAPTER"].clip(upper=4) * 0.25
-
-    # THECHNICAL_PRODUCTION = [
-    #     "SOFTWARE",
-    #     "PATENT_NOT_GRANTED",
-    #     "PATENT_GRANTED",
-    #     "BRAND",
-    # ]
-    # data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
-    #     axis=1
-    # )
-    # data_frame["BAREMA_THECHNICAL_PRODUCTION"] = (
-    #     data_frame["BAREMA_THECHNICAL_PRODUCTION"].clip(upper=5) * 0.25
-    # )
-
-    # data_frame["BAREMA_EVENT_ORGANIZATION"] = (
-    #     data_frame["EVENT_ORGANIZATION"].clip(upper=5) * 0.10
-    # )
-
-    # GUIDANCE = [
-    #     "GUIDANCE_IC_C",
-    #     "GUIDANCE_IC_A",
-    #     "GUIDANCE_M_C",
-    #     "GUIDANCE_M_A",
-    #     "GUIDANCE_D_C",
-    #     "GUIDANCE_D_A",
-    #     "GUIDANCE_G_C",
-    #     "GUIDANCE_G_A",
-    #     "GUIDANCE_E_C",
-    #     "GUIDANCE_E_A",
-    #     "GUIDANCE_O_C",
-    #     "GUIDANCE_SD_C",
-    #     "GUIDANCE_SD_A",
-    # ]
-    # data_frame["BAREMA_GUIDANCE"] = data_frame[GUIDANCE].sum(axis=1)
-    # data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
-    return data_frame
-
-
 weights = {
     "A1": 1,
     "A2": 0.875,
@@ -700,21 +634,6 @@ def csv_group():
     )
 
     data_frame.to_csv("Files/researcher_group.csv", index=False, encoding="utf-8-sig")
-
-    # data_frame = apply_barema(data_frame)
-
-    SCRIPT_SQL = """
-        SELECT name, lattes_id FROM
-        researcher;
-        """
-    registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
-    df = pd.DataFrame(registry, columns=["NAME", "LATTES_ID"])
-
-    data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
-
-    data_frame.to_csv(
-        "Files/barema.csv", index=False, encoding="utf-8-sig", decimal=","
-    )
 
 
 if __name__ == "__main__":

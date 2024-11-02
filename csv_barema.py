@@ -689,8 +689,9 @@ if __name__ == "__main__":
         "BAREMA_GUIDANCE",
     ]
     data_frame["TOTAL"] = data_frame[columns].sum(axis=1)
+    data_frame = data_frame[columns + ["TOTAL", "researcher_id"]]
 
     for _, data in data_frame.iterrows():
         print(data)
 
-    # data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")
+    data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")

@@ -1,4 +1,3 @@
-import shutil
 import sys
 import nltk
 import unidecode
@@ -20,8 +19,40 @@ from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from Rest.research_productionRest import productionRest
 from zeep import Client
-from csv_powerBI import csv_powerBI
-from csv_group_researchers import csv_group
+from csv_powerBI import (
+    graduate_program_csv_db,
+    graduate_program_researcher_csv_db,
+    production_distinct_novo_csv_db,
+    article_distinct_novo_csv_db,
+    researcher_production_novo_csv_db,
+    graduate_program_ind_prod_csv_db,
+    ind_prod_researcher_csv_db,
+    production_coauthors_csv_db,
+    researcher_production_year_csv_db,
+    researcher_production_year_distinct_csv_db,
+    researcher_article_qualis_csv_db,
+    researcher_production_csv_db,
+    article_qualis_csv_distinct_db,
+    researcher_csv_db,
+    researcher_production_tecnical_year_csv_db,
+    institution_csv_db,
+    fat_simcc_bibliographic_production,
+    dim_researcher_csv_db,
+    dim_institution_csv_db,
+    fat_production_tecnical_year_novo_csv_db,
+    dim_city_csv_db,
+    fat_foment,
+    dim_category_level_code,
+    dim_research_group,
+    fat_group_leaders,
+    dim_departament_researcher,
+    dim_departament_technician,
+    graduate_program_researcher_year_unnest,
+    dim_graduate_program_acronym,
+    dim_graduate_program_student_year_unnest,
+    graduate_program_student_researcher_csv_db,
+    save_data_to_csv,
+)
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 
@@ -286,7 +317,7 @@ def getCurriculoCompactado():
         arquivo.write(resultado)
         arquivo.close()
         return send_file(f"Files/xmls/{lattes_id}.zip", mimetype="application/zip")
-    except:
+    except Exception:
         return jsonify("Curriculo não encontrado")
 
 
@@ -323,18 +354,227 @@ def get_productivityResearch():
     return productivity_research
 
 
-@app.route("/csv_powerBI", methods=["GET"])
-def download_csv():
-    csv_powerBI()
-    path = "Files/indicadores_simcc.zip"
-    shutil.make_archive("Files/indicadores_simcc", "zip", "Files", "indicadores_simcc")
+@app.route("/csv/graduate_program_csv_db", methods=["GET"])
+def load_graduate_program_csv_db():
+    graduate_program_csv_db()
+    path = "Files/cimatec_graduate_program.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv_group", methods=["GET"])
-def download_csv_group():
-    csv_group()
-    path = "Files/researcher_group.csv"
+@app.route("/csv/graduate_program_researcher_csv_db", methods=["GET"])
+def load_graduate_program_researcher_csv_db():
+    graduate_program_researcher_csv_db()
+    path = "Files/cimatec_graduate_program_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/production_distinct_novo_csv_db", methods=["GET"])
+def load_production_distinct_novo_csv_db():
+    production_distinct_novo_csv_db()
+    path = "Files/production_distinct_novo_csv_db.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/article_distinct_novo_csv_db", methods=["GET"])
+def load_article_distinct_novo_csv_db():
+    article_distinct_novo_csv_db()
+    path = "Files/article_distinct_novo_csv_db.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_production_novo_csv_db", methods=["GET"])
+def load_researcher_production_novo_csv_db():
+    researcher_production_novo_csv_db()
+    path = "Files/researcher_production_novo_csv_db.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/graduate_program_ind_prod_csv_db", methods=["GET"])
+def load_graduate_program_ind_prod_csv_db():
+    graduate_program_ind_prod_csv_db()
+    path = "Files/graduate_program_ind_prod.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/ind_prod_researcher_csv_db", methods=["GET"])
+def load_ind_prod_researcher_csv_db():
+    ind_prod_researcher_csv_db()
+    path = "Files/fat_researcher_ind_prod.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/production_coauthors_csv_db", methods=["GET"])
+def load_production_coauthors_csv_db():
+    production_coauthors_csv_db()
+    path = "Files/production_coauthors_csv_db.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_production_year_csv_db", methods=["GET"])
+def load_researcher_production_year_csv_db():
+    researcher_production_year_csv_db()
+    path = "Files/production_year.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_production_year_distinct_csv_db", methods=["GET"])
+def load_researcher_production_year_distinct_csv_db():
+    researcher_production_year_distinct_csv_db()
+    path = "Files/production_year_distinct.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_article_qualis_csv_db", methods=["GET"])
+def load_researcher_article_qualis_csv_db():
+    researcher_article_qualis_csv_db()
+    path = "Files/article_qualis_year.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_production_csv_db", methods=["GET"])
+def load_researcher_production_csv_db():
+    researcher_production_csv_db()
+    path = "Files/production_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/article_qualis_csv_distinct_db", methods=["GET"])
+def load_article_qualis_csv_distinct_db():
+    article_qualis_csv_distinct_db()
+    path = "Files/article_qualis_year_institution.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_csv_db", methods=["GET"])
+def load_researcher_csv_db():
+    researcher_csv_db()
+    path = "Files/researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/researcher_production_tecnical_year_csv_db", methods=["GET"])
+def load_researcher_production_tecnical_year_csv_db():
+    researcher_production_tecnical_year_csv_db()
+    path = "Files/production_tecnical_year.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/institution_csv_db", methods=["GET"])
+def load_institution_csv_db():
+    institution_csv_db()
+    path = "Files/dim_institution.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/fat_simcc_bibliographic_production", methods=["GET"])
+def load_fat_simcc_bibliographic_production():
+    fat_simcc_bibliographic_production()
+    path = "Files/fat_simcc_bibliographic_production.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_researcher_csv_db", methods=["GET"])
+def load_dim_researcher_csv_db():
+    dim_researcher_csv_db()
+    path = "Files/dim_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_institution_csv_db", methods=["GET"])
+def load_dim_institution_csv_db():
+    dim_institution_csv_db()
+    path = "Files/dim_institution.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_city_csv_db", methods=["GET"])
+def load_dim_city_csv_db():
+    dim_city_csv_db()
+    path = "Files/dim_institution.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/fat_production_tecnical_year_novo_csv_db", methods=["GET"])
+def load_fat_production_tecnical_year_novo_csv_db():
+    fat_production_tecnical_year_novo_csv_db()
+    path = "Files/fat_production_tecnical_year_novo_csv_db.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/fat_foment", methods=["GET"])
+def load_fat_foment():
+    fat_foment()
+    path = "Files/fat_foment.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_category_level_code", methods=["GET"])
+def load_dim_category_level_code():
+    dim_category_level_code()
+    path = "Files/dim_category_level_code.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_research_group", methods=["GET"])
+def load_dim_research_group():
+    dim_research_group()
+    path = "Files/dim_research_group.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/fat_group_leaders", methods=["GET"])
+def load_fat_group_leaders():
+    fat_group_leaders()
+    path = "Files/fat_group_leaders.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_departament_researcher", methods=["GET"])
+def load_dim_departament_researcher():
+    dim_departament_researcher()
+    path = "Files/dim_departament_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_departament_technician", methods=["GET"])
+def load_dim_departament_technician():
+    dim_departament_technician()
+    path = "Files/dim_departament_technician.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/graduate_program_researcher_year_unnest", methods=["GET"])
+def load_graduate_program_researcher_year_unnest():
+    graduate_program_researcher_year_unnest()
+    path = "Files/graduate_program_researcher_year_unnest.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_graduate_program_acronym", methods=["GET"])
+def load_dim_graduate_program_acronym():
+    dim_graduate_program_acronym()
+    path = "Files/dim_graduate_program_acronym.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/dim_graduate_program_student_year_unnest", methods=["GET"])
+def load_dim_graduate_program_student_year_unnest():
+    dim_graduate_program_student_year_unnest()
+    path = "Files/graduate_program_student_year_unnest.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/graduate_program_student_researcher_csv_db", methods=["GET"])
+def load_graduate_program_student_researcher_csv_db():
+    graduate_program_student_researcher_csv_db()
+    path = "Files/cimatec_graduate_program_student.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/csv/save_data_to_csv", methods=["GET"])
+def load_save_data_to_csv():
+    save_data_to_csv()
+    path = "Files/data.csv"
     return send_file(path, as_attachment=True)
 
 

@@ -479,7 +479,7 @@ def researcher_production_csv_db():
         ],
     )
 
-    df_bd.to_csv(csv_dir + "production__researcher.csv")
+    df_bd.to_csv(csv_dir + "production_researcher.csv")
 
 
 def researcher_csv_db():
@@ -546,13 +546,7 @@ def researcher_production_novo_csv_db():
             PUBLIC.bibliographic_production b LEFT JOIN  bibliographic_production_article bar 
 			  ON b.id = bar.bibliographic_production_id , researcher r
           WHERE 
-          
          r.id =  b.researcher_id
-      
-         
-
-                    
-        
          """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -798,8 +792,6 @@ def graduate_program_student_researcher_csv_db():
 
 def profnit_graduate_program_csv_db():
     df_bd = graduate_programSQL.graduate_program_profnit_db()
-    logger.debug(profnit_graduate_program_csv_db)
-
     df_bd.to_csv(csv_dir + "profnit_graduate_program.csv")
 
 
@@ -987,8 +979,6 @@ def csv_powerBI():
     production_distinct_novo_csv_db()
     article_distinct_novo_csv_db()
     researcher_production_novo_csv_db()
-    researcher_production_tecnical_year_csv_db()
-    researcher_csv_db()
     graduate_program_ind_prod_csv_db()
     ind_prod_researcher_csv_db()
     production_coauthors_csv_db()
