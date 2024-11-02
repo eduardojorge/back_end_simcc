@@ -1,4 +1,3 @@
-import datetime
 import pandas as pd
 from Dao import sgbdSQL
 
@@ -363,6 +362,26 @@ def participation_event_prod():
     return data_frame
 
 
+def technical_work_program_prod():
+    SCRIPT_SQL = """
+        SELECT 
+            researcher_id,
+            COUNT(*),
+            year
+        FROM 
+            technical_work_program
+        GROUP BY
+            researcher_id, year
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=["researcher_id", "WORKING_ON_TV_OR_RADIO", "year"],
+    )
+    return data_frame
+
+
 def researcher_data():
     SCRIPT_SQL = """
         SELECT
@@ -384,64 +403,6 @@ def researcher_data():
         ],
     )
     return data_frame
-
-
-def class_researcher(researcher):
-    year = datetime.datetime.now().year
-    GUIDANCE_DOC = researcher["GUIDANCE_D_C"] + researcher["GUIDANCE_D_A"]
-    GUIDANCE_MAS = researcher["GUIDANCE_M_C"] + researcher["GUIDANCE_M_A"]
-    QUALIS_A = researcher["A1"] + researcher["A2"] + researcher["A3"] + researcher["A4"]
-    QUALIS_B = researcher["B1"] + researcher["B2"] + researcher["B3"] + researcher["B4"]
-
-    if year - researcher["FIRST_DOC"] >= 10:
-        if (researcher["A1"] >= 2 and GUIDANCE_DOC >= 4) or (
-            researcher["A1"] >= 1 and researcher["PATENT_GRANTED"] >= 1
-        ):
-            return "A+"
-        if (researcher["A1"] >= 1 and GUIDANCE_DOC >= 2) or (
-            researcher["PATENT_GRANTED"] >= 1
-        ):
-            return "A"
-
-    if year - researcher["FIRST_DOC"] >= 8:
-        if (QUALIS_A >= 2 and (GUIDANCE_MAS >= 2 or GUIDANCE_DOC >= 1)) or (
-            QUALIS_A >= 1
-            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
-        ):
-            return "B+"
-        if (QUALIS_A >= 1 and (GUIDANCE_MAS >= 2 or GUIDANCE_DOC >= 1)) or (
-            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
-        ):
-            return "B"
-
-    if year - researcher["FIRST_DOC"] >= 6:
-        if (QUALIS_A >= 2 and (GUIDANCE_MAS >= 1 or GUIDANCE_DOC >= 1)) or (
-            QUALIS_A >= 1
-            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
-        ):
-            return "C+"
-        if (QUALIS_A >= 1 and (GUIDANCE_MAS >= 1 or GUIDANCE_DOC >= 1)) or (
-            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
-        ):
-            return "C"
-
-    if year - researcher["FIRST_DOC"] >= 3:
-        if QUALIS_A >= 1 or (
-            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
-        ):
-            return "D"
-        if QUALIS_B >= 1 or (
-            researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3
-        ):
-            return "D+"
-
-    if year - researcher["FIRST_DOC"] > 0:
-        if QUALIS_B >= 1 or (
-            QUALIS_A >= 1
-            and (researcher["PATENT_GRANTED"] >= 1 or researcher["SOFTWARE"] >= 3)
-        ):
-            return "E+"
-    return "E"
 
 
 def education_prod():
@@ -521,6 +482,7 @@ def apply_barema(data_frame):
         "PATENT_NOT_GRANTED",
         "PATENT_GRANTED",
         "BRAND",
+        "WORKING_ON_TV_OR_RADIO",
     ]
     data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
         axis=1
@@ -552,31 +514,6 @@ def apply_barema(data_frame):
     data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
     return data_frame
 
-
-weights = {
-    "A1": 1,
-    "A2": 0.875,
-    "A3": 0.75,
-    "A4": 0.625,
-    "B1": 0.5,
-    "B2": 0.375,
-    "B3": 0.25,
-    "B4": 0.125,
-    "C": 0,
-    "SQ": 0,
-    "BOOK": 1,
-    "BOOK_CHAPTER": 0.25,
-    "SOFTWARE": 0.25,
-    "PATENT_GRANTED": 1,
-    "PATENT_NOT_GRANTED": 0.25,
-    "REPORT": 0.25,
-    "GUIDANCE_D_C": 0.5,
-    "GUIDANCE_D_A": 0.25,
-    "GUIDANCE_M_C": 0.25,
-    "GUIDANCE_M_A": 0.125,
-    "GUIDANCE_IC_C": 0.125,
-    "GUIDANCE_IC_A": 0.1,
-}
 
 if __name__ == "__main__":
     year = list(range(2019, 2025))
@@ -618,10 +555,6 @@ if __name__ == "__main__":
         data_frame, software_prod(), on=["year", "researcher_id"], how="left"
     )
 
-    # data_frame = pd.merge(
-    #     data_frame, report_prod(), on=["year", "researcher_id"], how="left"
-    # )
-
     data_frame = pd.merge(
         data_frame, guidance_prod(), on=["year", "researcher_id"], how="left"
     )
@@ -638,9 +571,12 @@ if __name__ == "__main__":
         data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
     )
 
-    # data_frame = pd.merge(
-    #     data_frame, participation_event_prod(), on=["year", "researcher_id"], how="left"
-    # )
+    data_frame = pd.merge(
+        data_frame,
+        technical_work_program_prod(),
+        on=["year", "researcher_id"],
+        how="left",
+    )
 
     data_frame = pd.merge(
         data_frame, research_project_prod(), on=["year", "researcher_id"], how="left"
