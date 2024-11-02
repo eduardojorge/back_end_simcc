@@ -444,6 +444,26 @@ def technical_work_prod():
     return data_frame
 
 
+def didactic_material_prod():
+    SCRIPT_SQL = """
+        SELECT 
+            researcher_id,
+            COUNT(*),
+            year
+        FROM 
+            didactic_material
+        GROUP BY
+            researcher_id, year
+        """
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
+
+    data_frame = pd.DataFrame(
+        registry,
+        columns=["researcher_id", "DIDATIC_MATERIAL", "year"],
+    )
+    return data_frame
+
+
 def researcher_data():
     SCRIPT_SQL = """
         SELECT
@@ -548,6 +568,7 @@ def apply_barema(data_frame):
         "THECHNICAL_WORK",
         "THECHNICAL_WORK_PRESENTATION",
         "TECHNOLOGICAL_PRODUCT",
+        "DIDATIC_MATERIAL",
     ]
     data_frame["BAREMA_THECHNICAL_PRODUCTION"] = data_frame[THECHNICAL_PRODUCTION].sum(
         axis=1
@@ -633,6 +654,10 @@ if __name__ == "__main__":
 
     data_frame = pd.merge(
         data_frame, brand_prod(), on=["year", "researcher_id"], how="left"
+    )
+
+    data_frame = pd.merge(
+        data_frame, didactic_material_prod(), on=["year", "researcher_id"], how="left"
     )
 
     data_frame = pd.merge(
