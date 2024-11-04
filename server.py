@@ -52,6 +52,7 @@ from csv_powerBI import (
     dim_graduate_program_student_year_unnest,
     graduate_program_student_researcher_csv_db,
     save_data_to_csv,
+    fat_departament_csv_bd
 )
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
@@ -577,6 +578,12 @@ def load_graduate_program_student_researcher_csv_db():
 def load_save_data_to_csv():
     save_data_to_csv()
     path = "Files/indicadores_simcc/data.csv"
+    return send_file(path, as_attachment=True)
+
+@app.route("/dim_departament.csv", methods=["GET"])
+def load_fat_departament_csv_bd():
+    fat_departament_csv_bd()
+    path = "Files/indicadores_simcc/dim_departament.csv"
     return send_file(path, as_attachment=True)
 
 
