@@ -356,224 +356,224 @@ def get_productivityResearch():
     return productivity_research
 
 
-@app.route("/csv/graduate_program_csv_db", methods=["GET"])
+@app.route("/cimatec_graduate_program.csv", methods=["GET"])
 def load_graduate_program_csv_db():
     graduate_program_csv_db()
     path = "Files/indicadores_simcc/cimatec_graduate_program.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/graduate_program_researcher_csv_db", methods=["GET"])
+@app.route("/cimatec_graduate_program_researcher.csv", methods=["GET"])
 def load_graduate_program_researcher_csv_db():
     graduate_program_researcher_csv_db()
     path = "Files/indicadores_simcc/cimatec_graduate_program_researcher.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/production_distinct_novo_csv_db", methods=["GET"])
+@app.route("/production_distinct_novo_csv_db.csv", methods=["GET"])
 def load_production_distinct_novo_csv_db():
     production_distinct_novo_csv_db()
     path = "Files/indicadores_simcc/production_distinct_novo_csv_db.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/article_distinct_novo_csv_db", methods=["GET"])
+@app.route("/article_distinct_novo_csv_db.csv", methods=["GET"])
 def load_article_distinct_novo_csv_db():
     article_distinct_novo_csv_db()
     path = "Files/indicadores_simcc/article_distinct_novo_csv_db.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_production_novo_csv_db", methods=["GET"])
+@app.route("/researcher_production_novo_csv_db.csv", methods=["GET"])
 def load_researcher_production_novo_csv_db():
     researcher_production_novo_csv_db()
     path = "Files/indicadores_simcc/researcher_production_novo_csv_db.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/graduate_program_ind_prod_csv_db", methods=["GET"])
+@app.route("/graduate_program_ind_prod.csv", methods=["GET"])
 def load_graduate_program_ind_prod_csv_db():
     graduate_program_ind_prod_csv_db()
     path = "Files/indicadores_simcc/graduate_program_ind_prod.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/ind_prod_researcher_csv_db", methods=["GET"])
+@app.route("/fat_researcher_ind_prod.csv", methods=["GET"])
 def load_ind_prod_researcher_csv_db():
     ind_prod_researcher_csv_db()
     path = "Files/indicadores_simcc/fat_researcher_ind_prod.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/production_coauthors_csv_db", methods=["GET"])
+@app.route("/production_coauthors_csv_db.csv", methods=["GET"])
 def load_production_coauthors_csv_db():
     production_coauthors_csv_db()
     path = "Files/indicadores_simcc/production_coauthors_csv_db.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_production_year_csv_db", methods=["GET"])
+@app.route("/production_year.csv", methods=["GET"])
 def load_researcher_production_year_csv_db():
     researcher_production_year_csv_db()
     path = "Files/indicadores_simcc/production_year.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_production_year_distinct_csv_db", methods=["GET"])
+@app.route("/production_year_distinct.csv", methods=["GET"])
 def load_researcher_production_year_distinct_csv_db():
     researcher_production_year_distinct_csv_db()
     path = "Files/indicadores_simcc/production_year_distinct.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_article_qualis_csv_db", methods=["GET"])
+@app.route("/article_qualis_year.csv", methods=["GET"])
 def load_researcher_article_qualis_csv_db():
     researcher_article_qualis_csv_db()
     path = "Files/indicadores_simcc/article_qualis_year.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_production_csv_db", methods=["GET"])
+@app.route("/production_researcher.csv", methods=["GET"])
 def load_researcher_production_csv_db():
     researcher_production_csv_db()
     path = "Files/indicadores_simcc/production_researcher.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/article_qualis_csv_distinct_db", methods=["GET"])
+@app.route("/article_qualis_year_institution.csv", methods=["GET"])
 def load_article_qualis_csv_distinct_db():
     article_qualis_csv_distinct_db()
     path = "Files/indicadores_simcc/article_qualis_year_institution.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_csv_db", methods=["GET"])
+@app.route("/researcher.csv", methods=["GET"])
 def load_researcher_csv_db():
     researcher_csv_db()
     path = "Files/indicadores_simcc/researcher.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/researcher_production_tecnical_year_csv_db", methods=["GET"])
+@app.route("/production_tecnical_year.csv", methods=["GET"])
 def load_researcher_production_tecnical_year_csv_db():
     researcher_production_tecnical_year_csv_db()
     path = "Files/indicadores_simcc/production_tecnical_year.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/institution_csv_db", methods=["GET"])
+@app.route("/dim_institution.csv", methods=["GET"])
 def load_institution_csv_db():
     institution_csv_db()
     path = "Files/indicadores_simcc/dim_institution.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/fat_simcc_bibliographic_production", methods=["GET"])
+@app.route("/fat_simcc_bibliographic_production.csv", methods=["GET"])
 def load_fat_simcc_bibliographic_production():
     fat_simcc_bibliographic_production()
     path = "Files/indicadores_simcc/fat_simcc_bibliographic_production.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_researcher_csv_db", methods=["GET"])
+@app.route("/dim_researcher.csv", methods=["GET"])
 def load_dim_researcher_csv_db():
     dim_researcher_csv_db()
     path = "Files/indicadores_simcc/dim_researcher.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_institution_csv_db", methods=["GET"])
+@app.route("/dim_institution.csv", methods=["GET"])
 def load_dim_institution_csv_db():
     dim_institution_csv_db()
     path = "Files/indicadores_simcc/dim_institution.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_city_csv_db", methods=["GET"])
+@app.route("/dim_institution.csv", methods=["GET"])
 def load_dim_city_csv_db():
     dim_city_csv_db()
     path = "Files/indicadores_simcc/dim_institution.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/fat_production_tecnical_year_novo_csv_db", methods=["GET"])
+@app.route("/fat_production_tecnical_year_novo_csv_db.csv", methods=["GET"])
 def load_fat_production_tecnical_year_novo_csv_db():
     fat_production_tecnical_year_novo_csv_db()
     path = "Files/indicadores_simcc/fat_production_tecnical_year_novo_csv_db.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/fat_foment", methods=["GET"])
+@app.route("/fat_foment.csv", methods=["GET"])
 def load_fat_foment():
     fat_foment()
     path = "Files/indicadores_simcc/fat_foment.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_category_level_code", methods=["GET"])
+@app.route("/dim_category_level_code.csv", methods=["GET"])
 def load_dim_category_level_code():
     dim_category_level_code()
     path = "Files/indicadores_simcc/dim_category_level_code.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_research_group", methods=["GET"])
+@app.route("/dim_research_group.csv", methods=["GET"])
 def load_dim_research_group():
     dim_research_group()
     path = "Files/indicadores_simcc/dim_research_group.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/fat_group_leaders", methods=["GET"])
+@app.route("/fat_group_leaders.csv", methods=["GET"])
 def load_fat_group_leaders():
     fat_group_leaders()
     path = "Files/indicadores_simcc/fat_group_leaders.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_departament_researcher", methods=["GET"])
+@app.route("/dim_departament_researcher.csv", methods=["GET"])
 def load_dim_departament_researcher():
     dim_departament_researcher()
     path = "Files/indicadores_simcc/dim_departament_researcher.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_departament_technician", methods=["GET"])
+@app.route("/dim_departament_technician.csv", methods=["GET"])
 def load_dim_departament_technician():
     dim_departament_technician()
     path = "Files/indicadores_simcc/dim_departament_technician.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/graduate_program_researcher_year_unnest", methods=["GET"])
+@app.route("/graduate_program_researcher_year_unnest.csv", methods=["GET"])
 def load_graduate_program_researcher_year_unnest():
     graduate_program_researcher_year_unnest()
     path = "Files/indicadores_simcc/graduate_program_researcher_year_unnest.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_graduate_program_acronym", methods=["GET"])
+@app.route("/dim_graduate_program_acronym.csv", methods=["GET"])
 def load_dim_graduate_program_acronym():
     dim_graduate_program_acronym()
     path = "Files/indicadores_simcc/dim_graduate_program_acronym.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/dim_graduate_program_student_year_unnest", methods=["GET"])
+@app.route("/graduate_program_student_year_unnest.csv", methods=["GET"])
 def load_dim_graduate_program_student_year_unnest():
     dim_graduate_program_student_year_unnest()
     path = "Files/indicadores_simcc/graduate_program_student_year_unnest.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/graduate_program_student_researcher_csv_db", methods=["GET"])
+@app.route("/cimatec_graduate_program_student.csv", methods=["GET"])
 def load_graduate_program_student_researcher_csv_db():
     graduate_program_student_researcher_csv_db()
     path = "Files/indicadores_simcc/cimatec_graduate_program_student.csv"
     return send_file(path, as_attachment=True)
 
 
-@app.route("/csv/save_data_to_csv", methods=["GET"])
+@app.route("/data.csv", methods=["GET"])
 def load_save_data_to_csv():
     save_data_to_csv()
     path = "Files/indicadores_simcc/data.csv"
