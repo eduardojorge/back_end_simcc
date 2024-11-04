@@ -52,7 +52,7 @@ from csv_powerBI import (
     dim_graduate_program_student_year_unnest,
     graduate_program_student_researcher_csv_db,
     save_data_to_csv,
-    fat_departament_csv_bd
+    fat_departament_csv_bd,
 )
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
@@ -580,10 +580,35 @@ def load_save_data_to_csv():
     path = "Files/indicadores_simcc/data.csv"
     return send_file(path, as_attachment=True)
 
+
 @app.route("/dim_departament.csv", methods=["GET"])
 def load_fat_departament_csv_bd():
     fat_departament_csv_bd()
     path = "Files/indicadores_simcc/dim_departament.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/Qualis.xlsx", methods=["GET"])
+def load_Qualis():
+    path = "Files/indicadores_simcc/Qualis.xlsx"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/platform_image.xlsx", methods=["GET"])
+def load_platform_image():
+    path = "Files/indicadores_simcc/platform_image.xlsx"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/DimensaoTipoProducao.xlsx", methods=["GET"])
+def load_DimensaoTipoProducao():
+    path = "Files/indicadores_simcc/DimensaoTipoProducao.xlsx"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/DimensaoAno.xlsx", methods=["GET"])
+def load_DimensaoAno():
+    path = "Files/indicadores_simcc/DimensaoAno.xlsx"
     return send_file(path, as_attachment=True)
 
 

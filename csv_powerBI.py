@@ -570,6 +570,18 @@ def researcher_production_novo_csv_db():
     df_bd.to_csv(csv_dir + "researcher_production_novo_csv_db.csv")
 
 
+def ufmg_tearcher():
+    SCRIPQ_SQL = """ 
+        SELECT researcher_id, matric, inscufmg, nome, genero, situacao, rt, clas, cargo, classe, ref, titulacao, entradanaufmg, progressao, semester
+        FROM public.ufmg_teacher;
+        """
+    registry = sgbdSQL.consultar_db(SCRIPQ_SQL)
+    data_frame = pd.DataFrame(registry, columns=["researcher_id", "matric", "inscufmg", "nome", "genero", "situacao", "rt", "clas", "cargo", "classe", "ref", "titulacao", "entradanaufmg", "progressao", "semester"])
+    data_frame.to_csv(csv_dir + 'ufmg_tearcher.csv', index=False)
+
+
+
+
 def article_distinct_novo_csv_db():
     sql = """
         SELECT 
@@ -1010,4 +1022,5 @@ def csv_powerBI():
 
 
 if __name__ == "__main__":
-    csv_powerBI()
+    # csv_powerBI()
+    dim_qualis_db()
