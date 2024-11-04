@@ -21,7 +21,7 @@ from Rest.research_productionRest import productionRest
 from zeep import Client
 from csv_powerBI import (
     graduate_program_csv_db,
-    ufmg_tearcher,
+    ufmg_teacher,
     graduate_program_researcher_csv_db,
     production_distinct_novo_csv_db,
     article_distinct_novo_csv_db,
@@ -613,10 +613,10 @@ def load_DimensaoAnog():
     return send_file(path, as_attachment=True)
 
 
-@app.route("/ufmg_tearcher.csv", methods=["GET"])
+@app.route("/ufmg_teacher.csv", methods=["GET"])
 def load_ufmg_tearcher():
-    ufmg_tearcher()
-    path = "Files/indicadores_simcc/ufmg_tearcher.csv"
+    ufmg_teacher()
+    path = "Files/indicadores_simcc/ufmg_teacher.csv"
     return send_file(path, as_attachment=True)
 
 
