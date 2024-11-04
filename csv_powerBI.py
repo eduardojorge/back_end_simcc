@@ -796,6 +796,7 @@ def profnit_graduate_program_csv_db():
 
 
 def graduate_program_csv_db():
+    print(csv_dir + "cimatec_graduate_program.csv")
     sql = """
         SELECT
             graduate_program_id,

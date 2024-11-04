@@ -667,10 +667,6 @@ if __name__ == "__main__":
         how="left",
     )
 
-    # data_frame = pd.merge(
-    #     data_frame, work_in_event_prod(), on=["year", "researcher_id"], how="left"
-    # )
-
     data_frame = pd.merge(
         data_frame, event_organization_prod(), on=["year", "researcher_id"], how="left"
     )
@@ -709,11 +705,11 @@ if __name__ == "__main__":
     )
 
     SCRIPT_SQL = """
-        SELECT lattes_id FROM
+        SELECT name, lattes_id FROM
         researcher;
         """
     registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database="barema_admin")
-    df = pd.DataFrame(registry, columns=["LATTES_ID"])
+    df = pd.DataFrame(registry, columns=["ID", "LATTES_ID"])
 
     data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
 
@@ -733,9 +729,8 @@ if __name__ == "__main__":
         "BAREMA_GUIDANCE",
     ]
     data_frame["TOTAL"] = data_frame[columns].sum(axis=1)
-    data_frame = data_frame[columns + ["TOTAL", "researcher_id"]]
-
-    for _, data in data_frame.iterrows():
-        print(data)
+    data_frame = data_frame[
+        columns + ["TOTAL", "ID", "LATTES_ID", "NAME", "researcher_id"]
+    ]
 
     data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")

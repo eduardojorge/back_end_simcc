@@ -28,7 +28,7 @@ trap "rm -f $LOCK_FILE" EXIT
 
 echo "Iniciando execução do script em $DATE_FORMAT" | tee -a "$LOG_FILE"
 
-python3 "${MY_PROJECT_HOME}/soap_lattes_adm.py" | tee -a "$LOG_FILE"
+python3 "${MY_PROJECT_HOME}/soap_lattes_adm.py" | tee  -a "$LOG_FILE"
 check_error "soap_lattes_adm.py"
 
 "${JADE_EXTRATOR_FOLTER}/hop-run.sh" -r local -j Jade-Extrator-Hop -f "${PROJECT_HOME}/metadata/dataset/workflow/Index.hwf" | tee -a "$LOG_FILE"

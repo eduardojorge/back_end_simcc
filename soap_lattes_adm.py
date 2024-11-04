@@ -1,4 +1,3 @@
-import zipfile
 import requests
 import Dao.sgbdSQL as sgbdSQL
 import logging
@@ -8,39 +7,26 @@ from datetime import datetime
 import urllib3
 from config import settings
 from zeep import Client
+import zipfile
 
 client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
-
-logger = logging.getLogger(__name__)
-
-
-def get_data_att(id: str, alternative_cnpq_service: bool) -> datetime:
-    url = (
-        f"https://simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
-        if alternative_cnpq_service
-        else None
-    )
-    resultado = (
-        requests.get(url, verify=False).json()
-        if alternative_cnpq_service
-        else client.service.getDataAtualizacaoCV(id)
-    )
-    resultado = resultado or "01/01/0001 00:00:00"
-    return datetime.strptime(resultado, "%d/%m/%Y %H:%M:%S")
+def CNPq_att(id: str, proxy: bool) -> datetime:
+    if proxy:
+        URL = f"https://simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
+        resultado = requests.get(URL, verify=False).json()
+    else:
+        resultado = client.service.getDataAtualizacaoCV(id)
+    return datetime.strptime(resultado or "01/01/0001 00:00:00", "%d/%m/%Y %H:%M:%S")
 
 
-def last_update(id: str) -> datetime:
-    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{id}';"
+def last_update(lattes_id: str):
+    lattes_id = lattes_id.zfill(16)
+    script_sql = f"SELECT last_update FROM researcher WHERE lattes_id = '{lattes_id}';"
     registry = sgbdSQL.consultar_db(script_sql)
-    return (
-        registry[0][0]
-        if registry
-        else datetime.strptime("01/01/0001 00:00:00", "%d/%m/%Y %H:%M:%S")
-    )
+    return registry[0][0] if registry else datetime.min
 
 
 def get_id_cnpq(name: str = "", date: str = "", CPF: str = "") -> str:
@@ -49,51 +35,49 @@ def get_id_cnpq(name: str = "", date: str = "", CPF: str = "") -> str:
     )
 
 
-def save_cv(id: str, dir: str, alternative_cnpq_service: bool):
-    if get_data_att(
-        id=id, alternative_cnpq_service=alternative_cnpq_service
-    ) <= last_update(id):
-        msg = f"Currículo já está atualizado id: {id}"
-        print(msg)
+def save_cv(lattes_id: str, dir: str, proxy: bool):
+    lattes_date = CNPq_att(id=lattes_id, proxy=proxy)
+    if lattes_date <= last_update(lattes_id):
+        msg = "{lattes_id} já está atualizado id"
         logger.debug(msg)
+        print(msg)
         return
 
-    msg = f"Currículo não atualizado id: {id}"
-    print(msg)
+    msg = f"{lattes_id} não atualizado id: "
     logger.debug(msg)
+    print(msg)
 
     try:
-        url = (
-            f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={id}"
-            if alternative_cnpq_service
-            else None
-        )
-        resultado = (
-            requests.get(url, verify=False).content
-            if alternative_cnpq_service
-            else client.service.getCurriculoCompactado(id)
-        )
+        if proxy:
+            URL = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={lattes_id}"
+            response = requests.get(URL, verify=False).content
+        else:
+            response = client.service.getCurriculoCompactado(lattes_id)
 
-        file_path = os.path.join(dir, "zip", f"{id}.zip")
-        with open(file_path, "wb") as arquivo:
-            arquivo.write(resultado)
+        file_path = os.path.join(dir, "zip", f"{lattes_id}.zip")
+        with open(file_path, "wb") as cv:
+            cv.write(response)
 
-        with zipfile.ZipFile(file_path, "r") as zip_ref:
-            zip_ref.extractall(dir)
-            zip_ref.extractall(os.path.join(dir, "atual"))
+        with zipfile.ZipFile(file_path, "r") as cv_zip:
+            cv_zip.extractall(dir)
+            cv_zip.extractall(os.path.join(dir, "atual"))
 
         if os.path.exists(file_path):
             os.remove(file_path)
+
     except Exception as E:
         print(E)
         logger.error("\nErro: Currículo não existe")
 
 
-def get_researcher_adm_simcc() -> pd.DataFrame:
-    script_sql = "SELECT name, lattes_id FROM researcher;"
-    registry = sgbdSQL.consultar_db(sql=script_sql, database=os.environ["ADM_DATABASE"])
-    df = pd.DataFrame(registry, columns=["name", "lattes_id"])
-    return df
+def list_researchers():
+    SCRIPT_SQL = """
+        SELECT name, lattes_id
+        FROM researcher;
+        """
+    registry = sgbdSQL.consultar_db(sql=SCRIPT_SQL, database=settings.ADM_DATABASE)
+    data_frame = pd.DataFrame(registry, columns=["name", "lattes_id"])
+    return data_frame
 
 
 if __name__ == "__main__":
@@ -111,34 +95,34 @@ if __name__ == "__main__":
         format=Log_Format,
         level=logging.DEBUG,
     )
-    logger = logging.getLogger()
+    logger = logging.getLogger(__name__)
 
-    if settings.ALTERNATIVE_CNPQ_SERVICE:
-        print("baixando curriculos pelo Tupi")
+    path = f"{settings.JADE_EXTRATOR_FOLTER}/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/"
 
-    dir = (
-        settings.JADE_EXTRATOR_FOLTER
-        + "/config/projects/Jade-Extrator-Hop/metadata/dataset/xml/"
-    )
+    for folder in ["atual", "zip"]:
+        other_path = os.path.join(path, folder)
+        if not os.path.exists(other_path):
+            os.makedirs(other_path)
 
-    for Files in os.listdir(dir):
+    for file in os.listdir(path):
+        file_path = os.path.join(path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+    qtd = 0
+
+    df = list_researchers()
+
+    for _, data in df.iterrows():
+        print(f"Curriculo número: {qtd}")
+        print(f"ID do pesquisador: {data['lattes_id']}")
+
+        lattes_id = str(data["lattes_id"]).zfill(16)
         try:
-            os.remove(os.path.join(dir, Files))
+            save_cv(lattes_id, path, settings.ALTERNATIVE_CNPQ_SERVICE)
+            qtd += 1
         except Exception:
-            logger.error("Erro 003: Directory")
-    logger.debug("Arquivos XML removidos")
+            print(f"Erro encontrado!!! {data['lattes_id']}")
 
-    quant_curriculos = 0
-
-    df = get_researcher_adm_simcc()
-
-    for Index, Data in df.iterrows():
-        print(f"Curriculo número: {quant_curriculos}")
-        print(f"ID do pesquisador: {Data['lattes_id']}")
-
-        lattes_id = str(Data["lattes_id"]).zfill(16)
-        save_cv(lattes_id, dir, os.getenv("ALTERNATIVE_CNPQ_SERVICE", False))
-        quant_curriculos += 1
-
-    logger.debug(f"FIM: {str(quant_curriculos)}")
-    print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    # logger.debug(f"FIM: {str(quant_curriculos)}")
+    # print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
