@@ -2,6 +2,8 @@ import pandas as pd
 import Dao.sgbdSQL as db
 import bd_maria
 from langchain_openai import ChatOpenAI
+from config import settings
+
 
 maria = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9)
 
@@ -16,7 +18,13 @@ def search_by_embeddings(query, search_type):
         LIMIT 10;
         """
 
-    registry = db.consultar_db(script_sql)
+    registry = db.consultar_db(
+        sql=script_sql,
+        database=settings.MARIA_DATABASE_NAME,
+        password=settings.MARIA_DATABASE_PASSWORD,
+        host=settings.MARIA_DATABASE_HOST,
+        port=settings.MARIA_DATABASE_PORT,
+    )
     data_frame = pd.DataFrame(registry, columns=["id", "proximidade"])
 
     data_frame = get_researcher_id(data_frame, search_type)

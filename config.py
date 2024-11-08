@@ -11,10 +11,16 @@ class Settings(BaseSettings):
     DATABASE_HOST: str = "localhost"
     ADM_DATABASE: str
     PORT: int = 5432
+
     OPENAI_API_KEY: Optional[str] = None
     ALTERNATIVE_CNPQ_SERVICE: bool = False
     JADE_EXTRATOR_FOLTER: Optional[str] = None
     HOME_SIMCC: Optional[str] = None
+
+    MARIA_DATABASE_PASSWORD: Optional[str] = None
+    MARIA_DATABASE_HOST: Optional[str] = None
+    MARIA_DATABASE_NAME: Optional[str] = None
+    MARIA_DATABASE_PORT: Optional[str] = None
 
     class Config:
         env_file = ".env"

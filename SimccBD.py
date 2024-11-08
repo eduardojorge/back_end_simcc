@@ -217,7 +217,7 @@ def bibliographic_production_total_db():
 
 def researcher_total_db():
     script_sql = "SELECT COUNT(*) as qtd FROM researcher"
-    reg = sgbdSQL.consultar_db(script_sql)
+    reg = sgbdSQL.consultar_db(sql=script_sql)
     df_bd = pd.DataFrame(reg, columns=["qtd"])
 
     return df_bd["qtd"].iloc[0]
