@@ -17,11 +17,6 @@ class Settings(BaseSettings):
     JADE_EXTRATOR_FOLTER: Optional[str] = None
     HOME_SIMCC: Optional[str] = None
 
-    MARIA_DATABASE_PASSWORD: Optional[str] = None
-    MARIA_DATABASE_HOST: Optional[str] = None
-    MARIA_DATABASE_NAME: Optional[str] = None
-    MARIA_DATABASE_PORT: Optional[str] = None
-
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

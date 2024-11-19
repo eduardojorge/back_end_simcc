@@ -111,9 +111,9 @@ if __name__ == "__main__":
 
     qtd = 0
 
-    df = list_researchers()
+    df_researchers = list_researchers()
 
-    for _, data in df.iterrows():
+    for _, data in df_researchers.iterrows():
         print(f"Curriculo número: {qtd}")
         print(f"ID do pesquisador: {data['lattes_id']}")
 
@@ -124,5 +124,5 @@ if __name__ == "__main__":
         except Exception:
             print(f"Erro encontrado!!! {data['lattes_id']}")
 
-    # logger.debug(f"FIM: {str(quant_curriculos)}")
-    # print(f"FIM, Quantidade de curriculos processados: {str(quant_curriculos)}")
+    logger.debug(f"FIM: {str(qtd)}")
+    print(f"FIM, Quantidade de curriculos processados: {str(qtd)}")

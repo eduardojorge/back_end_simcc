@@ -24,6 +24,7 @@ def article_prod():
     data_frame = pd.DataFrame(
         registry, columns=["year", "qualis", "count_article", "researcher_id"]
     )
+
     data_frame = data_frame.pivot_table(
         index=["year", "researcher_id"],
         columns="qualis",
@@ -31,6 +32,7 @@ def article_prod():
         aggfunc="sum",
         fill_value=0,
     )
+
     data_frame.reset_index(inplace=True)
 
     SCRIPT_SQL = """
@@ -52,6 +54,9 @@ def article_prod():
     data_frame = pd.merge(data_frame, df, on=["researcher_id", "year"], how="left")
 
     data_frame["year"] = data_frame["year"].astype(int)
+
+    columns = ["researcher_id", "year", "A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C", "JCR", 'SQ']  # fmt: skip
+    data_frame = data_frame.reindex(columns=columns, fill_value=0)
 
     return data_frame
 
@@ -598,13 +603,14 @@ def apply_barema(data_frame):
     ]
     data_frame["BAREMA_GUIDANCE"] = data_frame[GUIDANCE].sum(axis=1)
     data_frame["BAREMA_GUIDANCE"] = data_frame["BAREMA_GUIDANCE"].clip(upper=5) * 0.10
+
     return data_frame
 
 
 if __name__ == "__main__":
     year = list(range(2019, 2025))
 
-    SCRIPT_SQL = "SELECT id FROM researcher;"
+    SCRIPT_SQL = "SELECT id FROM researcher"
     registry = sgbdSQL.consultar_db(SCRIPT_SQL)
     researchers = pd.DataFrame(registry, columns=["researcher_id"])
 
@@ -703,7 +709,6 @@ if __name__ == "__main__":
     data_frame = pd.merge(
         data_frame, researcher_data(), on=["researcher_id"], how="left"
     )
-
     SCRIPT_SQL = """
         SELECT name, lattes_id FROM
         researcher;
@@ -712,7 +717,6 @@ if __name__ == "__main__":
     df = pd.DataFrame(registry, columns=["ID", "LATTES_ID"])
 
     data_frame = pd.merge(df, data_frame, how="left", on="LATTES_ID")
-
     data_frame = apply_barema(data_frame)
 
     columns = [
@@ -728,9 +732,10 @@ if __name__ == "__main__":
         "BAREMA_EVENT_ORGANIZATION",
         "BAREMA_GUIDANCE",
     ]
-    data_frame["TOTAL"] = data_frame[columns].sum(axis=1)
+
+    data_frame[columns] = data_frame[columns].fillna(0)
+    data_frame["TOTAL"] = data_frame[columns].sum(axis=1).round(3)
     data_frame = data_frame[
         columns + ["TOTAL", "ID", "LATTES_ID", "NAME", "researcher_id"]
     ]
-
     data_frame.to_csv("Files/barema.csv", index=False, encoding="utf-8-sig")

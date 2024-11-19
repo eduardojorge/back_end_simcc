@@ -41,13 +41,7 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.abstract (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.MARIA_DATABASE_PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)
 
     print("ETAPA 2")
     SCRIPT_SQL = """
@@ -71,13 +65,7 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.article (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)
 
     print("ETAPA 3")
     SCRIPT_SQL = """
@@ -99,13 +87,7 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.article_abstract (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)
 
     print("ETAPA 4")
     SCRIPT_SQL = """
@@ -129,13 +111,7 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.book (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)
 
     print("ETAPA 5")
     SCRIPT_SQL = """
@@ -159,13 +135,7 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.event (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)
 
     print("ETAPA 6")
     SCRIPT_SQL = """
@@ -188,10 +158,4 @@ if __name__ == "__main__":
                 INSERT INTO embeddings.patent (reference_id, embeddings, price)
                 VALUES ('{data['id']}', '{embeddings}', '{price}')
                 """
-            sgbdSQL.execScript_db(
-                sql=script_sql,
-                database=settings.MARIA_DATABASE_NAME,
-                password=settings.MARIA_DATABASE_PASSWORD,
-                host=settings.MARIA_DATABASE_HOST,
-                port=settings.PORT,
-            )
+            sgbdSQL.execScript_db(sql=script_sql)

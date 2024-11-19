@@ -56,8 +56,6 @@ from csv_powerBI import (
     fat_departament_csv_bd,
 )
 
-client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
-
 YEAR = 1990
 try:
     port = sys.argv[2]
@@ -312,6 +310,7 @@ def bibliographic_production_article():
 
 @app.route("/getCurriculoCompactado", methods=["GET"])
 def getCurriculoCompactado():
+    client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     lattes_id = request.args.get("lattes_id")
     try:
         resultado = client.service.getCurriculoCompactado(lattes_id)
@@ -327,6 +326,7 @@ def getCurriculoCompactado():
 
 @app.route("/getDataAtualizacaoCV", methods=["GET"])
 def getDataAtualizacaoCV():
+    client = Client("http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl")
     lattes_id = request.args.get("lattes_id")
     resultado = client.service.getDataAtualizacaoCV(lattes_id)
     return jsonify(resultado)

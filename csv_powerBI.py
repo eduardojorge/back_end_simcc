@@ -1039,5 +1039,4 @@ def csv_powerBI():
 
 
 if __name__ == "__main__":
-    # csv_powerBI()
-    dim_qualis_db()
+    csv_powerBI()
