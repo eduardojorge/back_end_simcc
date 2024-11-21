@@ -732,6 +732,13 @@ CREATE TABLE IF NOT EXISTS public.artistic_production (
     CONSTRAINT fk_researcher
         FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
 );
+CREATE TABLE IF NOT EXISTS public.relevant_production (
+    production_id uuid NOT NULL,
+    type varchar NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    has_image boolean DEFAULT false NOT NULL,
+    PRIMARY KEY (production_id, type)
+);
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;
 CREATE TABLE IF NOT EXISTS embeddings.abstract (
@@ -769,7 +776,7 @@ CREATE TABLE IF NOT EXISTS embeddings.patent (
     reference_id uuid REFERENCES public.patent(id),
     embeddings vector,
     price numeric(20, 18)
-);
+);  
 CREATE INDEX ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract_en gin_trgm_ops);

@@ -15,6 +15,7 @@ from Rest.book_events_area_patentRest import areaRest
 from Rest.graduateProgramRest import graduateProgramRest
 from Rest.researcherDataRest import researcherDataRest
 from Rest.researcherTermRest import researcherTermRest
+from Rest.relevantRest import management
 from Rest.mariaRest import mariaRest
 from Rest.ufmgRest import ufmgRest
 from Rest.research_productionRest import productionRest
@@ -72,6 +73,7 @@ def create_app():
     app.register_blueprint(researcherDataRest)
     app.register_blueprint(mariaRest)
     app.register_blueprint(productionRest)
+    app.register_blueprint(management)
 
     CORS(app)
     return app

@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     ALTERNATIVE_CNPQ_SERVICE: bool = False
     JADE_EXTRATOR_FOLTER: Optional[str] = None
-    HOME_SIMCC: Optional[str] = None
 
     class Config:
         env_file = ".env"

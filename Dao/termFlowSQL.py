@@ -570,59 +570,70 @@ def lists_bibliographic_production_qtd_qualis_researcher_db(
     return df_bd
 
 
-def lists_word_researcher_db(researcher_id, graduate_program, dep_id):
+def lists_word_researcher_db(researcher_id=None, graduate_program=None, dep_id=None):
     stopwords = nltk.corpus.stopwords.words("portuguese")
     stopwords += nltk.corpus.stopwords.words("english")
 
-    filter_ = (
-        f"""
-        WHERE 
-            b.researcher_id IN (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}') """
-        if dep_id
-        else str()
-    )
+    filter_clauses = str()
+    parameters = {}
+    parameters["stopwords"] = stopwords
 
-    filter_ = (
-        f"""
-        WHERE 
-            b.researcher_id = '{researcher_id}'"""
-        if researcher_id
-        else str()
-    )
+    if dep_id:
+        filter_clauses = """
+            b.researcher_id IN (
+                SELECT researcher_id 
+                FROM public.departament_researcher 
+                WHERE dep_id = %(dep_id)s
+            )
+        """
+        parameters["dep_id"] = dep_id
 
-    filter_ = (
-        f"""
-        RIGHT JOIN 
-            graduate_program_researcher gpr 
-            ON b.researcher_id = gpr.researcher_id 
-            AND gpr.graduate_program_id = '{graduate_program}' 
-            """
-        if graduate_program
-        else str()
-    )
+    elif researcher_id:
+        filter_clauses = "b.researcher_id = %(researcher_id)s"
+        parameters["researcher_id"] = researcher_id
 
-    script_sql = f"""
+    elif graduate_program:
+        filter_clauses = """
+            EXISTS (
+                SELECT 1 
+                FROM graduate_program_researcher gpr
+                WHERE 
+                    b.researcher_id = gpr.researcher_id
+                    AND gpr.graduate_program_id = %(graduate_program)s
+            )"""
+        parameters["graduate_program"] = graduate_program
+    else:
+        filter_clauses = str()
+
+    if researcher_id or dep_id or graduate_program:
+        filter_ = f"WHERE {filter_clauses}"
+    else:
+        filter_ = str()
+
+    SCRIPQ_SQL = f"""
         SELECT DISTINCT
             translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
         FROM
             bibliographic_production b
         {filter_}
-        """
+    """
 
-    script_sql = f"""
-            SELECT
-                ndoc AS qtd,
-                INITCAP(word) AS term
-            FROM
-                ts_stat($${script_sql}$$)
-            WHERE
-                CHAR_LENGTH(word) > 3
-                AND word not in ({', '.join([f'$${term}$$' for term in stopwords])})
-                ORDER BY
-                ndoc DESC
-            FETCH FIRST 20 ROWS ONLY;
-            """
-    reg = sgbdSQL.consultar_db(script_sql)
+    SCRIPQ_SQL = f"""
+        SELECT
+            ndoc AS qtd,
+            INITCAP(word) AS term
+        FROM
+            ts_stat($${SCRIPQ_SQL}$$)
+        WHERE
+            CHAR_LENGTH(word) > 3
+            AND word != ANY(%(stopwords)s)
+        ORDER BY
+            ndoc DESC
+        FETCH FIRST 20 ROWS ONLY;
+    """
+    print(SCRIPQ_SQL)
+
+    reg = sgbdSQL.consultar_db(SCRIPQ_SQL, parameters)
 
     data_frame = pd.DataFrame(reg, columns=["qtd", "term"])
 
