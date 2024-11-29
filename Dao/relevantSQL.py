@@ -1,7 +1,7 @@
 import pandas as pd
 import Dao.sgbdSQL as db
 
-def post_image(production_id, type_, has_image):
+def add_relevant_production(production_id, type_, has_image):
     SCRIPT_SQL = """
         INSERT INTO public.relevant_production (production_id, type, has_image)
         VALUES (%s, %s, %s)
@@ -21,7 +21,7 @@ def get_relevant_list():
     df = pd.DataFrame(result, columns=["production_id", "type", 'has_image', "created_at"])
     return df.to_dict(orient='records')
 
-def delete_image(production_id, type_):
+def delete_relevant_production(production_id, type_):
     SCRIPT_SQL = """
         DELETE FROM public.relevant_production
         WHERE production_id = %s AND type = %s;
