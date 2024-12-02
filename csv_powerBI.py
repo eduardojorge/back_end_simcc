@@ -596,7 +596,7 @@ def ufmg_teacher():
             "semester",
         ],
     )
-    data_frame.to_csv(csv_dir + "ufmg_tearcher.csv", index=False)
+    data_frame.to_csv(csv_dir + "ufmg_teacher.csv", index=False)
 
 
 def article_distinct_novo_csv_db():
