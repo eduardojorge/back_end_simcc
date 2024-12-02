@@ -1,14 +1,41 @@
 [tool.poetry]
-name = "new-back-simcc"
-version = "0.1.0"
+name = "back-simcc"
+version = "4.0.0"
 description = ""
 authors = ["gmcosta <geu_costa@outlook.com>"]
+package-mode = false
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "3.12.*"
+fastapi = {extras = ["standard"], version = "^0.115.5"}
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+taskipy = "^1.14.1"
+ruff = "^0.8.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+lint = 'ruff check .; ruff check . --diff'
+format = 'ruff check . --fix; ruff format .'
+run = 'fastapi dev simcc'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=simcc -vv'
+post_test = 'coverage html'
