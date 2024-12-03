@@ -1,0 +1,117 @@
+simcc/dao/dao_article.py:1:1: I001 [*] Import block is un-sorted or un-formatted
+  |
+1 | / from ..model.article import Qualis
+2 | | from uuid import UUID
+3 | | import unidecode
+4 | | from ..dao import Connection
+5 | | 
+6 | | 
+7 | | def research_article_search(researcher_id: UUID, qualis: Qualis, year=int, terms=str):
+  | |_^ I001
+8 |       SCRIPT_SQL = """
+9 |           SELECT DISTINCT
+  |
+  = help: Organize imports
+
+simcc/dao/dao_article.py:25:91: E501 Line too long (98 > 90)
+   |
+23 |         FROM
+24 |             bibliographic_production b
+25 |             LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
+   |                                                                                           ^^^^^^^^ E501
+26 |             LEFT JOIN researcher r ON r.id = b.researcher_id
+27 |             LEFT JOIN institution i ON r.institution_id = i.id
+   |
+
+simcc/dao/dao_article.py:60:91: E501 Line too long (153 > 90)
+   |
+58 |             elif term:
+59 |                 term = unidecode.unidecode(term.lower())
+60 |                 filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
+   |                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E501
+61 |             filter_terms += grammatic[char]
+62 |             term = str()
+   |
+
+simcc/dao/dao_article.py:67:91: E501 Line too long (145 > 90)
+   |
+65 |     if term:
+66 |         term = unidecode.unidecode(term.lower())
+67 |         filter_terms += rf"""ts_rank(to_tsvector(translate(unaccent(LOWER({column})),'-\.:;''',' ')), websearch_to_tsquery('"{term}"')) > 0.04"""
+   |                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E501
+68 |     return f"""({filter_terms})"""
+   |
+
+simcc/model/article.py:1:1: I001 [*] Import block is un-sorted or un-formatted
+  |
+1 | / from enum import Enum
+2 | | from pydantic import BaseModel
+3 | | from uuid import UUID
+4 | | from typing import Optional
+5 | | 
+6 | | 
+7 | | class Qualis(str, Enum):
+  | |_^ I001
+8 |       A1 = "A1"
+9 |       A2 = "A2"
+  |
+  = help: Organize imports
+
+simcc/routes/researcher_search.py:1:1: I001 [*] Import block is un-sorted or un-formatted
+  |
+1 | / from fastapi import APIRouter, Query
+2 | | from uuid import UUID
+3 | | from ..model.article import Qualis
+4 | | from ..dao import dao_article
+5 | | 
+6 | | router = APIRouter(tags=["Research Search"])
+  | |_^ I001
+7 |   
+8 |   default_year = 2014
+  |
+  = help: Organize imports
+
+simcc/routes/researcher_search.py:11:75: W291 Trailing whitespace
+   |
+10 | term_description = """
+11 | A string containing the search terms that will be used to filter articles. 
+   |                                                                           ^ W291
+12 | You can use operators like ';' (AND), '.' (AND NOT), '|' (OR), and parentheses for grouping. 
+13 | For example: 'data science | machine learning AND AI'. 
+   |
+   = help: Remove trailing whitespace
+
+simcc/routes/researcher_search.py:12:91: E501 Line too long (93 > 90)
+   |
+10 | term_description = """
+11 | A string containing the search terms that will be used to filter articles. 
+12 | You can use operators like ';' (AND), '.' (AND NOT), '|' (OR), and parentheses for grouping. 
+   |                                                                                           ^^^ E501
+13 | For example: 'data science | machine learning AND AI'. 
+14 | Terms will be processed for full-text search in the specified column.
+   |
+
+simcc/routes/researcher_search.py:12:93: W291 Trailing whitespace
+   |
+10 | term_description = """
+11 | A string containing the search terms that will be used to filter articles. 
+12 | You can use operators like ';' (AND), '.' (AND NOT), '|' (OR), and parentheses for grouping. 
+   |                                                                                             ^ W291
+13 | For example: 'data science | machine learning AND AI'. 
+14 | Terms will be processed for full-text search in the specified column.
+   |
+   = help: Remove trailing whitespace
+
+simcc/routes/researcher_search.py:13:55: W291 Trailing whitespace
+   |
+11 | A string containing the search terms that will be used to filter articles. 
+12 | You can use operators like ';' (AND), '.' (AND NOT), '|' (OR), and parentheses for grouping. 
+13 | For example: 'data science | machine learning AND AI'. 
+   |                                                       ^ W291
+14 | Terms will be processed for full-text search in the specified column.
+15 | """
+   |
+   = help: Remove trailing whitespace
+
+Found 10 errors.
+[*] 3 fixable with the `--fix` option (3 hidden fixes can be enabled with the `--unsafe-fixes` option).
