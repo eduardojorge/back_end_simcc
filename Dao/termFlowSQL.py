@@ -508,7 +508,7 @@ def lists_bibliographic_production_article_researcher_db(
         ORDER BY
             year DESC
         """
-
+    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         reg,
@@ -626,7 +626,7 @@ def lists_word_researcher_db(researcher_id=None, graduate_program=None, dep_id=N
             ts_stat($${SCRIPQ_SQL}$$)
         WHERE
             CHAR_LENGTH(word) > 3
-            AND word != ANY(%(stopwords)s)
+            AND TRIM(word) <> ANY(%(stopwords)s)
         ORDER BY
             ndoc DESC
         FETCH FIRST 20 ROWS ONLY;

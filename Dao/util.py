@@ -2,6 +2,7 @@ import nltk
 import unidecode
 from nltk.tokenize import RegexpTokenizer
 
+
 # fmt: off
 def filterSQLRank(text, split, attribute_2):
     text = text.replace("-", " ")
@@ -158,7 +159,6 @@ def clean_stopwords(text):
 
 
 def web_search_filter(string_of_terms, column):
-
     skip = 0
     term = str()
     filter_terms = str()
@@ -166,7 +166,6 @@ def web_search_filter(string_of_terms, column):
     grammatic = {";": " AND \n\n", ".": " AND NOT \n\n", "|": " OR \n\n"}
 
     for position, char in enumerate(string_of_terms):
-
         if skip:
             skip -= 1
             continue
