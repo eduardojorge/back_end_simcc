@@ -474,7 +474,7 @@ def recently_updated_db(year, institution, departament):
 
 
 def lists_bibliographic_production_article_db(
-    term, year, qualis, institution, distinct, graduate_program_id, dep_id
+    term, year, qualis, institution, distinct, graduate_program_id, dep_id, page
 ):
     filter_institution = str()
     if institution:
@@ -485,13 +485,17 @@ def lists_bibliographic_production_article_db(
     else:
         filter_term = str()
 
-    filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
+    if qualis:
+        filter_qualis = util.filterSQL(qualis, ";", "or", "qualis")
+    else:
+        filter_qualis = str()
 
-    filter_graduate_program = str()
     if graduate_program_id and graduate_program_id != "0":
         filter_graduate_program = f"""
             AND gpr.graduate_program_id = '{graduate_program_id}'
             """
+    else:
+        filter_graduate_program = str()
 
     if dep_id:
         filter_departament = f"""
@@ -503,6 +507,13 @@ def lists_bibliographic_production_article_db(
             """
     else:
         filter_departament = str()
+
+    if page:
+        page = page - 1
+        pagination = f"""
+        OFFSET {30 * page}
+        LIMIT 30
+        """
 
     if distinct == "1":
         script_sql = f"""
@@ -540,7 +551,8 @@ def lists_bibliographic_production_article_db(
                 {filter_qualis}
                 {filter_departament}
             ORDER BY
-                b.year_ DESC;
+                b.year_ DESC
+            {pagination}
                 """
 
         reg = sgbdSQL.consultar_db(script_sql)
@@ -607,7 +619,8 @@ def lists_bibliographic_production_article_db(
                 {filter_departament}
                 AND b.type = 'ARTICLE'
             ORDER BY
-                year_ DESC;
+                year_ DESC
+            {pagination}
             """
         reg = sgbdSQL.consultar_db(script_sql)
         data_frame = pd.DataFrame(

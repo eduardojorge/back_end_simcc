@@ -254,9 +254,10 @@ def bibliographic_production_article():
     distinct = request.args.get("distinct")
     graduate_program_id = request.args.get("graduate_program_id")
     dep_id = request.args.get("dep_id")
+    page = request.args.get("page", 0, int)
 
     df_bd = SimccBD.lists_bibliographic_production_article_db(
-        terms, year, qualis, university, distinct, graduate_program_id, dep_id
+        terms, year, qualis, university, distinct, graduate_program_id, dep_id, page
     )
 
     for i, infos in df_bd.iterrows():
