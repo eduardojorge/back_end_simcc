@@ -514,6 +514,8 @@ def lists_bibliographic_production_article_db(
         OFFSET {30 * page}
         LIMIT 30
         """
+    else:
+        pagination = str()
 
     if distinct == "1":
         script_sql = f"""

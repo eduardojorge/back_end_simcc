@@ -1,6 +1,5 @@
 import unidecode
 from flask import Blueprint, jsonify, request
-from flask_cors import cross_origin
 from http import HTTPStatus
 
 import Dao.resarcher_baremaSQL as resarcher_baremaSQL
@@ -255,9 +254,15 @@ def bibliographic_production_researcher():
     if not year:
         year = YEAR
     type = request.args.get("type")
+    page = request.args.get("page", 0, int)
 
     df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
-        term=terms, researcher_id=researcher_id, year=year, type=type, qualis=qualis
+        term=terms,
+        researcher_id=researcher_id,
+        year=year,
+        type=type,
+        qualis=qualis,
+        page=page,
     )
 
     for i, infos in df_bd.iterrows():

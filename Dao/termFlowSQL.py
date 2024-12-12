@@ -431,6 +431,7 @@ def lists_software_production_researcher_db(researcher_id, year):
 
 
 def lists_bibliographic_production_article_researcher_db(
+    page: int,
     term: str = None,
     researcher_id: str = None,
     year: int = None,
@@ -449,6 +450,16 @@ def lists_bibliographic_production_article_researcher_db(
         filter_id = f"""AND r.id = '{researcher_id}'"""
     else:
         filter_id = str()
+
+    if page:
+        page = page - 1
+        pagination = f"""
+        OFFSET {30 * page}
+        LIMIT 30
+        """
+    else:
+        pagination = str()
+
     if type == "ARTICLE":
         script_sql = f"""
             SELECT DISTINCT
@@ -478,6 +489,7 @@ def lists_bibliographic_production_article_researcher_db(
                 AND b.type = 'ARTICLE'
             ORDER BY
                 year DESC
+            {pagination}
             """
 
     if type == "ABSTRACT":
@@ -494,7 +506,8 @@ def lists_bibliographic_production_article_researcher_db(
             r.lattes_10_id AS lattes_10_id,
             r.lattes_id AS lattes_id,
             jcr AS jif,
-            jcr_link
+            jcr_link,
+            r.id
         FROM
             bibliographic_production b
             LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
@@ -502,13 +515,13 @@ def lists_bibliographic_production_article_researcher_db(
             LEFT JOIN institution i ON r.institution_id = i.id
         WHERE
             year_ >= {year}
-            AND {filter}
+            {filter}
             {filter_qualis}
             {filter_id}
         ORDER BY
             year DESC
+        {pagination}
         """
-    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         reg,
