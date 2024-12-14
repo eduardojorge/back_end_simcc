@@ -29,7 +29,6 @@ def article_qualis(resarcher_Production, infos):
 
 
 def lists_guidance_researcher_db(year, resarcher_Production):
-
     sql = f"""
         SELECT
             COUNT(g.id) AS qtd,
@@ -57,8 +56,7 @@ def lists_guidance_researcher_db(year, resarcher_Production):
             resarcher_Production.guidance_m_c = infos.qtd
 
         if (
-            util.unidecodelower(infos.nature.lower(),
-                                "Dissertação De Mestrado")
+            util.unidecodelower(infos.nature.lower(), "Dissertação De Mestrado")
             and infos.status == "Em andamento"
         ):
             resarcher_Production.guidance_m_a = infos.qtd
@@ -126,7 +124,6 @@ def lists_guidance_researcher_db(year, resarcher_Production):
 
 # Função processar e inserir a produção de cada pesquisador
 def production_general_db(name, lattes_id, year):
-
     filter = ""
     if name == "":
         filter = f"r.lattes_id='{lattes_id}' AND "
@@ -331,8 +328,7 @@ def production_general_db(name, lattes_id, year):
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(
         reg,
-        columns=["qtd", "tipo", "name_", "lattes_10_id",
-                 "graduation", "researcher_id"],
+        columns=["qtd", "tipo", "name_", "lattes_10_id", "graduation", "researcher_id"],
     )
     resarcher_Production = Resarcher_Production.Resarcher_Production()
 
@@ -366,7 +362,6 @@ def production_general_db(name, lattes_id, year):
 
 
 def researcher_production_db(list_name, lattes_id, year):
-
     if lattes_id:
         lattes_id_list = list()
         lattes_id_list = lattes_id.split(";")
@@ -392,8 +387,7 @@ def researcher_production_db(list_name, lattes_id, year):
         for cont, Data in df_bd.iterrows():
             cont += 1
             print(cont, " | ", Data["lattes_id"])
-            json_researcher.append(
-                production_general_db("", Data["lattes_id"], year))
+            json_researcher.append(production_general_db("", Data["lattes_id"], year))
 
         return json_researcher
     else:

@@ -776,7 +776,8 @@ CREATE TABLE IF NOT EXISTS embeddings.patent (
     reference_id uuid REFERENCES public.patent(id),
     embeddings vector,
     price numeric(20, 18)
-);  
+);
+
 CREATE INDEX ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract_en gin_trgm_ops);

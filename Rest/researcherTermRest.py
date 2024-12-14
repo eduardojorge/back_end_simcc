@@ -220,9 +220,6 @@ def pevent_researcher():
         p.nature = str(infos.nature)
         p.participation = str(infos.form_participation)
         p.year = str(infos.year)
-        # print(p.participation)
-
-        # print(researcher)
         list_pevent_researcher.append(p.getJson())
 
     return jsonify(list_pevent_researcher), 200
@@ -346,7 +343,6 @@ def institutionFrequenci():
             "among": str(infos.qtd),
             "image": str(infos.image),
         }
-        # print(researcher)
         list_institutionFrequenci.append(institution)
 
     return jsonify(list_institutionFrequenci), 200

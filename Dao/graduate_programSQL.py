@@ -25,8 +25,6 @@ def graduate_program_db(institution_id):
         ],
     )
 
-    print(df_bd)
-
     return df_bd
 
 

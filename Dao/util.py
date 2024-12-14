@@ -25,7 +25,6 @@ def filterSQLRank(text, split, attribute_2):
 
         if len(t) == 1:
             filter = """ ts_rank(to_tsvector(unaccent(LOWER(%s))), websearch_to_tsquery('%s')) > %s""" % (attribute_2, unidecode.unidecode(text), 0.04)
-            print("Rank" + text)
             x = len(filter)
             filter = filter[0 : x - 3]
             filter = " AND (" + filter + ")"

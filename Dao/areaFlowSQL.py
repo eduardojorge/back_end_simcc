@@ -55,7 +55,6 @@ def lists_great_area_expertise_term_initials_db(initials):
 
     df_bd = pd.DataFrame(reg, columns=["id", "nome"])
 
-    print(df_bd)
     return df_bd
 
 
@@ -108,7 +107,6 @@ def lists_area_speciality_term_initials_db(initials, area, graduate_program_id):
 
     df_bd = pd.DataFrame(reg, columns=["area_expertise", "area_specialty"])
 
-    print(df_bd)
     return df_bd
 
 
@@ -310,7 +308,6 @@ def lista_institution_area_expertise_db(great_area, area_specialty, institution)
     great_area = great_area.replace(" ", "_")
     filter_great_area = util.filterSQL(great_area, ";", "or", "rp.great_area")
     # filter_area_specialty = util.filterSQL(area_specialty,";","or","asp.name")
-    print(area_specialty)
     area_specialty = area_specialty.replace("&", " ")
     area_specialty = unidecode.unidecode(area_specialty.lower())
 
@@ -428,8 +425,6 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
     data_frame = data_frame.merge(researcher_departament(), on="id", how="left")
 
     return data_frame.fillna("").to_dict(orient="records")
-
-    print(script_sql)
 
 
 def lista_researcher_participation_event_db(term, institution, graduate_program_id):

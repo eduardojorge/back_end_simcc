@@ -1,8 +1,6 @@
 import unidecode
 from flask import jsonify, request, Blueprint
-from Model.Researcher import Researcher
 import Dao.areaFlowSQL as areaFlowSQL
-from flask_cors import cross_origin
 from http import HTTPStatus
 
 
@@ -48,7 +46,6 @@ def researcherPatent():
 
     graduate_program_id = request.args.get("graduate_program_id")
     university = request.args.get("university")
-    print("alow")
     list_researcher_area_expertise = areaFlowSQL.lista_researcher_patent_db(
         term, university, graduate_program_id
     )
@@ -95,12 +92,10 @@ def area_expertiseInitials():
     df_bd = areaFlowSQL.lists_great_area_expertise_term_initials_db(initials.lower())
 
     for i, infos in df_bd.iterrows():
-        print(infos.nome)
         researcher = {
             "id": str(infos.id),
             "name": infos.nome.replace("_", " "),
         }
-        # print(researcher)
         list_area_expertise.append(researcher)
 
     return jsonify(list_area_expertise), 200
@@ -113,7 +108,6 @@ def area_specialitInitials():
     area = request.args.get("area")
 
     graduate_program_id = request.args.get("graduate_program_id")
-    # print("yyyyy "+graduate_program_id  )
     if graduate_program_id is None:
         graduate_program_id = ""
 
@@ -129,7 +123,6 @@ def area_specialitInitials():
             # 'sub_area_expertise':str(infos.sub_area_expertise),
             "area_specialty": str(infos.area_specialty),
         }
-        # print(researcher)
         list_area_specialit.append(area_specialit_)
 
     return jsonify(list_area_specialit), 200

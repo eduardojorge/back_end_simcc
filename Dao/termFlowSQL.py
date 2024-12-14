@@ -396,7 +396,6 @@ def lists_pevent_researcher_db(researcher_id, year, term, nature):
         ORDER BY year desc
     """
 
-    print(sql)
     reg = sgbdSQL.consultar_db(sql)
 
     df_bd = pd.DataFrame(
@@ -644,7 +643,6 @@ def lists_word_researcher_db(researcher_id=None, graduate_program=None, dep_id=N
             ndoc DESC
         FETCH FIRST 20 ROWS ONLY;
     """
-    print(SCRIPQ_SQL)
 
     reg = sgbdSQL.consultar_db(SCRIPQ_SQL, parameters)
 
@@ -659,11 +657,9 @@ def lista_institution_production_db(text, institution, type_):
 
     filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
 
-    print(filter)
     # b.id = rf.bibliographic_production_id
     # researcher_frequency rf,
     #  AND rf.researcher_id = r.id
-    print("type " + type_)
     sql = ""
 
     if type_ == "SPEAKER":
@@ -891,7 +887,6 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
         ORDER BY
             among DESC;
             """
-    print(script_sql)
     registry = sgbdSQL.consultar_db(script_sql)
 
     data_frame = pd.DataFrame(
