@@ -638,7 +638,7 @@ def lists_word_researcher_db(researcher_id=None, graduate_program=None, dep_id=N
             ts_stat($${SCRIPQ_SQL}$$)
         WHERE
             CHAR_LENGTH(word) > 3
-            AND TRIM(word) <> ANY(%(stopwords)s)
+            AND TRIM(word) <> ALL(%(stopwords)s)
         ORDER BY
             ndoc DESC
         FETCH FIRST 20 ROWS ONLY;
