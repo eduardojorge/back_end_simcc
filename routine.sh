@@ -8,6 +8,7 @@ LOG_FILE="${MY_PROJECT_HOME}/routine.log"
 exec > >(tee -a "${LOG_FILE}") 2>&1
 
 echo "MY_PROJECT_HOME: $MY_PROJECT_HOME"
+cd "$MY_PROJECT_HOME" || exit 1
 
 # Carregar variáveis de ambiente
 source "${MY_PROJECT_HOME}/.env"
