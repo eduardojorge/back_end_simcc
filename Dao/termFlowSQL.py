@@ -657,9 +657,6 @@ def lista_institution_production_db(text, institution, type_):
 
     filterinstitution = util.filterSQL(institution, ";", "or", "i.name")
 
-    # b.id = rf.bibliographic_production_id
-    # researcher_frequency rf,
-    #  AND rf.researcher_id = r.id
     sql = ""
 
     if type_ == "SPEAKER":
@@ -674,7 +671,6 @@ def lista_institution_production_db(text, institution, type_):
                            AND acronym IS NOT NULL
 
                            AND type_participation in ('Apresentação Oral','Conferencista','Moderador','Simposista') 
-                           
                            
                            %s
                            %s

@@ -121,7 +121,7 @@ if __name__ == "__main__":
         try:
             save_cv(lattes_id, path, settings.ALTERNATIVE_CNPQ_SERVICE)
             qtd += 1
-        except Exception as e:
+        except Exception:
             print(f"Erro encontrado!!! {data['lattes_id']}")
 
     logger.debug(f"FIM: {str(qtd)}")
