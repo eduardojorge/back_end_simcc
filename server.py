@@ -42,7 +42,6 @@ from csv_powerBI import (
     dim_researcher_csv_db,
     dim_institution_csv_db,
     fat_production_tecnical_year_novo_csv_db,
-    dim_city_csv_db,
     fat_foment,
     dim_category_level_code,
     dim_research_group,
@@ -54,7 +53,8 @@ from csv_powerBI import (
     dim_graduate_program_student_year_unnest,
     graduate_program_student_researcher_csv_db,
     save_data_to_csv,
-    fat_departament_csv_bd,dim_city_csv_db
+    fat_departament_csv_bd,
+    dim_city_csv_db,
 )
 
 YEAR = 1990
@@ -495,7 +495,7 @@ def load_dim_institution_csv_db():
 
 
 @app.route("/dim_institution.csv", methods=["GET"])
-def load_dim_city_csv_db():
+def load_dim_institution():
     dim_city_csv_db()
     path = "Files/indicadores_simcc/dim_institution.csv"
     return send_file(path, as_attachment=True)
@@ -621,6 +621,7 @@ def load_ufmg_tearcher():
     ufmg_teacher()
     path = "Files/indicadores_simcc/ufmg_teacher.csv"
     return send_file(path, as_attachment=True)
+
 
 @app.route("/dim_city.csv", methods=["GET"])
 def load_dim_city_csv_db():
