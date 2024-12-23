@@ -630,9 +630,15 @@ def load_dim_city_csv_db():
     return send_file(path, as_attachment=True)
 
 
-@app.route("/logo.png", methods=["GET"])
-def logo_png():
+@app.route("/iapos.png", methods=["GET"])
+def iapos_png():
     path = "Files/indicadores_simcc/iapos.png"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/npai.png", methods=["GET"])
+def npai_png():
+    path = "Files/indicadores_simcc/npai.png"
     return send_file(path, as_attachment=True)
 
 
