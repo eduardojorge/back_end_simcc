@@ -630,6 +630,12 @@ def load_dim_city_csv_db():
     return send_file(path, as_attachment=True)
 
 
+@app.route("/logo.png", methods=["GET"])
+def logo_png():
+    path = "Files/indicadores_simcc/iapos.png"
+    return send_file(path, as_attachment=True)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
