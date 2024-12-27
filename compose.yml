@@ -1,0 +1,22 @@
+services:
+  simcc-postgres:
+    image: pgvector/pgvector:pg17
+    container_name: simcc-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: simcc
+    ports:
+      - "5432:5432"
+    volumes:
+      - simcc-postgres-data:/var/lib/postgresql/data
+      - ./scripts/database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - 001-NET
+
+volumes:
+  simcc-postgres-data:
+
+networks:
+  001-NET:
+    external: true

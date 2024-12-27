@@ -780,6 +780,13 @@ CREATE TABLE IF NOT EXISTS embeddings.patent (
 CREATE INDEX ON researcher USING gin (name gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract gin_trgm_ops);
 CREATE INDEX ON researcher USING gin (abstract_en gin_trgm_ops);
+
 CREATE INDEX ON great_area_expertise USING gin (name gin_trgm_ops);
 CREATE INDEX ON area_expertise USING gin (name gin_trgm_ops);
 CREATE INDEX ON periodical_magazine USING gin (name gin_trgm_ops);
+
+CREATE INDEX ON bibliographic_production USING gin (title gin_trgm_ops);
+CREATE INDEX ON brand USING gin (title gin_trgm_ops);
+CREATE INDEX ON software USING gin (title gin_trgm_ops);
+CREATE INDEX ON event_organization USING gin (title gin_trgm_ops);
+
