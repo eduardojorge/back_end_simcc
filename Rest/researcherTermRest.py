@@ -4,9 +4,15 @@ from http import HTTPStatus
 
 import Dao.resarcher_baremaSQL as resarcher_baremaSQL
 import Dao.termFlowSQL as termFlowSQL
-from Model.Bibliographic_Production_Researcher import (
-    Bibliographic_Production_Researcher,
-)
+
+from Dao.areaFlowSQL import (
+    researcher_graduate_program_db,
+    researcher_research_group_db,
+    researcher_openAlex_db,
+    researcher_foment_db,
+    researcher_departament,
+    )
+
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.PEvent_Researcher import PEvent_Researcher
 from Model.Researcher_Report import Researcher_Report
@@ -242,8 +248,6 @@ def patent_production_researcher():
 
 @researcherTermRest.route("/bibliographic_production_researcher", methods=["GET"])
 def bibliographic_production_researcher():
-    list_bibliographic_production_researcher = list()
-
     researcher_id = request.args.get("researcher_id")
     qualis = request.args.get("qualis")
     terms = request.args.get("terms")
@@ -253,7 +257,7 @@ def bibliographic_production_researcher():
     type = request.args.get("type")
     page = request.args.get("page", 0, int)
 
-    df_bd = termFlowSQL.lists_bibliographic_production_article_researcher_db(
+    production_list = termFlowSQL.lists_bibliographic_production_article_researcher_db(
         term=terms,
         researcher_id=researcher_id,
         year=year,
@@ -261,26 +265,7 @@ def bibliographic_production_researcher():
         qualis=qualis,
         page=page,
     )
-
-    for i, infos in df_bd.iterrows():
-        b = Bibliographic_Production_Researcher()
-        b.id = str(infos.id)
-        b.title = str(infos.title)
-        b.year = str(infos.year)
-        b.type = str(infos.type)
-        b.doi = str(infos.doi)
-        b.qualis = str(infos.qualis)
-        b.magazine = str(infos.magazine)
-        b.researcher = str(infos.researcher)
-        b.lattes_10_id = str(infos.lattes_10_id)
-        b.lattes_id = str(infos.lattes_id)
-        b.jif = str(infos.jif)
-        b.jcr_link = str(infos.jcr_link)
-        b.researcher_id = str(infos.researcher_id)
-
-        list_bibliographic_production_researcher.append(b.getJson())
-
-    return jsonify(list_bibliographic_production_researcher), 200
+    return jsonify(production_list), 200
 
 
 @researcherTermRest.route("/qualis_researcher", methods=["GET"])

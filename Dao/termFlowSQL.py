@@ -474,12 +474,23 @@ def lists_bibliographic_production_article_researcher_db(
                 r.lattes_id AS lattes_id,
                 jcr AS jif,
                 jcr_link,
-                r.id as researcher_id
+                r.id as researcher_id,
+                opa.abstract,
+                opa.article_institution,
+                opa.authors,
+                opa.authors_institution,
+                opa.citations_count,
+                ba.issn,
+                opa.keywords,
+                opa.landing_page_url,
+                opa.language,
+                opa.pdf
             FROM
                 bibliographic_production b
                 LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
                 LEFT JOIN researcher r ON r.id = b.researcher_id
                 LEFT JOIN institution i ON r.institution_id = i.id
+                LEFT JOIN openalex_article opa ON opa.article_id = b.id
             WHERE
                 year_ >= {year}
                 {filter}
@@ -506,12 +517,23 @@ def lists_bibliographic_production_article_researcher_db(
             r.lattes_id AS lattes_id,
             jcr AS jif,
             jcr_link,
-            r.id
+            r.id,
+            opa.abstract,
+            opa.article_institution,
+            opa.authors,
+            opa.authors_institution,
+            opa.citations_count,
+            ba.issn,
+            opa.keywords,
+            opa.landing_page_url,
+            opa.language,
+            opa.pdf
         FROM
             bibliographic_production b
             LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
             LEFT JOIN researcher r ON r.id = b.researcher_id
             LEFT JOIN institution i ON r.institution_id = i.id
+            LEFT JOIN openalex_article opa ON opa.article_id = b.id
         WHERE
             year_ >= {year}
             {filter}
@@ -521,6 +543,7 @@ def lists_bibliographic_production_article_researcher_db(
             year DESC
         {pagination}
         """
+    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(
         reg,
@@ -538,9 +561,11 @@ def lists_bibliographic_production_article_researcher_db(
             "jif",
             "jcr_link",
             "researcher_id",
+            "abstract", "article_institution", "authors", "authors_institution", "citations_count", "issn", "keywords", "landing_page_url", "language", "pdf"
         ],
     )
-    return data_frame
+
+    return data_frame.fillna("").to_dict(orient="records")
 
 
 def lists_bibliographic_production_qtd_qualis_researcher_db(
