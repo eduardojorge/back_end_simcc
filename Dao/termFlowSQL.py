@@ -120,8 +120,7 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                     )),
             p.title as title,
             MIN(p.development_year) as year,
-            MIN(p.grant_date) as grant_date,
-            p.researcher_id
+            MIN(p.grant_date) as grant_date
         FROM
             patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -137,11 +136,10 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
     if distinct == "0":
         script_sql = f"""
             SELECT
-                '',
+                p.researcher_id,
                 p.title as title,
                 (p.development_year) as year,
-                (p.grant_date) as grant_date,
-                p.researcher_id
+                (p.grant_date) as grant_date
             FROM
                 patent p
                 LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -152,7 +150,7 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                 {filter_researcher}
             ORDER BY year desc
             """
-
+    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(reg, columns=["researcher", "title", "year", "grant_date"])
@@ -272,7 +270,7 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                         b.year AS YEAR,
                         bc.isbn,
                         bc.publishing_company AS publishing_company,
-                        ''
+                        b.researcher_id
                     FROM   
                         bibliographic_production b, 
                         bibliographic_production_book_chapter bc,
