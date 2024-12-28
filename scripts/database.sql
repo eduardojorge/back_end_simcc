@@ -733,11 +733,16 @@ CREATE TABLE IF NOT EXISTS public.artistic_production (
         FOREIGN KEY (researcher_id) REFERENCES public.researcher(id)
 );
 CREATE TABLE IF NOT EXISTS public.relevant_production (
+    researcher_id uuid NOT NULL,
     production_id uuid NOT NULL,
     type varchar NOT NULL,
+    has_image boolean NOT NULL DEFAULT false,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    has_image boolean DEFAULT false NOT NULL,
-    PRIMARY KEY (production_id, type)
+    PRIMARY KEY (researcher_id, production_id, type),
+    CONSTRAINT fk_researcher
+        FOREIGN KEY (researcher_id)
+        REFERENCES public.researcher(id)
+        ON DELETE CASCADE
 );
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE EXTENSION vector;

@@ -120,7 +120,8 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                     )),
             p.title as title,
             MIN(p.development_year) as year,
-            MIN(p.grant_date) as grant_date
+            MIN(p.grant_date) as grant_date,
+            p.researcher_id
         FROM
             patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -139,7 +140,8 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                 '',
                 p.title as title,
                 (p.development_year) as year,
-                (p.grant_date) as grant_date
+                (p.grant_date) as grant_date,
+                p.researcher_id
             FROM
                 patent p
                 LEFT JOIN researcher r ON r.id = p.researcher_id

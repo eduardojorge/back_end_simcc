@@ -31,7 +31,7 @@ check_error() {
 echo "Iniciando execução do script em $DATE_FORMAT"
 
 # Usar o Python do ambiente virtual diretamente
-# "${MY_PROJECT_HOME}/.venv/bin/python" "${MY_PROJECT_HOME}/soap_lattes.py"
+"${MY_PROJECT_HOME}/.venv/bin/python" "${MY_PROJECT_HOME}/soap_lattes.py"
 check_error "Soap Lattes"
 
 rm -rf $JADE_EXTRATOR_FOLTER/audit/*

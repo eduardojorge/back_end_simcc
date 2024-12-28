@@ -46,15 +46,17 @@ def delete_image(id):
             return "Image deleted successfully", 200
     return "Image not found", 404
 
-@management.route("/relevant/<id>", methods=["POST"])
-def post_relevant_production(id):
+@management.route("/relevant/<researcher_id>/<production_id>", methods=["POST"])
+def post_relevant_production(researcher_id, production_id):
     type_ = request.args.get('type')
-    relevantSQL.add_relevant_production(id, type_, False)
+    relevantSQL.add_relevant_production(researcher_id, production_id, type_, False)
     return 'OK', 200
 
 @management.route("/relevant", methods=["GET"])
 def get_relevant_production_list():
-    relevant_list = relevantSQL.get_relevant_list()
+    researcher_id = request.args.get('researcher_id')
+    type_ = request.args.get('type')
+    relevant_list = relevantSQL.get_relevant_list(researcher_id, type_)
     return relevant_list
 
 @management.route("/relevant/<id>", methods=["DELETE"])
