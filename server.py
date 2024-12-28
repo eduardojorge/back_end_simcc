@@ -186,6 +186,10 @@ def researcherName():
     )
     return jsonify(list_researcher), HTTPStatus.OK
 
+@app.route("/researcher/<id>", methods=["GET"])
+def researcher(id):
+    list_researcher = Dao.areaFlowSQL.lista_researcher_full_name_db(id=id)
+    return jsonify(list_researcher), HTTPStatus.OK
 
 @app.route("/total", methods=["GET"])
 def total():

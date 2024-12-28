@@ -15,7 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def CNPq_att(id: str, proxy: bool) -> datetime:
     if proxy:
-        URL = f"https://simcc.uesc.br:8080/getDataAtualizacaoCV?lattes_id={id}"
+        URL = f"https://simcc.uesc.br/api/getDataAtualizacaoCV?lattes_id={id}"
         resultado = requests.get(URL, verify=False).json()
     else:
         resultado = client.service.getDataAtualizacaoCV(id)
@@ -38,7 +38,7 @@ def get_id_cnpq(name: str = "", date: str = "", CPF: str = "") -> str:
 def save_cv(lattes_id: str, dir: str, proxy: bool):
     lattes_date = CNPq_att(id=lattes_id, proxy=proxy)
     if lattes_date <= last_update(lattes_id):
-        msg = "{lattes_id} já está atualizado id"
+        msg = f"{lattes_id} já está atualizado id"
         logger.debug(msg)
         print(msg)
         return
@@ -49,7 +49,7 @@ def save_cv(lattes_id: str, dir: str, proxy: bool):
 
     try:
         if proxy:
-            URL = f"https://simcc.uesc.br:8080/getCurriculoCompactado?lattes_id={lattes_id}"
+            URL = f"https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}"
             response = requests.get(URL, verify=False).content
         else:
             response = client.service.getCurriculoCompactado(lattes_id)
@@ -120,9 +120,9 @@ if __name__ == "__main__":
         lattes_id = str(data["lattes_id"]).zfill(16)
         try:
             save_cv(lattes_id, path, settings.ALTERNATIVE_CNPQ_SERVICE)
-            qtd += 1
         except Exception:
             print(f"Erro encontrado!!! {data['lattes_id']}")
+        qtd += 1
 
     logger.debug(f"FIM: {str(qtd)}")
     print(f"FIM, Quantidade de curriculos processados: {str(qtd)}")

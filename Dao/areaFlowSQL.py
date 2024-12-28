@@ -698,7 +698,11 @@ def city_search(city_name: str = None) -> str:
     return pd.DataFrame(sgbdSQL.consultar_db(sql=sql), columns=["id"])["id"][0]
 
 
-def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
+def lista_researcher_full_name_db(name = None, graduate_program_id= None, dep_id= None, id= None):
+    filter_lattes = str()
+    if id:
+        filter_lattes = f"AND r.lattes_id = '{id}'"
+        
     filter_name = str()
     if name:
         name = name.replace(";", " ")
@@ -752,6 +756,7 @@ def lista_researcher_full_name_db(name, graduate_program_id, dep_id):
             1 = 1
             {filter_name}
             {filter_graduate_program}
+            {filter_lattes}
             {filter_departament};
             """
     registry = sgbdSQL.consultar_db(script_sql)
