@@ -116,10 +116,7 @@ def book_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
     distinct = request.args.get("distinct")
-    if not year:
-        year = YEAR
     term = request.args.get("term")
-
     df_bd = termFlowSQL.lists_book_production_researcher_db(
         researcher_id, year, term, distinct
     )
@@ -132,8 +129,6 @@ def book_chapter_production_researcher():
     researcher_id = request.args.get("researcher_id")
     term = request.args.get("term")
     year = request.args.get("year")
-    if not year:
-        year = YEAR
     distinct = request.args.get("distinct")
 
     df_bd = termFlowSQL.lists_book_chapter_production_researcher_db(
@@ -141,9 +136,6 @@ def book_chapter_production_researcher():
     )
 
     return jsonify(df_bd), 200
-
-
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 
 
 @researcherTermRest.route("/researcher_report", methods=["GET"])

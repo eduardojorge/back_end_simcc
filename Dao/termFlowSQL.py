@@ -192,6 +192,11 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
             jsonb_agg(DISTINCT jsonb_build_object(
                 'name', r.name,
                 'researcher_id', b.researcher_id
+            )),
+            jsonb_agg(DISTINCT jsonb_build_object(
+                'id', b.id,
+                'has_image', b.has_image,
+                'relevance', b.relevance
             ))
         FROM   
             bibliographic_production b, 
@@ -209,14 +214,19 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
         ORDER BY 
             year desc
             """
-    if distinct == 0:
-        script_sql = """
+    if distinct == "0":
+        script_sql = f"""
             SELECT
                 (b.title) AS title,
                 (b.year) AS YEAR,
                 bc.isbn,
                 (bc.publishing_company) AS publishing_company,
-                ''
+                r.id,
+                jsonb_build_object(
+                    'id', b.id,
+                    'has_image', b.has_image,
+                    'relevance', b.relevance
+                )
             FROM   
                 bibliographic_production b, 
                 bibliographic_production_book bc,
@@ -234,7 +244,8 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
     reg = sgbdSQL.consultar_db(script_sql)
 
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "isbn", "publishing_company", "researcher"]
+        reg,
+        columns=["title", "year", "isbn", "publishing_company", "researcher", "book"],
     )
 
     return df_bd.to_dict(orient="records")
@@ -260,6 +271,11 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                 jsonb_agg(DISTINCT jsonb_build_object(
                     'name', r.name,
                     'researcher_id', b.researcher_id
+                )),
+                jsonb_agg(DISTINCT jsonb_build_object(
+                    'id', b.id,
+                    'has_image', b.has_image,
+                    'relevance', b.relevance
                 ))
             FROM
                 bibliographic_production b,
@@ -269,7 +285,7 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                 bc.bibliographic_production_id = b.id
                 AND b.researcher_id = r.id
                 {filter_researcher}
-                AND b.year_>={year}
+                AND b.year_ >= {year}
                 AND b.type='BOOK_CHAPTER'
                 {filter}
             GROUP BY
@@ -283,7 +299,12 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                         b.year AS YEAR,
                         bc.isbn,
                         bc.publishing_company AS publishing_company,
-                        b.researcher_id
+                        b.researcher_id,
+                        jsonb_build_object(
+                            'id', b.id,
+                            'has_image', b.has_image,
+                            'relevance', b.relevance
+                        )
                     FROM   
                         bibliographic_production b, 
                         bibliographic_production_book_chapter bc,
@@ -299,7 +320,15 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                         year desc"""
     reg = sgbdSQL.consultar_db(sql)
     df_bd = pd.DataFrame(
-        reg, columns=["title", "year", "isbn", "publishing_company", "researcher"]
+        reg,
+        columns=[
+            "title",
+            "year",
+            "isbn",
+            "publishing_company",
+            "researcher",
+            "book_chapter",
+        ],
     )
     return df_bd.to_dict(orient="records")
 
@@ -317,13 +346,13 @@ def lists_brand_production_researcher_db(researcher_id, year):
         WHERE 
             researcher_id='{researcher_id}'
             AND b.year >= {year}
-        ORDER BY 
+        ORDER BY
             year DESC
             """
 
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=["title", "year"])
+    df_bd = pd.DataFrame(reg, columns=["title", "year", "has_image", "relevance"])
 
     return df_bd.to_dict(orient="records")
 
@@ -501,7 +530,9 @@ def lists_bibliographic_production_article_researcher_db(
                 opa.keywords,
                 opa.landing_page_url,
                 opa.language,
-                opa.pdf
+                opa.pdf,
+                b.has_image,
+                b.relevance
             FROM
                 bibliographic_production b
                 LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
@@ -544,7 +575,9 @@ def lists_bibliographic_production_article_researcher_db(
             opa.keywords,
             opa.landing_page_url,
             opa.language,
-            opa.pdf
+            opa.pdf,
+            b.has_image,
+            b.relevance
         FROM
             bibliographic_production b
             LEFT JOIN bibliographic_production_article ba ON b.id = ba.bibliographic_production_id
@@ -588,6 +621,8 @@ def lists_bibliographic_production_article_researcher_db(
             "landing_page_url",
             "language",
             "pdf",
+            "has_image",
+            "relevance",
         ],
     )
 
