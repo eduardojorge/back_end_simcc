@@ -5,18 +5,10 @@ from http import HTTPStatus
 import Dao.resarcher_baremaSQL as resarcher_baremaSQL
 import Dao.termFlowSQL as termFlowSQL
 
-from Dao.areaFlowSQL import (
-    researcher_graduate_program_db,
-    researcher_research_group_db,
-    researcher_openAlex_db,
-    researcher_foment_db,
-    researcher_departament,
-    )
 
 from Model.Guidance_Researcher import Guidance_Researcher
 from Model.PEvent_Researcher import PEvent_Researcher
 from Model.Researcher_Report import Researcher_Report
-from Model.Software_Researcher import Software_Researcher
 from Model.Year_Barema import Year_Barema
 
 researcherTermRest = Blueprint("researcherTermRest", __name__)
@@ -111,16 +103,11 @@ def guidance_researcher():
     return jsonify(list_guidance_researcher), 200
 
 
-# lists_bibliographic_production_article_researcher_db("Robótica",'35e6c140-7fbb-4298-b301-c5348725c467')
 @researcherTermRest.route("/brand_production_researcher", methods=["GET"])
 def brand_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
-    if not year:
-        year = YEAR
-
-    df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, 1000)
-
+    df_bd = termFlowSQL.lists_brand_production_researcher_db(researcher_id, year)
     return jsonify(df_bd), 200
 
 
@@ -186,22 +173,10 @@ def researcher_report():
 
 @researcherTermRest.route("/software_production_researcher", methods=["GET"])
 def software_production_researcher():
-    list_software_production_researcher = []
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
-    if not year:
-        year = YEAR
-
-    df_bd = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
-
-    for i, infos in df_bd.iterrows():
-        s = Software_Researcher()
-        s.title = str(infos.title)
-        s.year = str(infos.year)
-
-        list_software_production_researcher.append(s.getJson())
-
-    return jsonify(list_software_production_researcher), 200
+    software = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
+    return jsonify(software), 200
 
 
 @researcherTermRest.route("/pevent_researcher", methods=["GET"])

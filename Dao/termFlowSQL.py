@@ -114,13 +114,18 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
 
     script_sql = f"""
         SELECT
-            jsonb_agg(DISTINCT jsonb_build_object(
-                        'name', r.name,
-                        'researcher_id', p.researcher_id
-                    )),
+	        jsonb_agg(DISTINCT jsonb_build_object(
+				'name', r.name,
+				'researcher_id', p.researcher_id
+			)),
             p.title as title,
             MIN(p.development_year) as year,
-            MIN(p.grant_date) as grant_date
+            MIN(p.grant_date) as grant_date,
+	        jsonb_agg(DISTINCT jsonb_build_object(
+				'id', p.id,
+				'has_image', p.has_image,
+				'relevance', p.relevance
+			))
         FROM
             patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -139,7 +144,12 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                 p.researcher_id,
                 p.title as title,
                 (p.development_year) as year,
-                (p.grant_date) as grant_date
+                (p.grant_date) as grant_date,
+                jsonb_build_object(
+                    'id', p.id,
+                    'has_image', p.has_image,
+                    'relevance', p.relevance
+			    )
             FROM
                 patent p
                 LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -150,10 +160,12 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
                 {filter_researcher}
             ORDER BY year desc
             """
-    print(script_sql)
     reg = sgbdSQL.consultar_db(script_sql)
 
-    df_bd = pd.DataFrame(reg, columns=["researcher", "title", "year", "grant_date"])
+    df_bd = pd.DataFrame(
+        reg,
+        columns=["researcher", "title", "year", "grant_date", "patent"],
+    )
     df_bd["grant_date"] = df_bd["grant_date"].astype("str").replace("NaT", "")
 
     return df_bd.to_dict(orient="records")
@@ -227,6 +239,7 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
 
     return df_bd.to_dict(orient="records")
 
+
 def lists_book_chapter_production_researcher_db(researcher_id, year, term, distinct):
     filter = str()
     if term:
@@ -296,8 +309,10 @@ def lists_brand_production_researcher_db(researcher_id, year):
         SELECT 
             DISTINCT
             b.title as title, 
-            b.year as year
-        FROM 
+            b.year as year,
+            b.has_image,
+            b.relevance
+        FROM
             brand b
         WHERE 
             researcher_id='{researcher_id}'
@@ -414,7 +429,9 @@ def lists_software_production_researcher_db(researcher_id, year):
         SELECT 
             DISTINCT 
             s.title as title, 
-            s.year as year
+            s.year as year,
+            has_image,
+            relevance
         FROM 
             software s
         WHERE 
@@ -424,9 +441,9 @@ def lists_software_production_researcher_db(researcher_id, year):
         """
     reg = sgbdSQL.consultar_db(sql)
 
-    df_bd = pd.DataFrame(reg, columns=["title", "year"])
+    df_bd = pd.DataFrame(reg, columns=["title", "year", "has_image", "relevance"])
 
-    return df_bd
+    return df_bd.to_dict(orient="records")
 
 
 def lists_bibliographic_production_article_researcher_db(
@@ -561,7 +578,16 @@ def lists_bibliographic_production_article_researcher_db(
             "jif",
             "jcr_link",
             "researcher_id",
-            "abstract", "article_institution", "authors", "authors_institution", "citations_count", "issn", "keywords", "landing_page_url", "language", "pdf"
+            "abstract",
+            "article_institution",
+            "authors",
+            "authors_institution",
+            "citations_count",
+            "issn",
+            "keywords",
+            "landing_page_url",
+            "language",
+            "pdf",
         ],
     )
 

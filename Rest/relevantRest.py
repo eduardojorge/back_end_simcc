@@ -47,8 +47,8 @@ def delete_image(id):
     return "Image not found", 404
 
 
-@management.route("/relevant/<researcher_id>/<production_id>", methods=["POST"])
-def post_relevant_production(researcher_id, production_id):
+@management.route("/relevant/<production_id>", methods=["POST"])
+def post_relevant_production(production_id):
     type_ = request.args.get("type")
     relevantSQL.add_relevance(production_id, type_)
     return "OK", 200
