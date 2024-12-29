@@ -227,7 +227,6 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
 
     return df_bd.to_dict(orient="records")
 
-
 def lists_book_chapter_production_researcher_db(researcher_id, year, term, distinct):
     filter = str()
     if term:
@@ -249,8 +248,8 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                     'name', r.name,
                     'researcher_id', b.researcher_id
                 ))
-            FROM   
-                bibliographic_production b, 
+            FROM
+                bibliographic_production b,
                 bibliographic_production_book_chapter bc,
                 researcher r
             where 
@@ -264,6 +263,7 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                 bc.isbn
             ORDER BY 
                 year desc"""
+
     if distinct == "0":
         sql = f"""SELECT
                         b.title AS title,

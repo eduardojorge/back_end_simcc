@@ -727,7 +727,7 @@ def lista_researcher_full_name_db(name = None, graduate_program_id= None, dep_id
             )
             """
 
-    script_sql = f"""
+    SCRIPT_SQL = f"""
         SELECT
             r.id AS id,
             r.name AS researcher_name,
@@ -759,7 +759,8 @@ def lista_researcher_full_name_db(name = None, graduate_program_id= None, dep_id
             {filter_lattes}
             {filter_departament};
             """
-    registry = sgbdSQL.consultar_db(script_sql)
+    print(SCRIPT_SQL)
+    registry = sgbdSQL.consultar_db(SCRIPT_SQL)
 
     data_frame = pd.DataFrame(
         registry,
@@ -1032,7 +1033,7 @@ def researcher_graduate_program_db():
 def researcher_research_group_db():
     script_sql = """
         SELECT 
-            rg.first_leader_id as id,
+            r.id AS id, 
             jsonb_agg(jsonb_build_object(
             'group_id', rg.id,
             'name', rg.name,
@@ -1045,33 +1046,11 @@ def researcher_research_group_db():
             'institution_name', rg.institution_name,
             'category', rg.category
             )) as research_groups
-        FROM 
-            research_group rg
-        WHERE rg.first_leader_id IS NOT NULL
-        GROUP BY
-            rg.first_leader_id
-
-        UNION
-
-        SELECT 
-            rg.second_leader_id as id,
-            jsonb_agg(jsonb_build_object(
-            'group_id', rg.id,
-            'name', rg.name,
-            'area', rg.area,
-            'census',rg.census,
-            'start_of_collection', rg.start_of_collection,
-            'end_of_collection', rg.end_of_collection,
-            'group_identifier', rg.group_identifier,
-            'year', rg.year,
-            'institution_name', rg.institution_name,
-            'category', rg.category
-            )) as research_groups
-        FROM 
-            research_group rg
-        WHERE rg.second_leader_id IS NOT NULL
-        GROUP BY
-            rg.second_leader_id
+        FROM researcher r
+        INNER JOIN research_group rg 
+        ON rg.second_leader_id = r.id OR rg.first_leader_id = r.id
+        GROUP BY r.id
+        ORDER BY r.id
         """
     registry = sgbdSQL.consultar_db(script_sql)
 
