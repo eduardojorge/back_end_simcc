@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     ALTERNATIVE_CNPQ_SERVICE: bool = False
     JADE_EXTRATOR_FOLTER: Optional[str] = None
 
+    FIREBASE_COLLECTION: Optional[str] = "termos_busca"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
