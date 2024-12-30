@@ -37,7 +37,6 @@ def getLattesId10(lattes_id: str) -> str:
 
 
 def update_lattes_id_10():
-
     script_sql = """
         SELECT 
             r.id as id, 
@@ -53,7 +52,6 @@ def update_lattes_id_10():
     data_frame = pd.DataFrame(reg, columns=["id", "lattes"])
 
     for Index, infos in data_frame.iterrows():
-
         lattes_10_id = getLattesId10(infos["lattes"])
 
         script_sql = f"""

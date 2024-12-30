@@ -57,7 +57,9 @@ if __name__ == "__main__":
     dictionary = db.collection(settings.FIREBASE_COLLECTION)
     docs = dictionary.stream()
     for doc in docs:
+        print(f"Deletando [{doc.get('type_')}]")
         doc.reference.delete()
 
     for item in terms_dataframe().to_dict(orient="records"):
+        print(f"Adicionando [{item.get('type_')}]")
         dictionary.add(item)

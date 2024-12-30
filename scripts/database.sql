@@ -491,7 +491,7 @@ CREATE TABLE IF NOT EXISTS public.openalex_article (
     CONSTRAINT "PK_FIXMEHELP" PRIMARY KEY (article_id)
 );
 CREATE TABLE IF NOT EXISTS public.openalex_researcher (
-    researcher_id uuid,
+    researcher_id uuid UNIQUE,
     h_index integer,
     relevance_score double precision,
     works_count integer,
