@@ -271,7 +271,7 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                 jsonb_agg(DISTINCT jsonb_build_object(
                     'name', r.name,
                     'researcher_id', b.researcher_id,
-                    r.lattes_id
+                    'lattes_id', r.lattes_id
                 )),
                 jsonb_agg(DISTINCT jsonb_build_object(
                     'id', b.id,
