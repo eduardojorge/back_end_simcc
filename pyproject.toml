@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.*"
 fastapi = {extras = ["standard"], version = "^0.115.6"}
+respx = "^0.22.0"
+httpx = "^0.28.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -36,9 +38,7 @@ addopts = '-p no:warnings'
 lint = 'ruff check .; ruff check . --diff'
 format = 'ruff check . --fix; ruff format .'
 run = 'fastapi dev simcc'
-pre_test = 'task lint'
-test = 'pytest -s -x --cov=simcc -vv'
-post_test = 'coverage html'
+test = 'task lint; pytest -s -x --cov=simcc -vv; coverage html'
 
 [build-system]
 requires = ["poetry-core"]
