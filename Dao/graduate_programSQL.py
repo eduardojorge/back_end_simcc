@@ -344,3 +344,9 @@ def production_general_db(graduate_program_id, year, dep_id):
     list_graduateProgram_Production = pd.DataFrame(list_graduateProgram_Production)
 
     return list_graduateProgram_Production.replace("", 0).to_dict(orient="records")
+
+
+def basic_graphic(id):
+    SCRIPT_SQL = """
+        
+        """

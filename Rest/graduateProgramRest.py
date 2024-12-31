@@ -46,3 +46,24 @@ def graduate_program_profnit():
         graduate_program_id
     )
     return jsonify(json_graduate_program), 200
+
+
+@graduateProgramRest.route("/graduate_program/<id>/graphic/", methods=["GET"])
+def basic_graphic(id):
+    data = graduate_programSQL
+    return jsonify(data), 200
+
+
+@graduateProgramRest.route("/graduate_program/<id>/graphic/indprod", methods=["GET"])
+def indProd_graphic(id):
+    data = graduate_programSQL.basic_graphic(id)
+    return jsonify(data), 200
+
+
+@graduateProgramRest.route(
+    "/graduate_program/<id>/graphic/indprodsup/",
+    methods=["GET"],
+)
+def IndProdExtSup_graphic(id):
+    data = graduate_programSQL
+    return jsonify(data), 200

@@ -270,13 +270,15 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                 MIN(bc.publishing_company) AS publishing_company,
                 jsonb_agg(DISTINCT jsonb_build_object(
                     'name', r.name,
-                    'researcher_id', b.researcher_id
+                    'researcher_id', b.researcher_id,
+                    r.lattes_id
                 )),
                 jsonb_agg(DISTINCT jsonb_build_object(
                     'id', b.id,
                     'has_image', b.has_image,
                     'relevance', b.relevance
-                ))
+                )),
+                ''
             FROM
                 bibliographic_production b,
                 bibliographic_production_book_chapter bc,
@@ -304,7 +306,8 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
                             'id', b.id,
                             'has_image', b.has_image,
                             'relevance', b.relevance
-                        )
+                        ),
+                        r.lattes_id
                     FROM   
                         bibliographic_production b, 
                         bibliographic_production_book_chapter bc,
@@ -328,6 +331,7 @@ def lists_book_chapter_production_researcher_db(researcher_id, year, term, disti
             "publishing_company",
             "researcher",
             "book_chapter",
+            "lattes_id",
         ],
     )
     return df_bd.to_dict(orient="records")
