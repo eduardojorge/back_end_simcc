@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from uuid import UUID
 
 from fastapi import APIRouter
 
@@ -24,6 +25,8 @@ def list_graduate_programs():
     response_model=list[ResearcherArticleProduction],
     status_code=HTTPStatus.OK,
 )
-def article_production(program_id):
-    article_production = GraduateProgramService.list_article_production()
+def article_production(program_id: UUID, year: int = 2020):
+    article_production = GraduateProgramService.list_article_production(
+        program_id, year
+    )
     return article_production

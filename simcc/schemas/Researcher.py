@@ -13,3 +13,4 @@ class ResearcherArticleProduction(BaseModel):
     B4: int
     BC: int
     citations: int
+    year: int
