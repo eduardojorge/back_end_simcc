@@ -11,6 +11,8 @@ fastapi = {extras = ["standard"], version = "^0.115.6"}
 respx = "^0.22.0"
 httpx = "^0.28.1"
 pydantic-settings = "^2.7.1"
+psycopg = {extras = ["pool"], version = "^3.2.3"}
+pandas = "^2.2.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -36,10 +38,8 @@ pythonpath = "."
 addopts = '-p no:warnings'
 
 [tool.taskipy.tasks]
-lint = 'ruff check .; ruff check . --diff'
-format = 'ruff check . --fix; ruff format .'
 run = 'fastapi dev simcc'
-test = 'task lint; pytest -s -x --cov=simcc -vv; coverage html'
+test = 'pytest -s -x --cov=simcc -vv; coverage html'
 
 [build-system]
 requires = ["poetry-core"]

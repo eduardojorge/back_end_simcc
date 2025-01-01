@@ -1,9 +1,18 @@
 from http import HTTPStatus
+from sys import prefix
 
 import httpx
 from fastapi import FastAPI, Request, Response
 
+from simcc.routers import GraduateProgramRouter
+
 app = FastAPI()
+
+app.include_router(
+    GraduateProgramRouter.router,
+    prefix='/v2/graduate_program',
+    tags=['Graduate Program'],
+)
 
 PROXY_URL = 'http://localhost:8080'
 
