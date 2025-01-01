@@ -4,9 +4,10 @@ import httpx
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+from simcc.config import settings
 from simcc.routers import GraduateProgramRouter
 
-app = FastAPI()
+app = FastAPI(root_path=settings.ROOT_PATH)
 
 app.include_router(
     GraduateProgramRouter.router,
@@ -14,7 +15,7 @@ app.include_router(
     tags=['Graduate Program'],
 )
 
-PROXY_URL = 'http://localhost:8080'
+PROXY_URL = settings.PROXY_URL
 
 
 @app.get('/')

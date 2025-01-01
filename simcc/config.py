@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     HOST: str = 'localhost'
     PORT: int = 5432
 
+    ROOT_PATH: str = ''
+    PROXY_URL: str = 'http://localhost:8080'
+
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
