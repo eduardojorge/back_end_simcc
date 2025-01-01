@@ -19,7 +19,7 @@ class Article(BaseModel):
     doi: str
     qualis: str
     magazine: str
-    jcr: str
+    jcr: float
     jcr_link: str
 
     # OpenAlex Data

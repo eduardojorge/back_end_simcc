@@ -1,8 +1,8 @@
 from http import HTTPStatus
-from sys import prefix
 
 import httpx
 from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 
 from simcc.routers import GraduateProgramRouter
 
@@ -20,6 +20,22 @@ PROXY_URL = 'http://localhost:8080'
 @app.get('/')
 def read_root():
     return {'message': 'Olá Mundo!'}
+
+
+origins = [
+    'http://localhost/',
+    'http://localhost:5173/',
+    'http://conectee-front:80/',
+    'http://conectee.eng.ufmg.br/',
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 
 @app.middleware('http')
