@@ -4,5 +4,5 @@ from simcc.repositories.simcc import ProductionRepository
 
 
 def list_article_metrics(program_id: UUID, year: int):
-    article_metrics = ProductionRepository.list_article_metrics()
+    article_metrics = ProductionRepository.list_article_metrics(program_id, year)
     return article_metrics
