@@ -3,8 +3,17 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+class ArticleMetric(BaseModel):
+    id: UUID
+    jcr: float | None
+    qualis: str
+    citations: int | None
+    year: int
+
+
 class Article(BaseModel):
     # Article Data
+    id: UUID
     title: str
     year: str
     doi: str

@@ -11,6 +11,7 @@ class ResearcherArticleProduction(BaseModel):
     B2: int
     B3: int
     B4: int
-    BC: int
+    C: int
+    SQ: int
     citations: int
     year: int
