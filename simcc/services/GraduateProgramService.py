@@ -2,7 +2,10 @@ from uuid import UUID
 
 import pandas as pd
 
-from simcc.repositories import GraduateProgramRepository, ResearcherRepository
+from simcc.repositories.simcc import (
+    GraduateProgramRepository,
+    ResearcherRepository,
+)
 from simcc.schemas.GraduateProgram import GraduateProgram
 from simcc.schemas.Researcher import ResearcherArticleProduction
 

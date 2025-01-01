@@ -12,7 +12,10 @@ def list_article_production(
     program_filter = str()
     if program_id:
         params['program_id'] = program_id
-        program_filter = 'AND gpr.graduate_program_id = %(program_id)s'
+        program_filter = """
+            AND gpr.graduate_program_id = %(program_id)s
+            AND gpr.type_ = 'PERMANENTE'
+            """
 
     year_filter = str()
     if year:
