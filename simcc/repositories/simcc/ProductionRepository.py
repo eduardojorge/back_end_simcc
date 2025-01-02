@@ -21,8 +21,9 @@ def list_article_metrics(program_id: UUID, year: int) -> list[ArticleMetric]:
         year_filter = 'AND bp.year::int >= %(year)s'
 
     SCRIPT_SQL = f"""
-        SELECT bp.id, NULLIF(bpa.jcr, 'N/A') AS jcr, bp.year,
-            COALESCE(opa.citations_count, 0) AS citations, qualis
+        SELECT bp.year, SUM(opa.citations_count) AS citations,
+            ARRAY_AGG(bpa.qualis) AS qualis, ARRAY_AGG(bpa.jcr) AS jcr,
+            COUNT(*) AS among
         FROM researcher r
             LEFT JOIN bibliographic_production bp ON bp.researcher_id = r.id
             RIGHT JOIN bibliographic_production_article bpa
@@ -31,7 +32,9 @@ def list_article_metrics(program_id: UUID, year: int) -> list[ArticleMetric]:
             LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
         WHERE 1 = 1
             {program_filter}
-            {year_filter};
+            {year_filter}
+        GROUP BY
+            bp.year;
             """
 
     result = conn.select(SCRIPT_SQL, params)
