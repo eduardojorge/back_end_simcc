@@ -11,7 +11,7 @@ from simcc.schemas.Researcher import ResearcherArticleProduction
 
 
 def list_graduate_programs() -> GraduateProgram:
-    graduate_programs = GraduateProgramRepository.select_graduate_program()
+    graduate_programs = GraduateProgramRepository.list_graduate_programs()
     return graduate_programs
 
 

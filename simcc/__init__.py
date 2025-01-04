@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from simcc.config import settings
-from simcc.routers import GraduateProgramRouter
+from simcc.routers import GraduateProgramRouter, ResearcherRouter
 
 app = FastAPI(root_path=settings.ROOT_PATH)
 
@@ -13,6 +13,10 @@ app.include_router(
     GraduateProgramRouter.router,
     prefix='/v2/graduate_program',
     tags=['Graduate Program'],
+)
+app.include_router(
+    ResearcherRouter.router,
+    tags=['Researchers'],
 )
 
 PROXY_URL = settings.PROXY_URL
@@ -32,7 +36,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
