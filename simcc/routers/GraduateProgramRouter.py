@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get(
-    '/test',
+    '/',
     response_model=list[GraduateProgram],
     status_code=HTTPStatus.OK,
 )

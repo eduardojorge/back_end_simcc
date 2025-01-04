@@ -60,9 +60,9 @@ def search_in_articles(
     if terms:
         params['terms'] = web_search_filter(terms)
         filter_terms = """
-            AND ts_rank(to_tsvector(title),
+            AND to_tsvector(translate(unaccent(LOWER(r.abstract)), '-.:;''', ' ')),
                 websearch_to_tsquery(%(terms)s)) > 0.04
-            """
+            """  # noqa: E501
 
     join_program = str()
     filter_program = str()
@@ -127,10 +127,10 @@ def search_in_abstracts(
     filter_terms = str()
     if terms:
         params['terms'] = web_search_filter(terms)
-        filter_terms = """
-            AND ts_rank(to_tsvector(r.abstract),
+        filter_terms = r"""
+            AND to_tsvector(translate(unaccent(LOWER(r.abstract)), '-.:;''', ' ')),
                 websearch_to_tsquery(%(terms)s)) > 0.04
-            """
+            """  # noqa: E501
 
     join_program = str()
     filter_program = str()
