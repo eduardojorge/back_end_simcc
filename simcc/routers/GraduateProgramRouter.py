@@ -40,6 +40,6 @@ def article_production(program_id: UUID, year: int = 2020):
 )
 def article_metrics(program_id: UUID, year: int = 2020):
     article_metrics_list = ProductionService.list_article_metrics(
-        program_id, year
+        None, program_id, year
     )
     return article_metrics_list

@@ -39,7 +39,8 @@ def list_article_production(
     article_production_pivot = article_production_pivot.merge(
         citations, on=['name', 'year'], how='left'
     )
-    columns = ['name', 'year', 'A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'B4', 'C', 'SQ', 'citations']  # fmt: skip  # noqa: E501
+
+    columns = ResearcherArticleProduction.model_fields.keys()
     article_production = article_production_pivot.reindex(
         columns, axis='columns', fill_value=0
     )

@@ -55,3 +55,17 @@ class Researcher(BaseModel):
 
     class Config:
         json_encoders = {datetime: lambda v: v.strftime('%d/%m/%Y')}
+
+
+class AcademicMetric(BaseModel):
+    year: int
+    doctorate_end: int
+    doctorate_start: int
+    masters_degree_end: int
+    masters_degree_start: int
+    undergraduate_end: int
+    undergraduate_start: int
+    specialization_start: int
+    specialization_end: int
+    professional_masters_degree_start: int
+    professional_masters_degree_end: int

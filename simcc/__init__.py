@@ -14,9 +14,10 @@ app.include_router(
     prefix='/v2/graduate_program',
     tags=['Graduate Program'],
 )
+
 app.include_router(
     ResearcherRouter.router,
-    tags=['Researchers'],
+    tags=['Researcher'],
 )
 
 PROXY_URL = settings.PROXY_URL
@@ -27,19 +28,12 @@ def read_root():
     return {'message': 'Olá Mundo!'}
 
 
-origins = [
-    'http://localhost/',
-    'http://localhost:5173/',
-    'http://conectee-front:80/',
-    'http://conectee.eng.ufmg.br/',
-]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
-    allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
+    allow_credentials=True,
 )
 
 
