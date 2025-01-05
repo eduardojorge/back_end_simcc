@@ -549,29 +549,41 @@ CREATE TABLE IF NOT EXISTS research_group(
     institution_name character varying(200),
     category character varying(200)
 );
-CREATE TABLE IF NOT EXISTS ufmg_teacher (
+CREATE TABLE IF NOT EXISTS ufmg.departament (
+    dep_id VARCHAR(255),
+    org_cod VARCHAR(255),
+    dep_nom VARCHAR(255),
+    dep_des TEXT,
+    dep_email VARCHAR(255),
+    dep_site TEXT,
+    dep_sigla VARCHAR(255),
+    dep_tel VARCHAR(255),
+    img_data BYTEA,
+    PRIMARY KEY (dep_id)
+);
+CREATE TABLE IF NOT EXISTS ufmg.researcher (
     researcher_id uuid,
-    matric character varying(40),
-    inscUFMG character varying(40),
-    nome character varying(200),
-    genero character varying(40),
-    situacao character varying(40),
-    rt character varying(40),
-    clas character varying(40),
-    cargo character varying(40),
-    classe character varying(40),
-    ref character varying(40),
-    titulacao character varying(40),
+    matric character varying(255),
+    inscUFMG character varying(255),
+    nome character varying(255),
+    genero character varying(255),
+    situacao character varying(255),
+    rt character varying(255),
+    clas character varying(255),
+    cargo character varying(255),
+    classe character varying(255),
+    ref character varying(255),
+    titulacao character varying(255),
     entradaNaUFMG DATE,
     progressao DATE,
     semester character varying(6)
 );
-CREATE TABLE IF NOT EXISTS ufmg_technician (
-    technician_id uuid PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS ufmg.technician (
+    technician_id uuid PRIMARY KEY (technician_id),
     matric INT UNIQUE,
     ins_ufmg VARCHAR(255),
     nome VARCHAR(255),
-    genero VARCHAR(50),
+    genero VARCHAR(255),
     deno_sit VARCHAR(255),
     rt VARCHAR(255),
     classe VARCHAR(255),
@@ -583,32 +595,20 @@ CREATE TABLE IF NOT EXISTS ufmg_technician (
     detalhe_setor VARCHAR(255),
     dting_org DATE,
     data_prog DATE,
-    semester character varying(6)
+    semester character varying(255)
 );
-CREATE TABLE IF NOT EXISTS ufmg_departament (
-    dep_id VARCHAR(10),
-    org_cod VARCHAR(3),
-    dep_nom VARCHAR(100),
-    dep_des VARCHAR(500),
-    dep_email VARCHAR(100),
-    dep_site VARCHAR(100),
-    dep_sigla VARCHAR(30),
-    dep_tel VARCHAR(20),
-    img_data BYTEA,
-    PRIMARY KEY (dep_id)
-);
-CREATE TABLE IF NOT EXISTS ufmg_departament_technician (
-    dep_id character varying(10),
+CREATE TABLE IF NOT EXISTS ufmg.departament_technician (
+    dep_id character varying(255),
     technician_id uuid,
     PRIMARY KEY (dep_id, technician_id),
-    FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
-    FOREIGN KEY (technician_id) REFERENCES ufmg_technician (technician_id)
+    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
+    FOREIGN KEY (technician_id) REFERENCES ufmg.technician (technician_id)
 );
-CREATE TABLE IF NOT EXISTS departament_researcher (
+CREATE TABLE IF NOT EXISTS ufmg.departament_researcher (
     dep_id VARCHAR(20),
     researcher_id uuid NOT NULL,
     PRIMARY KEY (dep_id, researcher_id),
-    FOREIGN KEY (dep_id) REFERENCES ufmg_departament (dep_id),
+    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
     FOREIGN KEY (researcher_id) REFERENCES researcher (id)
 );
 CREATE TABLE incite_graduate_program(

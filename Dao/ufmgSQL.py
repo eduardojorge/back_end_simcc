@@ -9,7 +9,7 @@ def get_rt_list():
             rt,
             COUNT(rt)
         FROM
-            public.ufmg_teacher
+            ufmg.researcher
         GROUP BY
             rt
         """
@@ -23,7 +23,7 @@ def get_rt_list():
             rt,
             COUNT(rt)
         FROM
-            public.ufmg_technician
+            ufmg.technician
         GROUP BY
             rt
         """

@@ -317,7 +317,7 @@ def fat_departament_csv_bd():
 
 def dim_departament_researcher():
     script_sql = """
-        SELECT dep_id, researcher_id FROM public.departament_researcher
+        SELECT dep_id, researcher_id FROM ufmg.departament_researcher
         """
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(reg, columns=["dep_id", "researcher_id"])
@@ -327,7 +327,7 @@ def dim_departament_researcher():
 def dim_departament_technician():
     script_sql = """
         SELECT dep_id, technician_id FROM
-        ufmg_departament_technician
+        ufmg.departament_technician
         """
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(registry, columns=["dep_id", "technician_id"])
@@ -573,7 +573,7 @@ def researcher_production_novo_csv_db():
 def ufmg_teacher():
     SCRIPQ_SQL = """ 
         SELECT researcher_id, matric, inscufmg, nome, genero, situacao, rt, clas, cargo, classe, ref, titulacao, entradanaufmg, progressao, semester
-        FROM public.ufmg_teacher;
+        FROM ufmg.researcher;
         """
     registry = sgbdSQL.consultar_db(SCRIPQ_SQL)
     data_frame = pd.DataFrame(

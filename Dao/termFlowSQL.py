@@ -1141,8 +1141,8 @@ def researcher_departament():
                 'dep_tel', dp.dep_tel
             )) as departments
         FROM
-            public.departament_researcher dpr
-            LEFT JOIN public.ufmg_departament dp ON dpr.dep_id = dp.dep_id
+            ufmg.departament_researcher dpr
+            LEFT JOIN ufmg.departament dp ON dpr.dep_id = dp.dep_id
         GROUP BY
             dpr.researcher_id;
         """

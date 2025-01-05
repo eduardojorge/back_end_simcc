@@ -201,7 +201,7 @@ def production_general_db(graduate_program_id, year, dep_id):
         filter_departament = (
             f"""
             AND researcher_id IN 
-            (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            (SELECT researcher_id FROM ufmg.departament_researcher WHERE dep_id = '{dep_id}')
             """
             if dep_id
             else str()
@@ -210,7 +210,7 @@ def production_general_db(graduate_program_id, year, dep_id):
         filter_departament_researcher = (
             f"""
             AND id IN 
-            (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            (SELECT researcher_id FROM ufmg.departament_researcher WHERE dep_id = '{dep_id}')
             """
             if dep_id
             else str()

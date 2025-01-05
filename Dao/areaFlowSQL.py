@@ -698,11 +698,13 @@ def city_search(city_name: str = None) -> str:
     return pd.DataFrame(sgbdSQL.consultar_db(sql=sql), columns=["id"])["id"][0]
 
 
-def lista_researcher_full_name_db(name = None, graduate_program_id= None, dep_id= None, id= None):
+def lista_researcher_full_name_db(
+    name=None, graduate_program_id=None, dep_id=None, id=None
+):
     filter_lattes = str()
     if id:
         filter_lattes = f"AND r.lattes_id = '{id}'"
-        
+
     filter_name = str()
     if name:
         name = name.replace(";", " ")
@@ -722,7 +724,7 @@ def lista_researcher_full_name_db(name = None, graduate_program_id= None, dep_id
         filter_departament = f"""
             AND r.id IN (
                 SELECT researcher_id
-                FROM public.departament_researcher
+                FROM ufmg.departament_researcher
                 WHERE dep_id = '{dep_id}'
             )
             """
@@ -1165,7 +1167,7 @@ def ufmg_researcher():
             progressao,
             semester
         FROM
-            public.ufmg_teacher
+            ufmg.researcher
         WHERE researcher_id IS NOT NULL;
         """
     reg = sgbdSQL.consultar_db(script_sql)

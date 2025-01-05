@@ -117,7 +117,7 @@ def generic_data(year_, graduate_program_id, dep_id):
         filter_graduate_program = str()
     if dep_id:
         filter_departament = f"""
-            AND researcher_id IN (SELECT researcher_id FROM public.departament_researcher WHERE dep_id = '{dep_id}')
+            AND researcher_id IN (SELECT researcher_id FROM ufmg.departament_researcher WHERE dep_id = '{dep_id}')
             """
     else:
         filter_departament = str()

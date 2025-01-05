@@ -460,7 +460,7 @@ def recently_updated_db(year, institution, departament):
             SELECT
                 researcher_id
             FROM
-                public.departament_researcher
+                ufmg.departament_researcher
             WHERE dep_id = '{departament}'
             """
         registry = sgbdSQL.consultar_db(script_sql)
@@ -501,7 +501,7 @@ def lists_bibliographic_production_article_db(
         filter_departament = f"""
             AND r.id IN (
                 SELECT researcher_id
-                FROM public.departament_researcher
+                FROM ufmg.departament_researcher
                 WHERE dep_id = '{dep_id}'
             )
             """
