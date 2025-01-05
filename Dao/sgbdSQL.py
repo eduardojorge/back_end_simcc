@@ -36,6 +36,7 @@ def execScript_db(sql, params=None, database=None, host=None, password=None, por
 
 
 def consultar_db(sql, params=None, database=None, host=None, password=None, port=None):
+    print(sql)
     try:
         with conecta_db(database=database, host=host, password=password, port=port) as con, con.cursor() as cur:  # fmt: skip
             cur.execute(sql, params)

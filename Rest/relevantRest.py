@@ -8,7 +8,7 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), "Files", "image_productions")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-@management.route("/image/<id>", methods=["POST"])
+@management.route("/imagem/<id>", methods=["POST"])
 def post_image(id):
     type_ = request.args.get("type")
     if "file" not in request.files:
@@ -27,7 +27,7 @@ def post_image(id):
     return "Image saved successfully", 200
 
 
-@management.route("/image/<id>", methods=["GET"])
+@management.route("/imagem/<id>", methods=["GET"])
 def get_image(id):
     for extension in ["jpg", "jpeg", "png", "gif"]:
         file_path = os.path.join(UPLOAD_FOLDER, f"{id}.{extension}")
@@ -35,7 +35,7 @@ def get_image(id):
             return send_file(file_path)
 
 
-@management.route("/image/<id>", methods=["DELETE"])
+@management.route("/imagem/<id>", methods=["DELETE"])
 def delete_image(id):
     type_ = request.args.get("type")
     for extension in ["jpg", "jpeg", "png", "gif"]:

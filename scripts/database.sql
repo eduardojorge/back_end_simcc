@@ -3,6 +3,7 @@ create EXTENSION fuzzystrmatch;
 create EXTENSION pg_trgm;
 CREATE EXTENSION unaccent;
 CREATE TYPE relationship AS ENUM ('COLABORADOR', 'PERMANENTE');
+CREATE TYPE classification_class AS ENUM ('A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'E+', 'E');
 CREATE TABLE IF NOT EXISTS public.country (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name character varying NOT NULL,
@@ -124,8 +125,8 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     other_information character varying(5000),
     city_id uuid,
     country_id uuid,
+    classification classification_class DEFAULT 'E',
     has_image boolean NOT NULL DEFAULT false,
-    docente boolean NOT NULL DEFAULT false,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone,
     deleted_at timestamp without time zone,
@@ -134,7 +135,9 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     graduate_program character varying(255),
     graduation character varying(30),
     update_abstract boolean DEFAULT true,
-    student boolean DEFAULT false,
+    docente boolean NOT NULL DEFAULT false,
+    student boolean NOT NULL DEFAULT false,
+    updated boolean NOT NULL DEFAULT true,
     CONSTRAINT "PK_7b53850398061862ebe70d4ce44" PRIMARY KEY (id),
     CONSTRAINT "UQ_cd7166a27f090d19d4e985592db" UNIQUE (lattes_10_id),
     CONSTRAINT "UQ_fdf2bde0f46501e3e84ec154c32" UNIQUE (lattes_id),
@@ -469,11 +472,10 @@ CREATE TABLE education (
     education_name VARCHAR(255),
     education_start INTEGER,
     education_end INTEGER,
-    institution_id UUID,
     key_words VARCHAR(255),
+    institution VARCHAR(255),
     CONSTRAINT pk_education PRIMARY KEY (id),
-    CONSTRAINT fk_researcher_education FOREIGN KEY (researcher_id) REFERENCES public.researcher (id),
-    CONSTRAINT fk_institution_education FOREIGN KEY (institution_id) REFERENCES public.institution (id)
+    CONSTRAINT fk_researcher_education FOREIGN KEY (researcher_id) REFERENCES public.researcher (id)
 );
 CREATE TABLE IF NOT EXISTS public.openalex_article (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),

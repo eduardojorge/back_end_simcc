@@ -117,10 +117,7 @@ def area_specialitInitials():
 
     for i, infos in df_bd.iterrows():
         area_specialit_ = {
-            # 'id': str(infos.id),
-            #  'great_area':str(infos.great_area.replace("_"," ")) ,
             "area_expertise": str(infos.area_expertise),
-            # 'sub_area_expertise':str(infos.sub_area_expertise),
             "area_specialty": str(infos.area_specialty),
         }
         list_area_specialit.append(area_specialit_)
