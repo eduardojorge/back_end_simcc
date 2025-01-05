@@ -21,7 +21,7 @@ class Connection:
             print(f'Error: {e}')
             raise
 
-    def select(self, query, params=None):
+    def select(self, query, params=None) -> list:
         try:
             with self.pool.connection() as conn:
                 with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
@@ -37,4 +37,5 @@ class Connection:
         self.pool.close()
 
 
-conn = Connection(settings.get_connection_string())
+conn = Connection(settings.get_simcc_connection_string())
+conn_admin = Connection(settings.get_simcc_admin_connection_string())

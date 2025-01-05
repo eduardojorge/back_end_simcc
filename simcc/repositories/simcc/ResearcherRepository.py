@@ -87,7 +87,7 @@ def search_in_articles(
             b.among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
-            opr.openalex
+            opr.openalex, r.classification
         FROM researcher r
             LEFT JOIN institution i ON i.id = r.institution_id
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
@@ -155,7 +155,7 @@ def search_in_abstracts(
             1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
-            opr.openalex
+            opr.openalex, r.classification
         FROM researcher r
             LEFT JOIN institution i ON i.id = r.institution_id
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
@@ -165,6 +165,59 @@ def search_in_abstracts(
             {filter_terms}
             {filter_program}
             {filter_institution}
+        ORDER BY
+            among DESC
+            {filter_pagination};
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def search_in_name(
+    name: str,
+    graduate_program_id: UUID,
+    dep_id: UUID,
+    page: int = None,
+    lenght: int = None,
+):
+    params = {}
+
+    filter_name = str()
+    if name:
+        params['name'] = name + '%'
+        filter_name = 'AND r.name ILIKE %(name)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    join_program = str()
+    filter_program = str()
+    if graduate_program_id:
+        params['graduate_program_id'] = graduate_program_id
+        join_program = """
+            RIGHT JOIN graduate_program_researcher gpr
+                ON gpr.researcher_id = r.id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(graduate_program_id)s'
+
+    SCRIPT_SQL = f"""
+        SELECT
+            r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract, r.orcid,
+            r.graduation, r.last_update AS lattes_update, rp.great_area AS area,
+            rp.city, i.image AS image_university, i.name AS university,
+            1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
+            rp.software, rp.brand, opr.h_index, opr.relevance_score,
+            opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
+            opr.openalex, r.classification
+        FROM researcher r
+            LEFT JOIN institution i ON i.id = r.institution_id
+            LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
+            LEFT JOIN openalex_researcher opr ON opr.researcher_id = r.id
+            {join_program}
+        WHERE 1 = 1
+            {filter_program}
+            {filter_name}
         ORDER BY
             among DESC
             {filter_pagination};

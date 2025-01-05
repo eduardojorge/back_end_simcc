@@ -28,3 +28,16 @@ def search_in_abstracts(
         terms, graduate_program_id, university, page, lenght
     )
     return researchers
+
+
+def serch_in_name(
+    name: str,
+    graduate_program_id: UUID,
+    dep_id: UUID,
+    page: int,
+    lenght: int,
+) -> list[Researcher]:
+    researchers = ResearcherRepository.search_in_name(
+        name, graduate_program_id, dep_id, page, lenght
+    )
+    return researchers

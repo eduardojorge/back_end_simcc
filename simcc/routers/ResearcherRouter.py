@@ -8,6 +8,7 @@ from simcc.schemas.Article import ArticleMetric
 from simcc.schemas.Guidance import GuidanceMetrics
 from simcc.schemas.Patent import PatentMetric
 from simcc.schemas.Researcher import AcademicMetric, Researcher
+from simcc.schemas.Software import SoftwareMetric
 from simcc.services import ProductionService, ResearcherService
 
 router = APIRouter()
@@ -77,7 +78,29 @@ def academic_degree_metrics(researcher_id: UUID, year: int = 2020):
     return metrics
 
 
-@router.get('/researcher/{researcher_id}/software_metrics')
+@router.get(
+    '/researcher/{researcher_id}/software_metrics',
+    response_model=list[SoftwareMetric],
+    status_code=HTTPStatus.OK,
+)
 def software_metrics(researcher_id: UUID, year: int = 2020):
     metrics = ProductionService.list_software_metrics(researcher_id, year)
     return metrics
+
+
+@router.get(
+    '/researcherName',
+    response_model=list[Researcher],
+    status_code=HTTPStatus.OK,
+)
+def list_researchers(
+    name: str = None,
+    graduate_program_id: UUID = None,
+    dep_id: UUID = None,
+    page: int = None,
+    lenght: int = None,
+):
+    researchers = ResearcherService.serch_in_name(
+        name, graduate_program_id, dep_id, page, lenght
+    )
+    return researchers

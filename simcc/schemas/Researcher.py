@@ -34,6 +34,7 @@ class Researcher(BaseModel):
     orcid: str | None
     graduation: str
     lattes_update: datetime
+    classification: str
 
     # Metrics
     among: int | None
