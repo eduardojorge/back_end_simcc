@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -56,10 +55,10 @@ class Researcher(BaseModel):
     openalex: str | None
 
     # miscellaneous
-    research_groups: Any
-    foment: Any
-    departments: Any
-    graduate_programs: Any
+    research_groups: list | None
+    foment: list | None
+    departments: list | None
+    graduate_programs: list | None
 
     class Config:
         json_encoders = {datetime: lambda v: v.strftime('%d/%m/%Y')}

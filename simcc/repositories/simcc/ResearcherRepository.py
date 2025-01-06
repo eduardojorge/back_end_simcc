@@ -1,7 +1,11 @@
 from uuid import UUID
 
 from simcc.repositories import conn
-from simcc.repositories.util import pagination, web_search_filter
+from simcc.repositories.util import (
+    pagination,
+    web_search_filter,
+    web_search_param,
+)
 from simcc.schemas.Researcher import ResearcherArticleProduction
 
 
@@ -58,11 +62,9 @@ def search_in_articles(
 
     filter_terms = str()
     if terms:
-        params['terms'] = web_search_filter(terms)
-        filter_terms = r"""
-            AND ts_rank(to_tsvector(translate(unaccent(LOWER(b.title)),'-\.:;''',' ')),
-                websearch_to_tsquery(%(terms)s)) > 0.04
-            """  # noqa: E501
+        params['terms'] = web_search_param(terms)
+        filter_terms = web_search_filter('b.title')
+
     join_program = str()
     filter_program = str()
     if graduate_program_id:
@@ -125,11 +127,8 @@ def search_in_abstracts(
 
     filter_terms = str()
     if terms:
-        params['terms'] = web_search_filter(terms)
-        filter_terms = r"""
-            AND ts_rank(to_tsvector(translate(unaccent(LOWER(r.abstract)),'-\.:;''',' ')),
-                websearch_to_tsquery(%(terms)s)) > 0.04
-            """  # noqa: E501
+        params['terms'] = web_search_param(terms)
+        filter_terms = web_search_filter('r.abstract')
 
     join_program = str()
     filter_program = str()

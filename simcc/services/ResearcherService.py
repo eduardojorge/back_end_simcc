@@ -30,6 +30,9 @@ def search_in_abstracts(
     researchers = ResearcherRepository.search_in_abstracts(
         terms, graduate_program_id, university, page, lenght
     )
+    if not researchers:
+        return []
+
     programs = ResearcherRepository.list_graduate_programs()
     groups = ResearcherRepository.list_research_groups()
     foment_data = ResearcherRepository.list_foment_data()
