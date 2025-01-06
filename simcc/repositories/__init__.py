@@ -22,8 +22,6 @@ class Connection:
             raise
 
     def select(self, query, params=None) -> list:
-        print(query, params)
-
         try:
             with self.pool.connection() as conn:
                 with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
