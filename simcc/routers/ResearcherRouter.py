@@ -4,6 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from simcc.schemas import ResearcherOptions
+from simcc.schemas.Article import ArticleMetric
+from simcc.schemas.Guidance import GuidanceMetrics
+from simcc.schemas.Patent import PatentMetric
+from simcc.schemas.Researcher import AcademicMetric, Researcher
+from simcc.schemas.Software import SoftwareMetric
 from simcc.services import ProductionService, ResearcherService
 
 router = APIRouter()
@@ -11,6 +16,7 @@ router = APIRouter()
 
 @router.get(
     '/researcher',
+    response_model=list[Researcher],
     status_code=HTTPStatus.OK,
 )
 def search_in_abstract_or_article(
@@ -34,6 +40,7 @@ def search_in_abstract_or_article(
 
 @router.get(
     '/researcher/{researcher_id}/article_metrics',
+    response_model=list[ArticleMetric],
     status_code=HTTPStatus.OK,
 )
 def article_metrics(researcher_id: UUID, year: int = 2020):
@@ -43,6 +50,7 @@ def article_metrics(researcher_id: UUID, year: int = 2020):
 
 @router.get(
     '/researcher/{researcher_id}/patent_metrics',
+    response_model=list[PatentMetric],
     status_code=HTTPStatus.OK,
 )
 def patent_metrics(researcher_id: UUID, year: int = 2020):
@@ -52,6 +60,7 @@ def patent_metrics(researcher_id: UUID, year: int = 2020):
 
 @router.get(
     '/researcher/{researcher_id}/guidance_metrics',
+    response_model=list[GuidanceMetrics],
     status_code=HTTPStatus.OK,
 )
 def guidance_metrics(researcher_id: UUID, year: int = 2020):
@@ -61,6 +70,7 @@ def guidance_metrics(researcher_id: UUID, year: int = 2020):
 
 @router.get(
     '/researcher/{researcher_id}/academic_degree_metrics',
+    response_model=list[AcademicMetric],
     status_code=HTTPStatus.OK,
 )
 def academic_degree_metrics(researcher_id: UUID, year: int = 2020):
@@ -70,6 +80,7 @@ def academic_degree_metrics(researcher_id: UUID, year: int = 2020):
 
 @router.get(
     '/researcher/{researcher_id}/software_metrics',
+    response_model=list[SoftwareMetric],
     status_code=HTTPStatus.OK,
 )
 def software_metrics(researcher_id: UUID, year: int = 2020):
@@ -79,6 +90,7 @@ def software_metrics(researcher_id: UUID, year: int = 2020):
 
 @router.get(
     '/researcherName',
+    response_model=list[Researcher],
     status_code=HTTPStatus.OK,
 )
 def list_researchers(

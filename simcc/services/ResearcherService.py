@@ -75,7 +75,7 @@ def search_in_abstracts(
     researchers = researchers.merge(departaments, on='id', how='left')
     researchers = researchers.merge(ufmg_data, on='id', how='left')
 
-    researchers = researchers.replace(nan, None)
+    researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
 
 
@@ -111,5 +111,5 @@ def serch_in_name(
     researchers = researchers.merge(departaments, on='id', how='left')
     researchers = researchers.merge(ufmg_data, on='id', how='left')
 
-    researchers = researchers.replace(nan, None)
+    researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')

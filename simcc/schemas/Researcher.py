@@ -54,11 +54,26 @@ class Researcher(BaseModel):
     scopus: str | None
     openalex: str | None
 
-    # miscellaneous
+    # Miscellaneous
     research_groups: list | None
     subsidy: list | None
     departments: list | None
     graduate_programs: list | None
+
+    # UFMG
+    matric: str
+    inscufmg: str
+    genero: str
+    situacao: str
+    rt: str
+    clas: str
+    cargo: str
+    classe: str
+    ref: str
+    titulacao: str
+    entradanaufmg: datetime
+    progressao: datetime
+    semester: str
 
     class Config:
         json_encoders = {datetime: lambda v: v.strftime('%d/%m/%Y')}
