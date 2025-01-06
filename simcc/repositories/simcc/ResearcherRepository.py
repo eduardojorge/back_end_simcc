@@ -191,7 +191,7 @@ def search_in_name(
 
     filter_name = str()
     if name:
-        params['name'] = name + '%'
+        params['name'] = name.replace(';', ' ') + '%'
         filter_name = 'AND r.name ILIKE %(name)s'
 
     filter_pagination = str()
@@ -255,7 +255,7 @@ def list_research_groups():
     SCRIPT_SQL = """
         SELECT r.id AS id,
             JSONB_AGG(JSONB_BUILD_OBJECT(
-                'group_id', rg.id,
+                'research_group_id', rg.id,
                 'name', rg.name,
                 'area', rg.area,
                 'census',rg.census,
@@ -288,7 +288,7 @@ def list_foment_data():
                 'institute_name', s.institute_name,
                 'aid_quantity', s.aid_quantity,
                 'scholarship_quantity', s.scholarship_quantity
-            )) AS foment
+            )) AS subsidy
         FROM foment s
         GROUP BY s.researcher_id
         """

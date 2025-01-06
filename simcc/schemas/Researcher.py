@@ -56,7 +56,7 @@ class Researcher(BaseModel):
 
     # miscellaneous
     research_groups: list | None
-    foment: list | None
+    subsidy: list | None
     departments: list | None
     graduate_programs: list | None
 
