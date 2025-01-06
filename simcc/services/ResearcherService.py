@@ -24,17 +24,20 @@ def search_in_articles(
     groups = ResearcherRepository.list_research_groups()
     foment_data = ResearcherRepository.list_foment_data()
     departaments = ResearcherRepository.list_departament_data()
+    ufmg_data = ResearcherRepository.list_ufmg_data()
 
     researchers = pd.DataFrame(researchers)
     programs = pd.DataFrame(programs)
     groups = pd.DataFrame(groups)
     foment_data = pd.DataFrame(foment_data)
     departaments = pd.DataFrame(departaments)
+    ufmg_data = pd.DataFrame(ufmg_data)
 
     researchers = researchers.merge(programs, on='id', how='left')
     researchers = researchers.merge(groups, on='id', how='left')
     researchers = researchers.merge(foment_data, on='id', how='left')
     researchers = researchers.merge(departaments, on='id', how='left')
+    researchers = researchers.merge(ufmg_data, on='id', how='left')
 
     researchers = researchers.replace(nan, None)
     return researchers.to_dict(orient='records')
@@ -57,17 +60,20 @@ def search_in_abstracts(
     groups = ResearcherRepository.list_research_groups()
     foment_data = ResearcherRepository.list_foment_data()
     departaments = ResearcherRepository.list_departament_data()
+    ufmg_data = ResearcherRepository.list_ufmg_data()
 
     researchers = pd.DataFrame(researchers)
     programs = pd.DataFrame(programs)
     groups = pd.DataFrame(groups)
     foment_data = pd.DataFrame(foment_data)
     departaments = pd.DataFrame(departaments)
+    ufmg_data = pd.DataFrame(ufmg_data)
 
     researchers = researchers.merge(programs, on='id', how='left')
     researchers = researchers.merge(groups, on='id', how='left')
     researchers = researchers.merge(foment_data, on='id', how='left')
     researchers = researchers.merge(departaments, on='id', how='left')
+    researchers = researchers.merge(ufmg_data, on='id', how='left')
 
     researchers = researchers.replace(nan, None)
     return researchers.to_dict(orient='records')
@@ -90,17 +96,20 @@ def serch_in_name(
     groups = ResearcherRepository.list_research_groups()
     foment_data = ResearcherRepository.list_foment_data()
     departaments = ResearcherRepository.list_departament_data()
+    ufmg_data = ResearcherRepository.list_ufmg_data()
 
     researchers = pd.DataFrame(researchers)
     programs = pd.DataFrame(programs)
     groups = pd.DataFrame(groups)
     foment_data = pd.DataFrame(foment_data)
     departaments = pd.DataFrame(departaments)
+    ufmg_data = pd.DataFrame(ufmg_data)
 
     researchers = researchers.merge(programs, on='id', how='left')
     researchers = researchers.merge(groups, on='id', how='left')
     researchers = researchers.merge(foment_data, on='id', how='left')
     researchers = researchers.merge(departaments, on='id', how='left')
+    researchers = researchers.merge(ufmg_data, on='id', how='left')
 
     researchers = researchers.replace(nan, None)
     return researchers.to_dict(orient='records')

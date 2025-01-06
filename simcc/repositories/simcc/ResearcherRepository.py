@@ -315,3 +315,28 @@ def list_departament_data():
         """
     result = conn.select(SCRIPT_SQL)
     return result
+
+
+def list_ufmg_data():
+    SCRIPT_SQL = """
+        SELECT
+            researcher_id AS id,
+            matric AS matric,
+            inscufmg AS inscufmg,
+            genero AS genero,
+            situacao AS situacao,
+            rt AS rt,
+            clas AS clas,
+            cargo AS cargo,
+            classe AS classe,
+            ref AS ref,
+            titulacao AS titulacao,
+            entradanaufmg AS entradanaufmg,
+            progressao AS progressao,
+            semester AS semester
+        FROM
+            ufmg.researcher
+        WHERE researcher_id IS NOT NULL;
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
