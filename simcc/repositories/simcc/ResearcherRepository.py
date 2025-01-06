@@ -59,11 +59,10 @@ def search_in_articles(
     filter_terms = str()
     if terms:
         params['terms'] = web_search_filter(terms)
-        filter_terms = """
-            AND to_tsvector(translate(unaccent(LOWER(r.abstract)), '-.:;''', ' ')),
+        filter_terms = r"""
+            AND ts_rank(to_tsvector(translate(unaccent(LOWER(b.title)),'-\.:;''',' ')),
                 websearch_to_tsquery(%(terms)s)) > 0.04
             """  # noqa: E501
-
     join_program = str()
     filter_program = str()
     if graduate_program_id:
@@ -128,7 +127,7 @@ def search_in_abstracts(
     if terms:
         params['terms'] = web_search_filter(terms)
         filter_terms = r"""
-            AND to_tsvector(translate(unaccent(LOWER(r.abstract)), '-.:;''', ' ')),
+            AND ts_rank(to_tsvector(translate(unaccent(LOWER(r.abstract)),'-\.:;''',' ')),
                 websearch_to_tsquery(%(terms)s)) > 0.04
             """  # noqa: E501
 
@@ -182,6 +181,15 @@ def search_in_name(
 ):
     params = {}
 
+    join_departament = str()
+    filter_departament = str()
+    if dep_id:
+        params['dep_id'] = dep_id
+        join_departament = """
+            LEFT JOIN ufmg.departament_researcher dr ON dr.researcher_id = r.id
+            """
+        filter_departament = 'AND dr.dep_id = %(dep_id)s'
+
     filter_name = str()
     if name:
         params['name'] = name + '%'
@@ -215,12 +223,96 @@ def search_in_name(
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
             LEFT JOIN openalex_researcher opr ON opr.researcher_id = r.id
             {join_program}
+            {join_departament}
         WHERE 1 = 1
             {filter_program}
             {filter_name}
+            {filter_departament}
         ORDER BY
             among DESC
             {filter_pagination};
         """
     result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_graduate_programs():
+    SCRIPT_SQL = """
+        SELECT gpr.researcher_id AS id,
+            JSONB_AGG(JSONB_BUILD_OBJECT(
+                    'graduate_program_id', gp.graduate_program_id,
+                    'name',gp.name
+                )) AS graduate_programs
+        FROM graduate_program_researcher gpr
+            LEFT JOIN graduate_program gp
+                ON gpr.graduate_program_id = gp.graduate_program_id
+        GROUP BY gpr.researcher_id
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
+def list_research_groups():
+    SCRIPT_SQL = """
+        SELECT r.id AS id,
+            JSONB_AGG(JSONB_BUILD_OBJECT(
+                'group_id', rg.id,
+                'name', rg.name,
+                'area', rg.area,
+                'census',rg.census,
+                'start_of_collection', rg.start_of_collection,
+                'end_of_collection', rg.end_of_collection,
+                'group_identifier', rg.group_identifier,
+                'year', rg.year,
+                'institution_name', rg.institution_name,
+                'category', rg.category
+                )) AS research_groups
+        FROM researcher r
+        INNER JOIN research_group rg
+            ON rg.second_leader_id = r.id OR rg.first_leader_id = r.id
+        GROUP BY r.id
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
+def list_foment_data():
+    SCRIPT_SQL = """
+        SELECT s.researcher_id AS id,
+            JSONB_AGG(JSONB_BUILD_OBJECT(
+                'id', s.id,
+                'modality_code', s.modality_code,
+                'modality_name', s.modality_name,
+                'call_title', s.call_title,
+                'category_level_code', s.category_level_code,
+                'funding_program_name', s.funding_program_name,
+                'institute_name', s.institute_name,
+                'aid_quantity', s.aid_quantity,
+                'scholarship_quantity', s.scholarship_quantity
+            )) AS foment
+        FROM foment s
+        GROUP BY s.researcher_id
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
+def list_departament_data():
+    SCRIPT_SQL = """
+        SELECT dpr.researcher_id AS id,
+            JSONB_AGG(JSONB_BUILD_OBJECT(
+                'dep_id', dp.dep_id,
+                'org_cod', dp.org_cod,
+                'dep_nom', dp.dep_nom,
+                'dep_des', dp.dep_des,
+                'dep_email', dp.dep_email,
+                'dep_site', dp.dep_site,
+                'dep_sigla', dp.dep_sigla,
+                'dep_tel', dp.dep_tel
+            )) AS departments
+        FROM ufmg.departament_researcher dpr
+            LEFT JOIN ufmg.departament dp ON dpr.dep_id = dp.dep_id
+        GROUP BY dpr.researcher_id;
+        """
+    result = conn.select(SCRIPT_SQL)
     return result

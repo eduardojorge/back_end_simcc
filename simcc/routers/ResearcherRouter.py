@@ -96,7 +96,7 @@ def software_metrics(researcher_id: UUID, year: int = 2020):
 def list_researchers(
     name: str = None,
     graduate_program_id: UUID = None,
-    dep_id: UUID = None,
+    dep_id: str = None,
     page: int = None,
     lenght: int = None,
 ):

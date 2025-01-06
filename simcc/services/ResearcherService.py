@@ -1,5 +1,8 @@
 from uuid import UUID
 
+import pandas as pd
+from numpy import nan
+
 from simcc.repositories.simcc import ResearcherRepository
 from simcc.schemas.Researcher import Researcher
 
@@ -27,7 +30,24 @@ def search_in_abstracts(
     researchers = ResearcherRepository.search_in_abstracts(
         terms, graduate_program_id, university, page, lenght
     )
-    return researchers
+    programs = ResearcherRepository.list_graduate_programs()
+    groups = ResearcherRepository.list_research_groups()
+    foment_data = ResearcherRepository.list_foment_data()
+    departaments = ResearcherRepository.list_departament_data()
+
+    researchers = pd.DataFrame(researchers)
+    programs = pd.DataFrame(programs)
+    groups = pd.DataFrame(groups)
+    foment_data = pd.DataFrame(foment_data)
+    departaments = pd.DataFrame(departaments)
+
+    researchers = researchers.merge(programs, on='id', how='left')
+    researchers = researchers.merge(groups, on='id', how='left')
+    researchers = researchers.merge(foment_data, on='id', how='left')
+    researchers = researchers.merge(departaments, on='id', how='left')
+
+    researchers = researchers.replace(nan, None)
+    return researchers.to_dict(orient='records')
 
 
 def serch_in_name(
