@@ -39,7 +39,7 @@ def search_in_articles(
     researchers = researchers.merge(departaments, on='id', how='left')
     researchers = researchers.merge(ufmg_data, on='id', how='left')
 
-    researchers = researchers.replace(nan, None)
+    researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
 
 

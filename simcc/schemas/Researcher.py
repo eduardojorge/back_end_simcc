@@ -27,17 +27,17 @@ class Researcher(BaseModel):
     lattes_id: str
     lattes_10_id: str
     university: str
-    abstract: str | None
+    abstract: str
     area: str
     city: str
-    image_university: str | None
-    orcid: str | None
+    image_university: str
+    orcid: str | str
     graduation: str
     lattes_update: datetime
     classification: str
 
     # Metrics
-    among: int | None
+    among: int | str
     articles: int
     book_chapters: int
     book: int
@@ -46,19 +46,19 @@ class Researcher(BaseModel):
     brand: int
 
     # OpenAlex Data
-    h_index: int | None
-    relevance_score: int | None
-    works_count: int | None
-    cited_by_count: int | None
-    i10_index: int | None
-    scopus: str | None
-    openalex: str | None
+    h_index: int | str
+    relevance_score: int | str
+    works_count: int | str
+    cited_by_count: int | str
+    i10_index: int | str
+    scopus: str | str
+    openalex: str | str
 
     # Miscellaneous
-    research_groups: list | None
-    subsidy: list | None
-    departments: list | None
-    graduate_programs: list | None
+    research_groups: list | str
+    subsidy: list | str
+    departments: list | str
+    graduate_programs: list | str
 
     # UFMG
     matric: str
@@ -71,8 +71,8 @@ class Researcher(BaseModel):
     classe: str
     ref: str
     titulacao: str
-    entradanaufmg: datetime
-    progressao: datetime
+    entradanaufmg: datetime | str
+    progressao: datetime | str
     semester: str
 
     class Config:
