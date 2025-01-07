@@ -39,6 +39,7 @@ from csv_powerBI import (
     area_leader_dim,
     article_qualis_csv_distinct_db,
     researcher_csv_db,
+    researcher_csv_db_v2,
     researcher_production_tecnical_year_csv_db,
     institution_csv_db,
     fat_simcc_bibliographic_production,
@@ -465,6 +466,13 @@ def load_article_qualis_csv_distinct_db():
 def load_researcher_csv_db():
     researcher_csv_db()
     path = "Files/indicadores_simcc/researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/researcher_v2.csv", methods=["GET"])
+def load_researcher_csv_db_v2():
+    researcher_csv_db_v2()
+    path = "Files/indicadores_simcc/researcher_v2.csv"
     return send_file(path, as_attachment=True)
 
 

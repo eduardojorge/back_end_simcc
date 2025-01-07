@@ -488,6 +488,29 @@ def researcher_csv_db():
     sql = """
         SELECT r.name AS researcher, r.id AS researcher_id, 
             TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,
+            r.lattes_id
+        FROM  researcher r"""
+
+    reg = sgbdSQL.consultar_db(sql)
+
+    df_bd = pd.DataFrame(
+        reg,
+        columns=[
+            "researcher",
+            "researcher_id",
+            "last_update",
+            "graduation",
+            "lattes_id",
+        ],
+    )
+
+    df_bd.to_csv(csv_dir + "researcher.csv")
+
+
+def researcher_csv_db_v2():
+    sql = """
+        SELECT r.name AS researcher, r.id AS researcher_id, 
+            TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,
             r.lattes_id, extra_field
         FROM  researcher r"""
 
@@ -505,7 +528,7 @@ def researcher_csv_db():
         ],
     )
 
-    df_bd.to_csv(csv_dir + "researcher.csv")
+    df_bd.to_csv(csv_dir + "researcher_v2.csv")
 
 
 def institution_csv_db():
