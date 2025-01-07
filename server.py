@@ -40,7 +40,6 @@ from csv_powerBI import (
     area_leader_dim,
     article_qualis_csv_distinct_db,
     researcher_csv_db,
-    researcher_csv_db_v2,
     researcher_production_tecnical_year_csv_db,
     institution_csv_db,
     fat_simcc_bibliographic_production,

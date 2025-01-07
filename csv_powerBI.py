@@ -66,7 +66,8 @@ def researcher_city():
         """
     reg = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(reg, columns=["researcher_id", "city"])
-    df.to_csv(csv_dir + "researcher_city")
+    print(df)
+    df.to_csv(csv_dir + "researcher_city.csv")
 
 
 def dim_researcher_csv_db():
