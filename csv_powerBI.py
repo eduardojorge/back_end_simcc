@@ -21,7 +21,8 @@ def fat_simcc_bibliographic_production():
             bar.periodical_magazine_name,
             bar.jcr,
             bar.jcr_link,
-            c.id
+            c.id,
+            b.id
         FROM 
             bibliographic_production AS b 
         LEFT JOIN bibliographic_production_article bar
@@ -52,6 +53,7 @@ def fat_simcc_bibliographic_production():
             "jcr",
             "jcr_link",
             "city_id",
+            "bibliographic_production_id",
         ],
     )
 
@@ -483,10 +485,11 @@ def researcher_production_csv_db():
 
 
 def researcher_csv_db():
-    sql = """ SELECT r.name AS researcher, r.id AS researcher_id, TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,r.lattes_id
-        
-
-        FROM  researcher r """
+    sql = """
+        SELECT r.name AS researcher, r.id AS researcher_id, 
+            TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,
+            r.lattes_id, extra_field
+        FROM  researcher r"""
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -498,6 +501,7 @@ def researcher_csv_db():
             "last_update",
             "graduation",
             "lattes_id",
+            "area_leader",
         ],
     )
 
@@ -959,6 +963,68 @@ def dim_graduate_program_acronym():
     df.to_csv(csv_dir + "dim_graduate_program_acronym.csv")
 
 
+def area_leader_dim():
+    SCRIPT_SQL = """
+        SELECT DISTINCT extra_field FROM researcher;
+        """
+    reg = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(reg, columns=["area_leader"])
+    df.to_csv(csv_dir + "dim_area_leader.csv")
+
+
+def fat_openalex_article():
+    SCRIPT_SQL = """
+        SELECT article_id, article_institution, issn, authors_institution, 
+            abstract, authors, language, citations_count, pdf, landing_page_url, 
+            keywords
+        FROM public.openalex_article;
+        """
+    reg = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(
+        reg,
+        columns=[
+            "bibliographic_production_id",
+            "article_institution",
+            "issn",
+            "authors_institution",
+            "abstract",
+            "authors",
+            "language",
+            "citations_count",
+            "pdf",
+            "landing_page_url",
+            "keywords",
+        ],
+    )
+    df.to_csv(csv_dir + "fat_openalex_article.csv")
+
+
+def fat_openalex_researcher():
+    SCRIPT_SQL = """
+        SELECT researcher_id, h_index, relevance_score, works_count, 
+            cited_by_count, i10_index, scopus, orcid, openalex
+        FROM
+            public.openalex_researcher;
+
+        """
+    reg = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(
+        reg,
+        columns=[
+            "researcher_id",
+            "h_index",
+            "relevance_score",
+            "works_count",
+            "cited_by_count",
+            "i10_index",
+            "scopus",
+            "orcid",
+            "openalex",
+        ],
+    )
+    df.to_csv(csv_dir + "fat_openalex_researcher.csv")
+
+
 def graduate_program_ind_prod_csv_db():
     script_sql = """
         SELECT
@@ -1036,6 +1102,7 @@ def csv_powerBI():
     dim_graduate_program_student_year_unnest()
     graduate_program_student_researcher_csv_db()
     save_data_to_csv()
+    area_leader_dim()
 
 
 if __name__ == "__main__":

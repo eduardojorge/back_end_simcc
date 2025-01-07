@@ -41,7 +41,7 @@ def save_cv(lattes_id: str, dir: str, proxy: bool):
         msg = f"{lattes_id} já está atualizado id"
         logger.debug(msg)
         print(msg)
-        return
+        # return
 
     msg = f"{lattes_id} não atualizado id: "
     logger.debug(msg)

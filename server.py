@@ -23,8 +23,10 @@ from zeep import Client
 from csv_powerBI import (
     graduate_program_csv_db,
     ufmg_teacher,
+    fat_openalex_researcher,
     graduate_program_researcher_csv_db,
     production_distinct_novo_csv_db,
+    fat_openalex_article,
     article_distinct_novo_csv_db,
     researcher_production_novo_csv_db,
     graduate_program_ind_prod_csv_db,
@@ -34,6 +36,7 @@ from csv_powerBI import (
     researcher_production_year_distinct_csv_db,
     researcher_article_qualis_csv_db,
     researcher_production_csv_db,
+    area_leader_dim,
     article_qualis_csv_distinct_db,
     researcher_csv_db,
     researcher_production_tecnical_year_csv_db,
@@ -645,6 +648,27 @@ def iapos_png():
 @app.route("/npai.png", methods=["GET"])
 def npai_png():
     path = "Files/indicadores_simcc/npai.png"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/dim_area_leader.csv", methods=["GET"])
+def area_leader_dim_csv():
+    area_leader_dim()
+    path = "Files/indicadores_simcc/dim_area_leader.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/fat_openalex_article.csv", methods=["GET"])
+def fat_openalex_article_csv():
+    fat_openalex_article()
+    path = "Files/indicadores_simcc/fat_openalex_article.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/fat_openalex_researcher.csv", methods=["GET"])
+def fat_openalex_researcher_csv():
+    fat_openalex_researcher()
+    path = "Files/indicadores_simcc/fat_openalex_researcher.csv"
     return send_file(path, as_attachment=True)
 
 
