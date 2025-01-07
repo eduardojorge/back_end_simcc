@@ -66,8 +66,16 @@ def researcher_city():
         """
     reg = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(reg, columns=["researcher_id", "city"])
-    print(df)
     df.to_csv(csv_dir + "researcher_city.csv")
+
+
+def researcher_area_leader():
+    SCRIPT_SQL = """
+        SELECT id, extra_field FROM researcher;
+        """
+    reg = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(reg, columns=["researcher_id", "area_leader"])
+    df.to_csv(csv_dir + "researcher_area_leader.csv")
 
 
 def dim_researcher_csv_db():

@@ -24,6 +24,7 @@ from csv_powerBI import (
     graduate_program_csv_db,
     ufmg_teacher,
     researcher_city,
+    researcher_area_leader,
     fat_openalex_researcher,
     graduate_program_researcher_csv_db,
     production_distinct_novo_csv_db,
@@ -677,6 +678,13 @@ def area_leader_dim_csv():
 def fat_openalex_article_csv():
     fat_openalex_article()
     path = "Files/indicadores_simcc/fat_openalex_article.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/researcher_area_leader.csv", methods=["GET"])
+def researcher_area_leader_csv():
+    researcher_area_leader()
+    path = "Files/indicadores_simcc/researcher_area_leader.csv"
     return send_file(path, as_attachment=True)
 
 
