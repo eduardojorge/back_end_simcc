@@ -23,6 +23,7 @@ from zeep import Client
 from csv_powerBI import (
     graduate_program_csv_db,
     ufmg_teacher,
+    researcher_city,
     fat_openalex_researcher,
     graduate_program_researcher_csv_db,
     production_distinct_novo_csv_db,
@@ -501,6 +502,13 @@ def load_fat_simcc_bibliographic_production():
 def load_dim_researcher_csv_db():
     dim_researcher_csv_db()
     path = "Files/indicadores_simcc/dim_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/researcher_city.csv", methods=["GET"])
+def researcher_city_csv():
+    researcher_city()
+    path = "Files/indicadores_simcc/researcher_city.csv"
     return send_file(path, as_attachment=True)
 
 

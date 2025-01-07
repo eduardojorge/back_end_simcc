@@ -60,6 +60,15 @@ def fat_simcc_bibliographic_production():
     df_bd.to_csv(csv_dir + "fat_simcc_bibliographic_production.csv")
 
 
+def researcher_city():
+    SCRIPT_SQL = """
+        SELECT researcher_id, city FROM researcher_production;
+        """
+    reg = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(reg, columns=["researcher_id", "city"])
+    df.to_csv(csv_dir + "researcher_city")
+
+
 def dim_researcher_csv_db():
     sql = """
         SELECT 
@@ -319,7 +328,7 @@ def fat_departament_csv_bd():
 
 def dim_departament_researcher():
     script_sql = """
-        SELECT dep_id, researcher_id FROM ufmg.departament_researcher
+        SELECT dep_id, researcher_id FROM departament_researcher
         """
     reg = sgbdSQL.consultar_db(script_sql)
     df_bd = pd.DataFrame(reg, columns=["dep_id", "researcher_id"])
@@ -329,7 +338,7 @@ def dim_departament_researcher():
 def dim_departament_technician():
     script_sql = """
         SELECT dep_id, technician_id FROM
-        ufmg.departament_technician
+        ufmg_departament_technician
         """
     registry = sgbdSQL.consultar_db(script_sql)
     data_frame = pd.DataFrame(registry, columns=["dep_id", "technician_id"])
@@ -488,29 +497,6 @@ def researcher_csv_db():
     sql = """
         SELECT r.name AS researcher, r.id AS researcher_id, 
             TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,
-            r.lattes_id
-        FROM  researcher r"""
-
-    reg = sgbdSQL.consultar_db(sql)
-
-    df_bd = pd.DataFrame(
-        reg,
-        columns=[
-            "researcher",
-            "researcher_id",
-            "last_update",
-            "graduation",
-            "lattes_id",
-        ],
-    )
-
-    df_bd.to_csv(csv_dir + "researcher.csv")
-
-
-def researcher_csv_db_v2():
-    sql = """
-        SELECT r.name AS researcher, r.id AS researcher_id, 
-            TO_CHAR(r.last_update,'dd/mm/yyyy') date_,r.graduation as graduation,
             r.lattes_id, extra_field
         FROM  researcher r"""
 
@@ -528,7 +514,7 @@ def researcher_csv_db_v2():
         ],
     )
 
-    df_bd.to_csv(csv_dir + "researcher_v2.csv")
+    df_bd.to_csv(csv_dir + "researcher.csv")
 
 
 def institution_csv_db():
@@ -600,7 +586,7 @@ def researcher_production_novo_csv_db():
 def ufmg_teacher():
     SCRIPQ_SQL = """ 
         SELECT researcher_id, matric, inscufmg, nome, genero, situacao, rt, clas, cargo, classe, ref, titulacao, entradanaufmg, progressao, semester
-        FROM ufmg.researcher;
+        FROM ufmg_teacher;
         """
     registry = sgbdSQL.consultar_db(SCRIPQ_SQL)
     data_frame = pd.DataFrame(
