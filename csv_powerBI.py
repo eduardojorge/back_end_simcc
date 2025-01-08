@@ -71,7 +71,7 @@ def researcher_city():
 
 def researcher_area_leader():
     SCRIPT_SQL = """
-        SELECT id, extra_field FROM researcher;
+        SELECT id, unnest(string_to_array(extra_field, ';')) AS extra_field FROM researcher;
         """
     reg = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(reg, columns=["researcher_id", "area_leader"])
@@ -997,6 +997,7 @@ def fat_openalex_article():
             keywords
         FROM public.openalex_article;
         """
+
     reg = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(
         reg,
