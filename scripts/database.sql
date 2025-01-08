@@ -138,6 +138,7 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     update_abstract boolean DEFAULT true,
     docente boolean NOT NULL DEFAULT false,
     student boolean NOT NULL DEFAULT false,
+    extra_field VARCHAR(255),
     update_status update_status NOT NULL DEFAULT 'NOT_UPDATED',
     CONSTRAINT "PK_7b53850398061862ebe70d4ce44" PRIMARY KEY (id),
     CONSTRAINT "UQ_cd7166a27f090d19d4e985592db" UNIQUE (lattes_10_id),
