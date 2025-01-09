@@ -551,6 +551,7 @@ CREATE TABLE IF NOT EXISTS research_group(
     institution_name character varying(200),
     category character varying(200)
 );
+CREATE SCHEMA IF NOT EXISTS ufmg;
 CREATE TABLE IF NOT EXISTS ufmg.departament (
     dep_id VARCHAR(255),
     org_cod VARCHAR(255),

@@ -87,8 +87,7 @@ def dim_researcher_csv_db():
             r.graduation AS graduation,
             r.institution_id,
             r.docente
-        FROM  
-            researcher r
+        FROM researcher r
         """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -104,6 +103,38 @@ def dim_researcher_csv_db():
             "docente",
         ],
     )
+
+    researcher_list = []
+    words_list = []
+
+    for _, data in df_bd.iterrows():
+        SCRIPT_SQL = f"""
+            WITH term_data AS (
+                SELECT ndoc AS qtd, INITCAP(word) AS term
+                FROM ts_stat($$
+                    SELECT DISTINCT
+                        translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
+                    FROM bibliographic_production b
+                    WHERE b.researcher_id = '{data["researcher_id"]}'
+                    $$)
+                WHERE CHAR_LENGTH(word) > 3
+                ORDER BY ndoc DESC
+                FETCH FIRST 20 ROWS ONLY
+            )
+            SELECT STRING_AGG(term, ', ') AS terms
+            FROM term_data;
+            """
+
+        list_of_words = sgbdSQL.consultar_db(SCRIPT_SQL)[0][0]
+
+        researcher_list.append(data["researcher_id"])
+        words_list.append(list_of_words)
+
+    df_words = pd.DataFrame(
+        {"researcher_id": researcher_list, "list_of_words": words_list}
+    )
+
+    df_bd = df_bd.merge(df_words, how="left", on="researcher_id")
 
     df_bd.to_csv(csv_dir + "dim_researcher.csv")
 
@@ -1089,39 +1120,40 @@ def graduate_program_ind_prod_csv_db():
 
 
 def csv_powerBI():
-    graduate_program_csv_db()
-    graduate_program_researcher_csv_db()
-    production_distinct_novo_csv_db()
-    article_distinct_novo_csv_db()
-    researcher_production_novo_csv_db()
-    graduate_program_ind_prod_csv_db()
-    ind_prod_researcher_csv_db()
-    production_coauthors_csv_db()
-    researcher_production_year_csv_db()
-    researcher_production_year_distinct_csv_db()
-    researcher_article_qualis_csv_db()
-    researcher_production_csv_db()
-    article_qualis_csv_distinct_db()
-    researcher_csv_db()
-    researcher_production_tecnical_year_csv_db()
-    institution_csv_db()
-    fat_simcc_bibliographic_production()
+    # graduate_program_csv_db()
+    # graduate_program_researcher_csv_db()
+    # production_distinct_novo_csv_db()
+    # article_distinct_novo_csv_db()
+    # researcher_production_novo_csv_db()
+    # graduate_program_ind_prod_csv_db()
+    # ind_prod_researcher_csv_db()
+    # production_coauthors_csv_db()
+    # researcher_production_year_csv_db()
+    # researcher_production_year_distinct_csv_db()
+    # researcher_article_qualis_csv_db()
+    # researcher_production_csv_db()
+    # article_qualis_csv_distinct_db()
+    # researcher_csv_db()
+    # researcher_production_tecnical_year_csv_db()
+    # institution_csv_db()
+    # fat_simcc_bibliographic_production()
+    # dim_researcher_csv_db()
+    # dim_institution_csv_db()
+    # dim_city_csv_db()
+    # fat_production_tecnical_year_novo_csv_db()
+    # fat_foment()
+    # dim_category_level_code()
+    # dim_research_group()
+    # fat_group_leaders()
+    # dim_departament_researcher()
+    # dim_departament_technician()
+    # graduate_program_researcher_year_unnest()
+    # dim_graduate_program_acronym()
+    # dim_graduate_program_student_year_unnest()
+    # graduate_program_student_researcher_csv_db()
+    # save_data_to_csv()
+    # area_leader_dim()
     dim_researcher_csv_db()
-    dim_institution_csv_db()
-    dim_city_csv_db()
-    fat_production_tecnical_year_novo_csv_db()
-    fat_foment()
-    dim_category_level_code()
-    dim_research_group()
-    fat_group_leaders()
-    dim_departament_researcher()
-    dim_departament_technician()
-    graduate_program_researcher_year_unnest()
-    dim_graduate_program_acronym()
-    dim_graduate_program_student_year_unnest()
-    graduate_program_student_researcher_csv_db()
-    save_data_to_csv()
-    area_leader_dim()
 
 
 if __name__ == "__main__":

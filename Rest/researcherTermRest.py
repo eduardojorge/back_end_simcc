@@ -167,6 +167,8 @@ def researcher_report():
 def software_production_researcher():
     researcher_id = request.args.get("researcher_id")
     year = request.args.get("year")
+    if not year:
+        year = 2020
     software = termFlowSQL.lists_software_production_researcher_db(researcher_id, year)
     return jsonify(software), 200
 
