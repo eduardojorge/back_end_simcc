@@ -160,7 +160,7 @@ def extract_researcher(id, data):
 
     SCRIPT_SQL = """
         INSERT INTO public.openalex_researcher
-            (researcher_id, h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex)
+        (researcher_id, h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
 
@@ -170,4 +170,4 @@ def extract_researcher(id, data):
 
 if __name__ == "__main__":
     scrapping_researcher_data()
-    # scrapping_article_data()
+    scrapping_article_data()

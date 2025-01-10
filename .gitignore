@@ -8,3 +8,4 @@ test*
 *.csv
 *.xml
 *.zip
+*:Zone.Identifier
