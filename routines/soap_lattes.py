@@ -54,13 +54,15 @@ def database_att(lattes_id) -> datetime:
 def download_xml(lattes_id):
     if cnpq_att(lattes_id) <= database_att(lattes_id):
         print('Curriculo atualizado!')
+        logger.info('Curriculo atualizado!')
         return
 
     print('Baixando curriculo...')
+    logger.info('Baixando curriculo...')
 
     SCRIPT_SQL = """
         UPDATE researcher
-        SET updated = false
+        SET update_status = 'NOT_UPDATED'
         WHERE lattes_id = %(lattes_id)s;
         """
     conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
@@ -111,7 +113,13 @@ if __name__ == '__main__':
         print(f'Pesquisador: [{researcher.get("name")}]')
         print(f'Lattes: [{researcher.get("lattes_id")}]')
 
+        logger.info(f'Curriculo número: [{_}]')
+        logger.info(f'Pesquisador: [{researcher.get("name")}]')
+        logger.info(f'Lattes: [{researcher.get("lattes_id")}]')
+
         lattes_id = researcher.get('lattes_id')
         lattes_id = lattes_id.zfill(16)
         download_xml(lattes_id)
+
     print('FIM!')
+    logger.info('FIM!')

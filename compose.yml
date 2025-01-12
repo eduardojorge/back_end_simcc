@@ -1,0 +1,15 @@
+services:
+  simcc-postgres:
+    image: ankane/pgvector
+    container_name: simcc-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: simcc
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - simcc-postgres:/var/lib/postgresql/data
+
+volumes:
+  simcc-postgres:

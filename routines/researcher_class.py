@@ -161,7 +161,7 @@ def list_researchers():
     return result
 
 
-def researcher_classification(researcher: pd.DataFrame):  # noqa: PLR0911, PLR0912
+def researcher_classification(researcher: pd.DataFrame) -> str:  # noqa: PLR0911, PLR0912, PLR0915
     YEAR_DOC = datetime.datetime.now().year - researcher['first_doc']
     QUALIS_A = researcher['A1'] + researcher['A2']
     QUALIS_A += researcher['A3'] + researcher['A4']
