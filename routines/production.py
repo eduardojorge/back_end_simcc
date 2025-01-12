@@ -117,7 +117,7 @@ if __name__ == '__main__':
     log_format = '%(levelname)s | %(asctime)s - %(message)s'
 
     logging.basicConfig(
-        filename=os.path.join(LOG_PATH, 'soap.log'),
+        filename=os.path.join(LOG_PATH, 'production.log'),
         filemode='w',
         format=log_format,
         level=logging.DEBUG,
