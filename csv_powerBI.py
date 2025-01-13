@@ -110,38 +110,6 @@ def dim_researcher_csv_db(remote_addr: str = str()):
         ],
     )
 
-    researcher_list = []
-    words_list = []
-
-    for _, data in df_bd.iterrows():
-        SCRIPT_SQL = f"""
-            WITH term_data AS (
-                SELECT ndoc AS qtd, INITCAP(word) AS term
-                FROM ts_stat($$
-                    SELECT DISTINCT
-                        translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
-                    FROM bibliographic_production b
-                    WHERE b.researcher_id = '{data["researcher_id"]}'
-                    $$)
-                WHERE CHAR_LENGTH(word) > 3
-                ORDER BY ndoc DESC
-                FETCH FIRST 20 ROWS ONLY
-            )
-            SELECT STRING_AGG(term, ', ') AS terms
-            FROM term_data;
-            """
-
-        list_of_words = sgbdSQL.consultar_db(SCRIPT_SQL)[0][0]
-
-        researcher_list.append(data["researcher_id"])
-        words_list.append(list_of_words)
-
-    df_words = pd.DataFrame(
-        {"researcher_id": researcher_list, "list_of_words": words_list}
-    )
-
-    df_bd = df_bd.merge(df_words, how="left", on="researcher_id")
-
     df_bd.to_csv(csv_dir + "dim_researcher.csv")
 
 
