@@ -39,6 +39,8 @@ if __name__ == '__main__':
     for _, researcher in researchers.iterrows():
         params = researcher.to_dict()
 
+        print(type(params['fim']))
+        print(type(params['fim']) is datetime)
         if type(params['fim']) is not datetime:
             params['fim'] = None
 

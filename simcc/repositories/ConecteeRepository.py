@@ -8,12 +8,13 @@ def get_researcher(cpf=None, name=None):
     name_filter = str()
 
     if cpf:
+        cpf = cpf.replace('.', '').replace('-', '')
         params['cpf'] = cpf
-        cpf_filter = 'AND cpf = %(cpf)s'
+        cpf_filter = "AND REPLACE(REPLACE(cpf, '.', ''), '-', '') = %(cpf)s"
 
     if name:
-        params['name'] = name
-        name_filter = 'AND nome = %(name)s'
+        params['name'] = name + '%'
+        name_filter = 'AND nome ILIKE %(name)s'
 
     SCRIPT_SQL = f"""
         SELECT nome, cpf, classe, nivel, inicio, fim, tempo_nivel,
@@ -23,7 +24,6 @@ def get_researcher(cpf=None, name=None):
             {cpf_filter}
             {name_filter};
         """
-
     result = conn.select(SCRIPT_SQL, params)
     return result
 

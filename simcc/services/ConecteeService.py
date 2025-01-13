@@ -66,7 +66,7 @@ def extrair_dados_pdf(caminho_pdf):  # noqa: PLR0914
     )
     cpf = match_nome_cpf.group(2).strip() if match_nome_cpf else 'NÃO ENCONTRADO'
 
-    regex_posicionamentos = r'CLASSE:(\d+)\s+NIVEL:(\d+)\s+(\d{2}[A-Z]{3}\d{4})\s+A\s*(\d{2}[A-Z]{3}\d{4}|)'
+    regex_posicionamentos = r'CLASSE:(\d+)\s+NIVEL:(\d+)\s+(\d{2}[A-Z]{3}\d{4})\s+A\s*(\d{2}[A-Z]{3}\d{4}|)'  # noqa: E501
     matches = re.findall(regex_posicionamentos, texto)
 
     dados = []
