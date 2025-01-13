@@ -154,13 +154,16 @@ def dim_great_area():
     df.to_csv(csv_dir + "dim_great_area.csv")
 
 
-# def fat_great_area():
-#     SCRIPT_SQL = """
-#         SELECT researcher_id, REPLACE(TRIM(UNNEST(STRING_TO_ARRAY(great_area, ';'))), '_', ' ') AS great_area FROM researcher_production ORDER BY researcher_id;;
-#         """
-#     result = sgbdSQL.consultar_db(SCRIPT_SQL)
-#     df = pd.DataFrame(result, columns=["id", "name"])
-#     df.to_csv(csv_dir + "dim_great_area.csv")
+def fat_great_area():
+    SCRIPT_SQL = """
+        SELECT gae.id, researcher_id, REPLACE(gae.name, '_', ' ') as area
+        FROM great_area_expertise gae
+        LEFT JOIN researcher_area_expertise r
+            ON gae.id = r.great_area_expertise_id
+        """
+    result = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(result, columns=["great_area_id", "researcher_id", "name"])
+    df.to_csv(csv_dir + "fat_great_area.csv")
 
 
 def dim_area_specialty():
@@ -170,6 +173,19 @@ def dim_area_specialty():
     result = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(result, columns=["id", "name"])
     df.to_csv(csv_dir + "dim_area_specialty.csv")
+
+
+def fat_area_specialty():
+    SCRIPT_SQL = """
+        SELECT DISTINCT asp.id, researcher_id, asp.name 
+        FROM researcher_area_expertise r 
+        INNER JOIN area_specialty asp ON asp.id = r.area_specialty_id;
+        """
+    result = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(
+        result, columns=["area_specialty_id", "researcher_id", "area_specialty"]
+    )
+    df.to_csv(csv_dir + "fat_area_specialty.csv")
 
 
 def dim_institution_csv_db():

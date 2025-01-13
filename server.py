@@ -24,7 +24,9 @@ from csv_powerBI import (
     graduate_program_csv_db,
     ufmg_teacher,
     dim_great_area,
+    fat_great_area,
     dim_area_specialty,
+    fat_area_specialty,
     researcher_city,
     researcher_area_leader,
     fat_openalex_researcher,
@@ -701,6 +703,26 @@ def great_area():
 def area_specialty():
     dim_area_specialty()
     path = "Files/indicadores_simcc/dim_area_specialty.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/fat_great_area.csv", methods=["GET"])
+def great_area_csv():
+    fat_great_area()
+    path = "Files/indicadores_simcc/fat_great_area.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/fat_area_specialty.csv", methods=["GET"])
+def area_specialty_csv():
+    fat_area_specialty()
+    path = "Files/indicadores_simcc/fat_area_specialty.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/dim_titulacao.csv", methods=["GET"])
+def dim_titulacao():
+    path = "Files/indicadores_simcc/dim_titulacao.xlsx"
     return send_file(path, as_attachment=True)
 
 
