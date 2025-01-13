@@ -89,8 +89,8 @@ def dim_researcher_csv_db(remote_addr: str = str()):
             r.graduation AS graduation,
             r.institution_id,
             r.docente,
-            r.abstract,
-            '{remote_addr}' || '/ResearcherData/Image?researcher_id=' || r.id
+            regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ),
+            '{remote_addr}/api/ResearcherData/Image?researcher_id=' || r.id
         FROM researcher r
         """
 
