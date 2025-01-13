@@ -11,8 +11,9 @@ csv_dir = "Files/indicadores_simcc/"
 
 def fat_simcc_bibliographic_production():
     sql = """
-        SELECT 
-            distinct title,
+        SELECT
+            distinct unaccent(LOWER(title)) AS sanitized_title,
+            title,
             b.type as tipo,
             b.researcher_id,
             year,
@@ -43,6 +44,7 @@ def fat_simcc_bibliographic_production():
     df_bd = pd.DataFrame(
         reg,
         columns=[
+            "sanitized_title",
             "title",
             "tipo",
             "researcher_id",
@@ -79,7 +81,6 @@ def researcher_area_leader():
 
 
 def dim_researcher_csv_db(remote_addr: str = str()):
-    print()
     sql = f"""
         SELECT 
             r.name AS researcher, 
@@ -202,7 +203,8 @@ def dim_city_csv_db():
 def fat_production_tecnical_year_novo_csv_db():
     sql = """
         SELECT 
-            DISTINCT title,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
+            title,
             development_year::int AS year,
             'PATENTE' AS TYPE,
             p.researcher_id,
@@ -212,9 +214,12 @@ def fat_production_tecnical_year_novo_csv_db():
             patent p, researcher r
         WHERE 
             r.id = p.researcher_id
+
         UNION
+
         SELECT 
-            DISTINCT title,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
+            title,
             s.year AS year,
             'SOFTWARE' AS TYPE,
             researcher_id,
@@ -226,7 +231,8 @@ def fat_production_tecnical_year_novo_csv_db():
             r.id = s.researcher_id
         UNION
         SELECT 
-            DISTINCT title,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
+            title,
             b.year AS year,
             'MARCA' AS TYPE,
             researcher_id,
@@ -238,7 +244,8 @@ def fat_production_tecnical_year_novo_csv_db():
             r.id = b.researcher_id
         UNION
         SELECT 
-            DISTINCT title,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
+            title,
             b.year AS year,
             'RELATÓRIO TÉCNICO' AS TYPE,
             researcher_id,
@@ -254,7 +261,15 @@ def fat_production_tecnical_year_novo_csv_db():
 
     df_bd = pd.DataFrame(
         reg,
-        columns=["title", "year", "type", "researcher_id", "city_id", "institution_id"],
+        columns=[
+            "sanitized_title",
+            "title",
+            "year",
+            "type",
+            "researcher_id",
+            "city_id",
+            "institution_id",
+        ],
     )
 
     df_bd.to_csv(csv_dir + "fat_production_tecnical_year_novo_csv_db.csv")
