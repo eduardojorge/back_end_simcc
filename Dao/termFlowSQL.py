@@ -102,7 +102,7 @@ def list_research_dictionary_db(initials, type):
 def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
     filter_term = str()
     if term:
-        filter_term = f'AND {util.web_search_filter(term, "title")}'
+        filter_term = f"AND {util.web_search_filter(term, 'title')}"
 
     filter_year = str()
     if year:
@@ -174,7 +174,7 @@ def lists_patent_production_researcher_db(researcher_id, year, term, distinct):
 def lists_book_production_researcher_db(researcher_id, year, term, distinct):
     filter_term = str()
     if term:
-        filter_term = f'AND {util.web_search_filter(term, "title")}'
+        filter_term = f"AND {util.web_search_filter(term, 'title')}"
 
     if researcher_id:
         filter_researcher = f"""
@@ -254,7 +254,7 @@ def lists_book_production_researcher_db(researcher_id, year, term, distinct):
 def lists_book_chapter_production_researcher_db(researcher_id, year, term, distinct):
     filter = str()
     if term:
-        filter = f'AND {util.web_search_filter(term, "title")}'
+        filter = f"AND {util.web_search_filter(term, 'title')}"
 
     if researcher_id:
         filter_researcher = f"""
@@ -489,7 +489,7 @@ def lists_bibliographic_production_article_researcher_db(
 ):
     filter = str()
     if term:
-        filter = f'AND {util.web_search_filter(term, "title")}'
+        filter = f"AND {util.web_search_filter(term, 'title')}"
 
     filter_qualis = str()
     if qualis:
@@ -713,10 +713,8 @@ def lists_word_researcher_db(researcher_id=None, graduate_program=None, dep_id=N
         filter_ = str()
 
     SCRIPQ_SQL = f"""
-        SELECT DISTINCT
-            translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
-        FROM
-            bibliographic_production b
+        SELECT DISTINCT translate(unaccent(LOWER(b.title)), '''\\.:;?(),''', ' ')::tsvector AS processed_title
+        FROM bibliographic_production b
         {filter_}
     """
 

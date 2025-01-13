@@ -196,13 +196,11 @@ def fat_production_tecnical_year_novo_csv_db():
             development_year::int AS year,
             'PATENTE' AS TYPE,
             p.researcher_id,
-            r.city_id,
+            c.id,
             r.institution_id,
             unaccent(LOWER(title)) AS sanitized_title
-        FROM 
-            patent p, researcher r
-        WHERE 
-            r.id = p.researcher_id
+        FROM patent p, researcher r, researcher_production rp, city c
+        WHERE r.id = p.researcher_id AND rp.researcher_id = p.researcher_id AND rp.city = c.name
 
         UNION
 
@@ -210,40 +208,35 @@ def fat_production_tecnical_year_novo_csv_db():
             title,
             s.year AS year,
             'SOFTWARE' AS TYPE,
-            researcher_id,
-            r.city_id,
+            s.researcher_id,
+            c.id,
             r.institution_id,
             unaccent(LOWER(title)) AS sanitized_title
         FROM 
-            software s, researcher r
-        WHERE 
-            r.id = s.researcher_id
+            software s, researcher r, researcher_production rp, city c
+        WHERE r.id = s.researcher_id AND rp.researcher_id = s.researcher_id AND rp.city = c.name
         UNION
         SELECT DISTINCT
             title,
             b.year AS year,
             'MARCA' AS TYPE,
-            researcher_id,
-            r.city_id,
+            b.researcher_id,
+            c.id,
             r.institution_id,
             unaccent(LOWER(title)) AS sanitized_title
-        FROM 
-            brand b, researcher r
-        WHERE 
-            r.id = b.researcher_id
+        FROM brand b, researcher r, researcher_production rp, city c
+        WHERE r.id = b.researcher_id AND rp.researcher_id = b.researcher_id AND rp.city = c.name
         UNION
         SELECT DISTINCT
             title,
             b.year AS year,
             'RELATÓRIO TÉCNICO' AS TYPE,
-            researcher_id,
-            r.city_id,
+            b.researcher_id,
+            c.id,
             r.institution_id,
             unaccent(LOWER(title)) AS sanitized_title
-        FROM 
-            research_report b, researcher r
-        WHERE 
-            r.id = b.researcher_id
+        FROM research_report b, researcher r, researcher_production rp, city c
+        WHERE r.id = b.researcher_id AND rp.researcher_id = b.researcher_id AND rp.city = c.name
         """
 
     reg = sgbdSQL.consultar_db(sql)
