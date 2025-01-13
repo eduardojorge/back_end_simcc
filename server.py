@@ -23,6 +23,8 @@ from zeep import Client
 from csv_powerBI import (
     graduate_program_csv_db,
     ufmg_teacher,
+    dim_great_area,
+    dim_area_specialty,
     researcher_city,
     researcher_area_leader,
     fat_openalex_researcher,
@@ -493,7 +495,7 @@ def load_fat_simcc_bibliographic_production():
 
 @app.route("/dim_researcher.csv", methods=["GET"])
 def load_dim_researcher_csv_db():
-    dim_researcher_csv_db()
+    dim_researcher_csv_db(request.url[: request.url.rfind("/") + 1])
     path = "Files/indicadores_simcc/dim_researcher.csv"
     return send_file(path, as_attachment=True)
 
@@ -685,6 +687,20 @@ def researcher_area_leader_csv():
 def fat_openalex_researcher_csv():
     fat_openalex_researcher()
     path = "Files/indicadores_simcc/fat_openalex_researcher.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/dim_great_area.csv", methods=["GET"])
+def great_area():
+    dim_great_area()
+    path = "Files/indicadores_simcc/dim_great_area.csv"
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/dim_area_specialty.csv", methods=["GET"])
+def area_specialty():
+    dim_area_specialty()
+    path = "Files/indicadores_simcc/dim_area_specialty.csv"
     return send_file(path, as_attachment=True)
 
 

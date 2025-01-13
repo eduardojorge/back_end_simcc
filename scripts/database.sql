@@ -2,9 +2,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 create EXTENSION fuzzystrmatch;
 create EXTENSION pg_trgm;
 CREATE EXTENSION unaccent;
+CREATE EXTENSION vector;
+
 CREATE TYPE relationship AS ENUM ('COLABORADOR', 'PERMANENTE');
-CREATE TYPE update_status AS ENUM ('NOT_UPDATED', 'HOP_COMPLETED','UPDATED');
 CREATE TYPE classification_class AS ENUM ('A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'E+', 'E');
+
+CREATE SCHEMA IF NOT EXISTS embeddings;
+CREATE SCHEMA IF NOT EXISTS ufmg;
+
 CREATE TABLE IF NOT EXISTS public.country (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name character varying NOT NULL,
@@ -139,7 +144,6 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     docente boolean NOT NULL DEFAULT false,
     student boolean NOT NULL DEFAULT false,
     extra_field VARCHAR(255),
-    update_status update_status NOT NULL DEFAULT 'NOT_UPDATED',
     CONSTRAINT "PK_7b53850398061862ebe70d4ce44" PRIMARY KEY (id),
     CONSTRAINT "UQ_cd7166a27f090d19d4e985592db" UNIQUE (lattes_10_id),
     CONSTRAINT "UQ_fdf2bde0f46501e3e84ec154c32" UNIQUE (lattes_id),
@@ -551,69 +555,6 @@ CREATE TABLE IF NOT EXISTS research_group(
     institution_name character varying(200),
     category character varying(200)
 );
-CREATE SCHEMA IF NOT EXISTS ufmg;
-CREATE TABLE IF NOT EXISTS ufmg.departament (
-    dep_id VARCHAR(255),
-    org_cod VARCHAR(255),
-    dep_nom VARCHAR(255),
-    dep_des TEXT,
-    dep_email VARCHAR(255),
-    dep_site TEXT,
-    dep_sigla VARCHAR(255),
-    dep_tel VARCHAR(255),
-    img_data BYTEA,
-    PRIMARY KEY (dep_id)
-);
-CREATE TABLE IF NOT EXISTS ufmg.researcher (
-    researcher_id uuid,
-    matric character varying(255),
-    inscUFMG character varying(255),
-    nome character varying(255),
-    genero character varying(255),
-    situacao character varying(255),
-    rt character varying(255),
-    clas character varying(255),
-    cargo character varying(255),
-    classe character varying(255),
-    ref character varying(255),
-    titulacao character varying(255),
-    entradaNaUFMG DATE,
-    progressao DATE,
-    semester character varying(6)
-);
-CREATE TABLE IF NOT EXISTS ufmg.technician (
-    technician_id uuid PRIMARY KEY (technician_id),
-    matric INT UNIQUE,
-    ins_ufmg VARCHAR(255),
-    nome VARCHAR(255),
-    genero VARCHAR(255),
-    deno_sit VARCHAR(255),
-    rt VARCHAR(255),
-    classe VARCHAR(255),
-    cargo VARCHAR(255),
-    nivel VARCHAR(255),
-    ref VARCHAR(255),
-    titulacao VARCHAR(255),
-    setor VARCHAR(255),
-    detalhe_setor VARCHAR(255),
-    dting_org DATE,
-    data_prog DATE,
-    semester character varying(255)
-);
-CREATE TABLE IF NOT EXISTS ufmg.departament_technician (
-    dep_id character varying(255),
-    technician_id uuid,
-    PRIMARY KEY (dep_id, technician_id),
-    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
-    FOREIGN KEY (technician_id) REFERENCES ufmg.technician (technician_id)
-);
-CREATE TABLE IF NOT EXISTS ufmg.departament_researcher (
-    dep_id VARCHAR(20),
-    researcher_id uuid NOT NULL,
-    PRIMARY KEY (dep_id, researcher_id),
-    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
-    FOREIGN KEY (researcher_id) REFERENCES researcher (id)
-);
 CREATE TABLE incite_graduate_program(
     incite_graduate_program_id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
@@ -756,8 +697,80 @@ CREATE TABLE IF NOT EXISTS public.relevant_production (
         REFERENCES public.researcher(id)
         ON DELETE CASCADE
 );
-CREATE SCHEMA IF NOT EXISTS embeddings;
-CREATE EXTENSION vector;
+CREATE TABLE IF NOT EXISTS ufmg.departament (
+    dep_id VARCHAR(255),
+    org_cod VARCHAR(255),
+    dep_nom VARCHAR(255),
+    dep_des TEXT,
+    dep_email VARCHAR(255),
+    dep_site TEXT,
+    dep_sigla VARCHAR(255),
+    dep_tel VARCHAR(255),
+    img_data BYTEA,
+    PRIMARY KEY (dep_id)
+);
+CREATE TABLE IF NOT EXISTS ufmg.researcher (
+    researcher_id uuid,
+    matric character varying(255),
+    inscUFMG character varying(255),
+    nome character varying(255),
+    genero character varying(255),
+    situacao character varying(255),
+    rt character varying(255),
+    clas character varying(255),
+    cargo character varying(255),
+    classe character varying(255),
+    ref character varying(255),
+    titulacao character varying(255),
+    entradaNaUFMG DATE,
+    progressao DATE,
+    semester character varying(6)
+);
+CREATE TABLE IF NOT EXISTS ufmg.technician (
+    technician_id uuid,
+    matric INT UNIQUE,
+    ins_ufmg VARCHAR(255),
+    nome VARCHAR(255),
+    genero VARCHAR(255),
+    deno_sit VARCHAR(255),
+    rt VARCHAR(255),
+    classe VARCHAR(255),
+    cargo VARCHAR(255),
+    nivel VARCHAR(255),
+    ref VARCHAR(255),
+    titulacao VARCHAR(255),
+    setor VARCHAR(255),
+    detalhe_setor VARCHAR(255),
+    dting_org DATE,
+    data_prog DATE,
+    semester character varying(255),
+    PRIMARY KEY (technician_id)
+);
+CREATE TABLE IF NOT EXISTS ufmg.departament_technician (
+    dep_id character varying(255),
+    technician_id uuid,
+    PRIMARY KEY (dep_id, technician_id),
+    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
+    FOREIGN KEY (technician_id) REFERENCES ufmg.technician (technician_id)
+);
+CREATE TABLE IF NOT EXISTS ufmg.departament_researcher (
+    dep_id VARCHAR(20),
+    researcher_id uuid NOT NULL,
+    PRIMARY KEY (dep_id, researcher_id),
+    FOREIGN KEY (dep_id) REFERENCES ufmg.departament (dep_id),
+    FOREIGN KEY (researcher_id) REFERENCES researcher (id)
+);
+CREATE TABLE IF NOT EXISTS ufmg.researcher_data(
+    nome VARCHAR(255),
+    cpf VARCHAR(14),
+    classe INT,
+    nivel INT,
+    inicio TIMESTAMP,
+    fim TIMESTAMP,
+    tempo_nivel INT,
+    tempo_acumulado INT,
+    arquivo VARCHAR(255)
+);
 CREATE TABLE IF NOT EXISTS embeddings.abstract (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     reference_id uuid REFERENCES public.researcher(id),

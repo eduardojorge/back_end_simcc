@@ -78,16 +78,22 @@ def researcher_area_leader():
     df.to_csv(csv_dir + "researcher_area_leader.csv")
 
 
-def dim_researcher_csv_db():
-    sql = """
+def dim_researcher_csv_db(remote_addr: str = str()):
+    print()
+    sql = f"""
         SELECT 
             r.name AS researcher, 
             r.id AS researcher_id, 
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS date_,
             r.graduation AS graduation,
             r.institution_id,
-            r.docente
+            r.docente,
+            r.abstract,
+            rp.great_area AS great_area,
+            rp.area_specialty AS area_specialty,
+            '{remote_addr}' || '/ResearcherData/Image?researcher_id=' || r.id
         FROM researcher r
+        LEFT JOIN researcher_production rp ON rp.researcher_id = r.id;
         """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -101,6 +107,10 @@ def dim_researcher_csv_db():
             "graduation",
             "institution_id",
             "docente",
+            "abstract",
+            "great_area",
+            "area_specialty",
+            "image",
         ],
     )
 
@@ -137,6 +147,24 @@ def dim_researcher_csv_db():
     df_bd = df_bd.merge(df_words, how="left", on="researcher_id")
 
     df_bd.to_csv(csv_dir + "dim_researcher.csv")
+
+
+def dim_great_area():
+    SCRIPT_SQL = """
+        SELECT id, REPLACE(name, '_', ' ') FROM great_area_expertise;
+        """
+    result = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(result, columns=["id", "name"])
+    df.to_csv(csv_dir + "dim_great_area.csv")
+
+
+def dim_area_specialty():
+    SCRIPT_SQL = """
+        SELECT id, REPLACE(name, '_', ' ') FROM area_specialty;
+        """
+    result = sgbdSQL.consultar_db(SCRIPT_SQL)
+    df = pd.DataFrame(result, columns=["id", "name"])
+    df.to_csv(csv_dir + "dim_area_specialty.csv")
 
 
 def dim_institution_csv_db():
@@ -881,17 +909,18 @@ def graduate_program_csv_db():
     print(csv_dir + "cimatec_graduate_program.csv")
     sql = """
         SELECT
-            graduate_program_id,
-            code,
-            name,
-            area,
-            modality,
-            type,
-            rating,
-            institution_id
-        FROM 
-            graduate_program gp
-    """
+            gp.graduate_program_id,
+            gp.code,
+            gp.name,
+            gp.area,
+            gp.modality,
+            gp.type,
+            gp.rating,
+            i.id,
+            i.name
+        FROM graduate_program gp
+        LEFT JOIN institution i ON i.id = gp.institution_id
+        """
 
     reg = sgbdSQL.consultar_db(sql)
 
@@ -906,6 +935,7 @@ def graduate_program_csv_db():
             "type",
             "rating",
             "institution_id",
+            "institution",
         ],
     )
 
@@ -1120,39 +1150,39 @@ def graduate_program_ind_prod_csv_db():
 
 
 def csv_powerBI():
-    # graduate_program_csv_db()
-    # graduate_program_researcher_csv_db()
-    # production_distinct_novo_csv_db()
-    # article_distinct_novo_csv_db()
-    # researcher_production_novo_csv_db()
-    # graduate_program_ind_prod_csv_db()
-    # ind_prod_researcher_csv_db()
-    # production_coauthors_csv_db()
-    # researcher_production_year_csv_db()
-    # researcher_production_year_distinct_csv_db()
-    # researcher_article_qualis_csv_db()
-    # researcher_production_csv_db()
-    # article_qualis_csv_distinct_db()
-    # researcher_csv_db()
-    # researcher_production_tecnical_year_csv_db()
-    # institution_csv_db()
-    # fat_simcc_bibliographic_production()
-    # dim_researcher_csv_db()
-    # dim_institution_csv_db()
-    # dim_city_csv_db()
-    # fat_production_tecnical_year_novo_csv_db()
-    # fat_foment()
-    # dim_category_level_code()
-    # dim_research_group()
-    # fat_group_leaders()
-    # dim_departament_researcher()
-    # dim_departament_technician()
-    # graduate_program_researcher_year_unnest()
-    # dim_graduate_program_acronym()
-    # dim_graduate_program_student_year_unnest()
-    # graduate_program_student_researcher_csv_db()
-    # save_data_to_csv()
-    # area_leader_dim()
+    graduate_program_csv_db()
+    graduate_program_researcher_csv_db()
+    production_distinct_novo_csv_db()
+    article_distinct_novo_csv_db()
+    researcher_production_novo_csv_db()
+    graduate_program_ind_prod_csv_db()
+    ind_prod_researcher_csv_db()
+    production_coauthors_csv_db()
+    researcher_production_year_csv_db()
+    researcher_production_year_distinct_csv_db()
+    researcher_article_qualis_csv_db()
+    researcher_production_csv_db()
+    article_qualis_csv_distinct_db()
+    researcher_csv_db()
+    researcher_production_tecnical_year_csv_db()
+    institution_csv_db()
+    fat_simcc_bibliographic_production()
+    dim_researcher_csv_db()
+    dim_institution_csv_db()
+    dim_city_csv_db()
+    fat_production_tecnical_year_novo_csv_db()
+    fat_foment()
+    dim_category_level_code()
+    dim_research_group()
+    fat_group_leaders()
+    dim_departament_researcher()
+    dim_departament_technician()
+    graduate_program_researcher_year_unnest()
+    dim_graduate_program_acronym()
+    dim_graduate_program_student_year_unnest()
+    graduate_program_student_researcher_csv_db()
+    save_data_to_csv()
+    area_leader_dim()
     dim_researcher_csv_db()
 
 
