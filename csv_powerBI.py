@@ -12,7 +12,6 @@ csv_dir = "Files/indicadores_simcc/"
 def fat_simcc_bibliographic_production():
     sql = """
         SELECT
-            distinct unaccent(LOWER(title)) AS sanitized_title,
             title,
             b.type as tipo,
             b.researcher_id,
@@ -23,7 +22,8 @@ def fat_simcc_bibliographic_production():
             bar.jcr,
             bar.jcr_link,
             c.id,
-            b.id
+            b.id,
+            distinct unaccent(LOWER(title)) AS sanitized_title
         FROM 
             bibliographic_production AS b 
         LEFT JOIN bibliographic_production_article bar
@@ -44,7 +44,6 @@ def fat_simcc_bibliographic_production():
     df_bd = pd.DataFrame(
         reg,
         columns=[
-            "sanitized_title",
             "title",
             "tipo",
             "researcher_id",
@@ -56,6 +55,7 @@ def fat_simcc_bibliographic_production():
             "jcr_link",
             "city_id",
             "bibliographic_production_id",
+            "sanitized_title",
         ],
     )
 
@@ -191,13 +191,13 @@ def dim_city_csv_db():
 def fat_production_tecnical_year_novo_csv_db():
     sql = """
         SELECT 
-            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
             title,
             development_year::int AS year,
             'PATENTE' AS TYPE,
             p.researcher_id,
             r.city_id,
-            r.institution_id
+            r.institution_id,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title
         FROM 
             patent p, researcher r
         WHERE 
@@ -206,39 +206,39 @@ def fat_production_tecnical_year_novo_csv_db():
         UNION
 
         SELECT 
-            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
             title,
             s.year AS year,
             'SOFTWARE' AS TYPE,
             researcher_id,
             r.city_id,
-            r.institution_id
+            r.institution_id,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title
         FROM 
             software s, researcher r
         WHERE 
             r.id = s.researcher_id
         UNION
         SELECT 
-            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
             title,
             b.year AS year,
             'MARCA' AS TYPE,
             researcher_id,
             r.city_id,
-            r.institution_id
+            r.institution_id,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title
         FROM 
             brand b, researcher r
         WHERE 
             r.id = b.researcher_id
         UNION
         SELECT 
-            DISTINCT unaccent(LOWER(title)) AS sanitized_title,
             title,
             b.year AS year,
             'RELATÓRIO TÉCNICO' AS TYPE,
             researcher_id,
             r.city_id,
-            r.institution_id
+            r.institution_id,
+            DISTINCT unaccent(LOWER(title)) AS sanitized_title
         FROM 
             research_report b, researcher r
         WHERE 
@@ -250,13 +250,13 @@ def fat_production_tecnical_year_novo_csv_db():
     df_bd = pd.DataFrame(
         reg,
         columns=[
-            "sanitized_title",
             "title",
             "year",
             "type",
             "researcher_id",
             "city_id",
             "institution_id",
+            "sanitized_title",
         ],
     )
 
