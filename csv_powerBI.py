@@ -921,7 +921,6 @@ def profnit_graduate_program_csv_db():
 
 
 def graduate_program_csv_db():
-    print(csv_dir + "cimatec_graduate_program.csv")
     sql = """
         SELECT
             gp.graduate_program_id,
@@ -932,7 +931,8 @@ def graduate_program_csv_db():
             gp.type,
             gp.rating,
             i.id,
-            i.name
+            i.name,
+            gp.city
         FROM graduate_program gp
         LEFT JOIN institution i ON i.id = gp.institution_id
         """
@@ -951,6 +951,7 @@ def graduate_program_csv_db():
             "rating",
             "institution_id",
             "institution",
+            "city",
         ],
     )
 
