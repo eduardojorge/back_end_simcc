@@ -83,18 +83,15 @@ def researcher_area_leader():
 def dim_researcher_csv_db(remote_addr: str = str()):
     sql = f"""
         SELECT 
-            r.name AS researcher, 
-            r.id AS researcher_id, 
+            r.name AS researcher,
+            r.id AS researcher_id,
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS date_,
             r.graduation AS graduation,
             r.institution_id,
             r.docente,
             r.abstract,
-            rp.great_area AS great_area,
-            rp.area_specialty AS area_specialty,
             '{remote_addr}' || '/ResearcherData/Image?researcher_id=' || r.id
         FROM researcher r
-        LEFT JOIN researcher_production rp ON rp.researcher_id = r.id;
         """
 
     reg = sgbdSQL.consultar_db(sql)
@@ -109,8 +106,6 @@ def dim_researcher_csv_db(remote_addr: str = str()):
             "institution_id",
             "docente",
             "abstract",
-            "great_area",
-            "area_specialty",
             "image",
         ],
     )
@@ -157,6 +152,15 @@ def dim_great_area():
     result = sgbdSQL.consultar_db(SCRIPT_SQL)
     df = pd.DataFrame(result, columns=["id", "name"])
     df.to_csv(csv_dir + "dim_great_area.csv")
+
+
+# def fat_great_area():
+#     SCRIPT_SQL = """
+#         SELECT researcher_id, REPLACE(TRIM(UNNEST(STRING_TO_ARRAY(great_area, ';'))), '_', ' ') AS great_area FROM researcher_production ORDER BY researcher_id;;
+#         """
+#     result = sgbdSQL.consultar_db(SCRIPT_SQL)
+#     df = pd.DataFrame(result, columns=["id", "name"])
+#     df.to_csv(csv_dir + "dim_great_area.csv")
 
 
 def dim_area_specialty():
@@ -1183,7 +1187,6 @@ def csv_powerBI():
     researcher_production_tecnical_year_csv_db()
     institution_csv_db()
     fat_simcc_bibliographic_production()
-    dim_researcher_csv_db()
     dim_institution_csv_db()
     dim_city_csv_db()
     fat_production_tecnical_year_novo_csv_db()
