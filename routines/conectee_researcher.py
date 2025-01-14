@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -38,11 +37,10 @@ if __name__ == '__main__':
 
     for _, researcher in researchers.iterrows():
         params = researcher.to_dict()
-
-        print(type(params['fim']))
-        print(type(params['fim']) is datetime)
-        if type(params['fim']) is not datetime:
+        try:
+            conn.exec(SCRIPT_SQL, params)
+        except Exception:
             params['fim'] = None
+            conn.exec(SCRIPT_SQL, params)
 
-        conn.exec(SCRIPT_SQL, params)
         print('Sucesso com o pesquisdor: ', researcher['nome'])

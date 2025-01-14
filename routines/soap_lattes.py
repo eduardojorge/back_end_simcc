@@ -30,12 +30,13 @@ def list_admin_researchers():
 def cnpq_att(lattes_id) -> datetime:
     if PROXY:
         PROXY_URL = f'https://simcc.uesc.br/api/getDataAtualizacaoCV?lattes_id={lattes_id}'
-        if response := httpx.get(PROXY_URL, verify=False).json():
-            return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
-        return datetime.min
+        response = httpx.get(PROXY_URL, verify=False, timeout=10.0).json()
+    else:
+        response = client.service.getDataAtualizacaoCV(id)
 
-    response = client.service.getDataAtualizacaoCV(id)
-    return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+    if response:
+        return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+    return datetime.min
 
 
 def database_att(lattes_id) -> datetime:
@@ -62,14 +63,19 @@ def download_xml(lattes_id):
 
     SCRIPT_SQL = """
         UPDATE researcher
-        SET update_status = 'NOT_UPDATED'
+        SET current_state = 'NOT_UPDATED'
         WHERE lattes_id = %(lattes_id)s;
         """
     conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
 
     if PROXY:
         PROXY_URL = f'https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}'
-        response = httpx.get(PROXY_URL, verify=False).content
+        try:
+            response = httpx.get(PROXY_URL, verify=False, timeout=10.0).content
+        except Exception as e:
+            print(f'Erro ao acessar proxy: {e}')
+            logger.error(f'Erro ao acessar proxy: {e}')
+            return
     else:
         response = client.service.getCurriculoCompactado(lattes_id)
 
@@ -96,7 +102,10 @@ if __name__ == '__main__':
     logger = logging.getLogger(__name__)
 
     HOP_PATH = 'config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
+
     HOP_PATH = os.path.join(settings.JADE_EXTRATOR_FOLTER, HOP_PATH)
+    CURRENT_XML_PATH = os.path.join(HOP_PATH, CURRENT_XML_PATH)
+    ZIP_XML_PATH = os.path.join(HOP_PATH, ZIP_XML_PATH)
 
     for directory in [LOG_PATH, CURRENT_XML_PATH, ZIP_XML_PATH]:
         if not os.path.exists(directory):

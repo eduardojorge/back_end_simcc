@@ -155,7 +155,7 @@ def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id, name, lattes_id
         FROM public.researcher
-        WHERE updated = false;
+        WHERE update_status = 'HOP_COMPLETED';
         """
     result = conn.select(SCRIPT_SQL)
     return result
