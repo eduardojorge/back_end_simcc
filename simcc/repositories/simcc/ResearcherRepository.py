@@ -83,8 +83,9 @@ def search_in_articles(
     SCRIPT_SQL = f"""
         SELECT
             r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract, r.orcid,
-            r.graduation, r.last_update AS lattes_update, rp.great_area AS area,
-            rp.city, i.image AS image_university, i.name AS university,
+            r.graduation, r.last_update AS lattes_update,
+            REPLACE(rp.great_area, '_', ' ') AS area, rp.city,
+            i.image AS image_university, i.name AS university,
             b.among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
@@ -148,8 +149,9 @@ def search_in_abstracts(
     SCRIPT_SQL = f"""
         SELECT
             r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract, r.orcid,
-            r.graduation, r.last_update AS lattes_update, rp.great_area AS area,
-            rp.city, i.image AS image_university, i.name AS university,
+            r.graduation, r.last_update AS lattes_update,
+            REPLACE(rp.great_area, '_', ' ') AS area, rrp.city,
+            i.image AS image_university, i.name AS university,
             1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
@@ -211,8 +213,9 @@ def search_in_name(
     SCRIPT_SQL = f"""
         SELECT
             r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract, r.orcid,
-            r.graduation, r.last_update AS lattes_update, rp.great_area AS area,
-            rp.city, i.image AS image_university, i.name AS university,
+            r.graduation, r.last_update AS lattes_update,
+            REPLACE(rp.great_area, '_', ' ') AS area, rp.city,
+            i.image AS image_university, i.name AS university,
             1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
