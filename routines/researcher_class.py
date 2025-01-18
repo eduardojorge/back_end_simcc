@@ -1,4 +1,5 @@
 import datetime
+from uuid import uuid4
 
 import pandas as pd
 
@@ -42,7 +43,10 @@ def article_metrics(year):
         'SQ',
     ]
     articles = articles.reindex(columns, axis='columns', fill_value=0)
-    return articles.to_dict(orient='records')
+    articles = articles.to_dict(orient='records')
+    if articles:
+        return articles
+    return [{'researcher_id': uuid4, 'A1': 0, 'A2': 0, 'A3': 0, 'A4': 0, 'B1': 0, 'B2': 0, 'B3': 0, 'B4': 0, 'C': 0, 'SQ': 0}]  # noqa: E501 # fmt: skip
 
 
 def patent_metrics(year):
@@ -55,7 +59,9 @@ def patent_metrics(year):
         GROUP BY researcher_id;
         """
     result = conn.select(SCRIPT_SQL, {'year': year})
-    return result
+    if result:
+        return result
+    return [{'researcher_id': uuid4(), 'patent_not_granted': 0, 'patent_granted': 0}]  # noqa: E501 # fmt: skip
 
 
 def guidance_metrics(year):
@@ -155,7 +161,7 @@ def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id, name, lattes_id
         FROM public.researcher
-        WHERE update_status = 'HOP_COMPLETED';
+        WHERE current_state = 'HOP_COMPLETE';
         """
     result = conn.select(SCRIPT_SQL)
     return result
@@ -243,6 +249,7 @@ if __name__ == '__main__':
     YEAR_FILTER = 2019
 
     dataframe = pd.DataFrame(list_researchers())
+
     articles = pd.DataFrame(article_metrics(YEAR_FILTER))
     dataframe = dataframe.merge(articles, how='left', on=['researcher_id'])
 

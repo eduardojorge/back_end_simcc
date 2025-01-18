@@ -28,14 +28,18 @@ def list_admin_researchers():
 
 
 def cnpq_att(lattes_id) -> datetime:
-    if PROXY:
-        PROXY_URL = f'https://simcc.uesc.br/api/getDataAtualizacaoCV?lattes_id={lattes_id}'
-        if response := httpx.get(PROXY_URL, verify=False, timeout=None).json():
-            return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+    try:
+        if PROXY:
+            PROXY_URL = f'https://simcc.uesc.br/api/getDataAtualizacaoCV?lattes_id={lattes_id}'
+            if response := httpx.get(PROXY_URL, verify=False, timeout=None).json():  # fmt: skip  # noqa: E501
+                return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+            return datetime.min
+        response = client.service.getDataAtualizacaoCV(id)
+        return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+    except httpx.Timeout as E:
+        print(f'Erro de timeout: {E}')
+        logger.error(f'Erro ao consultar o CNPQ: {E}')
         return datetime.min
-
-    response = client.service.getDataAtualizacaoCV(id)
-    return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
 
 
 def database_att(lattes_id) -> datetime:
@@ -62,16 +66,21 @@ def download_xml(lattes_id):
 
     SCRIPT_SQL = """
         UPDATE researcher
-        SET current_state = 'NOT_UPDATED'
+        SET routine_status = ARRAY['OUTDATED']
         WHERE lattes_id = %(lattes_id)s;
         """
     conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
 
-    if PROXY:
-        PROXY_URL = f'https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}'
-        response = httpx.get(PROXY_URL, verify=False, timeout=None).content
-    else:
-        response = client.service.getCurriculoCompactado(lattes_id)
+    try:
+        if PROXY:
+            PROXY_URL = f'https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}'
+            response = httpx.get(PROXY_URL, verify=False, timeout=None).content
+        else:
+            response = client.service.getCurriculoCompactado(lattes_id)
+    except httpx.Timeout as E:
+        print(f'Erro de timeout: {E}')
+        logger.error(f'Erro de timeout: {E}')
+        return
 
     zip_path = os.path.join(HOP_PATH, ZIP_XML_PATH, lattes_id + '.zip')
     with open(zip_path, 'wb') as XML:

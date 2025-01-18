@@ -20,6 +20,7 @@ testcontainers = {extras = ["postgres"], version = "^4.9.0"}
 openpyxl = "^3.1.5"
 pdfplumber = "^0.11.5"
 nltk = "^3.9.1"
+beautifulsoup4 = "^4.12.3"
 
 
 [tool.poetry.group.dev.dependencies]
