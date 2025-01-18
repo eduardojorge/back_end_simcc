@@ -263,7 +263,7 @@ def fat_group_leaders():
 
 def dim_research_group():
     SCRIPT_SQL = """
-        SELECT rg.id AS group_id, TRANSLATE(rg.name, '"', '') AS group_name, 
+        SELECT rg.id AS group_id, TRANSLATE(rg.name, '"', '') AS group_name,
             rg.area, i.id AS institution_id
         FROM public.research_group rg
         RIGHT JOIN institution i ON rg.institution ILIKE '%' || i.acronym || '%';

@@ -5,7 +5,12 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from simcc.config import settings
-from simcc.routers import ConecteeRouter, GraduateProgramRouter, ResearcherRouter
+from simcc.routers import (
+    ConecteeRouter,
+    GraduateProgramRouter,
+    PowerBIRouter,
+    ResearcherRouter,
+)
 
 app = FastAPI(root_path=settings.ROOT_PATH)
 
@@ -19,12 +24,17 @@ app.include_router(
     ResearcherRouter.router,
     tags=['Researcher'],
 )
+app.include_router(
+    PowerBIRouter.router,
+    tags=['PowerBI Data'],
+)
 
 app.include_router(
     ConecteeRouter.router,
     prefix='/ufmg',
     tags=['Conectee'],
 )
+
 
 PROXY_URL = settings.PROXY_URL
 
