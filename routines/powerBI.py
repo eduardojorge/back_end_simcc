@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+import nltk
 import pandas as pd
 
 from simcc.repositories import conn
@@ -377,14 +378,67 @@ def researcher_city():
 def dim_researcher(origin: str):
     SCRIPT_SQL = f"""
         SELECT r.name AS researcher, r.id AS researcher_id,
-            TO_CHAR(r.last_update,'dd/mm/yyyy') AS date_,
+            TO_CHAR(r.last_update,'dd/mm/yyyy') AS last_update,
             r.graduation AS graduation, r.institution_id, r.docente,
-            regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ),
-            '{origin}api/ResearcherData/Image?researcher_id=' || r.id
+            regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ) AS abstract,
+            '{origin}api/ResearcherData/Image?researcher_id=' || r.id AS image
         FROM researcher r
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+
+    stopwords = nltk.corpus.stopwords.words('english')
+    stopwords += nltk.corpus.stopwords.words('portuguese')
+
+    parameters = {}
+    parameters['stopwords'] = stopwords
+
+    SCRIPT_SQL = r"""
+        WITH unified_data AS (
+            SELECT researcher_id, translate(title,'-\.:,;''', ' ') AS title
+            FROM bibliographic_production
+            UNION ALL
+            SELECT researcher_id, translate(title,'-\.:,;''', ' ') AS title
+            FROM patent
+            UNION ALL
+            SELECT researcher_id, translate(title,'-\.:,;''', ' ') AS title
+            FROM brand
+            UNION ALL
+            SELECT researcher_id, translate(title,'-\.:,;''', ' ') AS title
+            FROM event_organization
+            UNION ALL
+            SELECT researcher_id, translate(title,'-\.:,;''', ' ') AS title
+            FROM software
+        ),
+        word_split AS (
+            SELECT researcher_id, unnest(string_to_array(lower(regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
+            FROM unified_data
+        ),
+        word_count AS (
+            SELECT researcher_id, word, COUNT(*) AS frequency
+            FROM word_split
+            WHERE word <> ''
+            GROUP BY researcher_id, word
+        ),
+        ranked_words AS (
+            SELECT researcher_id, word, frequency, RANK() OVER (PARTITION BY researcher_id ORDER BY frequency DESC) AS rank
+            FROM word_count
+        )
+        SELECT researcher_id, STRING_AGG(word, ' | ') AS list_of_words
+        FROM ranked_words
+        WHERE 1 = 1
+            AND rank <= 20
+            AND CHAR_LENGTH(word) > 3
+            AND TRIM(word) <> ALL(%(stopwords)s)
+        GROUP BY researcher_id
+        ORDER BY researcher_id;
+        """  # noqa: E501
+
+    result = conn.select(SCRIPT_SQL, parameters)
+    list_words = pd.DataFrame(result)
+
+    csv = csv.merge(list_words, on='researcher_id', how='left')
+    print(csv)
     csv_path = os.path.join(PATH, 'dim_researcher.csv')
     csv.to_csv(csv_path)
 
