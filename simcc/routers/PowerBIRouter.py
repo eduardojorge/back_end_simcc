@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import FileResponse
 
 from routines import powerBI
@@ -28,7 +28,7 @@ def fat_area_specialty_csv():
 
 @router.get('/fat_great_area.csv')
 def fat_great_area_csv():
-    powerBI.fat_area_specialty()
+    powerBI.fat_great_area()
     file_path = os.path.join(STORAGE_PATH, 'fat_great_area.csv')
     return FileResponse(file_path, filename='fat_great_area.csv')
 
@@ -235,8 +235,9 @@ def researcher_city_csv():
 
 
 @router.get('/dim_researcher.csv')
-def dim_researcher_csv():
-    powerBI.dim_researcher()
+def dim_researcher_csv(request: Request):
+    origin = request.base_url
+    powerBI.dim_researcher(origin)
     file_name = 'dim_researcher.csv'
     file_path = os.path.join(STORAGE_PATH, file_name)
     return FileResponse(file_path, filename=file_name)

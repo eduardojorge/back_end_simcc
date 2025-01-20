@@ -59,14 +59,14 @@ def download_xml(lattes_id):
     if cnpq_att(lattes_id) <= database_att(lattes_id):
         print('Curriculo atualizado!')
         logger.info('Curriculo atualizado!')
-        return
+        # return
 
     print('Baixando curriculo...')
     logger.info('Baixando curriculo...')
 
     SCRIPT_SQL = """
-        UPDATE researcher
-        SET routine_status = ARRAY['OUTDATED']
+        UPDATE researcher SET
+            routine_status = ARRAY['OUTDATED']
         WHERE lattes_id = %(lattes_id)s;
         """
     conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
@@ -82,14 +82,26 @@ def download_xml(lattes_id):
         logger.error(f'Erro de timeout: {E}')
         return
 
-    zip_path = os.path.join(HOP_PATH, ZIP_XML_PATH, lattes_id + '.zip')
-    with open(zip_path, 'wb') as XML:
-        XML.write(response)
+    try:
+        zip_path = os.path.join(HOP_PATH, ZIP_XML_PATH, lattes_id + '.zip')
+        with open(zip_path, 'wb') as XML:
+            XML.write(response)
 
-    with zipfile.ZipFile(zip_path, 'r') as ZIP:
-        ZIP.extractall(HOP_PATH)
-        ZIP.extractall(os.path.join(HOP_PATH, CURRENT_XML_PATH))
-    os.remove(zip_path)
+        with zipfile.ZipFile(zip_path, 'r') as ZIP:
+            ZIP.extractall(HOP_PATH)
+            ZIP.extractall(os.path.join(HOP_PATH, CURRENT_XML_PATH))
+        os.remove(zip_path)
+    except zipfile.BadZipFile as E:
+        print(f'Erro de arquivo zip: {E}')
+        logger.error(f'Erro de arquivo zip: {E}')
+
+        SCRIPT_SQL = """
+        UPDATE researcher SET
+            routine_status = ARRAY['ERROR-ZIP']
+        WHERE lattes_id = %(lattes_id)s;
+        """
+        conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
+        return
 
 
 if __name__ == '__main__':

@@ -84,7 +84,6 @@ def patent_indprod():
     patent['patent_prod'] = (
         patent['granted'].map(barema) * patent['count_patent']
     )
-    print(patent)
     columns = ['patent_prod', 'year', 'researcher_id']
     patent = patent[columns]
     patent = patent.groupby(['researcher_id', 'year']).sum().reset_index()
@@ -152,7 +151,10 @@ def guidance_indprod():
 def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id
-        FROM public.researcher;
+        FROM public.researcher
+        WHERE 1 = 1
+            AND 'HOP-UPDATED' = ANY(routine_status)
+            AND NOT 'INDPROD-UPDATED' = ANY(routine_status);
         """
     result = conn.select(SCRIPT_SQL)
     return result
@@ -188,6 +190,9 @@ if __name__ == '__main__':
     history = pd.DataFrame(YEAR, columns=['year'])
 
     researchers = list_researchers()
+    if not researchers:
+        print('No researchers found')
+        raise ValueError('No researchers found')
     researchers = pd.DataFrame(researchers)
 
     researchers = researchers.merge(history, how='cross')
@@ -223,20 +228,34 @@ if __name__ == '__main__':
     researchers = researchers.merge(guidance, on=on, how='left')
 
     SCRIPT_SQL = """
-        DELETE FROM researcher_ind_prod;
+        DELETE FROM researcher_ind_prod
+        USING researcher r
+        WHERE researcher_ind_prod.researcher_id = r.id
+            AND 'HOP-UPDATED' = ANY(routine_status)
+            AND NOT 'INDPROD-UPDATED' = ANY(routine_status);
         """
     conn.exec(SCRIPT_SQL)
-
-    SCRIPT_SQL = """
-        INSERT INTO researcher_ind_prod (researcher_id, year,  ind_prod_article,
-            ind_prod_book, ind_prod_book_chapter, ind_prod_software,
-            ind_prod_granted_patent, ind_prod_not_granted_patent,
-            ind_prod_report, ind_prod_guidance)
-        VALUES (%(researcher_id)s, %(year)s, %(article_prod)s,
-            %(book_prod)s, %(book_chapter_prod)s, %(software_prod)s,
-            %(patent_prod)s, %(patent_prod)s,
-            %(report_prod)s, %(guidance_prod)s);
-        """
     for _, researcher in researchers.iterrows():
+        params = researcher.fillna(0).to_dict()
+        SCRIPT_SQL = """
+            INSERT INTO researcher_ind_prod (researcher_id, year,
+                ind_prod_article, ind_prod_book, ind_prod_book_chapter,
+                ind_prod_software, ind_prod_granted_patent,
+                ind_prod_not_granted_patent, ind_prod_report, ind_prod_guidance)
+            VALUES (%(researcher_id)s, %(year)s, %(article_prod)s,
+                %(book_prod)s, %(book_chapter_prod)s, %(software_prod)s,
+                %(patent_prod)s, %(patent_prod)s,
+                %(report_prod)s, %(guidance_prod)s);
+            """
         print(f'Inserting row for researcher: {_}')
-        conn.exec(SCRIPT_SQL, researcher.fillna(0).to_dict())
+        conn.exec(SCRIPT_SQL, params)
+
+    for researcher_id in researchers['researcher_id'].unique():
+        print(researcher_id)
+        prams = {'researcher_id': researcher_id}
+        SCRIPT_SQL = """
+            UPDATE researcher SET
+                routine_status = routine_status || '{INDPROD-UPDATED}'
+            WHERE id = %(researcher_id)s;
+            """
+        conn.exec(SCRIPT_SQL, params)

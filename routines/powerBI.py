@@ -31,7 +31,7 @@ def fat_great_area():
             REPLACE(gae.name, '_', ' ') AS name
         FROM great_area_expertise gae
             LEFT JOIN researcher_area_expertise r
-                ON gae.id = r.great_area_expertise_id
+                ON gae.id = r.great_area_expertise_id;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
@@ -374,18 +374,18 @@ def researcher_city():
     csv.to_csv(csv_path)
 
 
-def dim_researcher(API_URL: str = None):
+def dim_researcher(origin: str):
     SCRIPT_SQL = f"""
         SELECT r.name AS researcher, r.id AS researcher_id,
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS date_,
             r.graduation AS graduation, r.institution_id, r.docente,
             regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ),
-            '{API_URL}/api/ResearcherData/Image?researcher_id=' || r.id
+            '{origin}api/ResearcherData/Image?researcher_id=' || r.id
         FROM researcher r
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'researcher.csv')
+    csv_path = os.path.join(PATH, 'dim_researcher.csv')
     csv.to_csv(csv_path)
 
 
@@ -396,7 +396,7 @@ def fat_simcc_bibliographic_production():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'great_area_expertise.csv')
+    csv_path = os.path.join(PATH, 'fat_simcc_bibliographic_production.csv')
     csv.to_csv(csv_path)
 
 
@@ -410,7 +410,7 @@ def production_tecnical_year():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'researcher_area_expertise.csv')
+    csv_path = os.path.join(PATH, 'production_tecnical_year.csv')
     csv.to_csv(csv_path)
 
 
