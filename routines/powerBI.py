@@ -438,15 +438,28 @@ def dim_researcher(origin: str):
     list_words = pd.DataFrame(result)
 
     csv = csv.merge(list_words, on='researcher_id', how='left')
-    print(csv)
     csv_path = os.path.join(PATH, 'dim_researcher.csv')
     csv.to_csv(csv_path)
 
 
 def fat_simcc_bibliographic_production():
     SCRIPT_SQL = """
-        SELECT id, REPLACE(name, '_', ' ') AS name
-        FROM great_area_expertise;
+        SELECT DISTINCT
+            title, b.type as tipo, b.researcher_id, year, i.id, bar.qualis,
+            bar.periodical_magazine_name, bar.jcr, bar.jcr_link, c.id, b.id,
+            unaccent(LOWER(title)) AS sanitized_title
+        FROM bibliographic_production b
+        LEFT JOIN bibliographic_production_article bar
+            ON b.id = bar.bibliographic_production_id, researcher r
+        LEFT JOIN  institution i
+            ON r.institution_id = i.id
+        LEFT JOIN city c
+            ON r.city_id = c.id
+        WHERE 1 = 1
+            AND b.researcher_id IS NOT NULL
+            AND r.id =  b.researcher_id
+        ORDER BY
+            YEAR desc;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
