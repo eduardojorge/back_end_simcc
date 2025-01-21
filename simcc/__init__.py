@@ -3,6 +3,7 @@ from http import HTTPStatus
 import httpx
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from simcc.config import settings
 from simcc.routers import (
@@ -39,11 +40,6 @@ app.include_router(
 PROXY_URL = settings.PROXY_URL
 
 
-@app.get('/')
-def read_root():
-    return {'message': 'Olá Mundo!'}
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -72,3 +68,13 @@ async def reverse_proxy(request: Request, call_next):
                 headers=dict(proxy_response.headers),
             )
     return response
+
+
+@app.get('/')
+def read_root():
+    return {'message': 'Olá Mundo!'}
+
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse('storage/ico.ico')

@@ -173,7 +173,7 @@ def dim_departament():
 def data():
     now = datetime.now()
     date_str = now.strftime('%Y-%m-%d %H:%M:%S.%f')
-    csv = pd.DataFrame({'date': [date_str]})
+    csv = pd.DataFrame({'data': [date_str]})
     csv_path = os.path.join(PATH, 'data.csv')
     csv.to_csv(csv_path)
     return date_str
@@ -249,8 +249,9 @@ def dim_departament_researcher():
 def fat_group_leaders():
     SCRIPT_SQL = """
         SELECT id, name, institution, first_leader, first_leader_id,
-            second_leader, second_leader_id, AREA, census, start_of_collection,
-            end_of_collection, group_identifier, YEAR, institution_name, category
+            second_leader, second_leader_id, area, census,
+            start_of_collection, end_of_collection, group_identifier, year,
+            institution_name, category
         FROM research_group
         WHERE 1 = 1
             AND first_leader_id IS NOT NULL
@@ -258,6 +259,7 @@ def fat_group_leaders():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    csv.rename(columns={'area': 'AREA'}, inplace=True)
     csv_path = os.path.join(PATH, 'fat_group_leaders.csv')
     csv.to_csv(csv_path)
 
@@ -381,7 +383,8 @@ def dim_researcher(origin: str):
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS last_update,
             r.graduation AS graduation, r.institution_id, r.docente,
             regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ) AS abstract,
-            '{origin}api/ResearcherData/Image?researcher_id=' || r.id AS image
+            '{origin}api/ResearcherData/Image?researcher_id=' || r.id AS image,
+            r.orcid
         FROM researcher r
         """
     result = conn.select(SCRIPT_SQL)
