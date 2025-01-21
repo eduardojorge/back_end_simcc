@@ -201,9 +201,8 @@ def graduate_program_student_year_unnest():
 
 def dim_graduate_program_acronym():
     SCRIPT_SQL = """
-        SELECT graduate_program_id, code, name, area, modality, type,
-            rating, institution_id
-        FROM graduate_program
+        SELECT graduate_program_id, acronym, name
+        FROM graduate_program;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
@@ -733,7 +732,7 @@ def cimatec_graduate_program_researcher():
 def cimatec_graduate_program():
     SCRIPT_SQL = """
         SELECT gp.graduate_program_id, gp.code, gp.name, gp.area, gp.modality,
-            gp.type,gp.rating,i.id,i.name,gp.city
+            gp.type, gp.rating, i.id AS institution_id, i.name,gp.city
         FROM graduate_program gp
             LEFT JOIN institution i
                 ON i.id = gp.institution_id
