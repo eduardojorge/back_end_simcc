@@ -732,7 +732,8 @@ def cimatec_graduate_program_researcher():
 def cimatec_graduate_program():
     SCRIPT_SQL = """
         SELECT gp.graduate_program_id, gp.code, gp.name, gp.area, gp.modality,
-            gp.type, gp.rating, i.id AS institution_id, i.name,gp.city
+            gp.type, gp.rating, i.id AS institution_id, i.name AS institution,
+            gp.city
         FROM graduate_program gp
             LEFT JOIN institution i
                 ON i.id = gp.institution_id
