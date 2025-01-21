@@ -42,10 +42,7 @@ def fat_great_area():
 
 def dim_area_specialty():
     SCRIPT_SQL = """
-        SELECT DISTINCT asp.id AS area_specialty_id, researcher_id,
-            asp.name AS area_specialty
-        FROM researcher_area_expertise r
-        INNER JOIN area_specialty asp ON asp.id = r.area_specialty_id;
+        SELECT id, REPLACE(name, '_', ' ') AS name FROM area_specialty;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
@@ -204,7 +201,8 @@ def graduate_program_student_year_unnest():
 
 def dim_graduate_program_acronym():
     SCRIPT_SQL = """
-        SELECT graduate_program_id, acronym, name
+        SELECT graduate_program_id, code, name, area, modality, type,
+            rating, institution_id
         FROM graduate_program
         """
     result = conn.select(SCRIPT_SQL)
@@ -259,7 +257,7 @@ def fat_group_leaders():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv.rename(columns={'area': 'AREA'}, inplace=True)
+    csv.rename(columns={'area': 'AREA', 'year': 'YEAR'}, inplace=True)
     csv_path = os.path.join(PATH, 'fat_group_leaders.csv')
     csv.to_csv(csv_path)
 
