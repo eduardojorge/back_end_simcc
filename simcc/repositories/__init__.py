@@ -15,6 +15,7 @@ class Connection:
                 with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
                     cur.execute(query, params)
                     conn.commit()
+                    return cur.rowcount
         except Exception as e:
             print(f'Error executing query: {query}')
             print(f'With parameters: {params}')

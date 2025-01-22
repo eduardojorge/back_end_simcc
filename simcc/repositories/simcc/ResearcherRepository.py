@@ -82,8 +82,8 @@ def search_in_articles(
 
     SCRIPT_SQL = f"""
         SELECT
-            r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract, r.orcid,
-            r.graduation, r.last_update AS lattes_update,
+            r.id, r.name, r.lattes_id, r.lattes_10_id, r.abstract,
+            TRIM(r.orcid) AS orcid, r.graduation, r.last_update AS lattes_update,
             REPLACE(rp.great_area, '_', ' ') AS area, rp.city,
             i.image AS image_university, i.name AS university,
             b.among, rp.articles, rp.book_chapters, rp.book, rp.patent,

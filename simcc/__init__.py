@@ -61,6 +61,7 @@ async def reverse_proxy(request: Request, call_next):
                 params=request.query_params,
                 headers=dict(request.headers),
                 content=await request.body(),
+                timeout=None,
             )
             return Response(
                 content=proxy_response.content,

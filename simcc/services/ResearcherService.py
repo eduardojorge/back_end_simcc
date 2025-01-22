@@ -7,6 +7,47 @@ from simcc.repositories.simcc import ResearcherRepository
 from simcc.schemas.Researcher import Researcher
 
 
+def merge_researcher_data(researchers: pd.DataFrame) -> pd.DataFrame:
+    sources = {
+        'graduate_programs': ResearcherRepository.list_graduate_programs(),
+        'research_groups': ResearcherRepository.list_research_groups(),
+        'subsidy': ResearcherRepository.list_foment_data(),
+        'departments': ResearcherRepository.list_departament_data(),
+    }
+
+    for column, source in sources.items():
+        if source:
+            dataframe = pd.DataFrame(source)
+            researchers = researchers.merge(dataframe, on='id', how='left')
+        else:
+            researchers[column] = None
+
+    ufmg_data = ResearcherRepository.list_ufmg_data()
+    if ufmg_data:
+        dataframe = pd.DataFrame(ufmg_data)
+        researchers = researchers.merge(dataframe, on='id', how='left')
+    else:
+        columns = [
+            'matric',
+            'inscufmg',
+            'genero',
+            'situacao',
+            'rt',
+            'clas',
+            'cargo',
+            'classe',
+            'ref',
+            'titulacao',
+            'entradanaufmg',
+            'progressao',
+            'semester',
+        ]
+        for column in columns:
+            researchers[column] = None
+
+    return researchers
+
+
 def search_in_articles(
     terms: str = None,
     graduate_program_id: UUID = None,
@@ -20,24 +61,8 @@ def search_in_articles(
     if not researchers:
         return []
 
-    programs = ResearcherRepository.list_graduate_programs()
-    groups = ResearcherRepository.list_research_groups()
-    foment_data = ResearcherRepository.list_foment_data()
-    departaments = ResearcherRepository.list_departament_data()
-    ufmg_data = ResearcherRepository.list_ufmg_data()
-
     researchers = pd.DataFrame(researchers)
-    programs = pd.DataFrame(programs)
-    groups = pd.DataFrame(groups)
-    foment_data = pd.DataFrame(foment_data)
-    departaments = pd.DataFrame(departaments)
-    ufmg_data = pd.DataFrame(ufmg_data)
-
-    researchers = researchers.merge(programs, on='id', how='left')
-    researchers = researchers.merge(groups, on='id', how='left')
-    researchers = researchers.merge(foment_data, on='id', how='left')
-    researchers = researchers.merge(departaments, on='id', how='left')
-    researchers = researchers.merge(ufmg_data, on='id', how='left')
+    researchers = merge_researcher_data(researchers)
 
     researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
@@ -56,24 +81,8 @@ def search_in_abstracts(
     if not researchers:
         return []
 
-    programs = ResearcherRepository.list_graduate_programs()
-    groups = ResearcherRepository.list_research_groups()
-    foment_data = ResearcherRepository.list_foment_data()
-    departaments = ResearcherRepository.list_departament_data()
-    ufmg_data = ResearcherRepository.list_ufmg_data()
-
     researchers = pd.DataFrame(researchers)
-    programs = pd.DataFrame(programs)
-    groups = pd.DataFrame(groups)
-    foment_data = pd.DataFrame(foment_data)
-    departaments = pd.DataFrame(departaments)
-    ufmg_data = pd.DataFrame(ufmg_data)
-
-    researchers = researchers.merge(programs, on='id', how='left')
-    researchers = researchers.merge(groups, on='id', how='left')
-    researchers = researchers.merge(foment_data, on='id', how='left')
-    researchers = researchers.merge(departaments, on='id', how='left')
-    researchers = researchers.merge(ufmg_data, on='id', how='left')
+    researchers = merge_researcher_data(researchers)
 
     researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
@@ -92,24 +101,8 @@ def serch_in_name(
     if not researchers:
         return []
 
-    programs = ResearcherRepository.list_graduate_programs()
-    groups = ResearcherRepository.list_research_groups()
-    foment_data = ResearcherRepository.list_foment_data()
-    departaments = ResearcherRepository.list_departament_data()
-    ufmg_data = ResearcherRepository.list_ufmg_data()
-
     researchers = pd.DataFrame(researchers)
-    programs = pd.DataFrame(programs)
-    groups = pd.DataFrame(groups)
-    foment_data = pd.DataFrame(foment_data)
-    departaments = pd.DataFrame(departaments)
-    ufmg_data = pd.DataFrame(ufmg_data)
-
-    researchers = researchers.merge(programs, on='id', how='left')
-    researchers = researchers.merge(groups, on='id', how='left')
-    researchers = researchers.merge(foment_data, on='id', how='left')
-    researchers = researchers.merge(departaments, on='id', how='left')
-    researchers = researchers.merge(ufmg_data, on='id', how='left')
+    researchers = merge_researcher_data(researchers)
 
     researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
