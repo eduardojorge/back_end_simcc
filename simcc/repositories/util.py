@@ -2,7 +2,7 @@ from unidecode import unidecode
 
 
 def web_search_param(string_of_terms):
-    operator_map = {';': ' ', '.': ' -', '|': ' OR ', '(': '(', ')': ')'}
+    operator_map = {';': ' ', '.': ' -', '|': ' | ', '(': '(', ')': ')'}
 
     sanitized_terms = []
     for char in string_of_terms:
