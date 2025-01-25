@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from simcc.config import settings
 from simcc.routers import (
     ConecteeRouter,
+    GenericRouter,
     GraduateProgramRouter,
     PowerBIRouter,
     ResearcherRouter,
@@ -34,6 +35,11 @@ app.include_router(
     ConecteeRouter.router,
     prefix='/ufmg',
     tags=['Conectee'],
+)
+
+app.include_router(
+    GenericRouter.router,
+    tags=['Generic'],
 )
 
 
