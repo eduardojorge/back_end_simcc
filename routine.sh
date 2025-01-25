@@ -3,7 +3,8 @@
 PROJECT_HOME=$(dirname "$(readlink -f "$0")")
 
 cd "$PROJECT_HOME" || exit 1
-source ".env"
+source .venv/bin/activate
+source .env
 
 poetry run python routines/soap_lattes.py
 
