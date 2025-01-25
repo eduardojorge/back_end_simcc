@@ -151,10 +151,7 @@ def guidance_indprod():
 def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id
-        FROM public.researcher
-        WHERE 1 = 1
-            AND 'HOP-UPDATED' = ANY(routine_status)
-            AND NOT 'INDPROD-UPDATED' = ANY(routine_status);
+        FROM public.researcher;
         """
     result = conn.select(SCRIPT_SQL)
     return result
@@ -228,11 +225,7 @@ if __name__ == '__main__':
     researchers = researchers.merge(guidance, on=on, how='left')
 
     SCRIPT_SQL = """
-        DELETE FROM researcher_ind_prod
-        USING researcher r
-        WHERE researcher_ind_prod.researcher_id = r.id
-            AND 'HOP-UPDATED' = ANY(routine_status)
-            AND NOT 'INDPROD-UPDATED' = ANY(routine_status);
+        DELETE FROM researcher_ind_prod;
         """
     conn.exec(SCRIPT_SQL)
     for _, researcher in researchers.iterrows():
@@ -248,14 +241,4 @@ if __name__ == '__main__':
                 %(report_prod)s, %(guidance_prod)s);
             """
         print(f'Inserting row for researcher: {_}')
-        conn.exec(SCRIPT_SQL, params)
-
-    for researcher_id in researchers['researcher_id'].unique():
-        print(researcher_id)
-        prams = {'researcher_id': researcher_id}
-        SCRIPT_SQL = """
-            UPDATE researcher SET
-                routine_status = routine_status || '{INDPROD-UPDATED}'
-            WHERE id = %(researcher_id)s;
-            """
         conn.exec(SCRIPT_SQL, params)
