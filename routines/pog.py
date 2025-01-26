@@ -42,7 +42,7 @@ if __name__ == '__main__':
     SCRIPT_SQL = """
         UPDATE bibliographic_production_article p
         SET jcr=(subquery.jif2019), jcr_link=url_revista
-        FROM (SELECT jif2019, eissn, url_revistaFROM JCR) AS subquery
+        FROM (SELECT jif2019, eissn, url_revista FROM JCR) AS subquery
         WHERE translate(subquery.eissn,'-','') = p.issn
         """
 
