@@ -23,7 +23,7 @@ def delete_researcher_production():
     SCRIPT_SQL = """
         DELETE FROM researcher_production
         WHERE researcher_id IN
-        (SELECT id FROM researcher WHERE update_status = 'NOT_UPDATED');
+        (SELECT id FROM researcher WHERE 'OUTDATED' = ANY(routine_status));
         """
     conn.exec(SCRIPT_SQL)
 
