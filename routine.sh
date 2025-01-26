@@ -2,6 +2,10 @@
 
 PROJECT_HOME=$(dirname "$(readlink -f "$0")")
 
+export SHELL=/bin/bash
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PYTHONPATH="$PROJECT_HOME:$PYTHONPATH"
+
 cd "$PROJECT_HOME" || exit 1
 source .venv/bin/activate
 source .env
