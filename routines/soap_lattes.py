@@ -59,7 +59,7 @@ def download_xml(lattes_id):
     if cnpq_att(lattes_id) <= database_att(lattes_id):
         print('Curriculo atualizado!')
         logger.info('Curriculo atualizado!')
-        # return
+        return
 
     print('Baixando curriculo...')
     logger.info('Baixando curriculo...')

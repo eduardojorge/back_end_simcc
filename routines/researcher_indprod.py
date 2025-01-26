@@ -3,6 +3,31 @@ from unidecode import unidecode
 
 from simcc.repositories import conn
 
+barema = {
+    'A1': 1,
+    'A2': 0.875,
+    'A3': 0.75,
+    'A4': 0.625,
+    'B1': 0.5,
+    'B2': 0.375,
+    'B3': 0.25,
+    'B4': 0.125,
+    'C': 0,
+    'SQ': 0,
+    'BOOK': 1,
+    'BOOK_CHAPTER': 0.25,
+    'SOFTWARE': 0.25,
+    'PATENT_GRANTED': 1,
+    'PATENT_NOT_GRANTED': 0.25,
+    'REPORT': 0.25,
+    'TESE DE DOUTORADO CONCLUIDA': 0.5,
+    'TESE DE DOUTORADO EM ANDAMENTO': 0.25,
+    'DISSERTACAO DE MESTRADO CONCLUIDA': 0.25,
+    'DISSERTACAO DE MESTRADO EM ANDAMENTO': 0.125,
+    'INICIACAO CIENTIFICA CONCLUIDA': 0.125,
+    'INICIACAO CIENTIFICA EM ANDAMENTO': 0.1,
+}
+
 
 def article_indprod():
     SCRIPT_SQL = """
@@ -157,32 +182,7 @@ def list_researchers():
     return result
 
 
-if __name__ == '__main__':
-    barema = {
-        'A1': 1,
-        'A2': 0.875,
-        'A3': 0.75,
-        'A4': 0.625,
-        'B1': 0.5,
-        'B2': 0.375,
-        'B3': 0.25,
-        'B4': 0.125,
-        'C': 0,
-        'SQ': 0,
-        'BOOK': 1,
-        'BOOK_CHAPTER': 0.25,
-        'SOFTWARE': 0.25,
-        'PATENT_GRANTED': 1,
-        'PATENT_NOT_GRANTED': 0.25,
-        'REPORT': 0.25,
-        'TESE DE DOUTORADO CONCLUIDA': 0.5,
-        'TESE DE DOUTORADO EM ANDAMENTO': 0.25,
-        'DISSERTACAO DE MESTRADO CONCLUIDA': 0.25,
-        'DISSERTACAO DE MESTRADO EM ANDAMENTO': 0.125,
-        'INICIACAO CIENTIFICA CONCLUIDA': 0.125,
-        'INICIACAO CIENTIFICA EM ANDAMENTO': 0.1,
-    }
-
+def main():
     YEAR = range(2008, 2026)
     history = pd.DataFrame(YEAR, columns=['year'])
 
@@ -242,3 +242,7 @@ if __name__ == '__main__':
             """
         print(f'Inserting row for researcher: {_}')
         conn.exec(SCRIPT_SQL, params)
+
+
+if __name__ == '__main__':
+    main()
