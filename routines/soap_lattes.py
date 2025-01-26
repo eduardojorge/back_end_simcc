@@ -34,7 +34,7 @@ def cnpq_att(lattes_id) -> datetime:
             if response := httpx.get(PROXY_URL, verify=False, timeout=None).json():  # fmt: skip  # noqa: E501
                 return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
             return datetime.min
-        response = client.service.getDataAtualizacaoCV(id)
+        response = client.service.getDataAtualizacaoCV(lattes_id)
         return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
     except httpx.Timeout as E:
         print(f'Erro de timeout: {E}')
