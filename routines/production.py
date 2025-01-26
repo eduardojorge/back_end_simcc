@@ -13,7 +13,6 @@ def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id, name, lattes_id
         FROM public.researcher
-        WHERE 'HOP-UPDATED' = ANY(routine_status);
         """
     result = conn.select(SCRIPT_SQL)
     return result
@@ -22,8 +21,6 @@ def list_researchers():
 def delete_researcher_production():
     SCRIPT_SQL = """
         DELETE FROM researcher_production
-        WHERE researcher_id IN
-        (SELECT id FROM researcher WHERE 'OUTDATED' = ANY(routine_status));
         """
     conn.exec(SCRIPT_SQL)
 

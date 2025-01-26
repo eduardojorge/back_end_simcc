@@ -161,7 +161,6 @@ def list_researchers():
     SCRIPT_SQL = """
         SELECT id AS researcher_id, name, lattes_id
         FROM public.researcher
-        WHERE 'HOP-UPDATED' = ANY(routine_status);
         """
     result = conn.select(SCRIPT_SQL)
     return result
@@ -274,13 +273,3 @@ if __name__ == '__main__':
     dataframe['class'] = dataframe.fillna(0).apply(
         researcher_classification, axis=1
     )
-
-    for _, data in dataframe.iterrows():
-        SCRIPT_SQL = """
-            UPDATE researcher SET classification = %(class)s,
-                routine_status = array_append(routine_status, 'CLASS-UPDATED')
-            WHERE id = %(researcher_id)s
-            """
-        params = {'class': data['class'], 'researcher_id': data['researcher_id']}
-        print(f'[{_}] [{data["researcher_id"]}]')
-        conn.exec(SCRIPT_SQL, params)

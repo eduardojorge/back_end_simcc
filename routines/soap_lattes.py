@@ -64,13 +64,6 @@ def download_xml(lattes_id):
     print('Baixando curriculo...')
     logger.info('Baixando curriculo...')
 
-    SCRIPT_SQL = """
-        UPDATE researcher SET
-            routine_status = ARRAY['OUTDATED']
-        WHERE lattes_id = %(lattes_id)s;
-        """
-    conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
-
     try:
         if PROXY:
             PROXY_URL = f'https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}'
@@ -94,13 +87,6 @@ def download_xml(lattes_id):
     except zipfile.BadZipFile as E:
         print(f'Erro de arquivo zip: {E}')
         logger.error(f'Erro de arquivo zip: {E}')
-
-        SCRIPT_SQL = """
-        UPDATE researcher SET
-            routine_status = ARRAY['ERROR-ZIP']
-        WHERE lattes_id = %(lattes_id)s;
-        """
-        conn.exec(SCRIPT_SQL, {'lattes_id': lattes_id})
         return
 
 
