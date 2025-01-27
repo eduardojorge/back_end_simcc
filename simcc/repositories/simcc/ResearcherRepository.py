@@ -1,11 +1,7 @@
 from uuid import UUID
 
 from simcc.repositories import conn
-from simcc.repositories.util import (
-    pagination,
-    web_search_filter,
-    web_search_param,
-)
+from simcc.repositories.util import pagination, webseatch_filter
 from simcc.schemas.Researcher import ResearcherArticleProduction
 
 
@@ -62,8 +58,8 @@ def search_in_articles(
 
     filter_terms = str()
     if terms:
-        params['terms'] = web_search_param(terms)
-        filter_terms = web_search_filter('b.title')
+        filter_terms, terms = webseatch_filter('b.title', terms)
+        params |= terms
 
     join_program = str()
     filter_program = str()
@@ -128,8 +124,8 @@ def search_in_abstracts(
 
     filter_terms = str()
     if terms:
-        params['terms'] = web_search_param(terms)
-        filter_terms = web_search_filter('r.abstract')
+        filter_terms, terms = webseatch_filter('r.abstract', terms)
+        params |= terms
 
     join_program = str()
     filter_program = str()

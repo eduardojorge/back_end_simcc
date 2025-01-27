@@ -30,7 +30,7 @@ def lattes_xml(lattes_id: str):
 
 @router.get(
     '/getDataAtualizacaoCV',
-    response_class=datetime,
+    response_model=datetime,
     status_code=HTTPStatus.OK,
 )
 def current_lattes_date(lattes_id: str):
