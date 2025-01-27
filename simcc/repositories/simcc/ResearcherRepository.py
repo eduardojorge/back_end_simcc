@@ -63,7 +63,7 @@ def search_in_articles(
 
     join_program = str()
     filter_program = str()
-    if graduate_program_id:
+    if graduate_program_id and graduate_program_id != '0':
         params['graduate_program_id'] = graduate_program_id
         join_program = """
             RIGHT JOIN graduate_program_researcher gpr
@@ -129,7 +129,7 @@ def search_in_abstracts(
 
     join_program = str()
     filter_program = str()
-    if graduate_program_id:
+    if graduate_program_id and graduate_program_id != '0':
         params['graduate_program_id'] = graduate_program_id
         join_program = """
             RIGHT JOIN graduate_program_researcher gpr
