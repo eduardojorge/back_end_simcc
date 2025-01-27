@@ -5,6 +5,7 @@ import pandas as pd
 
 from simcc.repositories.simcc import ProductionRepository
 from simcc.schemas.Article import ArticleMetric
+from simcc.schemas.Book import BookProduction
 from simcc.schemas.Brand import BrandProduction
 from simcc.schemas.Guidance import GuidanceMetrics
 from simcc.schemas.Patent import PatentMetric, PatentProduction
@@ -155,3 +156,21 @@ def list_brand(
     if not brands:
         return []
     return brands
+
+
+def list_distinct_book(
+    researcher_id: UUID, year: int, page: int, lenght: int
+) -> list[BookProduction]:
+    books = ProductionRepository.list_distinct_book(
+        researcher_id, year, page, lenght
+    )
+    if not books:
+        return []
+    return books
+
+
+def list_book(researcher_id: UUID, year: int, page: int, lenght: int):
+    patents = ProductionRepository.list_book(researcher_id, year, page, lenght)
+    if not patents:
+        return []
+    return patents

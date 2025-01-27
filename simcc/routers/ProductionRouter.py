@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from simcc.schemas.Book import BookProduction
 from simcc.schemas.Brand import BrandProduction
 from simcc.schemas.Patent import PatentProduction
 from simcc.services import ProductionService
@@ -18,7 +19,7 @@ router = APIRouter()
 def list_patent_production(
     term: str = None,
     researcher_id: UUID | str = None,
-    year: int | str = 2000,
+    year: int | str = 2020,
     distinct: int = 1,
     page: int = None,
     lenght: int = None,
@@ -35,13 +36,37 @@ def list_patent_production(
 
 
 @router.get(
+    '/book_production_researcher',
+    response_model=list[BookProduction],
+    status_code=HTTPStatus.OK,
+)
+def list_book_production(
+    term: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    distinct: int = 1,
+    page: int = None,
+    lenght: int = None,
+):
+    if distinct:
+        books = ProductionService.list_distinct_book(
+            term, researcher_id, year, page, lenght
+        )
+    else:
+        books = ProductionService.list_book(
+            term, researcher_id, year, page, lenght
+        )
+    return books
+
+
+@router.get(
     '/brand_production_researcher',
     response_model=list[BrandProduction],
     status_code=HTTPStatus.OK,
 )
 def list_brand_production(
     researcher_id: UUID | str = None,
-    year: int | str = 2000,
+    year: int | str = 2020,
     page: int = None,
     lenght: int = None,
 ):

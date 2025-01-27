@@ -290,3 +290,7 @@ def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
 
     result = conn.select(SCRIPT_SQL, params)
     return result
+
+
+def list_distinct_book(): ...
+def list_book(): ...
