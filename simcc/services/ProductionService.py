@@ -123,3 +123,25 @@ def list_academic_degree_metrics(
 def list_software_metrics(researcher_id: UUID, year: int):
     metrics = ProductionRepository.list_software_metrics(researcher_id, year)
     return metrics
+
+
+def list_distinct_patent(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
+    patents = ProductionRepository.list_distinct_patent(
+        term, researcher_id, year, page, lenght
+    )
+    if not patents:
+        return []
+    return patents
+
+
+def list_patent(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
+    patents = ProductionRepository.list_patent(
+        term, researcher_id, year, page, lenght
+    )
+    if not patents:
+        return []
+    return patents

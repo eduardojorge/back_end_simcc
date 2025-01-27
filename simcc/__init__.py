@@ -11,6 +11,7 @@ from simcc.routers import (
     GenericRouter,
     GraduateProgramRouter,
     PowerBIRouter,
+    ProductionRouter,
     ResearcherRouter,
 )
 
@@ -21,7 +22,10 @@ app.include_router(
     prefix='/v2/graduate_program',
     tags=['Graduate Program'],
 )
-
+app.include_router(
+    ProductionRouter.router,
+    tags=['Production'],
+)
 app.include_router(
     ResearcherRouter.router,
     tags=['Researcher'],

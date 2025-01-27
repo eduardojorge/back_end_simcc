@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from simcc.repositories import conn
+from simcc.repositories.util import pagination, webseatch_filter
 from simcc.schemas.Article import ArticleMetric
 
 
@@ -167,6 +168,90 @@ def list_software_metrics(researcher_id: UUID, year: int):
             {filter_id}
             {filter_year}
         GROUP BY s.year;
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_distinct_patent(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
+    params = {}
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND p.researcher_id = %(researcher_id)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, term = webseatch_filter('p.title', term)
+        params |= term
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = """AND p.development_year::INT >= %(year)s"""
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT p.title AS title, MIN(p.development_year) as year,
+            MIN(p.grant_date) AS grant_date, ARRAY_AGG(p.id) AS id,
+            NULL AS has_image, NULL AS relevance,
+            ARRAY_AGG(DISTINCT r.id) AS researcher,
+            ARRAY_AGG(r.lattes_id) AS lattes_id
+        FROM patent p
+            LEFT JOIN researcher r ON r.id = p.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_terms}
+        GROUP BY p.title
+        ORDER BY year desc
+        {filter_pagination};
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_patent(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
+    params = {}
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND p.researcher_id = %(researcher_id)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, term = webseatch_filter('p.title', term)
+        params |= term
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = """AND p.development_year::INT >= %(year)s"""
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT p.title AS title, p.development_year as year,
+            p.grant_date AS grant_date, p.id AS id,
+            p.has_image AS has_image, p.relevance AS relevance,
+            r.id AS researcher, r.lattes_id AS lattes_id
+        FROM patent p
+            LEFT JOIN researcher r ON r.id = p.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_terms}
+        ORDER BY year desc
+        {filter_pagination};
         """
     result = conn.select(SCRIPT_SQL, params)
     return result
