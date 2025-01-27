@@ -255,3 +255,38 @@ def list_patent(
         """
     result = conn.select(SCRIPT_SQL, params)
     return result
+
+
+def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
+    params = {}
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND b.researcher_id = %(researcher_id)s'
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = """AND b.year >= %(year)s"""
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT DISTINCT b.title as title, b.year as year, b.has_image,
+            b.relevance, r.lattes_id
+        FROM brand b
+            LEFT JOIN researcher r
+                ON b.researcher_id = r.id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_pagination}
+        ORDER BY year desc
+        {filter_pagination};
+        """
+
+    result = conn.select(SCRIPT_SQL, params)
+    return result

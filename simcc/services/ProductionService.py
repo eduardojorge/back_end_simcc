@@ -5,8 +5,9 @@ import pandas as pd
 
 from simcc.repositories.simcc import ProductionRepository
 from simcc.schemas.Article import ArticleMetric
+from simcc.schemas.Brand import BrandProduction
 from simcc.schemas.Guidance import GuidanceMetrics
-from simcc.schemas.Patent import PatentMetric
+from simcc.schemas.Patent import PatentMetric, PatentProduction
 from simcc.schemas.Researcher import AcademicMetric
 
 
@@ -127,7 +128,7 @@ def list_software_metrics(researcher_id: UUID, year: int):
 
 def list_distinct_patent(
     term: str, researcher_id: UUID, year: int, page: int, lenght: int
-):
+) -> list[PatentProduction]:
     patents = ProductionRepository.list_distinct_patent(
         term, researcher_id, year, page, lenght
     )
@@ -138,10 +139,19 @@ def list_distinct_patent(
 
 def list_patent(
     term: str, researcher_id: UUID, year: int, page: int, lenght: int
-):
+) -> list[PatentProduction]:
     patents = ProductionRepository.list_patent(
         term, researcher_id, year, page, lenght
     )
     if not patents:
         return []
     return patents
+
+
+def list_brand(
+    researcher_id: UUID, year: int, page: int, lenght: int
+) -> list[BrandProduction]:
+    brands = ProductionRepository.list_brand(researcher_id, year, page, lenght)
+    if not brands:
+        return []
+    return brands
