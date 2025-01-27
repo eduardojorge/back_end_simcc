@@ -469,11 +469,18 @@ def fat_simcc_bibliographic_production():
 
 def production_tecnical_year():
     SCRIPT_SQL = """
-        SELECT gae.id AS great_area_id, researcher_id,
-            REPLACE(gae.name, '_', ' ') AS name
-        FROM great_area_expertise gae
-            LEFT JOIN researcher_area_expertise r
-                ON gae.id = r.great_area_expertise_id
+        SELECT researcher_id, title, development_year::int AS YEAR,
+            'PATENT' as type
+        FROM patent
+        UNION
+        SELECT researcher_id,title,YEAR,'SOFTWARE'
+        from software
+        UNION
+        SELECT researcher_id,title,YEAR,'BRAND' 
+        from brand
+        UNION
+        SELECT researcher_id,title,YEAR,'REPORT' 
+        from research_report
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
