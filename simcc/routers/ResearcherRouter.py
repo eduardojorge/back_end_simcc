@@ -7,7 +7,7 @@ from simcc.schemas import ResearcherOptions
 from simcc.schemas.Article import ArticleMetric
 from simcc.schemas.Guidance import GuidanceMetrics
 from simcc.schemas.Patent import PatentMetric
-from simcc.schemas.Researcher import AcademicMetric, Researcher
+from simcc.schemas.Researcher import AcademicMetric, CoAuthorship, Researcher
 from simcc.schemas.Software import SoftwareMetric
 from simcc.services import ProductionService, ResearcherService
 
@@ -104,3 +104,13 @@ def list_researchers(
         name, graduate_program_id, dep_id, page, lenght
     )
     return researchers
+
+
+@router.get(
+    '/researcher/co-authorship/{researcher_id}',
+    status_code=HTTPStatus.OK,
+    response_model=list[CoAuthorship],
+)
+def co_authorship(researcher_id: UUID):
+    co_authorship = ResearcherService.list_co_authorship(researcher_id)
+    return co_authorship

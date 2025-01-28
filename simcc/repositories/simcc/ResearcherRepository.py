@@ -328,3 +328,35 @@ def list_ufmg_data():
         """
     result = conn.select(SCRIPT_SQL)
     return result
+
+
+def list_co_authorship(researcher_id: UUID):
+    params = {'researcher_id': researcher_id}
+    SCRIPT_SQL = """
+        SELECT r.id, r.name, r.institution_id, COUNT(*) AS among
+        FROM researcher r
+        RIGHT JOIN (
+            SELECT UNNEST(ARRAY_AGG(bp.researcher_id)) AS researcher_id
+            FROM bibliographic_production bp
+            GROUP BY bp.title
+            HAVING COUNT(bp.title) > 1
+            AND %(researcher_id)s = ANY(ARRAY_AGG(bp.researcher_id))
+        ) co_authorship ON r.id = co_authorship.researcher_id
+        WHERE r.id != %(researcher_id)s
+        GROUP BY r.id;
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def get_institution_id(researcher_id: UUID):
+    one = True
+    params = {'researcher_id': researcher_id}
+    SCRIPT_SQL = """
+        SELECT institution_id
+        FROM researcher
+        WHERE id = %(researcher_id)s
+        """
+    result = conn.select(SCRIPT_SQL, params, one)
+    print(result)
+    return result

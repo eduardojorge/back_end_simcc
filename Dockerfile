@@ -10,6 +10,7 @@ RUN pip install poetry
 
 RUN poetry config installer.max-workers 10
 RUN poetry install --no-interaction --no-ansi
+RUN poetry run python -m nltk.downloader stopwords
 
 EXPOSE 8000
 

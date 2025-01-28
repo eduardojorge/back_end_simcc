@@ -4,7 +4,7 @@ import pandas as pd
 from numpy import nan
 
 from simcc.repositories.simcc import ResearcherRepository
-from simcc.schemas.Researcher import Researcher
+from simcc.schemas.Researcher import CoAuthorship, Researcher
 
 
 def merge_researcher_data(researchers: pd.DataFrame) -> pd.DataFrame:
@@ -106,3 +106,23 @@ def serch_in_name(
 
     researchers = researchers.replace(nan, '')
     return researchers.to_dict(orient='records')
+
+
+def list_co_authorship(researcher_id: UUID) -> list[CoAuthorship]:
+    co_authorship = ResearcherRepository.list_co_authorship(researcher_id)
+    if not co_authorship:
+        return []
+
+    institution_id = ResearcherRepository.get_institution_id(researcher_id)
+
+    co_authorship = pd.DataFrame(co_authorship)
+
+    def co_authorship_type(co_authorship_institution):
+        if co_authorship_institution == institution_id:
+            return 'external'
+        return 'internal'
+
+    co_authorship['type'] = co_authorship['institution_id'].apply(
+        co_authorship_type
+    )
+    return co_authorship.to_dict(orient='records')

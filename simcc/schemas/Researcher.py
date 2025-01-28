@@ -91,3 +91,10 @@ class AcademicMetric(BaseModel):
     specialization_end: int
     professional_masters_degree_start: int
     professional_masters_degree_end: int
+
+
+class CoAuthorship(BaseModel):
+    id: UUID
+    name: str
+    among: int
+    type: str
