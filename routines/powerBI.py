@@ -380,7 +380,7 @@ def dim_researcher(origin: str):
             TO_CHAR(r.last_update,'dd/mm/yyyy') AS last_update,
             r.graduation AS graduation, r.institution_id, r.docente,
             regexp_replace(r.abstract, E'[\\n\\r]+', ' - ', 'g' ) AS abstract,
-            '{origin}api/ResearcherData/Image?researcher_id=' || r.id AS image,
+            '{origin}ResearcherData/Image?researcher_id=' || r.id AS image,
             r.orcid
         FROM researcher r
         """
