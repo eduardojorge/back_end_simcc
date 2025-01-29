@@ -96,11 +96,11 @@ def dim_city_csv():
     return FileResponse(file_path, filename='dim_city.csv')
 
 
-@router.get('/ufmg_teacher.csv')
-def ufmg_teacher_csv():
-    powerBI.ufmg_teacher()
-    file_path = os.path.join(STORAGE_PATH, 'ufmg_teacher.csv')
-    return FileResponse(file_path, filename='ufmg_teacher.csv')
+@router.get('/ufmg_researcher.csv')
+def ufmg_researcher_csv():
+    powerBI.ufmg_researcher()
+    file_path = os.path.join(STORAGE_PATH, 'ufmg_researcher.csv')
+    return FileResponse(file_path, filename='ufmg_researcher.csv')
 
 
 @router.get('/DimensaoAno.xlsx')
@@ -367,5 +367,13 @@ def cimatec_graduate_program_researcher_csv():
 def cimatec_graduate_program_csv():
     powerBI.cimatec_graduate_program()
     file_name = 'cimatec_graduate_program.csv'
+    file_path = os.path.join(STORAGE_PATH, file_name)
+    return FileResponse(file_path, filename=file_name)
+
+
+@router.get('/dim_departament.csv')
+def dim_departament_csv():
+    powerBI.dim_departament()
+    file_name = 'dim_departament.csv'
     file_path = os.path.join(STORAGE_PATH, file_name)
     return FileResponse(file_path, filename=file_name)

@@ -127,7 +127,7 @@ def dim_city():
     csv.to_csv(csv_path)
 
 
-def ufmg_teacher():
+def ufmg_researcher():
     SCRIPT_SQL = """
         SELECT researcher_id, matric, inscufmg, nome, genero, situacao, rt, clas,
             cargo, classe, ref, titulacao, entradanaufmg, progressao, semester
@@ -135,7 +135,7 @@ def ufmg_teacher():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'ufmg_teacher.csv')
+    csv_path = os.path.join(PATH, 'ufmg_researcher.csv')
     csv.to_csv(csv_path)
 
 
@@ -159,11 +159,11 @@ def dim_departament():
     SCRIPT_SQL = """
         SELECT dep_id, dep_nom, 'Escola de Engenharia' AS institution,
             '083a16f0-cccf-47d2-a676-d10b8931f66b' AS institution_id
-        FROM public.ufmg_departament
+        FROM ufmg.departament
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'ufmg_department.csv')
+    csv_path = os.path.join(PATH, 'dim_departament.csv')
     csv.to_csv(csv_path)
 
 
@@ -235,7 +235,7 @@ def dim_departament_technician():
 def dim_departament_researcher():
     SCRIPT_SQL = """
         SELECT dep_id, researcher_id
-        FROM departament_researcher;
+        FROM ufmg.departament_researcher;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
