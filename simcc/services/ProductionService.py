@@ -4,11 +4,11 @@ from uuid import UUID
 import pandas as pd
 
 from simcc.repositories.simcc import ProductionRepository
-from simcc.schemas.Article import ArticleMetric
-from simcc.schemas.Book import BookProduction
-from simcc.schemas.Brand import BrandProduction
-from simcc.schemas.Guidance import GuidanceMetrics
-from simcc.schemas.Patent import PatentMetric, PatentProduction
+from simcc.schemas.Production.Article import ArticleMetric
+from simcc.schemas.Production.Book import BookProduction
+from simcc.schemas.Production.Brand import BrandProduction
+from simcc.schemas.Production.Guidance import GuidanceMetrics
+from simcc.schemas.Production.Patent import PatentMetric, PatentProduction
 from simcc.schemas.Researcher import AcademicMetric
 
 

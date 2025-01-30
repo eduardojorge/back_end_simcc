@@ -3,9 +3,9 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
-from simcc.schemas.Book import BookProduction
-from simcc.schemas.Brand import BrandProduction
-from simcc.schemas.Patent import PatentProduction
+from simcc.schemas.Production.Book import BookProduction
+from simcc.schemas.Production.Brand import BrandProduction
+from simcc.schemas.Production.Patent import PatentProduction
 from simcc.services import ProductionService
 
 router = APIRouter()

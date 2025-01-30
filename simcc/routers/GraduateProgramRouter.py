@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
-from simcc.schemas.Article import ArticleMetric
 from simcc.schemas.GraduateProgram import GraduateProgram
+from simcc.schemas.Production.Article import ArticleMetric
 from simcc.schemas.Researcher import ResearcherArticleProduction
 from simcc.services import GraduateProgramService, ProductionService
 

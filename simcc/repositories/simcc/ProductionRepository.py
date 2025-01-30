@@ -2,7 +2,7 @@ from uuid import UUID
 
 from simcc.repositories import conn
 from simcc.repositories.util import pagination, webseatch_filter
-from simcc.schemas.Article import ArticleMetric
+from simcc.schemas.Production.Article import ArticleMetric
 
 
 def list_article_metrics(

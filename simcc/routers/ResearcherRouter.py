@@ -4,11 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from simcc.schemas import ResearcherOptions
-from simcc.schemas.Article import ArticleMetric
-from simcc.schemas.Guidance import GuidanceMetrics
-from simcc.schemas.Patent import PatentMetric
+from simcc.schemas.Production.Article import ArticleMetric
+from simcc.schemas.Production.Guidance import GuidanceMetrics
+from simcc.schemas.Production.Patent import PatentMetric
+from simcc.schemas.Production.Software import SoftwareMetric
 from simcc.schemas.Researcher import AcademicMetric, CoAuthorship, Researcher
-from simcc.schemas.Software import SoftwareMetric
 from simcc.services import ProductionService, ResearcherService
 
 router = APIRouter()
