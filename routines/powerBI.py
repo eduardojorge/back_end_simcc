@@ -152,7 +152,7 @@ def ufmg_researcher():
         'progressao',
         'semester',
     ]
-    csv.reindex(columns, axis='columns', fill_value=0)
+    csv = csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'ufmg_researcher.csv')
     csv.to_csv(csv_path)
 
