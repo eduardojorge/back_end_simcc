@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pdfplumber
 
-from simcc.repositories import ConecteeRepository
+from simcc.repositories.conectee import ConecteeRepository
 from simcc.schemas.Conectee import ResearcherData
 
 
