@@ -248,6 +248,7 @@ def dim_departament_technician():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    print(csv)
     columns = ['dep_id', 'technician_id']
     csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'dim_departament_technician.csv')
@@ -262,7 +263,7 @@ def dim_departament_researcher():
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
     columns = ['dep_id', 'researcher_id']
-    csv.reindex(columns, axis='columns', fill_value=0)
+    csv = csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'dim_departament_researcher.csv')
     csv.to_csv(csv_path)
 
