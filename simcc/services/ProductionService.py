@@ -154,9 +154,11 @@ def list_patent(
 
 
 def list_brand(
-    researcher_id: UUID, year: int, page: int, lenght: int
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
 ) -> list[BrandProduction]:
-    brands = ProductionRepository.list_brand(researcher_id, year, page, lenght)
+    brands = ProductionRepository.list_brand(
+        term, researcher_id, year, page, lenght
+    )
     if not brands:
         return []
     return brands

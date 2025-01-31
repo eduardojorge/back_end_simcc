@@ -258,7 +258,9 @@ def list_patent(
     return result
 
 
-def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
+def list_brand(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
     params = {}
 
     filter_id = str()
@@ -270,6 +272,11 @@ def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
     if year:
         params['year'] = year
         filter_year = 'AND b.year >= %(year)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, term = webseatch_filter('b.title', term)
+        params |= term
 
     filter_pagination = str()
     if page and lenght:
@@ -284,7 +291,7 @@ def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
         WHERE 1 = 1
             {filter_id}
             {filter_year}
-            {filter_pagination}
+            {filter_terms}
         ORDER BY year desc
         {filter_pagination};
         """

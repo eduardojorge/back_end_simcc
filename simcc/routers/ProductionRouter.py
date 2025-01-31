@@ -65,10 +65,13 @@ def list_book_production(
     status_code=HTTPStatus.OK,
 )
 def list_brand_production(
+    term: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     page: int = None,
     lenght: int = None,
 ):
-    brands = ProductionService.list_brand(researcher_id, year, page, lenght)
+    brands = ProductionService.list_brand(
+        term, researcher_id, year, page, lenght
+    )
     return brands
