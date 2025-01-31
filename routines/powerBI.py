@@ -135,6 +135,24 @@ def ufmg_researcher():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    columns = [
+        'researcher_id',
+        'matric',
+        'inscufmg',
+        'nome',
+        'genero',
+        'situacao',
+        'rt',
+        'clas',
+        'cargo',
+        'classe',
+        'ref',
+        'titulacao',
+        'entradanaufmg',
+        'progressao',
+        'semester',
+    ]
+    csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'ufmg_researcher.csv')
     csv.to_csv(csv_path)
 
@@ -163,6 +181,8 @@ def dim_departament():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    columns = ['dep_id', 'dep_nom', 'institution', 'institution_id']
+    csv = csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'dim_departament.csv')
     csv.to_csv(csv_path)
 
@@ -228,6 +248,8 @@ def dim_departament_technician():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    columns = ['dep_id', 'technician_id']
+    csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'dim_departament_technician.csv')
     csv.to_csv(csv_path)
 
@@ -239,6 +261,8 @@ def dim_departament_researcher():
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+    columns = ['dep_id', 'researcher_id']
+    csv.reindex(columns, axis='columns', fill_value=0)
     csv_path = os.path.join(PATH, 'dim_departament_researcher.csv')
     csv.to_csv(csv_path)
 
