@@ -60,3 +60,34 @@ class Article(BaseModel):
     researcher: str
     researcher_id: UUID
     lattes_id: str
+
+
+class ArticleProduction(BaseModel):
+    id: UUID
+    title: str
+    year: int
+    type: str
+    doi: str
+    qualis: Qualis
+    magazine: str
+    researcher: str
+    lattes_10_id: str
+    lattes_id: str
+    jif: str
+    jcr_link: str
+    researcher_id: UUID
+    lattes_id: str
+
+    abstract: str
+    article_institution: str
+    authors: str
+    authors_institution: str
+    citations_count: str
+    issn: str
+    keywords: str
+    landing_page_url: str
+    language: str
+    pdf: str
+
+    has_image: bool | None
+    relevance: bool | None

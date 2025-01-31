@@ -2,7 +2,11 @@ from uuid import UUID
 
 from simcc.repositories import conn
 from simcc.repositories.util import pagination, webseatch_filter
-from simcc.schemas.Production.Article import ArticleMetric
+from simcc.schemas import ArticleOptions
+from simcc.schemas.Production.Article import (
+    ArticleMetric,
+    Qualis,
+)
 
 
 def list_article_metrics(
@@ -387,5 +391,77 @@ def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int)
         ORDER BY year desc
         {filter_pagination};
         """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_bibliographic_production(
+    terms: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: Qualis | list[Qualis] = None,
+    page: int = None,
+    lenght: int = None,
+):
+    params = {}
+
+    filter_type = str()
+    if type == 'ARTICLE':
+        filter_type = "AND type = 'ARTICLE'"
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
+
+    filter_terms = str()
+    if terms:
+        filter_terms, terms = webseatch_filter('bp.title', terms)
+        params |= terms
+
+    filter_qualis = str()
+    if qualis:
+        params['qualis'] = qualis
+        filter_qualis = 'AND bpa.qualis = %(qualis)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT DISTINCT
+            b.id AS id, title, year, type, doi, bpa.qualis,
+            periodical_magazine_name AS magazine, r.name AS researcher,
+            r.lattes_10_id, r.lattes_id, jcr AS jif,
+            jcr_link, r.id AS researcher_id, opa.abstract,
+            opa.article_institution, opa.authors,
+            opa.authors_institution, opa.citations_count, bpa.issn, opa.keywords,
+            opa.landing_page_url, opa.language, opa.pdf, b.has_image, b.relevance
+        FROM bibliographic_production b
+            LEFT JOIN bibliographic_production_article bpa
+                ON b.id = bpa.bibliographic_production_id
+            LEFT JOIN researcher r
+                ON r.id = b.researcher_id
+            LEFT JOIN institution i
+                ON r.institution_id = i.id
+            LEFT JOIN openalex_article opa
+                ON opa.article_id = b.id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_terms}
+            {filter_type}
+            {filter_qualis}
+            {filter_pagination}
+        ORDER BY
+            year DESC
+        """
+    print(SCRIPT_SQL, params)
     result = conn.select(SCRIPT_SQL, params)
     return result

@@ -4,7 +4,12 @@ from uuid import UUID
 import pandas as pd
 
 from simcc.repositories.simcc import ProductionRepository
-from simcc.schemas.Production.Article import ArticleMetric
+from simcc.schemas import ArticleOptions
+from simcc.schemas.Production.Article import (
+    ArticleMetric,
+    ArticleProduction,
+    Qualis,
+)
 from simcc.schemas.Production.Book import BookProduction
 from simcc.schemas.Production.Brand import BrandProduction
 from simcc.schemas.Production.Guidance import GuidanceMetrics
@@ -182,3 +187,17 @@ def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int)
     if not patents:
         return []
     return patents
+
+
+def list_bibliographic_production(
+    terms: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: Qualis | list[Qualis] = None,
+    page: int = None,
+    lenght: int = None,
+) -> list[ArticleProduction]:
+    return ProductionRepository.list_bibliographic_production(
+        terms, researcher_id, year, type, qualis, page, lenght
+    )

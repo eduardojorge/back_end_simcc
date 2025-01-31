@@ -3,6 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from simcc.schemas import ArticleOptions
+from simcc.schemas.Production.Article import ArticleProduction, Qualis
 from simcc.schemas.Production.Book import BookProduction
 from simcc.schemas.Production.BookChapter import BookChapterProduction
 from simcc.schemas.Production.Brand import BrandProduction
@@ -100,3 +102,23 @@ def list_book_chapter_production(
             term, researcher_id, year, page, lenght
         )
     return books
+
+
+@router.get(
+    '/bibliographic_production_researcher',
+    response_model=list[ArticleProduction],
+    status_code=HTTPStatus.OK,
+)
+def list_bibliographic_production(
+    terms: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: Qualis | list[Qualis] = None,
+    page: int = None,
+    lenght: int = None,
+):
+    articles = ProductionService.list_bibliographic_production(
+        terms, researcher_id, year, type, qualis, page, lenght
+    )
+    return articles
