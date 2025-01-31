@@ -190,17 +190,17 @@ def list_distinct_patent(
     filter_year = str()
     if year:
         params['year'] = year
-        filter_year = """AND p.development_year::INT >= %(year)s"""
+        filter_year = 'AND p.development_year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
 
     SCRIPT_SQL = f"""
-        SELECT p.title AS title, MIN(p.development_year) as year,
-            MIN(p.grant_date) AS grant_date, ARRAY_AGG(p.id) AS id,
+        SELECT p.title AS title, MAX(p.development_year) as year,
+            MAX(p.grant_date) AS grant_date, ARRAY_AGG(p.id) AS id,
             NULL AS has_image, NULL AS relevance,
-            ARRAY_AGG(DISTINCT r.id) AS researcher,
+            ARRAY_AGG(r.id) AS researcher,
             ARRAY_AGG(r.lattes_id) AS lattes_id
         FROM patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -233,7 +233,7 @@ def list_patent(
     filter_year = str()
     if year:
         params['year'] = year
-        filter_year = """AND p.development_year::INT >= %(year)s"""
+        filter_year = 'AND p.development_year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
@@ -242,7 +242,7 @@ def list_patent(
     SCRIPT_SQL = f"""
         SELECT p.title AS title, p.development_year as year,
             p.grant_date AS grant_date, p.id AS id,
-            p.has_image AS has_image, p.relevance AS relevance,
+            p.has_image, p.relevance,
             r.id AS researcher, r.lattes_id AS lattes_id
         FROM patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
@@ -253,6 +253,7 @@ def list_patent(
         ORDER BY year desc
         {filter_pagination};
         """
+
     result = conn.select(SCRIPT_SQL, params)
     return result
 
@@ -268,7 +269,7 @@ def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
     filter_year = str()
     if year:
         params['year'] = year
-        filter_year = """AND b.year >= %(year)s"""
+        filter_year = 'AND b.year >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
@@ -292,5 +293,92 @@ def list_brand(researcher_id: UUID, year: int, page: int, lenght: int):
     return result
 
 
-def list_distinct_book(): ...
-def list_book(): ...
+def list_distinct_book(
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+):
+    params = {}
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND bp.researcher_id = %(researcher_id)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, term = webseatch_filter('bp.title', term)
+        params |= term
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year::INT >= %(year)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT bp.title, year, bpb.isbn AS isbn,
+            MAX(bpb.publishing_company) AS publishing_company,
+            ARRAY_AGG(bp.researcher_id) AS researcher,
+            ARRAY_AGG(r.lattes_id) AS lattes_id, NULL AS relevance,
+            NULL AS has_image, ARRAY_AGG(bp.id) AS id
+        FROM bibliographic_production bp
+            INNER JOIN bibliographic_production_book bpb
+                ON bp.id = bpb.bibliographic_production_id
+            INNER JOIN researcher r
+                ON r.id = bp.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_terms}
+            {filter_year}
+        GROUP BY bp.title, bpb.isbn, year
+        ORDER BY year desc
+        {filter_pagination};
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+    params = {}
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND bp.researcher_id = %(researcher_id)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, term = webseatch_filter('bp.title', term)
+        params |= term
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year::INT >= %(year)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    SCRIPT_SQL = f"""
+        SELECT bp.title, year, bpb.isbn AS isbn,
+            bpb.publishing_company AS publishing_company,
+            bp.researcher_id AS researcher,
+            r.lattes_id AS lattes_id, bp.relevance,
+            bp.has_image , bp.id
+        FROM bibliographic_production bp
+            INNER JOIN bibliographic_production_book bpb
+                ON bp.id = bpb.bibliographic_production_id
+            INNER JOIN researcher r
+                ON r.id = bp.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_terms}
+            {filter_year}
+        ORDER BY year desc
+        {filter_pagination};
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result

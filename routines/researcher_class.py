@@ -109,7 +109,7 @@ def guidance_metrics(year):
 
 def academic_degree_metrics():
     SCRIPT_SQL = """
-        SELECT researcher_id, MIN(education_end) AS first_doc
+        SELECT researcher_id, MAX(education_end) AS first_doc
         FROM education
         WHERE degree = 'DOCTORATE'
         GROUP BY researcher_id

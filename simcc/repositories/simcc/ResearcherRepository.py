@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from unidecode import unidecode
+
 from simcc.repositories import conn
 from simcc.repositories.util import pagination, webseatch_filter
 from simcc.schemas.Researcher import ResearcherArticleProduction
@@ -189,7 +191,7 @@ def search_in_name(
 
     filter_name = str()
     if name:
-        params['name'] = name.replace(';', ' ') + '%'
+        params['name'] = unidecode(name.replace(';', ' ') + '%')
         filter_name = 'AND r.name ILIKE %(name)s'
 
     filter_pagination = str()
@@ -358,5 +360,4 @@ def get_institution_id(researcher_id: UUID):
         WHERE id = %(researcher_id)s
         """
     result = conn.select(SCRIPT_SQL, params, one)
-    print(result)
     return result

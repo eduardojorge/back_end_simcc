@@ -19,7 +19,6 @@ app = FastAPI(root_path=settings.ROOT_PATH)
 
 app.include_router(
     GraduateProgramRouter.router,
-    prefix='/v2/graduate_program',
     tags=['Graduate Program'],
 )
 app.include_router(

@@ -89,10 +89,14 @@ def list_guidance_metrics(
         'orientacao-de-outra-natureza concluida': 'o_completed',
         'supervisao de pos-doutorado concluida': 'sd_completed',
         'supervisao de pos-doutorado em andamento': 'sd_in_progress',
+        'year': 'year',
     }
 
     guidance_metrics.rename(columns=rename_dict, inplace=True)
-
+    columns = [column for column in rename_dict.values()]
+    guidance_metrics = guidance_metrics.reindex(
+        columns, axis='columns', fill_value=0
+    )
     return guidance_metrics.to_dict(orient='records')
 
 
@@ -159,18 +163,20 @@ def list_brand(
 
 
 def list_distinct_book(
-    researcher_id: UUID, year: int, page: int, lenght: int
+    term: str, researcher_id: UUID, year: int, page: int, lenght: int
 ) -> list[BookProduction]:
     books = ProductionRepository.list_distinct_book(
-        researcher_id, year, page, lenght
+        term, researcher_id, year, page, lenght
     )
     if not books:
         return []
     return books
 
 
-def list_book(researcher_id: UUID, year: int, page: int, lenght: int):
-    patents = ProductionRepository.list_book(researcher_id, year, page, lenght)
+def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+    patents = ProductionRepository.list_book(
+        term, researcher_id, year, page, lenght
+    )
     if not patents:
         return []
     return patents

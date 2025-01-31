@@ -238,7 +238,8 @@ CREATE TABLE IF NOT EXISTS public.software (
     researcher_id uuid,
     year smallint,
     is_new boolean DEFAULT true,
-    CONSTRAINT software_pkey PRIMARY KEY (id)
+    CONSTRAINT software_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.patent (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -253,7 +254,8 @@ CREATE TABLE IF NOT EXISTS public.patent (
     grant_date timestamp without time zone,
     deposit_date character varying(255),
     is_new boolean DEFAULT true,
-    CONSTRAINT patent_pkey PRIMARY KEY (id)
+    CONSTRAINT patent_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.research_report (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -278,7 +280,8 @@ CREATE TABLE IF NOT EXISTS public.guidance (
     status character varying(100),
     year smallint,
     is_new boolean DEFAULT true,
-    CONSTRAINT guidance_pkey PRIMARY KEY (id)
+    CONSTRAINT guidance_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.brand (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -291,7 +294,8 @@ CREATE TABLE IF NOT EXISTS public.brand (
     researcher_id uuid,
     year smallint,
     is_new boolean DEFAULT true,
-    CONSTRAINT brand_pkey PRIMARY KEY (id)
+    CONSTRAINT brand_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.participation_events (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -304,7 +308,8 @@ CREATE TABLE IF NOT EXISTS public.participation_events (
     researcher_id uuid,
     year smallint,
     is_new boolean DEFAULT true,
-    CONSTRAINT participation_events_pkey PRIMARY KEY (id)
+    CONSTRAINT participation_events_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.event_organization (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -317,7 +322,8 @@ CREATE TABLE IF NOT EXISTS public.event_organization (
     duration_in_weeks smallint,
     year smallint,
     is_new boolean DEFAULT true,
-    CONSTRAINT event_organization_pkey PRIMARY KEY (id)
+    CONSTRAINT event_organization_pkey PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (researcher_id) REFERENCES public.researcher (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS public.bibliographic_production_article (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
