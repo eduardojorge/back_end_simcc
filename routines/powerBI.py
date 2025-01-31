@@ -75,7 +75,7 @@ def fat_openalex_researcher():
 
 def researcher_area_leader():
     SCRIPT_SQL = """
-        SELECT id, unnest(string_to_array(extra_field, ';')) AS area_leader
+        SELECT id AS researcher_id, unnest(string_to_array(extra_field, ';')) AS area_leader
         FROM researcher;
         """
     result = conn.select(SCRIPT_SQL)
