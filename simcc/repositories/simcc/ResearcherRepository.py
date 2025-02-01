@@ -192,7 +192,9 @@ def search_in_name(
     filter_name = str()
     if name:
         params['name'] = unidecode(name.replace(';', ' ') + '%')
-        filter_name = 'AND r.name ILIKE %(name)s'
+        filter_name = """
+            AND translate(unaccent(r.name), '-\\.:;''',' ') ILIKE %(name)s
+            """
 
     filter_pagination = str()
     if page and lenght:
@@ -256,7 +258,7 @@ def list_research_groups():
     SCRIPT_SQL = """
         SELECT r.id AS id,
             JSONB_AGG(JSONB_BUILD_OBJECT(
-                'research_group_id', rg.id,
+                'group_id', rg.id,
                 'name', rg.name,
                 'area', rg.area,
                 'census',rg.census,

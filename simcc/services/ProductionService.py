@@ -190,13 +190,21 @@ def list_bibliographic_production(
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: QualisOptions | None = None,
+    qualis: QualisOptions | str = str(),
     page: int = None,
     lenght: int = None,
 ) -> list[ArticleProduction]:
-    return ProductionRepository.list_bibliographic_production(
+    production = ProductionRepository.list_bibliographic_production(
         terms, researcher_id, year, type, qualis, page, lenght
     )
+
+    if not production:
+        return []
+
+    production = pd.DataFrame(production)
+    production = production.fillna('')
+
+    return production.to_dict(orient='records')
 
 
 def list_article_production(
@@ -206,7 +214,7 @@ def list_article_production(
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: QualisOptions | None = None,
+    qualis: QualisOptions | str = str(),
     page: int = None,
     lenght: int = None,
     dep_id: str = None,
@@ -232,7 +240,7 @@ def list_distinct_article_production(
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: QualisOptions | None = None,
+    qualis: QualisOptions | str = str(),
     page: int = None,
     lenght: int = None,
     dep_id: str = None,

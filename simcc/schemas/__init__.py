@@ -12,13 +12,13 @@ class ArticleOptions(str, Enum):
 
 
 class QualisOptions(str, Enum):
-    A1: int = 'A1'
-    A2: int = 'A2'
-    A3: int = 'A3'
-    A4: int = 'A4'
-    B1: int = 'B1'
-    B2: int = 'B2'
-    B3: int = 'B3'
-    B4: int = 'B4'
-    C: int = 'C'
-    SQ: int = 'SQ'
+    A1: str = 'A1'
+    A2: str = 'A2'
+    A3: str = 'A3'
+    A4: str = 'A4'
+    B1: str = 'B1'
+    B2: str = 'B2'
+    B3: str = 'B3'
+    B4: str = 'B4'
+    C: str = 'C'
+    SQ: str = 'SQ'

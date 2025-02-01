@@ -114,7 +114,7 @@ def list_bibliographic_production(
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: QualisOptions | None = None,
+    qualis: QualisOptions | str = str(),
     page: int = None,
     lenght: int = None,
 ):
@@ -136,7 +136,7 @@ def list_article_production(
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: QualisOptions | None = None,
+    qualis: QualisOptions | str = str(),
     distinct: int = 1,
     page: int = None,
     lenght: int = None,
