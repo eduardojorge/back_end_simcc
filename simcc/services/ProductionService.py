@@ -4,12 +4,8 @@ from uuid import UUID
 import pandas as pd
 
 from simcc.repositories.simcc import ProductionRepository
-from simcc.schemas import ArticleOptions
-from simcc.schemas.Production.Article import (
-    ArticleMetric,
-    ArticleProduction,
-    Qualis,
-)
+from simcc.schemas import ArticleOptions, QualisOptions
+from simcc.schemas.Production.Article import ArticleMetric, ArticleProduction
 from simcc.schemas.Production.Book import BookProduction
 from simcc.schemas.Production.Brand import BrandProduction
 from simcc.schemas.Production.Guidance import GuidanceMetrics
@@ -194,10 +190,62 @@ def list_bibliographic_production(
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: Qualis | list[Qualis] = None,
+    qualis: QualisOptions | None = None,
     page: int = None,
     lenght: int = None,
 ) -> list[ArticleProduction]:
     return ProductionRepository.list_bibliographic_production(
         terms, researcher_id, year, type, qualis, page, lenght
+    )
+
+
+def list_article_production(
+    terms: str = None,
+    university: str = None,
+    researcher_id: UUID | str = None,
+    graduate_program_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: QualisOptions | None = None,
+    page: int = None,
+    lenght: int = None,
+    dep_id: str = None,
+):
+    return ProductionRepository.list_article_production(
+        terms,
+        university,
+        researcher_id,
+        graduate_program_id,
+        year,
+        type,
+        qualis,
+        page,
+        lenght,
+        dep_id,
+    )
+
+
+def list_distinct_article_production(
+    terms: str = None,
+    university: str = None,
+    researcher_id: UUID | str = None,
+    graduate_program_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: QualisOptions | None = None,
+    page: int = None,
+    lenght: int = None,
+    dep_id: str = None,
+):
+    return ProductionRepository.list_distinct_article_production(
+        terms,
+        university,
+        researcher_id,
+        graduate_program_id,
+        year,
+        type,
+        qualis,
+        page,
+        lenght,
+        dep_id,
     )

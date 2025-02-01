@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
-from simcc.schemas import ArticleOptions
-from simcc.schemas.Production.Article import ArticleProduction, Qualis
+from simcc.schemas import ArticleOptions, QualisOptions
+from simcc.schemas.Production.Article import ArticleProduction
 from simcc.schemas.Production.Book import BookProduction
 from simcc.schemas.Production.BookChapter import BookChapterProduction
 from simcc.schemas.Production.Brand import BrandProduction
@@ -114,11 +114,58 @@ def list_bibliographic_production(
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: Qualis | list[Qualis] = None,
+    qualis: QualisOptions | None = None,
     page: int = None,
     lenght: int = None,
 ):
     articles = ProductionService.list_bibliographic_production(
         terms, researcher_id, year, type, qualis, page, lenght
     )
+    return articles
+
+
+@router.get(
+    '/bibliographic_production_article',
+    response_model=list[ArticleProduction],
+    status_code=HTTPStatus.OK,
+)
+def list_article_production(
+    terms: str = None,
+    university: str = None,
+    researcher_id: UUID | str = None,
+    graduate_program_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: QualisOptions | None = None,
+    distinct: int = 1,
+    page: int = None,
+    lenght: int = None,
+    dep_id: str = None,
+):
+    if distinct:
+        articles = ProductionService.list_distinct_article_production(
+            terms,
+            university,
+            researcher_id,
+            graduate_program_id,
+            year,
+            type,
+            qualis,
+            page,
+            lenght,
+            dep_id,
+        )
+    else:
+        articles = ProductionService.list_article_production(
+            terms,
+            university,
+            researcher_id,
+            graduate_program_id,
+            year,
+            type,
+            qualis,
+            page,
+            lenght,
+            dep_id,
+        )
     return articles

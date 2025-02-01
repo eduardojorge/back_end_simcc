@@ -2,10 +2,9 @@ from uuid import UUID
 
 from simcc.repositories import conn
 from simcc.repositories.util import pagination, webseatch_filter
-from simcc.schemas import ArticleOptions
+from simcc.schemas import ArticleOptions, QualisOptions
 from simcc.schemas.Production.Article import (
     ArticleMetric,
-    Qualis,
 )
 
 
@@ -400,7 +399,7 @@ def list_bibliographic_production(
     researcher_id: UUID | str = None,
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
-    qualis: Qualis | list[Qualis] = None,
+    qualis: QualisOptions = None,
     page: int = None,
     lenght: int = None,
 ):
@@ -462,6 +461,224 @@ def list_bibliographic_production(
         ORDER BY
             year DESC
         """
-    print(SCRIPT_SQL, params)
+
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_article_production(  # noqa: PLR0914
+    terms: str = None,
+    university: str = None,
+    researcher_id: UUID | str = None,
+    graduate_program_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: QualisOptions = None,
+    page: int = None,
+    lenght: int = None,
+    dep_id: str = None,
+):
+    params = {}
+
+    filter_university = str()
+    join_university = str()
+    if university:
+        join_university = """
+            LEFT JOIN institution i
+                ON r.institution_id = i.id
+            """
+        filter_university = 'AND i.name = %(university)s'
+        params['university'] = university
+
+    filter_program = str()
+    join_program = str()
+    if graduate_program_id:
+        params['program_id'] = graduate_program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON r.id = gpr.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
+
+    filter_type = str()
+    if type == 'ARTICLE':
+        filter_type = "AND type = 'ARTICLE'"
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
+
+    filter_terms = str()
+    if terms:
+        filter_terms, terms = webseatch_filter('bp.title', terms)
+        params |= terms
+
+    filter_qualis = str()
+    if qualis:
+        params['qualis'] = qualis
+        filter_qualis = 'AND bpa.qualis = %(qualis)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    filter_dep = str()
+    join_dep = str()
+    if dep_id:
+        params['dep_id'] = dep_id
+        join_dep = """
+            INNER JOIN ufmg.departament_researcher dr
+                ON r.id = dr.researcher_id
+            """
+        filter_dep = 'AND dr.dep_id = %(dep_id)s'
+
+    SCRIPT_SQL = f"""
+        SELECT
+            b.id AS id, title, b.year, type, doi, bpa.qualis,
+            periodical_magazine_name AS magazine, r.name AS researcher,
+            r.lattes_10_id, r.lattes_id, jcr AS jif,
+            jcr_link, r.id AS researcher_id, opa.abstract,
+            opa.article_institution, opa.authors,
+            opa.authors_institution, opa.citations_count, bpa.issn, opa.keywords,
+            opa.landing_page_url, opa.language, opa.pdf, b.has_image, b.relevance
+        FROM bibliographic_production b
+            LEFT JOIN bibliographic_production_article bpa
+                ON b.id = bpa.bibliographic_production_id
+            LEFT JOIN researcher r
+                ON r.id = b.researcher_id
+            LEFT JOIN openalex_article opa
+                ON opa.article_id = b.id
+            {join_university}
+            {join_program}
+            {join_dep}
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_terms}
+            {filter_type}
+            {filter_qualis}
+            {filter_pagination}
+            {filter_program}
+            {filter_university}
+            {filter_dep}
+        ORDER BY
+            year DESC
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_distinct_article_production(  # noqa: PLR0914
+    terms: str = None,
+    university: str = None,
+    researcher_id: UUID | str = None,
+    graduate_program_id: UUID | str = None,
+    year: int | str = 2020,
+    type: ArticleOptions = 'ARTICLE',
+    qualis: QualisOptions = None,
+    page: int = None,
+    lenght: int = None,
+    dep_id: str = None,
+):
+    params = {}
+
+    filter_university = str()
+    join_university = str()
+    if university:
+        join_university = """
+            LEFT JOIN institution i
+                ON r.institution_id = i.id
+            """
+        filter_university = 'AND i.name = %(university)s'
+        params['university'] = university
+
+    filter_program = str()
+    join_program = str()
+    if graduate_program_id:
+        params['program_id'] = graduate_program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON r.id = gpr.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
+
+    filter_type = str()
+    if type == 'ARTICLE':
+        filter_type = "AND type = 'ARTICLE'"
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
+
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
+
+    filter_terms = str()
+    if terms:
+        filter_terms, terms = webseatch_filter('bp.title', terms)
+        params |= terms
+
+    filter_qualis = str()
+    if qualis:
+        params['qualis'] = qualis
+        filter_qualis = 'AND bpa.qualis = %(qualis)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    filter_dep = str()
+    join_dep = str()
+    if dep_id:
+        params['dep_id'] = dep_id
+        join_dep = """
+            INNER JOIN ufmg.departament_researcher dr
+                ON r.id = dr.researcher_id
+            """
+        filter_dep = 'AND dr.dep_id = %(dep_id)s'
+
+    SCRIPT_SQL = f"""
+        SELECT DISTINCT
+            b.id AS id, title, b.year, type, doi, bpa.qualis,
+            periodical_magazine_name AS magazine, r.name AS researcher,
+            r.lattes_10_id, r.lattes_id, jcr AS jif,
+            jcr_link, r.id AS researcher_id, opa.abstract,
+            opa.article_institution, opa.authors,
+            opa.authors_institution, opa.citations_count, bpa.issn, opa.keywords,
+            opa.landing_page_url, opa.language, opa.pdf, b.has_image, b.relevance
+        FROM bibliographic_production b
+            LEFT JOIN bibliographic_production_article bpa
+                ON b.id = bpa.bibliographic_production_id
+            LEFT JOIN researcher r
+                ON r.id = b.researcher_id
+            LEFT JOIN institution i
+                ON r.institution_id = i.id
+            LEFT JOIN openalex_article opa
+                ON opa.article_id = b.id
+            {join_program}
+            {join_dep}
+            {join_university}
+        WHERE 1 = 1
+            {filter_id}
+            {filter_year}
+            {filter_terms}
+            {filter_type}
+            {filter_qualis}
+            {filter_pagination}
+            {filter_program}
+            {filter_university}
+            {filter_dep}
+        ORDER BY
+            year DESC
+        """
     result = conn.select(SCRIPT_SQL, params)
     return result

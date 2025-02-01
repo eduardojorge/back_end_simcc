@@ -2,6 +2,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from simcc.schemas import QualisOptions
+
 
 class Qualis(BaseModel):
     A1: int = 0
@@ -67,27 +69,27 @@ class ArticleProduction(BaseModel):
     title: str
     year: int
     type: str
-    doi: str
-    qualis: Qualis
+    doi: str | None
+    qualis: QualisOptions
     magazine: str
     researcher: str
     lattes_10_id: str
     lattes_id: str
-    jif: str
-    jcr_link: str
+    jif: str | None
+    jcr_link: str | None
     researcher_id: UUID
     lattes_id: str
 
-    abstract: str
-    article_institution: str
-    authors: str
-    authors_institution: str
-    citations_count: str
-    issn: str
-    keywords: str
-    landing_page_url: str
-    language: str
-    pdf: str
+    abstract: str | None
+    article_institution: str | None
+    authors: str | None
+    authors_institution: str | None
+    citations_count: int | None
+    issn: str | None
+    keywords: str | None
+    landing_page_url: str | None
+    language: str | None
+    pdf: str | None
 
     has_image: bool | None
     relevance: bool | None
