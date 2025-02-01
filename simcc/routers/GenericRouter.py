@@ -37,5 +37,6 @@ def current_lattes_date(lattes_id: str):
     client = Client('http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
     response = client.service.getDataAtualizacaoCV(lattes_id)
     if response:
-        return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+        response = datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
+        return response.strftime('%d/%m/%Y %H:%M:%S')
     raise HTTPException(status_code=404, detail='Curriculum not found')
