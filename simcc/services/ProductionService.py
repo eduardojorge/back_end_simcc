@@ -257,3 +257,27 @@ def list_distinct_article_production(
         lenght,
         dep_id,
     )
+
+
+def list_book_chapter(
+    term: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    page: int = None,
+    lenght: int = None,
+):
+    return ProductionRepository.list_book_chapter(
+        term, researcher_id, year, page, lenght
+    )
+
+
+def list_distinct_book_chapter(
+    term: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    page: int = None,
+    lenght: int = None,
+):
+    return ProductionRepository.list_distinct_book_chapter(
+        term, researcher_id, year, page, lenght
+    )

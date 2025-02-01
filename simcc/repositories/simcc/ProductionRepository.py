@@ -683,3 +683,102 @@ def list_distinct_article_production(  # noqa: PLR0914
         """
     result = conn.select(SCRIPT_SQL, params)
     return result
+
+
+def list_book_chapter(
+    term: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    page: int = None,
+    lenght: int = None,
+):
+    params = {}
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, terms = webseatch_filter('bp.title', term)
+        params |= terms
+
+    SCRIPT_SQL = f"""
+        SELECT bp.title, bp.year, bpc.isbn, bpc.publishing_company,
+            bp.researcher_id AS researcher, bp.id, r.lattes_id, bp.relevance,
+            bp.has_image
+        FROM bibliographic_production bp
+            INNER JOIN bibliographic_production_book_chapter bpc
+                ON bpc.bibliographic_production_id = bp.id
+            LEFT JOIN researcher r
+                ON r.id = bp.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_pagination}
+            {filter_year}
+            {filter_terms}
+        ORDER BY bp.year DESC;
+        """
+
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def list_distinct_book_chapter(
+    term: str = None,
+    researcher_id: UUID | str = None,
+    year: int | str = 2020,
+    page: int = None,
+    lenght: int = None,
+):
+    params = {}
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
+
+    filter_terms = str()
+    if term:
+        filter_terms, terms = webseatch_filter('bp.title', term)
+        params |= terms
+
+    SCRIPT_SQL = f"""
+        SELECT bp.title, MIN(bp.year) AS year, MAX(bpc.isbn),
+            MAX(bpc.publishing_company),
+            ARRAY_AGG(bp.researcher_id) AS researcher, ARRAY_AGG(bp.id) AS id,
+            ARRAY_AGG(r.lattes_id) AS lattes_id, NULL AS relevance,
+            NULL AS has_image
+        FROM bibliographic_production bp
+            INNER JOIN bibliographic_production_book_chapter bpc
+                ON bpc.bibliographic_production_id = bp.id
+            LEFT JOIN researcher r
+                ON r.id = bp.researcher_id
+        WHERE 1 = 1
+            {filter_id}
+            {filter_pagination}
+            {filter_year}
+            {filter_terms}
+        GROUP BY bp.title
+        ORDER BY year DESC;
+        """
+
+    result = conn.select(SCRIPT_SQL, params)
+    return result
