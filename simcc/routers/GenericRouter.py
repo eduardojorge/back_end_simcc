@@ -30,13 +30,14 @@ def lattes_xml(lattes_id: str):
 
 @router.get(
     '/getDataAtualizacaoCV',
-    response_model=datetime,
+    response_model=str,
     status_code=HTTPStatus.OK,
 )
 def current_lattes_date(lattes_id: str):
     client = Client('http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
     response = client.service.getDataAtualizacaoCV(lattes_id)
     if response:
-        response = datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
-        return response.strftime('%d/%m/%Y %H:%M:%S')
+        return datetime.strptime(response, '%d/%m/%Y %H:%M:%S').strftime(
+            '%d/%m/%Y %H:%M:%S'
+        )
     raise HTTPException(status_code=404, detail='Curriculum not found')
