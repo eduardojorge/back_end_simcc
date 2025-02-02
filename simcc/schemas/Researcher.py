@@ -35,6 +35,7 @@ class Researcher(BaseModel):
     graduation: str
     lattes_update: datetime
     classification: str
+    status: bool
 
     # Metrics
     among: int | str

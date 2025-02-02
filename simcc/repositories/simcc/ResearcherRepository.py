@@ -87,7 +87,7 @@ def search_in_articles(
             b.among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
-            opr.openalex, r.classification
+            opr.openalex, r.classification, r.status
         FROM researcher r
             LEFT JOIN institution i ON i.id = r.institution_id
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
@@ -153,7 +153,7 @@ def search_in_abstracts(
             1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
-            opr.openalex, r.classification
+            opr.openalex, r.classification, r.status
         FROM researcher r
             LEFT JOIN institution i ON i.id = r.institution_id
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id
@@ -219,7 +219,7 @@ def search_in_name(
             1 AS among, rp.articles, rp.book_chapters, rp.book, rp.patent,
             rp.software, rp.brand, opr.h_index, opr.relevance_score,
             opr.works_count, opr.cited_by_count, opr.i10_index, opr.scopus,
-            opr.openalex, r.classification
+            opr.openalex, r.classification, r.status
         FROM researcher r
             LEFT JOIN institution i ON i.id = r.institution_id
             LEFT JOIN researcher_production rp ON rp.researcher_id = r.id

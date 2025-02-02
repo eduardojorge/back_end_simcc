@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     ROOT_PATH: str = ''
     PROXY_URL: str = 'http://localhost:8080'
     ALTERNATIVE_CNPQ_SERVICE: bool = False
+    FIREBASE_COLLECTION: str = 'termos_busca'
 
     JADE_EXTRATOR_FOLTER: DirectoryPath
 
