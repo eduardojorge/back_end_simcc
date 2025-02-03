@@ -57,6 +57,17 @@ with open(
             )
             select_programa.select_by_index(index)
             time.sleep(2)
+            ####
+            nome_programa = select_programa.first_selected_option.text
+            bool = False
+            id_programa = str()
+            for char in nome_programa:
+                if char == ')': break
+                if bool:
+                    id_programa = id_programa + char
+                if char == '(':
+                    bool = True
+            ####
             consultar_button = driver.find_element(By.NAME, 'form:consultar')
             driver.execute_script(
                 'arguments[0].scrollIntoView();', consultar_button
@@ -79,7 +90,9 @@ with open(
                     dados_doscentes = row.find_elements(By.TAG_NAME, 'td')
                     row_dados = []
                     for dado in dados_doscentes:
-                        row_dados.append(dado.text)
+                        if dado.text:
+                            row_dados.append(dado.text)
+                    row_dados.append(id_programa)
                     writer.writerow(row_dados)
                 button_proxima = WebDriverWait(driver, 10).until(
                     EC.visibility_of_element_located((
