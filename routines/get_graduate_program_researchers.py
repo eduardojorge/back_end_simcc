@@ -52,6 +52,13 @@ with open(
         last_index = len(select_programa.options)
         index = 1
         while index < last_index:
+            if driver.find_elements(By.CLASS_NAME, "alert.alert-danger"):
+                driver.get(url)
+                WebDriverWait(driver, 50000).until(EC.presence_of_element_located((By.NAME, "form:j_idt33:inst:input"))).send_keys(instituicao)
+                time.sleep(2)
+                select_instituicao = Select(driver.find_element(By.NAME, "form:j_idt33:inst:listbox"))
+                select_instituicao.select_by_index(0)
+                time.sleep(2)
             select_programa = Select(
                 driver.find_element(By.NAME, 'form:j_idt33:j_idt113')
             )
@@ -86,12 +93,25 @@ with open(
                 )
                 if (len(table_rows_doscentes)) < 50:
                     bool = False
+                originalWin = driver.current_window_handle
                 for row in table_rows_doscentes:
                     dados_doscentes = row.find_elements(By.TAG_NAME, 'td')
                     row_dados = []
                     for dado in dados_doscentes:
                         if dado.text:
                             row_dados.append(dado.text)
+                        else:
+                            link = dado.find_element(By.TAG_NAME, "a").get_attribute("href")
+                            driver.switch_to.new_window('tab')
+                            driver.get(link)
+                            time.sleep(2)
+                            inicio = WebDriverWait(driver, 10).until(
+                                EC.visibility_of_element_located((By.XPATH, "//h1[text()='Vínculo com o Programa']/following::table[1]//tr[1]/td[3]"))
+                            )
+                            row_dados.append(inicio.text)
+                            driver.close()
+                            driver.switch_to.window(originalWin) 
+                            
                     row_dados.append(id_programa)
                     writer.writerow(row_dados)
                 button_proxima = WebDriverWait(driver, 10).until(
