@@ -517,7 +517,7 @@ def list_article_production(  # noqa: PLR0914
 
     filter_terms = str()
     if terms:
-        filter_terms, terms = webseatch_filter('bp.title', terms)
+        filter_terms, terms = webseatch_filter('b.title', terms)
         params |= terms
 
     filter_qualis = str()
@@ -625,7 +625,7 @@ def list_distinct_article_production(  # noqa: PLR0914
 
     filter_terms = str()
     if terms:
-        filter_terms, terms = webseatch_filter('bp.title', terms)
+        filter_terms, terms = webseatch_filter('b.title', terms)
         params |= terms
 
     filter_qualis = str()

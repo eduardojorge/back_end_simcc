@@ -219,7 +219,7 @@ def list_article_production(
     lenght: int = None,
     dep_id: str = None,
 ):
-    return ProductionRepository.list_article_production(
+    production = ProductionRepository.list_article_production(
         terms,
         university,
         researcher_id,
@@ -231,6 +231,13 @@ def list_article_production(
         lenght,
         dep_id,
     )
+    if not production:
+        return []
+
+    production = pd.DataFrame(production)
+    production = production.fillna('')
+
+    return production.to_dict(orient='records')
 
 
 def list_distinct_article_production(
@@ -245,7 +252,7 @@ def list_distinct_article_production(
     lenght: int = None,
     dep_id: str = None,
 ):
-    return ProductionRepository.list_distinct_article_production(
+    production = ProductionRepository.list_distinct_article_production(
         terms,
         university,
         researcher_id,
@@ -257,6 +264,14 @@ def list_distinct_article_production(
         lenght,
         dep_id,
     )
+
+    if not production:
+        return []
+
+    production = pd.DataFrame(production)
+    production = production.fillna('')
+
+    return production.to_dict(orient='records')
 
 
 def list_book_chapter(

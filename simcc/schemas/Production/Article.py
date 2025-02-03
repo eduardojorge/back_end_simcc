@@ -84,7 +84,7 @@ class ArticleProduction(BaseModel):
     article_institution: str | None
     authors: str | None
     authors_institution: str | None
-    citations_count: int | None
+    citations_count: int | str | None
     issn: str | None
     keywords: str | None
     landing_page_url: str | None
