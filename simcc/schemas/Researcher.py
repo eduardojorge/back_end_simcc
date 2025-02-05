@@ -39,12 +39,12 @@ class Researcher(BaseModel):
 
     # Metrics
     among: int | str
-    articles: int
-    book_chapters: int
-    book: int
-    patent: int
-    software: int
-    brand: int
+    articles: int | str
+    book_chapters: int | str
+    book: int | str
+    patent: int | str
+    software: int | str
+    brand: int | str
 
     # OpenAlex Data
     h_index: int | str

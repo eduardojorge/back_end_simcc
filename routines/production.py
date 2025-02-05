@@ -162,5 +162,3 @@ if __name__ == '__main__':
     researchers = researchers.merge(patent, how='left', on='researcher_id')
 
     researchers = researchers.replace(np.nan, None)
-
-    print(researchers[['researcher_id', 'area', 'area_specialty']])
