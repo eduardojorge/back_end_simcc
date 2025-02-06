@@ -38,7 +38,9 @@ def article_indprod():
         GROUP BY year, qualis, researcher_id;
         """
     result = conn.select(SCRIPT_SQL)
-    articles = pd.DataFrame(result)
+    articles = pd.DataFrame(
+        result, columns=['year', 'qualis', 'count_article', 'researcher_id']
+    )
 
     articles['article_prod'] = (
         articles['qualis'].map(barema) * articles['count_article']
