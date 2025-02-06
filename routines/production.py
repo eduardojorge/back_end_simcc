@@ -111,6 +111,16 @@ def list_patent():
     return result
 
 
+def list_address():
+    SCRIPT_SQL = """
+        SELECT researcher_id, city, organ
+        FROM researcher_address
+        ORDER BY researcher_id;
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
 if __name__ == '__main__':
     log_format = '%(levelname)s | %(asctime)s - %(message)s'
 
@@ -150,6 +160,11 @@ if __name__ == '__main__':
     patent = list_patent()
     patent = pd.DataFrame(patent)
 
+    address = list_address()
+    address = pd.DataFrame(address)
+
+    # Merge the dataframes
+
     researchers = researchers.merge(
         bibliographic_production, how='left', on='researcher_id'
     )
@@ -160,5 +175,21 @@ if __name__ == '__main__':
     researchers = researchers.merge(software, how='left', on='researcher_id')
     researchers = researchers.merge(brand, how='left', on='researcher_id')
     researchers = researchers.merge(patent, how='left', on='researcher_id')
+    researchers = researchers.merge(address, how='left', on='researcher_id')
 
     researchers = researchers.replace(np.nan, None)
+    researchers = researchers.rename(columns=str.lower)
+
+    for _, researcher in researchers.iterrows():
+        SCRIPT_SQL = """
+            INSERT INTO researcher_production
+                (researcher_id, articles, book_chapters,
+                book, work_in_event, patent, software, brand, great_area,
+                area_specialty, city, organ)
+            VALUES
+                (%(researcher_id)s, %(article)s, %(book_chapter)s, %(book)s,
+                %(work_in_event)s, %(patent)s, %(software)s, %(brand)s,
+                %(area)s, %(area_specialty)s, %(city)s, %(organ)s);
+            """
+        print(f'Inserting row for researcher: {_}')
+        conn.exec(SCRIPT_SQL, researcher.to_dict())
