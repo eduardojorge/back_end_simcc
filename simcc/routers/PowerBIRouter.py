@@ -377,3 +377,19 @@ def dim_departament_csv():
     file_name = 'dim_departament.csv'
     file_path = os.path.join(STORAGE_PATH, file_name)
     return FileResponse(file_path, filename=file_name)
+
+
+@router.get('/dim_research_project.csv')
+def dim_research_project_csv():
+    powerBI.dim_research_project()
+    file_name = 'dim_research_project.csv'
+    file_path = os.path.join(STORAGE_PATH, file_name)
+    return FileResponse(file_path, filename=file_name)
+
+
+@router.get('/fat_research_project_foment.csv')
+def fat_research_project_foment_csv():
+    powerBI.fat_research_project_foment()
+    file_name = 'fat_research_project_foment.csv'
+    file_path = os.path.join(STORAGE_PATH, file_name)
+    return FileResponse(file_path, filename=file_name)

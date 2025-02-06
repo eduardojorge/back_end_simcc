@@ -777,6 +777,30 @@ def cimatec_graduate_program():
     csv.to_csv(csv_path)
 
 
+def dim_research_project():
+    SCRIPT_SQL = """
+        SELECT id, researcher_id, start_year, end_year, agency_code, agency_name,
+            project_name, status, nature, number_undergraduates,description
+            number_specialists, number_academic_masters, number_phd
+        FROM research_project;
+        """
+    result = conn.select(SCRIPT_SQL)
+    csv = pd.DataFrame(result)
+    csv_path = os.path.join(PATH, 'dim_research_project.csv')
+    csv.to_csv(csv_path)
+
+
+def fat_research_project_foment():
+    SCRIPT_SQL = """
+        SELECT project_id, agency_name, agency_code, nature
+        FROM research_project_foment;
+        """
+    result = conn.select(SCRIPT_SQL)
+    csv = pd.DataFrame(result)
+    csv_path = os.path.join(PATH, 'fat_research_project_foment.csv')
+    csv.to_csv(csv_path)
+
+
 if __name__ == '__main__':
     for directory in [PATH]:
         if not os.path.exists(directory):
