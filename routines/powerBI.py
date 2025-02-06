@@ -780,14 +780,22 @@ def cimatec_graduate_program():
 def dim_research_project():
     SCRIPT_SQL = """
         SELECT id, researcher_id, start_year, end_year, agency_code, agency_name,
-            project_name, status, nature, number_undergraduates,description
+            project_name, status, nature, number_undergraduates, description,
             number_specialists, number_academic_masters, number_phd
         FROM research_project;
-        """
+    """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
+
+    csv['start_year'] = (
+        pd.to_numeric(csv['start_year'], errors='coerce').fillna(0).astype(int)
+    )
+    csv['end_year'] = (
+        pd.to_numeric(csv['end_year'], errors='coerce').fillna(0).astype(int)
+    )
+
     csv_path = os.path.join(PATH, 'dim_research_project.csv')
-    csv.to_csv(csv_path)
+    csv.to_csv(csv_path, encoding='ISO-8859-1')
 
 
 def fat_research_project_foment():
