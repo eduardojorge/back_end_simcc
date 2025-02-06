@@ -36,7 +36,6 @@ app.include_router(
 )
 app.include_router(
     MetricsRouter.router,
-    tags=['Metrics'],
 )
 app.include_router(
     ConecteeRouter.router,
