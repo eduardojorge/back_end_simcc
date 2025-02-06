@@ -3,7 +3,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile
 
-from simcc.schemas.Conectee import ResearcherData
+from simcc.schemas.Conectee import ResearcherData, RtMetrics
 from simcc.services import ConecteeService
 
 router = APIRouter()
@@ -48,3 +48,10 @@ def save_and_process_files(files: list[UploadFile]):
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
             detail=str(e),
         )
+
+
+@router.get(
+    '/departament/rt', status_code=HTTPStatus.OK, response_model=RtMetrics
+)
+def get_departament_rt():
+    return ConecteeService.get_departament_rt_data()

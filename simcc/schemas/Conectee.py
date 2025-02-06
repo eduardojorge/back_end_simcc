@@ -13,3 +13,8 @@ class ResearcherData(BaseModel):
     tempo_nivel: int | None
     tempo_acumulado: int
     arquivo: str = Field(..., max_length=255)
+
+
+class RtMetrics(BaseModel):
+    teachers: list
+    technician: list

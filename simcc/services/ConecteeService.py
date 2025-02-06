@@ -143,3 +143,9 @@ def extract_data(path):
             params['fim'] = None
         ConecteeRepository.insert_researcher(params)
     return True
+
+
+def get_departament_rt_data():
+    researchers = ConecteeRepository.list_researchers()
+    technicians = ConecteeRepository.list_technicians()
+    return {'teachers': researchers, 'technicians': technicians}

@@ -42,3 +42,23 @@ def insert_researcher(researcher: ResearcherData):
             %(tempo_nivel)s, %(tempo_acumulado)s, %(arquivo)s);
         """
     conn.exec(SCRIPT_SQL, researcher)
+
+
+def list_researchers():
+    SCRIPT_SQL = """
+        SELECT rt, COUNT(rt)
+        FROM ufmg.researcher
+        GROUP BY rt
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
+def list_technicians():
+    SCRIPT_SQL = """
+        SELECT rt, COUNT(rt)
+        FROM ufmg.technician
+        GROUP BY rt
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result

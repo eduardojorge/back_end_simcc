@@ -6,6 +6,40 @@ import pandas as pd
 from simcc.repositories import conn
 
 
+def event_organization_metrics(year):
+    SCRIPT_SQL = """
+        SELECT researcher_id, COUNT(*) AS event_organization
+        FROM event_organization
+        WHERE year >= %(year)s
+        GROUP BY researcher_id;
+        """
+    result = conn.select(SCRIPT_SQL, {'year': year})
+    return result
+
+
+def work_in_event_metrics(year):
+    SCRIPT_SQL = """
+        SELECT researcher_id, COUNT(*) AS work_in_event
+        FROM bibliographic_production
+        WHERE type = 'WORK_IN_EVENT'
+            AND year >= %(year)s
+        GROUP BY researcher_id;
+        """
+    result = conn.select(SCRIPT_SQL, {'year': year})
+    return result
+
+
+def participation_events_metrics(year):
+    SCRIPT_SQL = """
+        SELECT researcher_id, COUNT(*) AS participation_events
+        FROM participation_events
+        WHERE year >= %(year)s
+        GROUP BY researcher_id;
+        """
+    result = conn.select(SCRIPT_SQL, {'year': year})
+    return result
+
+
 def article_metrics(year):
     SCRIPT_SQL = """
         SELECT qualis, COUNT(*) AS count_article, researcher_id
@@ -141,6 +175,17 @@ def book_chapter_metrics(year):
         WHERE type = 'BOOK_CHAPTER'
             AND year_ >= %(year)s
         GROUP BY researcher_id
+        """
+    result = conn.select(SCRIPT_SQL, {'year': year})
+    return result
+
+
+def brand_metrics(year):
+    SCRIPT_SQL = """
+        SELECT researcher_id, COUNT(*) brand
+        FROM public.brand b
+        WHERE b.year >= %(year)s
+        GROUP BY researcher_id;
         """
     result = conn.select(SCRIPT_SQL, {'year': year})
     return result
