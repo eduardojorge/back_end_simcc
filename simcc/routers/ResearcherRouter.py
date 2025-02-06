@@ -4,12 +4,8 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from simcc.schemas import ResearcherOptions
-from simcc.schemas.Production.Article import ArticleMetric
-from simcc.schemas.Production.Guidance import GuidanceMetrics
-from simcc.schemas.Production.Patent import PatentMetric
-from simcc.schemas.Production.Software import SoftwareMetric
-from simcc.schemas.Researcher import AcademicMetric, CoAuthorship, Researcher
-from simcc.services import ProductionService, ResearcherService
+from simcc.schemas.Researcher import CoAuthorship, Researcher
+from simcc.services import ResearcherService
 
 router = APIRouter()
 
@@ -36,86 +32,6 @@ def search_in_abstract_or_article(
             terms, graduate_program_id, university
         )
     return researchers
-
-
-@router.get(
-    '/article_metrics',
-    response_model=list[ArticleMetric],
-    status_code=HTTPStatus.OK,
-    tags=['General Metrics'],
-)
-@router.get(
-    '/researcher/{researcher_id}/article_metrics',
-    response_model=list[ArticleMetric],
-    status_code=HTTPStatus.OK,
-)
-def article_metrics(researcher_id: UUID = None, year: int = 2020):
-    metrics = ProductionService.list_article_metrics(researcher_id, None, year)
-    return metrics
-
-
-@router.get(
-    '/patent_metrics',
-    response_model=list[PatentMetric],
-    status_code=HTTPStatus.OK,
-    tags=['General Metrics'],
-)
-@router.get(
-    '/researcher/{researcher_id}/patent_metrics',
-    response_model=list[PatentMetric],
-    status_code=HTTPStatus.OK,
-)
-def patent_metrics(researcher_id: UUID = None, year: int = 2020):
-    metrics = ProductionService.list_patent_metrics(researcher_id, year)
-    return metrics
-
-
-@router.get(
-    '/guidance_metrics',
-    response_model=list[GuidanceMetrics],
-    status_code=HTTPStatus.OK,
-    tags=['General Metrics'],
-)
-@router.get(
-    '/researcher/{researcher_id}/guidance_metrics',
-    response_model=list[GuidanceMetrics],
-    status_code=HTTPStatus.OK,
-)
-def guidance_metrics(researcher_id: UUID = None, year: int = 2020):
-    metrics = ProductionService.list_guidance_metrics(researcher_id, year)
-    return metrics
-
-
-@router.get(
-    '/academic_degree_metrics',
-    response_model=list[AcademicMetric],
-    status_code=HTTPStatus.OK,
-    tags=['General Metrics'],
-)
-@router.get(
-    '/researcher/{researcher_id}/academic_degree_metrics',
-    response_model=list[AcademicMetric],
-    status_code=HTTPStatus.OK,
-)
-def academic_degree_metrics(researcher_id: UUID = None, year: int = 2020):
-    metrics = ProductionService.list_academic_degree_metrics(researcher_id, year)
-    return metrics
-
-
-@router.get(
-    '/software_metrics',
-    response_model=list[SoftwareMetric],
-    status_code=HTTPStatus.OK,
-    tags=['General Metrics'],
-)
-@router.get(
-    '/researcher/{researcher_id}/software_metrics',
-    response_model=list[SoftwareMetric],
-    status_code=HTTPStatus.OK,
-)
-def software_metrics(researcher_id: UUID = None, year: int = 2020):
-    metrics = ProductionService.list_software_metrics(researcher_id, year)
-    return metrics
 
 
 @router.get(

@@ -10,6 +10,7 @@ from simcc.routers import (
     ConecteeRouter,
     GenericRouter,
     GraduateProgramRouter,
+    MetricsRouter,
     PowerBIRouter,
     ProductionRouter,
     ResearcherRouter,
@@ -33,13 +34,15 @@ app.include_router(
     PowerBIRouter.router,
     tags=['PowerBI Data'],
 )
-
+app.include_router(
+    MetricsRouter.router,
+    tags=['Metrics'],
+)
 app.include_router(
     ConecteeRouter.router,
     prefix='/ufmg',
     tags=['Conectee'],
 )
-
 app.include_router(
     GenericRouter.router,
     tags=['Generic'],

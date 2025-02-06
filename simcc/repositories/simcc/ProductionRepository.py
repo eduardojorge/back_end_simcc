@@ -58,13 +58,23 @@ def list_article_metrics(
     return result
 
 
-def list_patent_metrics(researcher_id: UUID, year: int):
+def list_patent_metrics(researcher_id: UUID, program_id: UUID, year: int):
     params = {}
 
     filter_id = str()
     if researcher_id:
         params['researcher_id'] = researcher_id
         filter_id = 'AND p.researcher_id = %(researcher_id)s'
+
+    filter_program = str()
+    join_program = str()
+    if program_id:
+        params['program_id'] = program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON gpr.researcher_id = p.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     filter_year = str()
     if year:
@@ -76,9 +86,11 @@ def list_patent_metrics(researcher_id: UUID, year: int):
             COUNT(*) FILTER (WHERE p.grant_date IS NULL) AS NOT_GRANTED,
             COUNT(*) FILTER (WHERE p.grant_date IS NOT NULL) AS GRANTED
         FROM patent p
+            {join_program}
         WHERE 1 = 1
             {filter_id}
             {filter_year}
+            {filter_program}
         GROUP BY development_year;
         """
 
@@ -86,7 +98,7 @@ def list_patent_metrics(researcher_id: UUID, year: int):
     return result
 
 
-def list_guidance_metrics(researcher_id: UUID, year: int):
+def list_guidance_metrics(researcher_id: UUID, program_id: UUID, year: int):
     params = {}
 
     filter_id = str()
@@ -99,21 +111,35 @@ def list_guidance_metrics(researcher_id: UUID, year: int):
         params['year'] = year
         filter_year = 'AND g.year >= %(year)s'
 
+    filter_program = str()
+    join_program = str()
+    if program_id:
+        params['program_id'] = program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON gpr.researcher_id = g.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
+
     SCRIPT_SQL = f"""
         SELECT g.year AS year,
             unaccent(lower((g.nature || ' ' || g.status))) AS nature,
             COUNT(*) as count_nature
         FROM guidance g
+            {join_program}
         WHERE 1 = 1
             {filter_id}
             {filter_year}
+            {filter_program}
         GROUP BY g.year, nature, g.status;
         """
     result = conn.select(SCRIPT_SQL, params)
     return result
 
 
-def list_academic_degree_metrics(researcher_id: UUID, year: int):
+def list_academic_degree_metrics(
+    researcher_id: UUID, program_id: UUID, year: int
+):
     params = {}
 
     filter_id = str()
@@ -128,6 +154,17 @@ def list_academic_degree_metrics(researcher_id: UUID, year: int):
             AND (e.education_start >= %(year)s OR e.education_end >= %(year)s)
             """
 
+    filter_program = str()
+    if program_id:
+        params['program_id'] = program_id
+
+        filter_program = """
+             AND e.researcher_id IN
+             (SELECT researcher_id
+             FROM graduate_program_researcher
+             WHERE graduate_program_id = %(program_id)s)
+             """
+
     SCRIPT_SQL = f"""
         SELECT e.education_start AS year, COUNT(e.degree) AS among,
             REPLACE(degree || '-START', '-', '_') as degree
@@ -135,6 +172,7 @@ def list_academic_degree_metrics(researcher_id: UUID, year: int):
         WHERE 1 = 1
             {filter_year}
             {filter_id}
+            {filter_program}
         GROUP BY year, degree
 
         UNION
@@ -145,13 +183,14 @@ def list_academic_degree_metrics(researcher_id: UUID, year: int):
         WHERE 1 = 1
             {filter_year}
             {filter_id}
+            {filter_program}
         GROUP BY year, degree
         """
     result = conn.select(SCRIPT_SQL, params)
     return result
 
 
-def list_software_metrics(researcher_id: UUID, year: int):
+def list_software_metrics(researcher_id: UUID, program_id: UUID, year: int):
     params = {}
 
     filter_id = str()
@@ -164,12 +203,24 @@ def list_software_metrics(researcher_id: UUID, year: int):
         params['year'] = year
         filter_year = """AND s.year >= %(year)s"""
 
+    filter_program = str()
+    join_program = str()
+    if program_id:
+        params['program_id'] = program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON gpr.researcher_id = s.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
+
     SCRIPT_SQL = f"""
         SELECT s.year, COUNT(*) among
         FROM public.software s
+            {join_program}
         WHERE 1 = 1
             {filter_id}
             {filter_year}
+            {filter_program}
         GROUP BY s.year;
         """
     result = conn.select(SCRIPT_SQL, params)

@@ -49,9 +49,11 @@ def list_article_metrics(
     return article_metrics.to_dict(orient='records')
 
 
-def list_patent_metrics(researcher_id: UUID, year: int) -> list[PatentMetric]:
+def list_patent_metrics(
+    researcher_id: UUID, program_id: UUID, year: int
+) -> list[PatentMetric]:
     patent_metrics = ProductionRepository.list_patent_metrics(
-        researcher_id, year
+        researcher_id, program_id, year
     )
     if not patent_metrics:
         return []
@@ -59,10 +61,10 @@ def list_patent_metrics(researcher_id: UUID, year: int) -> list[PatentMetric]:
 
 
 def list_guidance_metrics(
-    researcher_id: UUID, year: int
+    researcher_id: UUID, program_id: UUID, year: int
 ) -> list[GuidanceMetrics]:
     guidance_metrics = ProductionRepository.list_guidance_metrics(
-        researcher_id, year
+        researcher_id, program_id, year
     )
     if not guidance_metrics:
         return []
@@ -102,10 +104,10 @@ def list_guidance_metrics(
 
 
 def list_academic_degree_metrics(
-    researcher_id: UUID, year: int
+    researcher_id: UUID, program_id: UUID, year: int
 ) -> list[AcademicMetric]:
     degree_metrics = ProductionRepository.list_academic_degree_metrics(
-        researcher_id, year
+        researcher_id, program_id, year
     )
     if not degree_metrics:
         return []
@@ -127,8 +129,10 @@ def list_academic_degree_metrics(
     return degree_metrics.to_dict(orient='records')
 
 
-def list_software_metrics(researcher_id: UUID, year: int):
-    metrics = ProductionRepository.list_software_metrics(researcher_id, year)
+def list_software_metrics(researcher_id: UUID, program_id: UUID, year: int):
+    metrics = ProductionRepository.list_software_metrics(
+        researcher_id, program_id, year
+    )
     return metrics
 
 

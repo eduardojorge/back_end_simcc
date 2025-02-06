@@ -4,9 +4,8 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from simcc.schemas.GraduateProgram import GraduateProgram
-from simcc.schemas.Production.Article import ArticleMetric
 from simcc.schemas.Researcher import ResearcherArticleProduction
-from simcc.services import GraduateProgramService, ProductionService
+from simcc.services import GraduateProgramService
 
 router = APIRouter()
 
@@ -31,15 +30,3 @@ def article_production(program_id: UUID, year: int = 2020):
         program_id, year
     )
     return article_production_list
-
-
-@router.get(
-    '/graduate_program/{program_id}/article_metrics',
-    response_model=list[ArticleMetric],
-    status_code=HTTPStatus.OK,
-)
-def article_metrics(program_id: UUID, year: int = 2020):
-    article_metrics_list = ProductionService.list_article_metrics(
-        None, program_id, year
-    )
-    return article_metrics_list
