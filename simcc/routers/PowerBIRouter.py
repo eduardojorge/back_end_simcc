@@ -393,3 +393,11 @@ def fat_research_project_foment_csv():
     file_name = 'fat_research_project_foment.csv'
     file_path = os.path.join(STORAGE_PATH, file_name)
     return FileResponse(file_path, filename=file_name)
+
+
+@router.get('/dim_terms.csv')
+def dim_terms_csv():
+    powerBI.dim_terms()
+    file_name = 'dim_terms.csv'
+    file_path = os.path.join(STORAGE_PATH, file_name)
+    return FileResponse(file_path, filename=file_name)
