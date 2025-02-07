@@ -845,7 +845,7 @@ def dim_bibliographic_production_terms():
         GROUP BY id, type_
         ORDER BY id;
         """
-    result = conn.select(SCRIPT_SQL)
+    result = conn.select(SCRIPT_SQL, parameters)
     csv = pd.DataFrame(result)
     csv_path = os.path.join(PATH, 'dim_bibliographic_production_terms.csv')
     csv.to_csv(csv_path)
@@ -892,7 +892,7 @@ def dim_tecnical_production_terms():
         GROUP BY id, type_
         ORDER BY id;
         """
-    result = conn.select(SCRIPT_SQL)
+    result = conn.select(SCRIPT_SQL, parameters)
     csv = pd.DataFrame(result)
     csv_path = os.path.join(PATH, 'dim_tecnical_production_terms.csv')
     csv.to_csv(csv_path)
