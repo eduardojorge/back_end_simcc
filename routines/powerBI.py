@@ -810,20 +810,61 @@ def fat_research_project_foment():
     csv.to_csv(csv_path)
 
 
-def dim_terms():
+def dim_bibliographic_production_terms():
+    stopwords = nltk.corpus.stopwords.words('english')
+    stopwords += nltk.corpus.stopwords.words('portuguese')
+
+    parameters = {}
+    parameters['stopwords'] = stopwords
+
     SCRIPT_SQL = r"""
         WITH unified_data AS (
             SELECT id, 'BIBLIOGRAPHIC_PRODUCTION' AS type_, translate(title,'-\.:,;''', ' ') AS title
             FROM bibliographic_production
-            UNION ALL
+        ),
+        word_split AS (
+            SELECT id, type_, unnest(string_to_array(lower(regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
+            FROM unified_data
+        ),
+        word_count AS (
+            SELECT id, type_, word, COUNT(*) AS frequency
+            FROM word_split
+            WHERE word <> ''
+            GROUP BY id, type_, word
+        ),
+        ranked_words AS (
+            SELECT id, type_, word, frequency, RANK() OVER (PARTITION BY id ORDER BY frequency DESC) AS rank
+            FROM word_count
+        )
+        SELECT id, type_, UNNEST(ARRAY_AGG(ranked_words.word)) AS term
+        FROM ranked_words
+        WHERE 1 = 1
+            AND rank <= 20
+            AND CHAR_LENGTH(word) > 3
+            AND TRIM(word) <> ALL(%(stopwords)s)
+        GROUP BY id, type_
+        ORDER BY id;
+        """
+    result = conn.select(SCRIPT_SQL)
+    csv = pd.DataFrame(result)
+    csv_path = os.path.join(PATH, 'dim_bibliographic_production_terms.csv')
+    csv.to_csv(csv_path)
+
+
+def dim_tecnical_production_terms():
+    stopwords = nltk.corpus.stopwords.words('english')
+    stopwords += nltk.corpus.stopwords.words('portuguese')
+
+    parameters = {}
+    parameters['stopwords'] = stopwords
+
+    SCRIPT_SQL = r"""
+        WITH unified_data AS (
             SELECT id, 'PATENT', translate(title,'-\.:,;''', ' ') AS title
             FROM patent
             UNION ALL
             SELECT id, 'BRAND', translate(title,'-\.:,;''', ' ') AS title
             FROM brand
-            UNION ALL
-            SELECT id, 'EVENT_ORGANIZATION',translate(title,'-\.:,;''', ' ') AS title
-            FROM event_organization
             UNION ALL
             SELECT id, 'SOFTWARE', translate(title,'-\.:,;''', ' ') AS title
             FROM software
@@ -847,13 +888,13 @@ def dim_terms():
         WHERE 1 = 1
             AND rank <= 20
             AND CHAR_LENGTH(word) > 3
-            AND TRIM(word) NOT IN ('da', 'de')
+            AND TRIM(word) <> ALL(%(stopwords)s)
         GROUP BY id, type_
         ORDER BY id;
         """
     result = conn.select(SCRIPT_SQL)
     csv = pd.DataFrame(result)
-    csv_path = os.path.join(PATH, 'dim_terms.csv')
+    csv_path = os.path.join(PATH, 'dim_tecnical_production_terms.csv')
     csv.to_csv(csv_path)
 
 
