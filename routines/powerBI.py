@@ -474,7 +474,7 @@ def fat_simcc_bibliographic_production():
             title, b.type as tipo, b.researcher_id, year, i.id AS institution_id,
             bar.qualis, bar.periodical_magazine_name, bar.jcr, bar.jcr_link,
             c.id AS city_id, b.id AS bibliographic_production_id,
-            unaccent(LOWER(title)) AS sanitized_title, id
+            unaccent(LOWER(title)) AS sanitized_title, b.id
         FROM bibliographic_production b
         LEFT JOIN bibliographic_production_article bar
             ON b.id = bar.bibliographic_production_id, researcher r
