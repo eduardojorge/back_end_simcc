@@ -860,7 +860,7 @@ def dim_tecnical_production_terms():
 
     SCRIPT_SQL = r"""
         WITH unified_data AS (
-            SELECT id, 'PATENT', translate(title,'-\.:,;''', ' ') AS title
+            SELECT id, 'PATENT' AS type_, translate(title,'-\.:,;''', ' ') AS title
             FROM patent
             UNION ALL
             SELECT id, 'BRAND', translate(title,'-\.:,;''', ' ') AS title
