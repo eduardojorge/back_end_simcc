@@ -330,7 +330,7 @@ def fat_production_tecnical_year_novo_csv_db():
         SELECT DISTINCT
             title, development_year::int AS year, 'PATENTE' AS TYPE,
             p.researcher_id, c.id AS city_id, r.institution_id AS institution_id,
-            unaccent(LOWER(title)) AS sanitized_title
+            unaccent(LOWER(title)) AS sanitized_title, p.id
         FROM patent p, researcher r, researcher_production rp, city c
         WHERE 1 = 1
             AND r.id = p.researcher_id
@@ -341,7 +341,7 @@ def fat_production_tecnical_year_novo_csv_db():
 
         SELECT DISTINCT
             title, s.year AS year, 'SOFTWARE' AS TYPE, s.researcher_id, c.id,
-            r.institution_id, unaccent(LOWER(title)) AS sanitized_title
+            r.institution_id, unaccent(LOWER(title)) AS sanitized_title, s.id
         FROM software s, researcher r, researcher_production rp, city c
         WHERE 1 = 1
             AND r.id = s.researcher_id
@@ -352,7 +352,7 @@ def fat_production_tecnical_year_novo_csv_db():
 
         SELECT DISTINCT
             title, b.year AS year, 'MARCA' AS TYPE, b.researcher_id, c.id,
-            r.institution_id, unaccent(LOWER(title)) AS sanitized_title
+            r.institution_id, unaccent(LOWER(title)) AS sanitized_title, b.id
         FROM brand b, researcher r, researcher_production rp, city c
         WHERE 1 = 1
             AND r.id = b.researcher_id
@@ -363,7 +363,8 @@ def fat_production_tecnical_year_novo_csv_db():
 
         SELECT DISTINCT
             title, b.year AS year, 'RELATÓRIO TÉCNICO' AS TYPE, b.researcher_id,
-            c.id, r.institution_id, unaccent(LOWER(title)) AS sanitized_title
+            c.id, r.institution_id, unaccent(LOWER(title)) AS sanitized_title,
+            b.id
         FROM research_report b, researcher r, researcher_production rp, city c
         WHERE 1 = 1
             AND r.id = b.researcher_id
@@ -473,7 +474,7 @@ def fat_simcc_bibliographic_production():
             title, b.type as tipo, b.researcher_id, year, i.id AS institution_id,
             bar.qualis, bar.periodical_magazine_name, bar.jcr, bar.jcr_link,
             c.id AS city_id, b.id AS bibliographic_production_id,
-            unaccent(LOWER(title)) AS sanitized_title
+            unaccent(LOWER(title)) AS sanitized_title, id
         FROM bibliographic_production b
         LEFT JOIN bibliographic_production_article bar
             ON b.id = bar.bibliographic_production_id, researcher r
