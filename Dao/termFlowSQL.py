@@ -951,7 +951,8 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -994,6 +995,7 @@ def list_researchers_originals_words_db(terms, institution, type_, graduate_prog
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 

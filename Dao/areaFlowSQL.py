@@ -136,7 +136,8 @@ def lista_researcher_area_expertise_db(term, institution):
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -176,6 +177,7 @@ def lista_researcher_area_expertise_db(term, institution):
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 
@@ -376,7 +378,8 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -415,6 +418,7 @@ def lista_researcher_area_speciality_db(term, institution, graduate_program_id):
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 
@@ -462,7 +466,8 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -506,6 +511,7 @@ def lista_researcher_participation_event_db(term, institution, graduate_program_
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 
@@ -553,7 +559,8 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -595,6 +602,7 @@ def lista_researcher_patent_db(term, institution, graduate_program_id):
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 
@@ -642,7 +650,8 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -677,6 +686,7 @@ def lista_researcher_event_db(term, institution, graduate_program_id):
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
 
@@ -748,7 +758,8 @@ def lista_researcher_full_name_db(
             r.orcid AS orcid,
             i.image AS image_university,
             r.graduation AS graduation,
-            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update
+            to_char(r.last_update,'dd/mm/yyyy') AS lattes_update,
+            r.status
         FROM
             researcher r
             LEFT JOIN city c ON c.id = r.city_id
@@ -785,6 +796,7 @@ def lista_researcher_full_name_db(
             "image_university",
             "graduation",
             "lattes_update",
+            "status",
         ],
     )
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")
@@ -835,7 +847,8 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             rp.software,
             rp.brand,
             r.last_update,
-            r.graduation
+            r.graduation,
+            r.status
         FROM
             researcher r
             LEFT JOIN graduate_program_researcher gpr ON r.id = gpr.researcher_id
@@ -897,6 +910,7 @@ def lista_researcher_book_db(text, institution, graduate_program_id, book_type):
             "brand",
             "lattes_update",
             "graduation",
+            "status",
         ],
     )
     data_frame = data_frame.merge(researcher_graduate_program_db(), on="id", how="left")

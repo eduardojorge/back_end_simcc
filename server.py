@@ -250,6 +250,7 @@ def recently_updated():
             "lattes_id": str(infos.lattes_id),
             "jif": str(infos.jcr),
             "jcr_link": str(infos.jcr_link),
+            "status": str(infos.status),
         }
         list_bibliographic_production_article.append(bibliographic_production_article_)
 
@@ -298,6 +299,7 @@ def bibliographic_production_article():
                 "pdf": infos.pdf,
                 "landing_page_url": infos.landing_page_url,
                 "keywords": infos.keywords,
+                "status": infos.status,
             }
 
         if distinct == "1":
@@ -319,6 +321,7 @@ def bibliographic_production_article():
                 "pdf": infos.pdf,
                 "landing_page_url": infos.landing_page_url,
                 "keywords": infos.keywords,
+                "status": infos.status,
             }
 
         list_bibliographic_production_article.append(bibliographic_production_article_)

@@ -408,7 +408,8 @@ def recently_updated_db(year, institution, departament):
             r.lattes_id AS lattes_id,
             a.jcr,
             a.jcr_link,
-            b.created_at
+            b.created_at,
+            r.status
         FROM
             public.bibliographic_production b
             LEFT JOIN bibliographic_production_article a ON a.bibliographic_production_id = b.id
@@ -452,6 +453,7 @@ def recently_updated_db(year, institution, departament):
             "jcr",
             "jcr_link",
             "created_at",
+            "status",
         ],
     )
 
@@ -536,7 +538,8 @@ def lists_bibliographic_production_article_db(
                 op.citations_count,
                 op.pdf,
                 op.landing_page_url,
-                op.keywords
+                op.keywords,
+                r.status
             FROM
                 public.bibliographic_production b
                 INNER JOIN researcher r ON r.id = b.researcher_id
@@ -579,6 +582,7 @@ def lists_bibliographic_production_article_db(
                 "pdf",
                 "landing_page_url",
                 "keywords",
+                "status",
             ],
         )
 
@@ -604,7 +608,8 @@ def lists_bibliographic_production_article_db(
                 op.citations_count,
                 op.pdf,
                 op.landing_page_url,
-                op.keywords
+                op.keywords,
+                r.status
             FROM
                 public.bibliographic_production b
                 LEFT JOIN researcher r ON r.id = b.researcher_id
@@ -648,6 +653,7 @@ def lists_bibliographic_production_article_db(
                 "pdf",
                 "landing_page_url",
                 "keywords",
+                "status",
             ],
         )
     return data_frame.fillna("")
