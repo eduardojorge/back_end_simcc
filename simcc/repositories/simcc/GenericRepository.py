@@ -17,9 +17,14 @@ def lattes_list(names: list = None, lattes: list = None) -> dict:
         filter_names = 'AND name = ANY(%(names)s)'
 
     SCRIPT_SQL = f"""
-        SELECT id AS researcher_id, lattes_id, name AS researcher, lattes_10_id,
-            graduation
-        FROM researcher
+        SELECT r.id AS researcher_id, r.lattes_id, r.name AS researcher,
+            r.lattes_10_id, r.graduation, rp.city, i.name as university,
+            rp.great_area AS area
+        FROM researcher r
+        LEFT JOIN researcher_production rp
+            ON r.id = rp.researcher_id
+        LEFT JOIN institution i
+            ON r.institution_id = i.id
         WHERE 1 = 1
             {filter_names}
             {filter_lattes}

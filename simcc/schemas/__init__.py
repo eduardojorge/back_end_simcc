@@ -63,6 +63,10 @@ class ResearcherBarema(BaseModel):
     graduation: str
     researcher: str
 
+    university: str
+    city: str
+    area: str
+
 
 class ArticleOptions(str, Enum):
     ARTICLE = 'ARTICLE'
