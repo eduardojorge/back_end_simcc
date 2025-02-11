@@ -22,12 +22,12 @@ def barema_production(
 ) -> list[ResearcherBarema]:
     lattes_list = []
     if lattes_id:
-        lattes_list = lattes_id.split(',')
+        lattes_list = lattes_id.split(';')
         researchers = GenericRepository.lattes_list(lattes=lattes_list)
     elif name.upper() == 'TODOS':
         researchers = GenericRepository.lattes_list()
     else:
-        names = name.split(',')
+        names = name.split(';')
         researchers = GenericRepository.lattes_list(names=names)
 
     researchers = pd.DataFrame(researchers)
