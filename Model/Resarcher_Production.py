@@ -1,6 +1,5 @@
 class Resarcher_Production(object):
     id = ""
-
     year = ""
 
     patent = ""
@@ -18,21 +17,15 @@ class Resarcher_Production(object):
     article_C = ""
     article_SQ = ""
     book_chapter = ""
-    work_in_event = ""
     researcher = ""
-
     guidance_ic_a = ""
     guidance_ic_c = ""
-
     guidance_m_a = ""
     guidance_m_c = ""
-
     guidance_d_a = ""
     guidance_d_c = ""
-
     guidance_g_a = ""
     guidance_g_c = ""
-
     guidance_e_a = ""
     guidance_e_c = ""
 
@@ -40,6 +33,7 @@ class Resarcher_Production(object):
     graduation = ""
     event_organization = ""
     participation_event = ""
+    work_in_event = ""
 
     def __init__(self):
         self.id = ""

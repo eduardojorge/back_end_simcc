@@ -19,8 +19,8 @@ YEAR = 1990
 @researcherTermRest.route("/resarcher_barema", methods=["GET"])
 def resarcher_barema():
     list_name = request.args.get("name")
-
     list_lattes_id = request.args.get("lattes_id")
+
     year = Year_Barema()
 
     year.article = request.args.get("yarticle")
