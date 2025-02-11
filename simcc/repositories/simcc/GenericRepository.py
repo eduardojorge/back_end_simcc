@@ -9,12 +9,12 @@ def lattes_list(names: list = None, lattes: list = None) -> dict:
     filter_lattes = str()
     if lattes:
         params['lattes'] = lattes
-        filter_lattes = 'AND lattes_id = ANY(%(lattes)s)'
+        filter_lattes = 'AND r.lattes_id = ANY(%(lattes)s)'
 
     filter_names = str()
     if names:
         params['names'] = names
-        filter_names = 'AND name = ANY(%(names)s)'
+        filter_names = 'AND r.name = ANY(%(names)s)'
 
     SCRIPT_SQL = f"""
         SELECT r.id AS researcher_id, r.lattes_id, r.name AS researcher,
