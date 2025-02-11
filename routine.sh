@@ -28,3 +28,5 @@ rm -rf $JADE_EXTRATOR_FOLTER/audit/*
 .venv/bin/python routines/program_indprod.py
 
 .venv/bin/python routines/powerBI.py
+
+.venv/bin/python routines/terms.py
