@@ -1,32 +1,44 @@
 #!/usr/bin/env bash
 
-SIMCC_HOME=$(dirname "$(readlink -f "$0")")
+check_error() {
+  if [ $? -ne 0 ]; then
+    echo "Erro: Falha ao executar $1 em $DATE_FORMAT"
+    exit 1
+  fi
+}
 
-export SHELL=/bin/bash
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-export PYTHONPATH="$SIMCC_HOME:$PYTHONPATH"
+SIMCC_HOME=$(dirname "$(readlink -f "$0")")
 
 cd "$SIMCC_HOME" || exit 1
 source .venv/bin/activate
 source .env
 
-.venv/bin/python routines/soap_lattes.py
+"${SIMCC_HOME}/.venv/bin/python" routines/soap_lattes.py
+check_error "soap_lattes"
 
 rm -rf $JADE_EXTRATOR_FOLTER/audit/*
 "${JADE_EXTRATOR_FOLTER}/hop-run.sh" -r local -j Jade-Extrator-Hop -f "${PROJECT_HOME}/metadata/dataset/workflow/Index.hwf"
 
-.venv/bin/python routines/population.py
+"${SIMCC_HOME}/.venv/bin/python" routines/population.py
+check_error "population"
 
-.venv/bin/python routines/pog.py
+"${SIMCC_HOME}/.venv/bin/python" routines/pog.py
+check_error "pog"
 
-.venv/bin/python routines/production.py
+"${SIMCC_HOME}/.venv/bin/python" routines/production.py
+check_error "production"
 
-.venv/bin/python routines/lattes_bfs.py
+"${SIMCC_HOME}/.venv/bin/python" routines/lattes_bfs.py
+check_error "lattes_bfs"
 
-.venv/bin/python routines/researcher_indprod.py
+"${SIMCC_HOME}/.venv/bin/python" routines/researcher_indprod.py
+check_error "researcher_indprod"
 
-.venv/bin/python routines/program_indprod.py
+"${SIMCC_HOME}/.venv/bin/python" routines/program_indprod.py
+check_error "program_indprod"
 
-.venv/bin/python routines/powerBI.py
+"${SIMCC_HOME}/.venv/bin/python" routines/powerBI.py
+check_error "powerBI"
 
-.venv/bin/python routines/terms.py
+"${SIMCC_HOME}/.venv/bin/python" routines/terms.py
+check_error "terms"

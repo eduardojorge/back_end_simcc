@@ -141,6 +141,7 @@ CREATE TABLE IF NOT EXISTS public.researcher (
     docente boolean NOT NULL DEFAULT false,
     student boolean NOT NULL DEFAULT false,
     extra_field VARCHAR(255),
+    status boolean NOT NULL DEFAULT true,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone,
     deleted_at timestamp without time zone,

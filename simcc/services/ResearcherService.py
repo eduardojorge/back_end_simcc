@@ -108,19 +108,52 @@ def serch_in_name(
     return researchers.to_dict(orient='records')
 
 
+def opa_co_authorship(researcher_id: UUID) -> list:
+    co_authorship = ResearcherRepository.list_openalex_co_authorship(
+        researcher_id
+    )
+    if not co_authorship:
+        return []
+
+    co_authorship = pd.DataFrame(co_authorship)
+
+    co_authorship = co_authorship.groupby('name').agg(
+        among=('name', 'size'),
+        institution=('institution', lambda x: x.tolist()),
+    )
+    co_authorship = co_authorship.reset_index()
+
+    co_authorship['institution_id'] = co_authorship['institution'].apply(
+        ResearcherRepository.get_institutions
+    )
+
+    def get_id(name: str) -> UUID:
+        researcher_id = ResearcherRepository.get_id(name)
+        if researcher_id:
+            return researcher_id.get('id')
+        return None
+
+    co_authorship['id'] = co_authorship['name'].apply(get_id)
+
+    return co_authorship.to_dict(orient='records')
+
+
 def list_co_authorship(researcher_id: UUID) -> list[CoAuthorship]:
     co_authorship = ResearcherRepository.list_co_authorship(researcher_id)
+    co_authorship += opa_co_authorship(researcher_id)
+
     if not co_authorship:
         return []
 
     institution_id = ResearcherRepository.get_institution_id(researcher_id)
+    institution_id = institution_id.get('institution_id', None)
 
     co_authorship = pd.DataFrame(co_authorship)
 
     def co_authorship_type(co_authorship_institution):
         if co_authorship_institution == institution_id:
-            return 'external'
-        return 'internal'
+            return 'internal'
+        return 'external'
 
     co_authorship['type'] = co_authorship['institution_id'].apply(
         co_authorship_type

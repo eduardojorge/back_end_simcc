@@ -353,6 +353,21 @@ def list_co_authorship(researcher_id: UUID):
     return result
 
 
+def list_openalex_co_authorship(researcher_id: UUID):
+    params = {'researcher_id': researcher_id}
+
+    SCRIPT_SQL = """
+        SELECT unnest(string_to_array(opa.authors, ';')) AS name,
+            unnest(string_to_array(opa.authors_institution, ';')) AS institution
+        FROM openalex_article opa
+        INNER JOIN bibliographic_production bp
+            ON opa.article_id = bp.id
+        WHERE bp.researcher_id = %(researcher_id)s;
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
 def get_institution_id(researcher_id: UUID):
     one = True
     params = {'researcher_id': researcher_id}
@@ -360,6 +375,33 @@ def get_institution_id(researcher_id: UUID):
         SELECT institution_id
         FROM researcher
         WHERE id = %(researcher_id)s
+        """
+    result = conn.select(SCRIPT_SQL, params, one)
+    return result
+
+
+def get_id(name: str = None):
+    one = True
+    params = {'name': unidecode(name).lower()}
+
+    SCRIPT_SQL = """
+        SELECT id
+        FROM researcher
+        WHERE UNACCENT(name) ILIKE %(name)s;
+        """
+
+    result = conn.select(SCRIPT_SQL, params, one)
+    return result
+
+
+def get_institutions(institutions: list[str] = None):
+    one = True
+    institutions = [unidecode(i).strip().lower() for i in institutions]
+    params = {'names': institutions}
+    SCRIPT_SQL = """
+        SELECT id
+        FROM institution
+        WHERE UNACCENT(name) = ANY(%(names)s);
         """
     result = conn.select(SCRIPT_SQL, params, one)
     return result
