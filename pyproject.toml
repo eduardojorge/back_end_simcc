@@ -11,7 +11,7 @@ fastapi = {extras = ["standard"], version = "^0.115.6"}
 respx = "^0.22.0"
 httpx = "^0.28.1"
 pydantic-settings = "^2.7.1"
-psycopg = {extras = ["pool"], version = "^3.2.3"}
+psycopg = {extras = ["binary"], version = "^3.2.4"}
 pandas = "^2.2.3"
 unidecode = "^1.3.8"
 zeep = "^4.3.1"
@@ -24,6 +24,7 @@ beautifulsoup4 = "^4.12.3"
 requests = "^2.32.3"
 selenium = "^4.28.0"
 firebase-admin = "^6.6.0"
+psycopg-pool = "^3.2.4"
 
 
 [tool.poetry.group.dev.dependencies]
