@@ -819,11 +819,16 @@ def dim_bibliographic_production_terms():
 
     SCRIPT_SQL = r"""
         WITH unified_data AS (
-            SELECT id, 'BIBLIOGRAPHIC_PRODUCTION' AS type_, translate(title,'-\.:,;''', ' ') AS title
+            SELECT id, 'BIBLIOGRAPHIC_PRODUCTION' AS type_,
+                translate(title,'-\.:,;''', ' ') AS title
             FROM bibliographic_production
         ),
         word_split AS (
-            SELECT id, type_, unnest(string_to_array(lower(regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
+            SELECT id, type_,
+                unnest(
+                string_to_array(
+                lower(
+                regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
             FROM unified_data
         ),
         word_count AS (
@@ -833,7 +838,8 @@ def dim_bibliographic_production_terms():
             GROUP BY id, type_, word
         ),
         ranked_words AS (
-            SELECT id, type_, word, frequency, RANK() OVER (PARTITION BY id ORDER BY frequency DESC) AS rank
+            SELECT id, type_, word, frequency,
+            RANK() OVER (PARTITION BY id ORDER BY frequency DESC) AS rank
             FROM word_count
         )
         SELECT id, type_, UNNEST(ARRAY_AGG(ranked_words.word)) AS term
@@ -860,7 +866,8 @@ def dim_tecnical_production_terms():
 
     SCRIPT_SQL = r"""
         WITH unified_data AS (
-            SELECT id, 'PATENT' AS type_, translate(title,'-\.:,;''', ' ') AS title
+            SELECT id, 'PATENT' AS type_,
+                translate(title,'-\.:,;''', ' ') AS title
             FROM patent
             UNION ALL
             SELECT id, 'BRAND', translate(title,'-\.:,;''', ' ') AS title
@@ -870,7 +877,11 @@ def dim_tecnical_production_terms():
             FROM software
         ),
         word_split AS (
-            SELECT id, type_, unnest(string_to_array(lower(regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
+            SELECT id, type_,
+                unnest(
+                string_to_array(
+                lower(
+                regexp_replace(title, '[^a-zA-Z0-9\s]', '', 'g')), ' ')) AS word
             FROM unified_data
         ),
         word_count AS (
@@ -880,7 +891,8 @@ def dim_tecnical_production_terms():
             GROUP BY id, type_, word
         ),
         ranked_words AS (
-            SELECT id, type_, word, frequency, RANK() OVER (PARTITION BY id ORDER BY frequency DESC) AS rank
+            SELECT id, type_, word, frequency,
+                RANK() OVER (PARTITION BY id ORDER BY frequency DESC) AS rank
             FROM word_count
         )
         SELECT id, type_, UNNEST(ARRAY_AGG(ranked_words.word)) AS term
