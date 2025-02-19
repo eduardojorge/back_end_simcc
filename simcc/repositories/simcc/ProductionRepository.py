@@ -812,8 +812,8 @@ def list_distinct_book_chapter(
         params |= terms
 
     SCRIPT_SQL = f"""
-        SELECT bp.title, MIN(bp.year) AS year, MAX(bpc.isbn),
-            MAX(bpc.publishing_company),
+        SELECT bp.title, MIN(bp.year) AS year, MAX(bpc.isbn) AS isbn,
+            MAX(bpc.publishing_company) AS publishing_company,
             ARRAY_AGG(bp.researcher_id) AS researcher, ARRAY_AGG(bp.id) AS id,
             ARRAY_AGG(r.lattes_id) AS lattes_id, NULL AS relevance,
             NULL AS has_image
