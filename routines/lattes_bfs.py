@@ -1,6 +1,7 @@
 import httpx
 from bs4 import BeautifulSoup
 
+from routines.logger import logger_researcher_routine, logger_routine
 from simcc.repositories import conn
 
 
@@ -58,6 +59,8 @@ def update_lattes_id_10():
 
         print('Sucesso com o pesquisador número: ', _)
         conn.exec(SCRIPT_SQL, params)
+        logger_researcher_routine(researcher['id'], 'LATTES_10', False)
 
 
 update_lattes_id_10()
+logger_routine('LATTES_10', False)

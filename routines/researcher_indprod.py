@@ -1,6 +1,7 @@
 import pandas as pd
 from unidecode import unidecode
 
+from routines.logger import logger_researcher_routine, logger_routine
 from simcc.repositories import conn
 
 barema = {
@@ -244,7 +245,13 @@ def main():
             """
         print(f'Inserting row for researcher: {_}')
         conn.exec(SCRIPT_SQL, params)
+        logger_researcher_routine(
+            researcher.researcher_id,
+            'IND_PROD',
+            False,
+        )
 
 
 if __name__ == '__main__':
     main()
+    logger_routine('IND_PROD', False)

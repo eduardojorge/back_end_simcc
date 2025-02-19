@@ -6,9 +6,11 @@ CREATE EXTENSION vector;
 
 CREATE TYPE relationship AS ENUM ('COLABORADOR', 'PERMANENTE');
 CREATE TYPE classification_class AS ENUM ('A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'E+', 'E');
+CREATE TYPE routine_type AS ENUM ('SOAP_LATTES', 'HOP', 'POPULATION', 'PRODUCTION', 'LATTES_10', 'IND_PROD', 'POG', 'OPEN_ALEX');
 
 CREATE SCHEMA IF NOT EXISTS embeddings;
 CREATE SCHEMA IF NOT EXISTS ufmg;
+CREATE SCHEMA IF NOT EXISTS logs;
 
 CREATE TABLE IF NOT EXISTS public.country (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -696,6 +698,19 @@ CREATE TABLE IF NOT EXISTS public.relevant_production (
         FOREIGN KEY (researcher_id)
         REFERENCES public.researcher(id)
         ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS logs.routine (
+    routine_type routine_type NOT NULL,
+    error BOOLEAN DEFAULT FALSE,
+    detail TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+CREATE TABLE IF NOT EXISTS logs.researcher_routine (
+    researcher_id uuid NOT NULL,
+    routine_type routine_type NOT NULL,
+    error BOOLEAN DEFAULT FALSE,
+    detail TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 CREATE TABLE IF NOT EXISTS ufmg.departament (
     dep_id VARCHAR(255),

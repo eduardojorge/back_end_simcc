@@ -4,6 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
+from routines.logger import logger_researcher_routine, logger_routine
 from simcc.repositories import conn
 
 LOG_PATH = 'logs'
@@ -193,3 +194,5 @@ if __name__ == '__main__':
             """
         print(f'Inserting row for researcher: {_}')
         conn.exec(SCRIPT_SQL, researcher.to_dict())
+        logger_researcher_routine(researcher.researcher_id, 'PRODUCTION', False)
+    logger_routine('PRODUCTION', False)

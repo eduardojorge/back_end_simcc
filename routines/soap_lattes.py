@@ -1,4 +1,3 @@
-import logging
 import os
 import zipfile
 from datetime import datetime
@@ -6,6 +5,7 @@ from datetime import datetime
 import httpx
 from zeep import Client
 
+from routines.logger import logger_researcher_routine, logger_routine
 from simcc.config import settings
 from simcc.repositories import conn, conn_admin
 
@@ -38,7 +38,6 @@ def cnpq_att(lattes_id) -> datetime:
         return datetime.strptime(response, '%d/%m/%Y %H:%M:%S')
     except httpx.Timeout as E:
         print(f'Erro de timeout: {E}')
-        logger.error(f'Erro ao consultar o CNPQ: {E}')
         return datetime.min
 
 
@@ -55,15 +54,12 @@ def database_att(lattes_id) -> datetime:
     return datetime.min
 
 
-def download_xml(lattes_id):
+def download_xml(lattes_id, researcher_id):
     if cnpq_att(lattes_id) <= database_att(lattes_id):
         print('Curriculo atualizado!')
-        logger.info('Curriculo atualizado!')
         return
 
     print('Baixando curriculo...')
-    logger.info('Baixando curriculo...')
-
     try:
         if PROXY:
             PROXY_URL = f'https://simcc.uesc.br/api/getCurriculoCompactado?lattes_id={lattes_id}'
@@ -71,8 +67,7 @@ def download_xml(lattes_id):
         else:
             response = client.service.getCurriculoCompactado(lattes_id)
     except httpx.Timeout as E:
-        print(f'Erro de timeout: {E}')
-        logger.error(f'Erro de timeout: {E}')
+        logger_researcher_routine(researcher_id, 'SOAP_LATTES', True, E)
         return
 
     try:
@@ -84,24 +79,14 @@ def download_xml(lattes_id):
             ZIP.extractall(HOP_PATH)
             ZIP.extractall(os.path.join(HOP_PATH, CURRENT_XML_PATH))
         os.remove(zip_path)
+        logger_researcher_routine(researcher_id, 'SOAP_LATTES', False)
     except zipfile.BadZipFile as E:
         print(f'Erro de arquivo zip: {E}')
-        logger.error(f'Erro de arquivo zip: {E}')
+        logger_researcher_routine(researcher_id, 'SOAP_LATTES', True, E)
         return
 
 
 if __name__ == '__main__':
-    log_format = '%(levelname)s | %(asctime)s - %(message)s'
-
-    logging.basicConfig(
-        filename=os.path.join(LOG_PATH, 'soap.log'),
-        filemode='w',
-        format=log_format,
-        level=logging.DEBUG,
-    )
-
-    logger = logging.getLogger(__name__)
-
     HOP_PATH = 'config/projects/Jade-Extrator-Hop/metadata/dataset/xml/'
     HOP_PATH = os.path.join(settings.JADE_EXTRATOR_FOLTER, HOP_PATH)
     CURRENT_XML_PATH = os.path.join(HOP_PATH, CURRENT_XML_PATH)
@@ -122,13 +107,9 @@ if __name__ == '__main__':
         print(f'Pesquisador: [{researcher.get("name")}]')
         print(f'Lattes: [{researcher.get("lattes_id")}]')
 
-        logger.info(f'Curriculo número: [{_}]')
-        logger.info(f'Pesquisador: [{researcher.get("name")}]')
-        logger.info(f'Lattes: [{researcher.get("lattes_id")}]')
-
         lattes_id = researcher.get('lattes_id')
         lattes_id = lattes_id.zfill(16)
-        download_xml(lattes_id)
-
+        researcher_id = researcher['researcher_id']
+        download_xml(lattes_id, researcher_id)
+    logger_routine('SOAP_LATTES', False)
     print('FIM!')
-    logger.info('FIM!')

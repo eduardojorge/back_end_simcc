@@ -1,8 +1,8 @@
-import logging
 import os
 
 import nltk
 
+from routines.logger import logger_routine
 from simcc.repositories import conn
 
 LOG_PATH = 'logs'
@@ -226,17 +226,6 @@ def list_researchers():
 
 
 if __name__ == '__main__':
-    log_format = '%(levelname)s | %(asctime)s - %(message)s'
-
-    logging.basicConfig(
-        filename=os.path.join(LOG_PATH, 'population.log'),
-        filemode='w',
-        format=log_format,
-        level=logging.DEBUG,
-    )
-
-    logger = logging.getLogger(__name__)
-
     for directory in [LOG_PATH]:
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -248,3 +237,4 @@ if __name__ == '__main__':
     create_researcher_abstract_dictionary()
     create_researcher_patent_dictionary()
     create_researcher_event_dictionary()
+    logger_routine('POPULATION', False)

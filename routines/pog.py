@@ -1,6 +1,7 @@
 import logging
 import os
 
+from routines.logger import logger_routine
 from simcc.repositories import conn
 
 LOG_PATH = 'logs'
@@ -83,3 +84,4 @@ if __name__ == '__main__':
 
     conn.exec(SCRIPT_SQL)
     logger.info('Title updated for publications')
+    logger_routine('POG', False)

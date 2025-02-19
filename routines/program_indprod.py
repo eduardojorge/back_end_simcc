@@ -1,6 +1,7 @@
 import pandas as pd
 from unidecode import unidecode
 
+from routines.logger import logger_routine
 from simcc.repositories import conn
 
 barema = {
@@ -257,3 +258,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    logger_routine('IND_PROD', False)
