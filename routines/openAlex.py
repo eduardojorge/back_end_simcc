@@ -10,9 +10,9 @@ from simcc.repositories import conn
 
 
 def scrapping_article_data():
-    os.makedirs('Files/openAlex_article/', exist_ok=True)
+    os.makedirs("logs/openAlex_article/", exist_ok=True)
 
-    OPENALEX_URL = 'https://api.openalex.org/works/https://doi.org/'
+    OPENALEX_URL = "https://api.openalex.org/works/https://doi.org/"
 
     SCRIPT_SQL = """
         SELECT bp.doi, bp.id
@@ -25,26 +25,26 @@ def scrapping_article_data():
     dataframe = pd.DataFrame(result)
 
     for _, data in dataframe.iterrows():
-        ARTICLE_URL = OPENALEX_URL + data['doi']
+        ARTICLE_URL = OPENALEX_URL + data["doi"]
         ATICLE_FILE = f'Files/openAlex_article/{data["id"]}.json'
         response = requests.get(ARTICLE_URL)
 
         if response.status_code == 200:
-            with open(ATICLE_FILE, 'w', encoding='utf-8') as buffer:
+            with open(ATICLE_FILE, "w", encoding="utf-8") as buffer:
                 json.dump(response.json(), buffer)
-                extract_article(data['id'], response.json())
-            print('[201] - CREATED ARTICLE')
+                extract_article(data["id"], response.json())
+            print("[201] - CREATED ARTICLE")
         else:
-            with open(ATICLE_FILE, 'w', encoding='utf-8') as buffer:
+            with open(ATICLE_FILE, "w", encoding="utf-8") as buffer:
                 response = str(response.status_code)
                 buffer.write(response)
-            print('[404] - NOT FOUND ARTICLE')
+            print("[404] - NOT FOUND ARTICLE")
         time.sleep(6)
 
 
 def scrapping_researcher_data():
-    os.makedirs('Files/openAlex_researcher/', exist_ok=True)
-    OPENALEX_URL = 'https://api.openalex.org/authors/orcid:'
+    os.makedirs("logs/openAlex_researcher/", exist_ok=True)
+    OPENALEX_URL = "https://api.openalex.org/authors/orcid:"
 
     SCRIPT_SQL = """
         SELECT r.orcid, r.id
@@ -57,33 +57,33 @@ def scrapping_researcher_data():
     dataframe = pd.DataFrame(result)
 
     for _, data in dataframe.iterrows():
-        RESEARCHER_URL = OPENALEX_URL + data['orcid']
+        RESEARCHER_URL = OPENALEX_URL + data["orcid"]
         RESEARCHER_FILE = f'Files/openAlex_researcher/{data["id"]}.json'
         response = requests.get(RESEARCHER_URL)
 
         if response.status_code == 200:
-            with open(RESEARCHER_FILE, 'w', encoding='utf-8') as buffer:
+            with open(RESEARCHER_FILE, "w", encoding="utf-8") as buffer:
                 json.dump(response.json(), buffer)
-                extract_researcher(data['id'], response.json())
-            print('[201] - CREATED RESEARCHER')
+                extract_researcher(data["id"], response.json())
+            print("[201] - CREATED RESEARCHER")
         else:
-            with open(RESEARCHER_FILE, 'w', encoding='utf-8') as buffer:
+            with open(RESEARCHER_FILE, "w", encoding="utf-8") as buffer:
                 response = str(response.status_code)
                 buffer.write(response)
-            print('[404] - NOT FOUND RESEARCHER')
+            print("[404] - NOT FOUND RESEARCHER")
         time.sleep(6)
 
 
 def extract_article(id, data):
-    if ISSN := data.get('primary_location', ''):
-        if ISSN := ISSN.get('source', ''):
-            ISSN = ISSN.get('issn')
+    if ISSN := data.get("primary_location", ""):
+        if ISSN := ISSN.get("source", ""):
+            ISSN = ISSN.get("issn")
 
-    if ARTICLE_INSTITUTION := data.get('primary_location', ''):
-        if ARTICLE_INSTITUTION := ARTICLE_INSTITUTION.get('source', ''):
-            ARTICLE_INSTITUTION = ARTICLE_INSTITUTION.get('display_name')
+    if ARTICLE_INSTITUTION := data.get("primary_location", ""):
+        if ARTICLE_INSTITUTION := ARTICLE_INSTITUTION.get("source", ""):
+            ARTICLE_INSTITUTION = ARTICLE_INSTITUTION.get("display_name")
 
-    if ABSTRACT := data.get('abstract_inverted_index', None):
+    if ABSTRACT := data.get("abstract_inverted_index", None):
         length = max(max(index) for index in ABSTRACT.values())
 
         inverted_abstract = list(range(length + 1))
@@ -91,41 +91,39 @@ def extract_article(id, data):
         for word in ABSTRACT.items():
             for index in word[1]:
                 inverted_abstract[index] = word[0]
-        ABSTRACT = ' '.join(inverted_abstract)
+        ABSTRACT = " ".join(inverted_abstract)
 
-    AUTHORSHIPS = data.get('authorships')
+    AUTHORSHIPS = data.get("authorships")
 
     AUTHORS_LIST = []
     AUTHORS_INSTITUTION_LIST = []
 
     for author in AUTHORSHIPS:
-        author = author.get('author', {})
-        author = author.get('display_name', {})
+        author = author.get("author", {})
+        author = author.get("display_name", {})
         AUTHORS_LIST.append(author)
 
     for authors_institution in AUTHORSHIPS:
-        authors_institution = authors_institution.get('institutions')
+        authors_institution = authors_institution.get("institutions")
         xpto = []
         for institution in authors_institution:
-            xpto.append(institution.get('display_name'))
-        AUTHORS_INSTITUTION_LIST.append(', '.join(xpto))
+            xpto.append(institution.get("display_name"))
+        AUTHORS_INSTITUTION_LIST.append(", ".join(xpto))
 
-    AUTHORS_INSTITUTION_LIST = '; '.join(AUTHORS_INSTITUTION_LIST)
-    AUTHORS_LIST = '; '.join(AUTHORS_LIST)
+    AUTHORS_INSTITUTION_LIST = "; ".join(AUTHORS_INSTITUTION_LIST)
+    AUTHORS_LIST = "; ".join(AUTHORS_LIST)
 
-    LANGUAGE = data.get('language')
-    CITATIONS = sum(
-        count.get('cited_by_count') for count in data.get('counts_by_year')
-    )
+    LANGUAGE = data.get("language")
+    CITATIONS = sum(count.get("cited_by_count") for count in data.get("counts_by_year"))
 
-    if DOWNLOAD_LINK := data.get('primary_location', ''):
-        DOWNLOAD_LINK = data.get('pdf_url')
+    if DOWNLOAD_LINK := data.get("primary_location", ""):
+        DOWNLOAD_LINK = data.get("pdf_url")
 
-    if LANDING_PAGE_URL := data.get('primary_location', ''):
-        LANDING_PAGE_URL = data.get('landing_page_url')
+    if LANDING_PAGE_URL := data.get("primary_location", ""):
+        LANDING_PAGE_URL = data.get("landing_page_url")
 
-    KEYWORDS = [word.get('display_name') for word in data.get('keywords')]
-    KEYWORDS = '; '.join(KEYWORDS)
+    KEYWORDS = [word.get("display_name") for word in data.get("keywords")]
+    KEYWORDS = "; ".join(KEYWORDS)
 
     xpto = [id, ARTICLE_INSTITUTION, ISSN, ABSTRACT, AUTHORS_LIST, AUTHORS_INSTITUTION_LIST, LANGUAGE, CITATIONS, DOWNLOAD_LINK, LANDING_PAGE_URL, KEYWORDS]  # fmt: skip  # noqa: E501
 
@@ -138,28 +136,28 @@ def extract_article(id, data):
         """
 
     conn.exec(SCRIPT_SQL, xpto)
-    print(f'Insert concluido! [{id}]')
+    print(f"Insert concluido! [{id}]")
 
 
 def extract_researcher(id, data):
-    if H_INDEX := data.get('summary_stats', None):
-        H_INDEX = H_INDEX.get('h_index')
+    if H_INDEX := data.get("summary_stats", None):
+        H_INDEX = H_INDEX.get("h_index")
 
-    if I10_INDEX := data.get('summary_stats', None):
-        I10_INDEX = I10_INDEX.get('i10_index')
+    if I10_INDEX := data.get("summary_stats", None):
+        I10_INDEX = I10_INDEX.get("i10_index")
 
-    if ORCID := data.get('ids', ''):
-        if ORCID := ORCID.get('orcid', ''):
+    if ORCID := data.get("ids", ""):
+        if ORCID := ORCID.get("orcid", ""):
             ORCID = ORCID[-18:]
 
-    if SCOPUS := data.get('ids', None):
-        SCOPUS = SCOPUS.get('scopus')
+    if SCOPUS := data.get("ids", None):
+        SCOPUS = SCOPUS.get("scopus")
 
-    OPEN_ALEX = data.get('id')
+    OPEN_ALEX = data.get("id")
 
-    WORKS_COUNT = data.get('works_count')
+    WORKS_COUNT = data.get("works_count")
 
-    CITED_BY_COUNT = data.get('cited_by_count')
+    CITED_BY_COUNT = data.get("cited_by_count")
 
     xpto = [id, H_INDEX, 0, WORKS_COUNT, CITED_BY_COUNT, I10_INDEX, SCOPUS, ORCID, OPEN_ALEX]  # fmt: skip
 
@@ -170,11 +168,11 @@ def extract_researcher(id, data):
         """
 
     conn.exec(SCRIPT_SQL, xpto)
-    logger_researcher_routine(id, 'OPEN_ALEX', False)
-    print(f'Insert concluido! [{id}]')
+    logger_researcher_routine(id, "OPEN_ALEX", False)
+    print(f"Insert concluido! [{id}]")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     scrapping_researcher_data()
     scrapping_article_data()
-    logger_routine('OPEN_ALEX', False)
+    logger_routine("OPEN_ALEX", False)

@@ -15,7 +15,7 @@ router = APIRouter()
 
 
 @router.get(
-    '/patent_production_researcher',
+    "/patent_production_researcher",
     response_model=list[PatentProduction],
     status_code=HTTPStatus.OK,
 )
@@ -32,14 +32,12 @@ def list_patent_production(
             term, researcher_id, year, page, lenght
         )
     else:
-        patents = ProductionService.list_patent(
-            term, researcher_id, year, page, lenght
-        )
+        patents = ProductionService.list_patent(term, researcher_id, year, page, lenght)
     return patents
 
 
 @router.get(
-    '/book_production_researcher',
+    "/book_production_researcher",
     response_model=list[BookProduction],
     status_code=HTTPStatus.OK,
 )
@@ -56,14 +54,12 @@ def list_book_production(
             term, researcher_id, year, page, lenght
         )
     else:
-        books = ProductionService.list_book(
-            term, researcher_id, year, page, lenght
-        )
+        books = ProductionService.list_book(term, researcher_id, year, page, lenght)
     return books
 
 
 @router.get(
-    '/brand_production_researcher',
+    "/brand_production_researcher",
     response_model=list[BrandProduction],
     status_code=HTTPStatus.OK,
 )
@@ -74,14 +70,12 @@ def list_brand_production(
     page: int = None,
     lenght: int = None,
 ):
-    brands = ProductionService.list_brand(
-        term, researcher_id, year, page, lenght
-    )
+    brands = ProductionService.list_brand(term, researcher_id, year, page, lenght)
     return brands
 
 
 @router.get(
-    '/book_chapter_production_researcher',
+    "/book_chapter_production_researcher",
     response_model=list[BookChapterProduction],
     status_code=HTTPStatus.OK,
 )
@@ -105,7 +99,7 @@ def list_book_chapter_production(
 
 
 @router.get(
-    '/bibliographic_production_researcher',
+    "/bibliographic_production_researcher",
     response_model=list[ArticleProduction],
     status_code=HTTPStatus.OK,
 )
@@ -113,7 +107,7 @@ def list_bibliographic_production(
     terms: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
-    type: ArticleOptions = 'ARTICLE',
+    type: ArticleOptions = "ARTICLE",
     qualis: QualisOptions | str = str(),
     page: int = None,
     lenght: int = None,
@@ -125,7 +119,7 @@ def list_bibliographic_production(
 
 
 @router.get(
-    '/bibliographic_production_article',
+    "/bibliographic_production_article",
     response_model=list[ArticleProduction],
     status_code=HTTPStatus.OK,
 )
@@ -135,7 +129,7 @@ def list_article_production(
     researcher_id: UUID | str = None,
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
-    type: ArticleOptions = 'ARTICLE',
+    type: ArticleOptions = "ARTICLE",
     qualis: QualisOptions | str = str(),
     distinct: int = 1,
     page: int = None,
