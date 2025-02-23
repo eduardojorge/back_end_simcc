@@ -28,8 +28,8 @@ check_error "pog"
 "${SIMCC_HOME}/.venv/bin/python" routines/production.py
 check_error "production"
 
-"${SIMCC_HOME}/.venv/bin/python" routines/lattes_bfs.py
-check_error "lattes_bfs"
+"${SIMCC_HOME}/.venv/bin/python" routines/researcher_images.py
+check_error "researcher_images"
 
 "${SIMCC_HOME}/.venv/bin/python" routines/researcher_indprod.py
 check_error "researcher_indprod"
