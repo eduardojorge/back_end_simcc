@@ -34,33 +34,40 @@ def get_lattes_id_10(lattes_id: str) -> str:
     return None
 
 
-def update_lattes_id_10():
+def update_lattes_id_10(researcher):
+    lattes_10_id = get_lattes_id_10(researcher['lattes_id'])
+
     SCRIPT_SQL = """
-        SELECT r.id as id, r.lattes_id as lattes
-        FROM researcher r
-        WHERE r.lattes_10_id IS NULL;
+        UPDATE researcher
+        SET lattes_10_id = %(lattes_10_id)s
+        WHERE id = %(id)s;
         """
-    researchers = conn.select(SCRIPT_SQL)
 
-    for _, researcher in enumerate(researchers):
-        lattes_10_id = get_lattes_id_10(researcher['lattes'])
+    params = {
+        'id': researcher['researcher_id'],
+        'lattes_10_id': lattes_10_id,
+    }
 
-        SCRIPT_SQL = """
-            UPDATE researcher
-            SET lattes_10_id = %(lattes_10_id)s
-            WHERE id = %(id)s;
-            """
+    conn.exec(SCRIPT_SQL, params)
 
-        params = {
-            'id': researcher['id'],
-            'lattes': researcher['lattes'],
-            'lattes_10_id': lattes_10_id,
-        }
 
-        print('Sucesso com o pesquisador número: ', _)
-        conn.exec(SCRIPT_SQL, params)
+def list_researchers():
+    SCRIPT_SQL = """
+        SELECT r.id as researcher_id, r.lattes_id as lattes_id
+        FROM researcher r
+        LEFT JOIN logs.researcher_routine lrr
+            ON r.id = lrr.researcher_id
+            AND lrr.routine_type = 'LATTES_10'
+        WHERE r.lattes_10_id IS NULL
+            OR lrr.created_at < NOW() - INTERVAL '30 days';
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result
+
+
+if __name__ == '__main__':
+    researchers = list_researchers()
+    for researcher in researchers:
+        update_lattes_id_10(researcher)
         logger_researcher_routine(researcher['id'], 'LATTES_10', False)
-
-
-update_lattes_id_10()
-logger_routine('LATTES_10', False)
+    logger_routine('LATTES_10', False)
