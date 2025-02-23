@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from simcc.repositories import conn
 from simcc.schemas import YearBarema
 
@@ -34,3 +36,38 @@ def lattes_list(names: list = None, lattes: list = None) -> dict:
 
 
 def production(lattes_list: list, year: YearBarema): ...
+
+
+def get_researcher_foment(institution_id: UUID):
+    params = {}
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
+
+    SCRIPT_SQL = f"""
+        SELECT s.researcher_id, r.name, s.modality_code, s.modality_name,
+            s.call_title, s.category_level_code, s.funding_program_name,
+            s.institute_name, s.aid_quantity, s.scholarship_quantity
+        FROM foment s
+            LEFT JOIN researcher r
+                ON s.researcher_id = r.id
+        WHERE 1 = 1
+            AND s.researcher_id IS NOT NULL
+            AND researcher_id NOT IN
+                (SELECT id FROM researcher WHERE docente = false)
+            {filter_institution}
+        """
+    result = conn.select(SCRIPT_SQL, params)
+    return result
+
+
+def get_logs():
+    SCRIPT_SQL = """
+        SELECT DISTINCT ON (routine_type) routine_type, error, detail,
+            created_at
+        FROM logs.routine
+        ORDER BY routine_type, created_at DESC;
+        """
+    result = conn.select(SCRIPT_SQL)
+    return result

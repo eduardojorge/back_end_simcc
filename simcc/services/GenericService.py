@@ -1,3 +1,5 @@
+from uuid import UUID
+
 import pandas as pd
 from numpy import nan
 
@@ -88,3 +90,11 @@ def barema_production(
 
     researchers = researchers.replace(nan, 0)
     return researchers.to_dict(orient='records')
+
+
+def get_researcher_foment(institution_id: UUID = None):
+    return GenericRepository.get_researcher_foment(institution_id)
+
+
+def get_logs():
+    return GenericRepository.get_logs()

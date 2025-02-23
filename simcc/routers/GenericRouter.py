@@ -3,6 +3,7 @@ from datetime import datetime
 from http import HTTPStatus
 from pathlib import Path
 from typing import Optional
+from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
@@ -15,6 +16,20 @@ STORAGE_PATH = Path('storage/dictionary')
 STORAGE_PATH.mkdir(parents=True, exist_ok=True)
 
 router = APIRouter()
+
+
+@router.get('/logs_researcher')
+def get_researcher_logs(): ...
+
+
+@router.get('/logs')
+def get_logs():
+    return GenericService.get_logs()
+
+
+@router.get('/foment')
+def get_researcher_foment(institution_id: UUID = None):
+    return GenericService.get_researcher_foment(institution_id)
 
 
 @router.get('/dictionary.pdf')

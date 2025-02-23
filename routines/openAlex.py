@@ -15,7 +15,7 @@ def scrapping_article_data():
         SELECT bp.doi, bp.id
         FROM public.bibliographic_production bp
         LEFT OUTER JOIN openalex_article opa ON bp.id = opa.article_id
-        WHERE doi IS NOT NULL AND opa.article_id IS NULL LIMIT 10;
+        WHERE doi IS NOT NULL AND opa.article_id IS NULL;
         """
 
     result = conn.select(SCRIPT_SQL)
@@ -23,6 +23,7 @@ def scrapping_article_data():
 
     for _, data in dataframe.iterrows():
         ARTICLE_URL = OPENALEX_URL + data['doi']
+        print(ARTICLE_URL)
         ATICLE_FILE = f'storage/openAlex/article/{data["id"]}.json'
         response = requests.get(ARTICLE_URL)
 
@@ -49,7 +50,7 @@ def scrapping_researcher_data():
         SELECT r.orcid, r.id
         FROM researcher r
         LEFT JOIN openalex_researcher opr ON r.id = opr.researcher_id
-        WHERE r.orcid IS NOT NULL AND opr.researcher_id IS NULL LIMIT 10;
+        WHERE r.orcid IS NOT NULL AND opr.researcher_id IS NULL;
         """
 
     result = conn.select(SCRIPT_SQL)
