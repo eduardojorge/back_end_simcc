@@ -137,10 +137,15 @@ def list_software_metrics(researcher_id: UUID, program_id: UUID, year: int):
 
 
 def list_distinct_patent(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ) -> list[PatentProduction]:
     patents = ProductionRepository.list_distinct_patent(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
     if not patents:
         return []
@@ -148,10 +153,15 @@ def list_distinct_patent(
 
 
 def list_patent(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ) -> list[PatentProduction]:
     patents = ProductionRepository.list_patent(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
     if not patents:
         return []
@@ -159,10 +169,15 @@ def list_patent(
 
 
 def list_brand(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ) -> list[BrandProduction]:
     brands = ProductionRepository.list_brand(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
     if not brands:
         return []
@@ -170,19 +185,31 @@ def list_brand(
 
 
 def list_distinct_book(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ) -> list[BookProduction]:
     books = ProductionRepository.list_distinct_book(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
     if not books:
         return []
     return books
 
 
-def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+def list_book(
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
+):
     patents = ProductionRepository.list_book(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
     if not patents:
         return []
@@ -195,11 +222,12 @@ def list_bibliographic_production(
     year: int | str = 2020,
     type: ArticleOptions = 'ARTICLE',
     qualis: QualisOptions | str = str(),
+    institution_id: UUID | str = None,
     page: int = None,
     lenght: int = None,
 ) -> list[ArticleProduction]:
     production = ProductionRepository.list_bibliographic_production(
-        terms, researcher_id, year, type, qualis, page, lenght
+        terms, researcher_id, year, type, qualis, institution_id, page, lenght
     )
 
     if not production:
@@ -282,11 +310,12 @@ def list_book_chapter(
     term: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
+    institution_id: UUID = None,
     page: int = None,
     lenght: int = None,
 ):
     return ProductionRepository.list_book_chapter(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )
 
 
@@ -294,9 +323,10 @@ def list_distinct_book_chapter(
     term: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
+    institution_id: UUID = None,
     page: int = None,
     lenght: int = None,
 ):
     return ProductionRepository.list_distinct_book_chapter(
-        term, researcher_id, year, page, lenght
+        term, researcher_id, year, institution_id, page, lenght
     )

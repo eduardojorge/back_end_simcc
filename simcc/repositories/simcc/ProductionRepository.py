@@ -16,13 +16,13 @@ def list_article_metrics(
     params = {}
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND bp.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND bp.researcher_id = %(researcher_id)s'
 
     program_join = str()
     program_filter = str()
     if program_id:
-        params["program_id"] = program_id
+        params['program_id'] = program_id
         program_join = """
             LEFT JOIN graduate_program_researcher gpr ON gpr.researcher_id = r.id
             """
@@ -33,8 +33,8 @@ def list_article_metrics(
 
     year_filter = str()
     if year:
-        params["year"] = year
-        year_filter = "AND bp.year::int >= %(year)s"
+        params['year'] = year
+        year_filter = 'AND bp.year::int >= %(year)s'
 
     SCRIPT_SQL = f"""
         SELECT bp.year, SUM(opa.citations_count) AS citations,
@@ -63,23 +63,23 @@ def list_patent_metrics(researcher_id: UUID, program_id: UUID, year: int):
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND p.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND p.researcher_id = %(researcher_id)s'
 
     filter_program = str()
     join_program = str()
     if program_id:
-        params["program_id"] = program_id
+        params['program_id'] = program_id
         join_program = """
             INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = p.researcher_id
             """
-        filter_program = "AND gpr.graduate_program_id = %(program_id)s"
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND p.development_year::INT >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND p.development_year::INT >= %(year)s'
 
     SCRIPT_SQL = f"""
         SELECT development_year AS year,
@@ -103,23 +103,23 @@ def list_guidance_metrics(researcher_id: UUID, program_id: UUID, year: int):
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND g.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND g.researcher_id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND g.year >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND g.year >= %(year)s'
 
     filter_program = str()
     join_program = str()
     if program_id:
-        params["program_id"] = program_id
+        params['program_id'] = program_id
         join_program = """
             INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = g.researcher_id
             """
-        filter_program = "AND gpr.graduate_program_id = %(program_id)s"
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     SCRIPT_SQL = f"""
         SELECT g.year AS year,
@@ -137,24 +137,26 @@ def list_guidance_metrics(researcher_id: UUID, program_id: UUID, year: int):
     return result
 
 
-def list_academic_degree_metrics(researcher_id: UUID, program_id: UUID, year: int):
+def list_academic_degree_metrics(
+    researcher_id: UUID, program_id: UUID, year: int
+):
     params = {}
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND e.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND e.researcher_id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
+        params['year'] = year
         filter_year = """
             AND (e.education_start >= %(year)s OR e.education_end >= %(year)s)
             """
 
     filter_program = str()
     if program_id:
-        params["program_id"] = program_id
+        params['program_id'] = program_id
 
         filter_program = """
              AND e.researcher_id IN
@@ -193,23 +195,23 @@ def list_software_metrics(researcher_id: UUID, program_id: UUID, year: int):
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND s.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND s.researcher_id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
+        params['year'] = year
         filter_year = """AND s.year >= %(year)s"""
 
     filter_program = str()
     join_program = str()
     if program_id:
-        params["program_id"] = program_id
+        params['program_id'] = program_id
         join_program = """
             INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = s.researcher_id
             """
-        filter_program = "AND gpr.graduate_program_id = %(program_id)s"
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     SCRIPT_SQL = f"""
         SELECT s.year, COUNT(*) among
@@ -226,27 +228,37 @@ def list_software_metrics(researcher_id: UUID, program_id: UUID, year: int):
 
 
 def list_distinct_patent(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ):
     params = {}
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND p.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND p.researcher_id = %(researcher_id)s'
 
     filter_terms = str()
     if term:
-        filter_terms, term = webseatch_filter("p.title", term)
+        filter_terms, term = webseatch_filter('p.title', term)
         params |= term
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND p.development_year::INT >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND p.development_year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
+
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
 
     SCRIPT_SQL = f"""
         SELECT p.title AS title, MAX(p.development_year) as year,
@@ -260,6 +272,7 @@ def list_distinct_patent(
             {filter_id}
             {filter_year}
             {filter_terms}
+            {filter_institution}
         GROUP BY p.title
         ORDER BY year desc
         {filter_pagination};
@@ -268,26 +281,38 @@ def list_distinct_patent(
     return result
 
 
-def list_patent(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+def list_patent(
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
+):
     params = {}
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND p.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND p.researcher_id = %(researcher_id)s'
 
     filter_terms = str()
     if term:
-        filter_terms, term = webseatch_filter("p.title", term)
+        filter_terms, term = webseatch_filter('p.title', term)
         params |= term
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND p.development_year::INT >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND p.development_year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
+
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
 
     SCRIPT_SQL = f"""
         SELECT p.title AS title, p.development_year as year,
@@ -300,6 +325,7 @@ def list_patent(term: str, researcher_id: UUID, year: int, page: int, lenght: in
             {filter_id}
             {filter_year}
             {filter_terms}
+            {filter_institution}
         ORDER BY year desc
         {filter_pagination};
         """
@@ -308,22 +334,34 @@ def list_patent(term: str, researcher_id: UUID, year: int, page: int, lenght: in
     return result
 
 
-def list_brand(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+def list_brand(
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
+):
     params = {}
+
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND b.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND b.researcher_id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND b.year >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND b.year >= %(year)s'
 
     filter_terms = str()
     if term:
-        filter_terms, term = webseatch_filter("b.title", term)
+        filter_terms, term = webseatch_filter('b.title', term)
         params |= term
 
     filter_pagination = str()
@@ -340,6 +378,7 @@ def list_brand(term: str, researcher_id: UUID, year: int, page: int, lenght: int
             {filter_id}
             {filter_year}
             {filter_terms}
+            {filter_institution}
         ORDER BY year desc
         {filter_pagination};
         """
@@ -349,28 +388,38 @@ def list_brand(term: str, researcher_id: UUID, year: int, page: int, lenght: int
 
 
 def list_distinct_book(
-    term: str, researcher_id: UUID, year: int, page: int, lenght: int
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
 ):
     params = {}
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND bp.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND bp.researcher_id = %(researcher_id)s'
 
     filter_terms = str()
     if term:
-        filter_terms, term = webseatch_filter("bp.title", term)
+        filter_terms, term = webseatch_filter('bp.title', term)
         params |= term
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year::INT >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
+
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
 
     SCRIPT_SQL = f"""
         SELECT bp.title, year, bpb.isbn AS isbn,
@@ -387,6 +436,7 @@ def list_distinct_book(
             {filter_id}
             {filter_terms}
             {filter_year}
+            {filter_institution}
         GROUP BY bp.title, bpb.isbn, year
         ORDER BY year desc
         {filter_pagination};
@@ -395,23 +445,35 @@ def list_distinct_book(
     return result
 
 
-def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int):
+def list_book(
+    term: str,
+    researcher_id: UUID,
+    year: int,
+    institution_id: UUID,
+    page: int,
+    lenght: int,
+):
     params = {}
+
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND bp.researcher_id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND bp.researcher_id = %(researcher_id)s'
 
     filter_terms = str()
     if term:
-        filter_terms, term = webseatch_filter("bp.title", term)
+        filter_terms, term = webseatch_filter('bp.title', term)
         params |= term
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year::INT >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year::INT >= %(year)s'
 
     filter_pagination = str()
     if page and lenght:
@@ -431,6 +493,7 @@ def list_book(term: str, researcher_id: UUID, year: int, page: int, lenght: int)
         WHERE 1 = 1
             {filter_id}
             {filter_terms}
+            {filter_institution}
             {filter_year}
         ORDER BY year desc
         {filter_pagination};
@@ -443,36 +506,42 @@ def list_bibliographic_production(
     terms: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
-    type: ArticleOptions = "ARTICLE",
+    type: ArticleOptions = 'ARTICLE',
     qualis: QualisOptions = None,
+    institution_id: UUID = None,
     page: int = None,
     lenght: int = None,
 ):
     params = {}
 
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.institution_id = %(institution_id)s'
+
     filter_type = str()
-    if type == "ARTICLE":
+    if type == 'ARTICLE':
         filter_type = "AND type = 'ARTICLE'"
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND r.id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year_ >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
 
     filter_terms = str()
     if terms:
-        filter_terms, terms = webseatch_filter("b.title", terms)
+        filter_terms, terms = webseatch_filter('b.title', terms)
         params |= terms
 
     filter_qualis = str()
     if qualis:
-        params["qualis"] = qualis.split(";")
-        filter_qualis = "AND bpa.qualis = ANY(%(qualis)s)"
+        params['qualis'] = qualis.split(';')
+        filter_qualis = 'AND bpa.qualis = ANY(%(qualis)s)'
 
     filter_pagination = str()
     if page and lenght:
@@ -503,6 +572,7 @@ def list_bibliographic_production(
             {filter_terms}
             {filter_type}
             {filter_qualis}
+            {filter_institution}
             {filter_pagination}
         ORDER BY
             year DESC
@@ -518,7 +588,7 @@ def list_article_production(  # noqa: PLR0914
     researcher_id: UUID | str = None,
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
-    type: ArticleOptions = "ARTICLE",
+    type: ArticleOptions = 'ARTICLE',
     qualis: QualisOptions = None,
     page: int = None,
     lenght: int = None,
@@ -533,42 +603,42 @@ def list_article_production(  # noqa: PLR0914
             LEFT JOIN institution i
                 ON r.institution_id = i.id
             """
-        filter_university = "AND i.name = %(university)s"
-        params["university"] = university
+        filter_university = 'AND i.name = %(university)s'
+        params['university'] = university
 
     filter_program = str()
     join_program = str()
     if graduate_program_id:
-        params["program_id"] = graduate_program_id
+        params['program_id'] = graduate_program_id
         join_program = """
             INNER JOIN graduate_program_researcher gpr
                 ON r.id = gpr.researcher_id
             """
-        filter_program = "AND gpr.graduate_program_id = %(program_id)s"
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     filter_type = str()
-    if type == "ARTICLE":
+    if type == 'ARTICLE':
         filter_type = "AND type = 'ARTICLE'"
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND r.id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year_ >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
 
     filter_terms = str()
     if terms:
-        filter_terms, terms = webseatch_filter("b.title", terms)
+        filter_terms, terms = webseatch_filter('b.title', terms)
         params |= terms
 
     filter_qualis = str()
     if qualis:
-        params["qualis"] = qualis.split(";")
-        filter_qualis = "AND bpa.qualis = ANY(%(qualis)s)"
+        params['qualis'] = qualis.split(';')
+        filter_qualis = 'AND bpa.qualis = ANY(%(qualis)s)'
 
     filter_pagination = str()
     if page and lenght:
@@ -577,12 +647,12 @@ def list_article_production(  # noqa: PLR0914
     filter_dep = str()
     join_dep = str()
     if dep_id:
-        params["dep_id"] = dep_id
+        params['dep_id'] = dep_id
         join_dep = """
             INNER JOIN ufmg.departament_researcher dr
                 ON r.id = dr.researcher_id
             """
-        filter_dep = "AND dr.dep_id = %(dep_id)s"
+        filter_dep = 'AND dr.dep_id = %(dep_id)s'
 
     SCRIPT_SQL = f"""
         SELECT
@@ -626,7 +696,7 @@ def list_distinct_article_production(  # noqa: PLR0914
     researcher_id: UUID | str = None,
     graduate_program_id: UUID | str = None,
     year: int | str = 2020,
-    type: ArticleOptions = "ARTICLE",
+    type: ArticleOptions = 'ARTICLE',
     qualis: QualisOptions = None,
     page: int = None,
     lenght: int = None,
@@ -641,42 +711,42 @@ def list_distinct_article_production(  # noqa: PLR0914
             LEFT JOIN institution i
                 ON r.institution_id = i.id
             """
-        filter_university = "AND i.name = %(university)s"
-        params["university"] = university
+        filter_university = 'AND i.name = %(university)s'
+        params['university'] = university
 
     filter_program = str()
     join_program = str()
     if graduate_program_id:
-        params["program_id"] = graduate_program_id
+        params['program_id'] = graduate_program_id
         join_program = """
             INNER JOIN graduate_program_researcher gpr
                 ON r.id = gpr.researcher_id
             """
-        filter_program = "AND gpr.graduate_program_id = %(program_id)s"
+        filter_program = 'AND gpr.graduate_program_id = %(program_id)s'
 
     filter_type = str()
-    if type == "ARTICLE":
+    if type == 'ARTICLE':
         filter_type = "AND type = 'ARTICLE'"
 
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND r.id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
 
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year_ >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
 
     filter_terms = str()
     if terms:
-        filter_terms, terms = webseatch_filter("b.title", terms)
+        filter_terms, terms = webseatch_filter('b.title', terms)
         params |= terms
 
     filter_qualis = str()
     if qualis:
-        params["qualis"] = qualis.split(";")
-        filter_qualis = "AND bpa.qualis = ANY(%(qualis)s)"
+        params['qualis'] = qualis.split(';')
+        filter_qualis = 'AND bpa.qualis = ANY(%(qualis)s)'
 
     filter_pagination = str()
     if page and lenght:
@@ -685,12 +755,12 @@ def list_distinct_article_production(  # noqa: PLR0914
     filter_dep = str()
     join_dep = str()
     if dep_id:
-        params["dep_id"] = dep_id
+        params['dep_id'] = dep_id
         join_dep = """
             INNER JOIN ufmg.departament_researcher dr
                 ON r.id = dr.researcher_id
             """
-        filter_dep = "AND dr.dep_id = %(dep_id)s"
+        filter_dep = 'AND dr.dep_id = %(dep_id)s'
 
     SCRIPT_SQL = f"""
         SELECT DISTINCT
@@ -735,27 +805,33 @@ def list_book_chapter(
     term: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
+    institution_id: UUID | str = None,
     page: int = None,
     lenght: int = None,
 ):
     params = {}
 
+    filter_institution = str()
+    if institution_id:
+        params['institution_id'] = institution_id
+        filter_institution = 'AND r.id = %(institution_id)s'
+
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND r.id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year_ >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
 
     filter_terms = str()
     if term:
-        filter_terms, terms = webseatch_filter("bp.title", term)
+        filter_terms, terms = webseatch_filter('bp.title', term)
         params |= terms
 
     SCRIPT_SQL = f"""
@@ -771,6 +847,7 @@ def list_book_chapter(
             {filter_id}
             {filter_pagination}
             {filter_year}
+            {filter_institution}
             {filter_terms}
         ORDER BY bp.year DESC;
         """
@@ -783,27 +860,33 @@ def list_distinct_book_chapter(
     term: str = None,
     researcher_id: UUID | str = None,
     year: int | str = 2020,
+    institution: UUID | str = None,
     page: int = None,
     lenght: int = None,
 ):
     params = {}
 
+    filter_institution = str()
+    if institution:
+        params['institution'] = institution
+        filter_institution = 'AND r.institution_id = %(institution)s'
+
     filter_id = str()
     if researcher_id:
-        params["researcher_id"] = researcher_id
-        filter_id = "AND r.id = %(researcher_id)s"
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND r.id = %(researcher_id)s'
 
     filter_pagination = str()
     if page and lenght:
         filter_pagination = pagination(page, lenght)
     filter_year = str()
     if year:
-        params["year"] = year
-        filter_year = "AND year_ >= %(year)s"
+        params['year'] = year
+        filter_year = 'AND year_ >= %(year)s'
 
     filter_terms = str()
     if term:
-        filter_terms, terms = webseatch_filter("bp.title", term)
+        filter_terms, terms = webseatch_filter('bp.title', term)
         params |= terms
 
     SCRIPT_SQL = f"""
@@ -821,6 +904,7 @@ def list_distinct_book_chapter(
             {filter_id}
             {filter_pagination}
             {filter_year}
+            {filter_institution}
             {filter_terms}
         GROUP BY bp.title
         ORDER BY year DESC;
