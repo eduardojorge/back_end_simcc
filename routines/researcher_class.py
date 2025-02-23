@@ -293,7 +293,6 @@ if __name__ == '__main__':
     YEAR_FILTER = 2019
 
     dataframe = pd.DataFrame(list_researchers())
-
     articles = pd.DataFrame(article_metrics(YEAR_FILTER))
     dataframe = dataframe.merge(articles, how='left', on=['researcher_id'])
 
@@ -318,3 +317,11 @@ if __name__ == '__main__':
     dataframe['class'] = dataframe.fillna(0).apply(
         researcher_classification, axis=1
     )
+
+    SCRIPT_SQL = """
+        UPDATE researcher
+        SET classification = %(class)s
+        WHERE id = %(researcher_id)s
+        """
+    for _, researcher in dataframe.iterrows():
+        conn.exec(SCRIPT_SQL, researcher.to_dict())
