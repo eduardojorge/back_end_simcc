@@ -4,7 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from simcc.schemas import ResearcherOptions
-from simcc.schemas.Researcher import CoAuthorship, Researcher
+from simcc.schemas.Researcher import (
+    CoAuthorship,
+    ProfessionalExperience,
+    Researcher,
+)
 from simcc.services import ResearcherService
 
 router = APIRouter()
@@ -46,10 +50,9 @@ def list_researchers(
     page: int = None,
     lenght: int = None,
 ):
-    researchers = ResearcherService.serch_in_name(
+    return ResearcherService.serch_in_name(
         name, graduate_program_id, dep_id, page, lenght
     )
-    return researchers
 
 
 @router.get(
@@ -58,5 +61,20 @@ def list_researchers(
     response_model=list[CoAuthorship],
 )
 def co_authorship(researcher_id: UUID):
-    co_authorship = ResearcherService.list_co_authorship(researcher_id)
-    return co_authorship
+    return ResearcherService.list_co_authorship(researcher_id)
+
+
+@router.get(
+    '/professional_experience',
+    response_model=list[ProfessionalExperience],
+)
+def get_professional_experience(
+    researcher_id: UUID = None,
+    graduate_program_id: UUID | str = None,
+    dep_id: str = None,
+    page: int = None,
+    lenght: int = None,
+):
+    return ResearcherService.professional_experience(
+        researcher_id, graduate_program_id, dep_id, page, lenght
+    )

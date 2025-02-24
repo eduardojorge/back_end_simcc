@@ -68,7 +68,7 @@ def search_in_articles(
     if graduate_program_id and graduate_program_id != '0':
         params['graduate_program_id'] = graduate_program_id
         join_program = """
-            RIGHT JOIN graduate_program_researcher gpr
+            INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = r.id
             """
         filter_program = 'AND gpr.graduate_program_id = %(graduate_program_id)s'
@@ -134,7 +134,7 @@ def search_in_abstracts(
     if graduate_program_id and graduate_program_id != '0':
         params['graduate_program_id'] = graduate_program_id
         join_program = """
-            RIGHT JOIN graduate_program_researcher gpr
+            INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = r.id
             """
         filter_program = 'AND gpr.graduate_program_id = %(graduate_program_id)s'
@@ -205,7 +205,7 @@ def search_in_name(
     if graduate_program_id:
         params['graduate_program_id'] = graduate_program_id
         join_program = """
-            RIGHT JOIN graduate_program_researcher gpr
+            INNER JOIN graduate_program_researcher gpr
                 ON gpr.researcher_id = r.id
             """
         filter_program = 'AND gpr.graduate_program_id = %(graduate_program_id)s'
@@ -404,4 +404,63 @@ def get_institutions(institutions: list[str] = None):
         WHERE UNACCENT(name) = ANY(%(names)s);
         """
     result = conn.select(SCRIPT_SQL, params, one)
+    return result
+
+
+def professional_experience(
+    researcher_id,
+    graduate_program_id: UUID | str = None,
+    dep_id: str = None,
+    page: int = None,
+    lenght: int = None,
+):
+    params = {}
+
+    join_program = str()
+    filter_program = str()
+    if graduate_program_id:
+        params['graduate_program_id'] = graduate_program_id
+        join_program = """
+            INNER JOIN graduate_program_researcher gpr
+                ON gpr.researcher_id = rpe.researcher_id
+            """
+        filter_program = 'AND gpr.graduate_program_id = %(graduate_program_id)s'
+
+    filter_pagination = str()
+    if page and lenght:
+        filter_pagination = pagination(page, lenght)
+
+    filter_id = str()
+    if researcher_id:
+        params['researcher_id'] = researcher_id
+        filter_id = 'AND rpe.researcher_id = %(researcher_id)s'
+
+    filter_dep = str()
+    join_dep = str()
+    if dep_id:
+        params['dep_id'] = dep_id
+        join_dep = """
+            INNER JOIN ufmg.departament_researcher dr
+                ON rpe.id = dr.researcher_id
+            """
+        filter_dep = 'AND dr.dep_id = %(dep_id)s'
+
+    SCRIPT_SQL = f"""
+        SELECT id, rpe.researcher_id, enterprise, start_year, end_year,
+            employment_type, other_employment_type, functional_classification,
+            other_functional_classification, workload_hours_weekly,
+            exclusive_dedication, additional_info
+        FROM public.researcher_professional_experience rpe
+            {join_program}
+            {join_dep}
+        WHERE 1 = 1
+            {filter_id}
+            {filter_dep}
+            {filter_program}
+        ORDER BY start_year
+        {filter_pagination}
+        """
+
+    result = conn.select(SCRIPT_SQL, params)
+    print(SCRIPT_SQL, params)
     return result

@@ -699,6 +699,20 @@ CREATE TABLE IF NOT EXISTS public.relevant_production (
         REFERENCES public.researcher(id)
         ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS public.researcher_professional_experience (
+    id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
+    researcher_id uuid NOT NULL REFERENCES public.researcher(id),
+    enterprise VARCHAR(255),
+    start_year INT, 
+    end_year INT, 
+    employment_type VARCHAR(255),
+    other_employment_type VARCHAR(255),
+    functional_classification VARCHAR(255),
+    other_functional_classification VARCHAR(255),
+    workload_hours_weekly VARCHAR(255),
+    exclusive_dedication BOOLEAN,
+    additional_info TEXT
+);
 CREATE TABLE IF NOT EXISTS logs.routine (
     routine_type routine_type NOT NULL,
     error BOOLEAN DEFAULT FALSE,
