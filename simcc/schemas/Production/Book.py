@@ -13,3 +13,4 @@ class BookProduction(BaseModel):
     lattes_id: str | list[str]
     has_image: bool | None
     relevance: bool | None
+    name: str | list[str]

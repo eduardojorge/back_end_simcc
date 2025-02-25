@@ -370,7 +370,7 @@ def list_brand(
 
     SCRIPT_SQL = f"""
         SELECT DISTINCT b.title as title, b.year as year, b.has_image,
-            b.relevance, r.lattes_id
+            b.relevance, r.lattes_id, r.name
         FROM brand b
             LEFT JOIN researcher r
                 ON b.researcher_id = r.id
@@ -426,7 +426,7 @@ def list_distinct_book(
             MAX(bpb.publishing_company) AS publishing_company,
             ARRAY_AGG(bp.researcher_id) AS researcher,
             ARRAY_AGG(r.lattes_id) AS lattes_id, NULL AS relevance,
-            NULL AS has_image, ARRAY_AGG(bp.id) AS id
+            NULL AS has_image, ARRAY_AGG(bp.id) AS id, ARRAY_AGG(r.name) AS name
         FROM bibliographic_production bp
             INNER JOIN bibliographic_production_book bpb
                 ON bp.id = bpb.bibliographic_production_id
@@ -484,7 +484,7 @@ def list_book(
             bpb.publishing_company AS publishing_company,
             bp.researcher_id AS researcher,
             r.lattes_id AS lattes_id, bp.relevance,
-            bp.has_image , bp.id
+            bp.has_image, bp.id, r.name
         FROM bibliographic_production bp
             INNER JOIN bibliographic_production_book bpb
                 ON bp.id = bpb.bibliographic_production_id
@@ -837,7 +837,7 @@ def list_book_chapter(
     SCRIPT_SQL = f"""
         SELECT bp.title, bp.year, bpc.isbn, bpc.publishing_company,
             bp.researcher_id AS researcher, bp.id, r.lattes_id, bp.relevance,
-            bp.has_image
+            bp.has_image, r.name
         FROM bibliographic_production bp
             INNER JOIN bibliographic_production_book_chapter bpc
                 ON bpc.bibliographic_production_id = bp.id
@@ -894,7 +894,7 @@ def list_distinct_book_chapter(
             MAX(bpc.publishing_company) AS publishing_company,
             ARRAY_AGG(bp.researcher_id) AS researcher, ARRAY_AGG(bp.id) AS id,
             ARRAY_AGG(r.lattes_id) AS lattes_id, NULL AS relevance,
-            NULL AS has_image
+            NULL AS has_image, ARRAY_AGG(r.name) AS name
         FROM bibliographic_production bp
             INNER JOIN bibliographic_production_book_chapter bpc
                 ON bpc.bibliographic_production_id = bp.id

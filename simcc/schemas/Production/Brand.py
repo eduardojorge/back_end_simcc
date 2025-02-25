@@ -7,3 +7,4 @@ class BrandProduction(BaseModel):
     has_image: bool
     relevance: bool
     lattes_id: str
+    name: str
