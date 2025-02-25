@@ -411,6 +411,7 @@ def professional_experience(
     researcher_id,
     graduate_program_id: UUID | str = None,
     dep_id: str = None,
+    year: int = None,
     page: int = None,
     lenght: int = None,
 ):
@@ -445,6 +446,11 @@ def professional_experience(
             """
         filter_dep = 'AND dr.dep_id = %(dep_id)s'
 
+    filter_year = str()
+    if year:
+        params['year'] = year
+        filter_year = 'AND rpe.start_year >= %(year)s'
+
     SCRIPT_SQL = f"""
         SELECT id, rpe.researcher_id, enterprise, start_year, end_year,
             employment_type, other_employment_type, functional_classification,
@@ -457,6 +463,7 @@ def professional_experience(
             {filter_id}
             {filter_dep}
             {filter_program}
+            {filter_year}
         ORDER BY start_year
         {filter_pagination}
         """

@@ -72,9 +72,10 @@ def get_professional_experience(
     researcher_id: UUID = None,
     graduate_program_id: UUID | str = None,
     dep_id: str = None,
+    year: int = None,
     page: int = None,
     lenght: int = None,
 ):
     return ResearcherService.professional_experience(
-        researcher_id, graduate_program_id, dep_id, page, lenght
+        researcher_id, graduate_program_id, dep_id, year, page, lenght
     )
