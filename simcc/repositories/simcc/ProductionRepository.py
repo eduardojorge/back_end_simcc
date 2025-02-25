@@ -265,7 +265,7 @@ def list_distinct_patent(
             MAX(p.grant_date) AS grant_date, ARRAY_AGG(p.id) AS id,
             NULL AS has_image, NULL AS relevance,
             ARRAY_AGG(r.id) AS researcher,
-            ARRAY_AGG(r.lattes_id) AS lattes_id
+            ARRAY_AGG(r.lattes_id) AS lattes_id, ARRAY_AGG(r.name) AS name
         FROM patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
         WHERE 1 = 1
@@ -318,7 +318,7 @@ def list_patent(
         SELECT p.title AS title, p.development_year as year,
             p.grant_date AS grant_date, p.id AS id,
             p.has_image, p.relevance,
-            r.id AS researcher, r.lattes_id AS lattes_id
+            r.id AS researcher, r.lattes_id AS lattes_id, r.name
         FROM patent p
             LEFT JOIN researcher r ON r.id = p.researcher_id
         WHERE 1 = 1

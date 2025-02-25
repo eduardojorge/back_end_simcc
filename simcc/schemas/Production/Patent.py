@@ -16,6 +16,7 @@ class PatentProduction(BaseModel):
     researcher: UUID | list[UUID]
     grant_date: datetime | None
     year: int
+    name: str | list[str]
 
     # Distinct 0
     id: UUID | list[UUID]
