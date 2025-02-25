@@ -68,6 +68,9 @@ def list_researchers():
 if __name__ == '__main__':
     researchers = list_researchers()
     for researcher in researchers:
+        print('Researcher ID:', researcher['researcher_id'])
         update_lattes_id_10(researcher)
-        logger_researcher_routine(researcher['id'], 'LATTES_10', False)
+        logger_researcher_routine(
+            researcher['researcher_id'], 'LATTES_10', False
+        )
     logger_routine('LATTES_10', False)
